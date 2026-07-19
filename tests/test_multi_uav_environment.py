@@ -9,7 +9,13 @@ from pathlib import Path
 import numpy as np
 from numpy.testing import assert_allclose
 
-from multiuav.core.models import CylindricalThreat, Scenario, TerrainMap, UAVMission
+from multiuav.core.models import (
+    CylindricalThreat,
+    DynamicCylinder,
+    Scenario,
+    TerrainMap,
+    UAVMission,
+)
 from multiuav.envs.dynamics import SingleIntegrator3D
 from multiuav.envs.multi_uav_env import EnvironmentConfig, MultiUAVParallelEnv
 from multiuav.envs.wrappers import EpisodeTrajectoryRecorder
@@ -21,6 +27,7 @@ def _scenario(
     *,
     terrain_height: float = 0.0,
     threats: tuple[CylindricalThreat, ...] = (),
+    dynamic_obstacles: tuple[DynamicCylinder, ...] = (),
 ) -> Scenario:
     """Create a small deterministic world for environment unit tests."""
     terrain = TerrainMap(
@@ -40,6 +47,7 @@ def _scenario(
         world_x=(0.0, 100.0),
         world_y=(0.0, 100.0),
         world_z=(0.0, 100.0),
+        dynamic_obstacles=dynamic_obstacles,
     )
 
 
@@ -105,6 +113,7 @@ class EnvironmentTests(unittest.TestCase):
                 "inter_uav_collision_cost",
                 "terrain_violation_cost",
                 "threat_violation_cost",
+                "dynamic_obstacle_violation_cost",
                 "boundary_violation_cost",
             },
         )
@@ -181,6 +190,75 @@ class EnvironmentTests(unittest.TestCase):
         )
         self.assertTrue(threat_terms["uav_0"])
         self.assertEqual(threat_infos["uav_0"]["termination_reason"], "threat_violation")
+
+    def test_environment_advances_dynamic_obstacle_once_per_step(self) -> None:
+        obstacle = DynamicCylinder(
+            identifier="crossing",
+            initial_center=np.array([30.0, 20.0, 30.0]),
+            velocity=np.array([1.0, 0.0, 0.0]),
+            radius=3.0,
+            height=40.0,
+        )
+        env = MultiUAVParallelEnv(
+            _scenario(
+                _one_mission([10, 10, 30], [90, 10, 30]), dynamic_obstacles=(obstacle,)
+            ),
+            _config(max_dynamic_obstacles=1),
+        )
+        env.reset(seed=4)
+
+        _, _, _, _, infos = env.step({"uav_0": np.zeros(3, dtype=np.float32)})
+
+        self.assertEqual(env.dynamic_world.step_count, 1)
+        assert_allclose(infos["uav_0"]["dynamic_obstacles"][0]["center"], [31.0, 20.0, 30.0])
+
+    def test_dynamic_cylinder_violation_has_its_own_cost_and_termination_reason(self) -> None:
+        obstacle = DynamicCylinder(
+            identifier="blocking",
+            initial_center=np.array([20.0, 10.0, 30.0]),
+            velocity=np.zeros(3),
+            radius=5.0,
+            height=60.0,
+        )
+        env = MultiUAVParallelEnv(
+            _scenario(
+                _one_mission([10, 10, 30], [90, 10, 30]), dynamic_obstacles=(obstacle,)
+            ),
+            _config(max_dynamic_obstacles=1),
+        )
+        env.reset(seed=4)
+
+        _, _, terminations, _, infos = env.step(
+            {"uav_0": np.array([1.0, 0.0, 0.0], dtype=np.float32)}
+        )
+
+        self.assertTrue(terminations["uav_0"])
+        self.assertEqual(infos["uav_0"]["termination_reason"], "dynamic_obstacle_violation")
+        self.assertGreater(infos["uav_0"]["safety_costs"]["dynamic_obstacle_violation_cost"], 0.0)
+
+    def test_delayed_communication_keeps_hidden_neighbor_out_of_local_observation(self) -> None:
+        env = MultiUAVParallelEnv(
+            _scenario(
+                (
+                    UAVMission(np.array([10.0, 10.0, 30.0]), np.array([90.0, 10.0, 30.0])),
+                    UAVMission(np.array([30.0, 10.0, 30.0]), np.array([90.0, 10.0, 30.0])),
+                )
+            ),
+            _config(
+                max_neighbors=1,
+                communication_enabled=True,
+                communication_delay_steps=1,
+                communication_max_staleness_steps=2,
+            ),
+        )
+        observations, _ = env.reset(seed=4)
+
+        self.assertTrue(np.allclose(observations["uav_0"][15:21], 0.0))
+        observations, _, _, _, _ = env.step(
+            {agent: np.zeros(3, dtype=np.float32) for agent in env.agents}
+        )
+
+        self.assertFalse(np.allclose(observations["uav_0"][15:21], 0.0))
 
     def test_all_arrived_and_variable_uav_counts(self) -> None:
         for count in (1, 2, 4):

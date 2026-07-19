@@ -20,4 +20,5 @@ safety_costs:
   collision: 1.0
   terrain: 1.0
   threat: 1.0
+  dynamic_obstacle: 1.0
   boundary: 1.0

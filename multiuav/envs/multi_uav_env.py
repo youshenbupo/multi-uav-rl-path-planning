@@ -15,6 +15,8 @@ from gymnasium.utils import seeding
 from pettingzoo import ParallelEnv
 
 from multiuav.core.models import Scenario
+from multiuav.envs.communication import CommunicationChannel, CommunicationConfig
+from multiuav.envs.dynamic_world import DynamicWorldState, validate_dynamic_trajectories
 from multiuav.envs.dynamics import SingleIntegrator3D
 from multiuav.envs.observations import (
     EnvironmentSnapshot,
@@ -46,6 +48,12 @@ class EnvironmentConfig:
     severe_clearance_shortfall: float = 20.0
     severe_threat_penetration: float = 10.0
     max_neighbors: int = 3
+    max_dynamic_obstacles: int = 0
+    communication_enabled: bool = False
+    communication_range: float = float("inf")
+    communication_delay_steps: int = 0
+    communication_drop_probability: float = 0.0
+    communication_max_staleness_steps: int = 0
     rewards: dict[str, float] = field(
         default_factory=lambda: {
             "progress": 1.0,
@@ -57,7 +65,13 @@ class EnvironmentConfig:
         }
     )
     safety_costs: dict[str, float] = field(
-        default_factory=lambda: {"collision": 1.0, "terrain": 1.0, "threat": 1.0, "boundary": 1.0}
+        default_factory=lambda: {
+            "collision": 1.0,
+            "terrain": 1.0,
+            "threat": 1.0,
+            "dynamic_obstacle": 1.0,
+            "boundary": 1.0,
+        }
     )
 
     def __post_init__(self) -> None:
@@ -69,8 +83,9 @@ class EnvironmentConfig:
             raise ValueError("Goal and collision radii must be nonnegative.")
         if self.severe_clearance_shortfall < 0.0 or self.severe_threat_penetration < 0.0:
             raise ValueError("Severe safety thresholds must be nonnegative.")
-        if self.max_neighbors < 0:
-            raise ValueError("max_neighbors must be nonnegative.")
+        if self.max_neighbors < 0 or self.max_dynamic_obstacles < 0:
+            raise ValueError("Observation entity budgets must be nonnegative.")
+        self.communication_config()
         required_rewards = {
             "progress",
             "goal_arrival",
@@ -81,9 +96,19 @@ class EnvironmentConfig:
         }
         if set(self.rewards) != required_rewards:
             raise ValueError("Reward mapping has missing or unsupported keys.")
-        required_costs = {"collision", "terrain", "threat", "boundary"}
+        required_costs = {"collision", "terrain", "threat", "dynamic_obstacle", "boundary"}
         if set(self.safety_costs) != required_costs:
             raise ValueError("Safety-cost mapping has missing or unsupported keys.")
+
+    def communication_config(self) -> CommunicationConfig:
+        """Project serializable flat settings to the communication runtime configuration."""
+        return CommunicationConfig(
+            enabled=self.communication_enabled,
+            range=self.communication_range,
+            delay_steps=self.communication_delay_steps,
+            drop_probability=self.communication_drop_probability,
+            max_staleness_steps=self.communication_max_staleness_steps,
+        )
 
 
 def load_environment_config(path: Path) -> EnvironmentConfig:
@@ -120,12 +145,25 @@ class MultiUAVParallelEnv(ParallelEnv):
         self.previous_goal_distances = np.zeros(len(self.possible_agents), dtype=float)
         self.boundary_clipped = np.zeros(len(self.possible_agents), dtype=bool)
         self.step_count = 0
+        validate_dynamic_trajectories(
+            scenario.dynamic_obstacles,
+            dt=config.dt,
+            max_steps=config.max_steps,
+            world_x=scenario.world_x,
+            world_y=scenario.world_y,
+            world_z=scenario.world_z,
+        )
+        self.dynamic_world = DynamicWorldState(scenario.dynamic_obstacles, config.dt)
+        self.communication_channel: CommunicationChannel | None = None
 
     @cache
     def observation_space(self, agent: str) -> spaces.Box:
         """Return the stable per-agent local observation space."""
         self._validate_agent_name(agent)
-        shape = (local_observation_size(self.config.max_neighbors),)
+        observation_size = local_observation_size(
+            self.config.max_neighbors, self.config.max_dynamic_obstacles
+        )
+        shape = (observation_size,)
         return spaces.Box(low=-np.inf, high=np.inf, shape=shape, dtype=np.float32)
 
     @cache
@@ -150,7 +188,13 @@ class MultiUAVParallelEnv(ParallelEnv):
     @property
     def state_space(self) -> spaces.Box:
         """Return the fixed centralized-state space for this fixed scenario."""
-        size = 10 * len(self.possible_agents) + 4 + 4 * len(self.scenario.threats) + 2
+        size = (
+            10 * len(self.possible_agents)
+            + 4
+            + 4 * len(self.scenario.threats)
+            + 8 * len(self.scenario.dynamic_obstacles)
+            + 2
+        )
         return spaces.Box(low=-np.inf, high=np.inf, shape=(size,), dtype=np.float32)
 
     def reset(
@@ -170,6 +214,18 @@ class MultiUAVParallelEnv(ParallelEnv):
         self.active_mask = self.previous_goal_distances > self.config.goal_radius
         self.boundary_clipped = np.zeros(len(self.possible_agents), dtype=bool)
         self.step_count = 0
+        self.dynamic_world = DynamicWorldState(self.scenario.dynamic_obstacles, self.config.dt)
+        self.communication_channel = CommunicationChannel(
+            self.config.communication_config(), self.np_random
+        )
+        self.communication_channel.reset(len(self.possible_agents))
+        self.communication_channel.broadcast(
+            positions=self.positions,
+            velocities=self.velocities,
+            active_mask=self.active_mask,
+            step=self.step_count,
+        )
+        self.communication_channel.deliver(step=self.step_count)
         snapshot = self._snapshot()
         observations = self._observations(snapshot)
         return observations, self._infos(snapshot, "none", {}, {})
@@ -212,6 +268,16 @@ class MultiUAVParallelEnv(ParallelEnv):
         current_goal_distances = np.linalg.norm(goals - self.positions, axis=1)
         newly_arrived = old_active & (current_goal_distances <= self.config.goal_radius)
         self.active_mask = old_active & ~newly_arrived
+        self.dynamic_world = self.dynamic_world.advance()
+        assert self.communication_channel is not None
+        if np.isfinite(self.positions).all() and np.isfinite(self.velocities).all():
+            self.communication_channel.broadcast(
+                positions=self.positions,
+                velocities=self.velocities,
+                active_mask=self.active_mask,
+                step=self.step_count,
+            )
+            self.communication_channel.deliver(step=self.step_count)
         safety_snapshot = self._snapshot(active_mask=old_active)
         safety_costs = {
             agent: compute_safety_costs(safety_snapshot, self.agent_name_mapping[agent])
@@ -270,12 +336,22 @@ class MultiUAVParallelEnv(ParallelEnv):
             max_horizontal_speed=self.config.max_horizontal_speed,
             max_vertical_speed=self.config.max_vertical_speed,
             boundary_clipped=self.boundary_clipped.copy(),
+            dynamic_world=self.dynamic_world,
+            knowledge_states=(
+                tuple(
+                    self.communication_channel.knowledge_for(index, step=self.step_count)
+                    for index in range(len(self.possible_agents))
+                )
+                if self.communication_channel is not None
+                else ()
+            ),
         )
 
     def _observations(self, snapshot: EnvironmentSnapshot) -> dict[str, np.ndarray]:
         return {
             agent: build_local_observation(
                 snapshot, self.agent_name_mapping[agent], self.config.max_neighbors
+                , self.config.max_dynamic_obstacles
             )
             for agent in self.possible_agents
         }
@@ -300,6 +376,8 @@ class MultiUAVParallelEnv(ParallelEnv):
                 ).as_dict(),
                 "termination_reason": reason,
                 "minimum_separation": self.minimum_separation,
+                "dynamic_obstacles": self._dynamic_obstacle_info(snapshot),
+                "communication": self._communication_info(snapshot, self.agent_name_mapping[agent]),
             }
             for agent in self.possible_agents
         }
@@ -330,6 +408,17 @@ class MultiUAVParallelEnv(ParallelEnv):
                     )
                     if signed_radial < -self.config.severe_threat_penetration:
                         return "threat_violation"
+            if safety_snapshot.dynamic_world is not None:
+                for center, obstacle in zip(
+                    safety_snapshot.dynamic_world.centers,
+                    safety_snapshot.dynamic_world.obstacles,
+                    strict=True,
+                ):
+                    if abs(point[2] - center[2]) > obstacle.height / 2.0:
+                        continue
+                    signed_radial = float(np.linalg.norm(point[:2] - center[:2]) - obstacle.radius)
+                    if signed_radial < -self.config.severe_threat_penetration:
+                        return "dynamic_obstacle_violation"
         if not np.any(self.active_mask):
             return "all_arrived"
         return "none"
@@ -337,3 +426,29 @@ class MultiUAVParallelEnv(ParallelEnv):
     def _validate_agent_name(self, agent: str) -> None:
         if agent not in self.agent_name_mapping:
             raise ValueError(f"Unknown UAV agent: {agent}")
+
+    def _dynamic_obstacle_info(self, snapshot: EnvironmentSnapshot) -> list[dict[str, Any]]:
+        """Return serializable current moving-obstacle truth for experiment audit."""
+        if snapshot.dynamic_world is None:
+            return []
+        return [
+            {
+                "identifier": obstacle.identifier,
+                "center": center.tolist(),
+                "velocity": obstacle.velocity.tolist(),
+                "radius": obstacle.radius,
+                "height": obstacle.height,
+            }
+            for center, obstacle in zip(
+                snapshot.dynamic_world.centers, snapshot.dynamic_world.obstacles, strict=True
+            )
+        ]
+
+    def _communication_info(
+        self, snapshot: EnvironmentSnapshot, index: int
+    ) -> dict[str, list[int] | list[bool]]:
+        """Expose received-neighbour validity and age without replacing actor observations."""
+        if not snapshot.knowledge_states:
+            return {"valid": [], "ages": []}
+        knowledge = snapshot.knowledge_states[index]
+        return {"valid": knowledge.valid.tolist(), "ages": knowledge.ages.tolist()}

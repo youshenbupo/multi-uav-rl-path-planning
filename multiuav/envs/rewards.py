@@ -17,6 +17,7 @@ class SafetyCosts:
     inter_uav_collision_cost: float = 0.0
     terrain_violation_cost: float = 0.0
     threat_violation_cost: float = 0.0
+    dynamic_obstacle_violation_cost: float = 0.0
     boundary_violation_cost: float = 0.0
 
     def as_dict(self) -> dict[str, float]:
@@ -68,10 +69,22 @@ def compute_safety_costs(snapshot: EnvironmentSnapshot, uav_index: int) -> Safet
             - float(np.linalg.norm(point[:2] - np.array([threat.center_x, threat.center_y]))),
         )
         threat_cost += radial_penetration**2 / max(threat.radius**2, 1e-9)
+    dynamic_obstacle_cost = 0.0
+    if snapshot.dynamic_world is not None:
+        for center, obstacle in zip(
+            snapshot.dynamic_world.centers, snapshot.dynamic_world.obstacles, strict=True
+        ):
+            if abs(point[2] - center[2]) > obstacle.height / 2.0:
+                continue
+            radial_penetration = max(
+                0.0, obstacle.radius - float(np.linalg.norm(point[:2] - center[:2]))
+            )
+            dynamic_obstacle_cost += radial_penetration**2 / max(obstacle.radius**2, 1e-9)
     return SafetyCosts(
         inter_uav_collision_cost=float(collision_cost),
         terrain_violation_cost=float(terrain_shortfall**2),
         threat_violation_cost=float(threat_cost),
+        dynamic_obstacle_violation_cost=float(dynamic_obstacle_cost),
         boundary_violation_cost=float(snapshot.boundary_clipped[uav_index]),
     )
 
