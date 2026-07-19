@@ -142,3 +142,31 @@ def test_checkpointless_evaluation_is_recorded_as_semantic_smoke(tmp_path: Path)
     assert "semantic_smoke_cli" in completed.stdout
     config = yaml.safe_load((tmp_path / "semantic_smoke_cli" / "config.yaml").read_text())
     assert config["method"] == "semantic_smoke"
+
+
+def test_ablation_script_writes_missing_artifact_resolution_without_metrics(tmp_path: Path) -> None:
+    """Untrained ablation arms produce an auditable resolution instead of synthetic results."""
+    manifest = PROJECT_ROOT / "configs/experiments/ablation_manifest.yaml"
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(PROJECT_ROOT / "scripts" / "run_ablation.py"),
+            "--manifest",
+            str(manifest),
+            "--output-root",
+            str(tmp_path),
+            "--experiment-name",
+            "ablation_resolution",
+        ],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert "unavailable" in completed.stdout
+    resolution = json.loads(
+        (tmp_path / "ablation_resolution" / "ablation_resolution.json").read_text(encoding="utf-8")
+    )
+    assert all(entry["availability"] == "unavailable" for entry in resolution["entries"])
+    assert not (tmp_path / "ablation_resolution" / "summary.json").exists()

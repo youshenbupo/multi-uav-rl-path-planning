@@ -49,3 +49,13 @@ energy proxy, decision latency, and CBF interventions/corrections/emergencies.
 `expert_gap` and `generalization_gap` are recorded as unavailable in
 `environment.json` until a matched CA-HGALO reference rollout and paired
 within/out-of-distribution evaluation are supplied; they must not be fabricated.
+
+## Ablation matrix
+
+`configs/experiments/ablation_manifest.yaml` declares the full method and the
+eight planned component removals. Each arm must name its separately trained
+checkpoint. `scripts/run_ablation.py --manifest ...` writes an
+`ablation_resolution.json` report: missing artifacts are marked unavailable and
+produce no metrics; available artifacts are evaluated into their own output
+subdirectory. This prevents an ablation label from silently reusing the full
+method's weights.

@@ -96,3 +96,6 @@
   hierarchical `full_method` checkpoint. Existing straight-line, CA-HGALO,
   MAPPO, graph-MAPPO, and hierarchy scripts are deliberately marked unavailable
   in this unified protocol until each has a comparable dynamic-world adapter.
+- The planned ablation manifest is present, but its nine separately trained
+  checkpoint artifacts have not yet been produced. The ablation command writes
+  unavailable resolution records until an arm-specific artifact is supplied.

@@ -1,0 +1,32 @@
+# Populate checkpoints only after separately training the corresponding arm.
+entries:
+  - name: full_method
+    checkpoint: null
+    disabled: []
+  - name: no_expert_pretrain
+    checkpoint: null
+    disabled: [expert_pretrain]
+  - name: no_cpa
+    checkpoint: null
+    disabled: [cpa]
+  - name: no_graph_encoder
+    checkpoint: null
+    disabled: [graph_encoder]
+  - name: no_hierarchy
+    checkpoint: null
+    disabled: [hierarchy]
+  - name: no_high_level_delay
+    checkpoint: null
+    disabled: [high_level_delay]
+  - name: no_altitude_maneuver
+    checkpoint: null
+    disabled: [altitude_maneuver]
+  - name: no_cbf
+    checkpoint: null
+    disabled: [cbf]
+  - name: no_auxiliary_prediction
+    checkpoint: null
+    disabled: [auxiliary_prediction]
+  - name: no_curriculum
+    checkpoint: null
+    disabled: [curriculum]

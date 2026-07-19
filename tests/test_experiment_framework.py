@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from multiuav.experiments.ablation import load_ablation_manifest
 from multiuav.experiments.metrics import SeedResult
 from multiuav.experiments.outputs import ExperimentOutput
 from multiuav.experiments.registry import MethodRegistry
@@ -109,3 +110,17 @@ def test_scale_profiles_define_every_required_uav_count() -> None:
 
     assert tuple(profile.num_uavs for profile in profiles) == (3, 5, 8, 12, 16)
     assert all(profile.communication_radius > 0.0 for profile in profiles)
+
+
+def test_ablation_manifest_marks_missing_checkpoint_as_unavailable(tmp_path: Path) -> None:
+    """Ablation matrix entries cannot be evaluated without their own trained artifact."""
+    manifest_path = tmp_path / "ablations.yaml"
+    manifest_path.write_text(
+        "entries:\n  - name: no_cbf\n    checkpoint: missing_hierarchy.pt\n    disabled: [cbf]\n",
+        encoding="utf-8",
+    )
+
+    manifest = load_ablation_manifest(manifest_path)
+
+    assert manifest.entries[0].availability == "unavailable"
+    assert "missing checkpoint" in manifest.entries[0].reason
