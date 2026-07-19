@@ -403,6 +403,9 @@ class HierarchicalPolicyTests(unittest.TestCase):
                 "enable_delay",
                 "enable_altitude_maneuver",
                 "allow_joint_finetune",
+                "communication_enabled",
+                "dynamic_obstacle_enabled",
+                "cbf_enabled",
             }.issubset(payload)
         )
         self.assertEqual(

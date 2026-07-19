@@ -8,6 +8,7 @@ from pathlib import Path
 from multiuav.experiments.metrics import SeedResult
 from multiuav.experiments.outputs import ExperimentOutput
 from multiuav.experiments.registry import MethodRegistry
+from multiuav.experiments.runner import evaluate_goal_controller
 from multiuav.experiments.spec import ExperimentSpec
 
 
@@ -39,3 +40,16 @@ def test_unavailable_external_baseline_is_explicit() -> None:
 
     assert method.availability == "unavailable"
     assert "not implemented" in method.reason
+
+
+def test_dynamic_communication_evaluation_writes_auditable_seed_metrics(tmp_path: Path) -> None:
+    """The common evaluator exercises moving obstacles, delayed communication, and CBF."""
+    spec = ExperimentSpec(name="dynamic_smoke", seeds=(13,), num_uavs=3, device="cpu")
+    layout = ExperimentOutput.create(tmp_path, spec, metadata={"device": "cpu"})
+    result = evaluate_goal_controller(spec, layout, episodes_per_seed=1, max_steps=4)
+
+    assert result[0].seed == 13
+    assert "CBF_intervention_rate" in result[0].metrics
+    raw = (layout.root / "raw_results" / "seed_13.jsonl").read_text(encoding="utf-8")
+    assert '"dynamic_obstacle_count": 1' in raw
+    assert '"communication_delay_steps": 1' in raw

@@ -39,6 +39,7 @@ from multiuav.learning.hierarchical_policy import (
     LowLevelCritic,
 )
 from multiuav.learning.hierarchical_rollout_buffer import compute_duration_aware_gae
+from multiuav.safety import CBFConfig, NormalizedActionCBFAdapter, OSQPSafetyFilter
 
 
 @dataclass(frozen=True)
@@ -77,6 +78,8 @@ class HierarchicalExperimentConfig:
     communication_delay_steps: int = 0
     communication_drop_probability: float = 0.0
     communication_max_staleness_steps: int = 0
+    dynamic_obstacle_enabled: bool = False
+    cbf_enabled: bool = False
 
     def __post_init__(self) -> None:
         if (
@@ -176,7 +179,9 @@ class HierarchicalMAPPOExperiment:
         self.config = config
         self.device = device
         _seed_everything(config.seed)
-        scenario = make_graph_scenario(num_uavs=config.num_uavs)
+        scenario = make_graph_scenario(
+            num_uavs=config.num_uavs, dynamic_obstacle=config.dynamic_obstacle_enabled
+        )
         environment_config = EnvironmentConfig(
             dt=1.0,
             max_steps=20,
@@ -188,6 +193,7 @@ class HierarchicalMAPPOExperiment:
             severe_clearance_shortfall=8.0,
             severe_threat_penetration=5.0,
             max_neighbors=min(3, config.num_uavs - 1),
+            max_dynamic_obstacles=int(config.dynamic_obstacle_enabled),
             communication_enabled=config.communication_enabled,
             communication_range=config.communication_radius,
             communication_delay_steps=config.communication_delay_steps,
@@ -243,6 +249,11 @@ class HierarchicalMAPPOExperiment:
             device=device,
         )
         self.graph_builder = ConflictGraphBuilder(config.graph_config())
+        self.cbf_adapter = (
+            NormalizedActionCBFAdapter(OSQPSafetyFilter(CBFConfig(max_solve_time_seconds=0.1)))
+            if config.cbf_enabled
+            else None
+        )
         self.total_transitions = 0
 
     def train(self, *, stage: str) -> list[dict[str, float]]:
@@ -590,9 +601,14 @@ class HierarchicalMAPPOExperiment:
         terminated = np.zeros((self.config.num_envs, self.config.num_uavs), dtype=bool)
         next_observations: list[tuple[dict[str, np.ndarray], MultiUAVParallelEnv]] = []
         for environment_index, environment in enumerate(self.environments):
+            filtered_actions = actions[environment_index]
+            if self.cbf_adapter is not None:
+                filtered_actions, _ = self.cbf_adapter.filter_normalized(
+                    environment._snapshot(), filtered_actions
+                )
             observation, reward_dict, terminal_dict, truncation_dict, _ = environment.step(
                 {
-                    agent: actions[environment_index, environment.agent_name_mapping[agent]]
+                    agent: filtered_actions[environment.agent_name_mapping[agent]]
                     for agent in environment.possible_agents
                 }
             )

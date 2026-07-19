@@ -27,3 +27,9 @@ enable_priority: false
 enable_delay: false
 enable_altitude_maneuver: false
 allow_joint_finetune: false
+communication_enabled: true
+communication_delay_steps: 1
+communication_drop_probability: 0.1
+communication_max_staleness_steps: 3
+dynamic_obstacle_enabled: true
+cbf_enabled: true

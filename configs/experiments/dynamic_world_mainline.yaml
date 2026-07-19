@@ -1,0 +1,30 @@
+# Phase-14 shared protocol: one BC-initialized hierarchical predictive-graph MAPPO mainline.
+seeds: [20260719, 20260720, 20260721, 20260722, 20260723]
+uav_counts: [3, 5, 8, 12, 16]
+scenarios: [within_distribution, high_density, dynamic_crossing, delayed_lossy_communication]
+methods:
+  - straight_line_greedy
+  - python_ca_hgalo
+  - rule_conflict_coordinator
+  - mappo
+  - predictive_graph_mappo
+  - hierarchical_graph_mappo
+  - bc_initialized_hierarchical_graph_mappo
+  - full_method
+unavailable_external_baselines: [astar, rrt_star, orca]
+dynamic_obstacle:
+  identifier: crossing_0
+  initial_center: [22.0, 50.0, 30.0]
+  velocity: [0.0, 2.0, 0.0]
+  radius: 3.0
+  height: 20.0
+communication:
+  enabled: true
+  range: 45.0
+  delay_steps: 1
+  drop_probability: 0.1
+  max_staleness_steps: 3
+statistics:
+  confidence_interval: 0.95
+  keep_all_seed_records: true
+  outlier_deletion: forbidden

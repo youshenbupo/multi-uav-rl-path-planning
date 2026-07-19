@@ -193,3 +193,11 @@ decision records the requested and safe velocities, intervention norm, active
 constraints, maximum slack, solver status/time, and emergency-fallback flag.
 Direct OSQP runs on CPU; it solves a small execution-side QP and is independent
 of the GPU used for neural-policy training.
+
+## Dynamic world mainline
+
+Phase 14 unifies the project on a single path: CA-HGALO demonstrations,
+BC-initialized hierarchical predictive-conflict-graph MAPPO, and execution-side
+CBF-QP in a dynamic-obstacle, delayed/lossy-communication environment. The
+common commands, output layout, scale protocol, and metric limitations are in
+[the Phase-14 experiment protocol](docs/phase14_experiments.md).

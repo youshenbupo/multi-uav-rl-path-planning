@@ -13,7 +13,13 @@ import torch
 import yaml
 from torch.utils.tensorboard import SummaryWriter
 
-from multiuav.core.models import CylindricalThreat, Scenario, TerrainMap, UAVMission
+from multiuav.core.models import (
+    CylindricalThreat,
+    DynamicCylinder,
+    Scenario,
+    TerrainMap,
+    UAVMission,
+)
 from multiuav.envs.multi_uav_env import EnvironmentConfig, MultiUAVParallelEnv
 from multiuav.learning.bc_finetuning import BCFineTuneSchedule
 from multiuav.learning.conflict_graph import (
@@ -140,7 +146,9 @@ def load_graph_experiment_config(path: Path) -> GraphExperimentConfig:
     return GraphExperimentConfig(**dict(values))
 
 
-def make_graph_scenario(*, num_uavs: int, obstacle: bool = False) -> Scenario:
+def make_graph_scenario(
+    *, num_uavs: int, obstacle: bool = False, dynamic_obstacle: bool = False
+) -> Scenario:
     """Create reproducible parallel missions for any supported graph size."""
     if num_uavs < 2:
         raise ValueError("num_uavs must be at least two.")
@@ -169,6 +177,17 @@ def make_graph_scenario(*, num_uavs: int, obstacle: bool = False) -> Scenario:
         world_x=(0.0, 100.0),
         world_y=(0.0, 100.0),
         world_z=(0.0, 100.0),
+        dynamic_obstacles=(
+            DynamicCylinder(
+                identifier="crossing_0",
+                initial_center=np.array([22.0, 50.0, 30.0]),
+                velocity=np.array([0.0, 2.0, 0.0]),
+                radius=3.0,
+                height=20.0,
+            ),
+        )
+        if dynamic_obstacle
+        else (),
     )
 
 
