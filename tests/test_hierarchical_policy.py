@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 import torch
@@ -80,6 +81,21 @@ class HierarchicalPolicyTests(unittest.TestCase):
         self.assertTrue(torch.equal(second_actions, proposals))
         self.assertTrue(torch.equal(third_actions, proposals))
         self.assertTrue(torch.equal(fourth_actions, proposals + 1))
+
+    def test_hierarchical_runner_uses_delivered_knowledge_for_graph_edges(self) -> None:
+        config = replace(
+            load_hierarchical_experiment_config(Path("configs/rl/hierarchical_mappo.yaml")),
+            num_envs=1,
+            communication_enabled=True,
+            communication_delay_steps=1,
+            communication_max_staleness_steps=2,
+        )
+        experiment = HierarchicalMAPPOExperiment(config, device=torch.device("cpu"))
+
+        graph = experiment._build_graph()
+
+        expected_adjacency = torch.eye(config.num_uavs, dtype=torch.bool)
+        self.assertTrue(torch.equal(graph.adjacency[0], expected_adjacency))
 
     def test_inactive_agent_resets_hold_and_disabled_context_is_zero(self) -> None:
         policy = HierarchicalPolicy(

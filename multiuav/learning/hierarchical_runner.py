@@ -21,7 +21,7 @@ from multiuav.learning.conflict_graph import (
     GraphBuildConfig,
 )
 from multiuav.learning.gae import compute_gae
-from multiuav.learning.graph_runner import make_graph_scenario
+from multiuav.learning.graph_runner import build_graph_from_environments, make_graph_scenario
 from multiuav.learning.hierarchical_mappo import (
     HierarchicalMAPPOConfig,
     HierarchicalMAPPOTrainer,
@@ -73,6 +73,10 @@ class HierarchicalExperimentConfig:
     enable_delay: bool
     enable_altitude_maneuver: bool
     allow_joint_finetune: bool
+    communication_enabled: bool = False
+    communication_delay_steps: int = 0
+    communication_drop_probability: float = 0.0
+    communication_max_staleness_steps: int = 0
 
     def __post_init__(self) -> None:
         if (
@@ -184,6 +188,11 @@ class HierarchicalMAPPOExperiment:
             severe_clearance_shortfall=8.0,
             severe_threat_penetration=5.0,
             max_neighbors=min(3, config.num_uavs - 1),
+            communication_enabled=config.communication_enabled,
+            communication_range=config.communication_radius,
+            communication_delay_steps=config.communication_delay_steps,
+            communication_drop_probability=config.communication_drop_probability,
+            communication_max_staleness_steps=config.communication_max_staleness_steps,
         )
         self.environments = [
             MultiUAVParallelEnv(scenario, environment_config) for _ in range(config.num_envs)
@@ -621,33 +630,8 @@ class HierarchicalMAPPOExperiment:
         return torch.as_tensor(np.asarray(values), dtype=torch.float32, device=self.device)
 
     def _build_graph(self) -> ConflictGraph:
-        positions = torch.as_tensor(
-            np.asarray([environment.positions for environment in self.environments]),
-            dtype=torch.float32,
-            device=self.device,
-        )
-        velocities = torch.as_tensor(
-            np.asarray([environment.velocities for environment in self.environments]),
-            dtype=torch.float32,
-            device=self.device,
-        )
-        goals = torch.as_tensor(
-            np.asarray(
-                [
-                    [mission.goal for mission in environment.scenario.missions]
-                    for environment in self.environments
-                ]
-            ),
-            dtype=torch.float32,
-            device=self.device,
-        )
-        active = torch.as_tensor(
-            np.asarray([environment.active_mask for environment in self.environments]),
-            dtype=torch.bool,
-            device=self.device,
-        )
-        return self.graph_builder.build(
-            positions=positions, velocities=velocities, goals=goals, active_mask=active
+        return build_graph_from_environments(
+            self.graph_builder, self.environments, device=self.device
         )
 
 
