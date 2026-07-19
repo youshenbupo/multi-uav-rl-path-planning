@@ -246,7 +246,7 @@ This is execution-path evidence, not a guarantee of safety for an arbitrary
 learned policy or an initially unrecoverable state. The phase-thirteen stop
 gate is active.
 
-## Phase 14 - dynamic-world mainline (in progress 2026-07-19)
+## Phase 14 - dynamic-world mainline (implementation completed 2026-07-19)
 
 The environment now has deterministic constant-velocity cylinders and seeded
 range/delay/drop/staleness communication. Actor graph construction uses only
@@ -260,8 +260,9 @@ summary intervals, CUDA selection metadata, and per-episode trajectory PNGs.
 hierarchy weights in this dynamic world rather than substituting a rule policy.
 A CUDA smoke command resolved the local RTX 5060 device and wrote its output
 artifacts. Its no-checkpoint controller is explicitly labelled a semantic smoke
-controller, not a learned result. Phase 14 remains in progress because the
-complete trained-baseline/ablation experiment matrix has not yet been run.
+controller, not a learned result. The full component-removal matrix is declared
+in an ablation manifest: each arm requires its own checkpoint and missing
+artifacts are reported unavailable instead of receiving copied metrics.
 
 A separate CUDA run loaded the existing BC low/high artifacts, trained the
 dynamic hierarchy for one 12-transition update, then restored the resulting
@@ -269,4 +270,6 @@ checkpoint through `scripts/evaluate.py` for a bounded three-step episode.
 The checkpoint evaluator resolved CUDA and wrote raw metrics plus a PNG. Its
 success rate was `0.0` and the CBF recorded two emergency fallbacks, so this is
 strictly an end-to-end execution check, not a performance, safety, or learning
-claim.
+claim. The implementation phase is complete; sufficiently long multi-seed
+training and comparison runs remain future experimental evidence, not missing
+software functionality.
