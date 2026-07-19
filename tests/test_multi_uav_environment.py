@@ -93,7 +93,7 @@ class EnvironmentTests(unittest.TestCase):
         observations, infos = env.reset(seed=7)
 
         self.assertEqual(set(observations), {"uav_0"})
-        self.assertEqual(observations["uav_0"].shape, (29,))
+        self.assertEqual(observations["uav_0"].shape, (33,))
         self.assertEqual(observations["uav_0"].dtype, np.float32)
         self.assertTrue(env.observation_space("uav_0").contains(observations["uav_0"]))
         self.assertEqual(env.state().shape, (16,))
@@ -249,16 +249,19 @@ class EnvironmentTests(unittest.TestCase):
                 communication_enabled=True,
                 communication_delay_steps=1,
                 communication_max_staleness_steps=2,
+                communication_uncertainty_growth_per_step=2.0,
             ),
         )
         observations, _ = env.reset(seed=4)
 
-        self.assertTrue(np.allclose(observations["uav_0"][15:21], 0.0))
+        self.assertTrue(np.allclose(observations["uav_0"][15:23], 0.0))
         observations, _, _, _, _ = env.step(
             {agent: np.zeros(3, dtype=np.float32) for agent in env.agents}
         )
 
-        self.assertFalse(np.allclose(observations["uav_0"][15:21], 0.0))
+        self.assertFalse(np.allclose(observations["uav_0"][15:23], 0.0))
+        self.assertAlmostEqual(float(observations["uav_0"][21]), 1.0 / 20.0)
+        self.assertGreater(float(observations["uav_0"][22]), 0.0)
 
     def test_all_arrived_and_variable_uav_counts(self) -> None:
         for count in (1, 2, 4):

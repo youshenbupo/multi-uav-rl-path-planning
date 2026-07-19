@@ -17,6 +17,7 @@ FloatArray = NDArray[np.float64]
 
 BASE_LOCAL_OBSERVATION_SIZE = 17
 DYNAMIC_OBSTACLE_FEATURE_SIZE = 9
+NEIGHBOUR_FEATURE_SIZE = 8
 
 
 @dataclass(frozen=True)
@@ -44,7 +45,7 @@ def local_observation_size(max_neighbors: int, max_dynamic_obstacles: int = 0) -
     return (
         BASE_LOCAL_OBSERVATION_SIZE
         + DYNAMIC_OBSTACLE_FEATURE_SIZE * max_dynamic_obstacles
-        + 6 * max_neighbors
+        + NEIGHBOUR_FEATURE_SIZE * max_neighbors
     )
 
 
@@ -233,10 +234,14 @@ def _neighbour_features(
     current = snapshot.positions[uav_index]
     positions = snapshot.positions
     velocities = snapshot.velocities
+    ages = np.zeros(len(positions), dtype=float)
+    uncertainty = np.zeros(len(positions), dtype=float)
     if snapshot.knowledge_states:
         knowledge = snapshot.knowledge_states[uav_index]
-        positions = knowledge.positions
+        positions = knowledge.predicted_positions
         velocities = knowledge.velocities
+        ages = knowledge.ages.astype(float)
+        uncertainty = knowledge.position_uncertainty
         candidates = [
             index
             for index, known in enumerate(knowledge.valid)
@@ -257,9 +262,23 @@ def _neighbour_features(
             snapshot.max_horizontal_speed,
             snapshot.max_vertical_speed,
         )
-        values.append(np.concatenate((relative_position, relative_velocity)))
+        values.append(
+            np.concatenate(
+                (
+                    relative_position,
+                    relative_velocity,
+                    np.array(
+                        [
+                            max(ages[index], 0.0) / max(snapshot.max_steps, 1),
+                            uncertainty[index] / np.linalg.norm(spans),
+                        ],
+                        dtype=float,
+                    ),
+                )
+            )
+        )
     while len(values) < max_neighbors:
-        values.append(np.zeros(6, dtype=float))
+        values.append(np.zeros(NEIGHBOUR_FEATURE_SIZE, dtype=float))
     return np.concatenate(values) if values else np.empty(0, dtype=float)
 
 

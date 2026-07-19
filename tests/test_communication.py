@@ -84,3 +84,33 @@ def test_stale_delivered_neighbor_becomes_invalid() -> None:
 
     assert channel.knowledge_for(0, step=1).valid[1]
     assert not channel.knowledge_for(0, step=2).valid[1]
+
+
+def test_knowledge_dead_reckons_delivered_packet_and_grows_uncertainty() -> None:
+    """A valid stale packet is predicted forward without exposing current neighbour truth."""
+    channel = CommunicationChannel(
+        CommunicationConfig(
+            enabled=True,
+            range=100.0,
+            delay_steps=0,
+            drop_probability=0.0,
+            max_staleness_steps=3,
+            prediction_dt=0.5,
+            uncertainty_growth_per_step=2.0,
+        ),
+        np.random.default_rng(17),
+    )
+    channel.reset(2)
+    channel.broadcast(
+        positions=np.array([[0.0, 0.0, 0.0], [5.0, 0.0, 0.0]]),
+        velocities=np.array([[0.0, 0.0, 0.0], [4.0, 0.0, 0.0]]),
+        active_mask=np.array([True, True]),
+        step=0,
+    )
+    channel.deliver(step=0)
+
+    knowledge = channel.knowledge_for(0, step=2)
+
+    np.testing.assert_allclose(knowledge.positions[1], [5.0, 0.0, 0.0])
+    np.testing.assert_allclose(knowledge.predicted_positions[1], [9.0, 0.0, 0.0])
+    assert knowledge.position_uncertainty[1] == 4.0

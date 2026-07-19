@@ -404,10 +404,16 @@ class HierarchicalPolicyTests(unittest.TestCase):
                 "enable_altitude_maneuver",
                 "allow_joint_finetune",
                 "communication_enabled",
+                "communication_uncertainty_growth_per_step",
+                "graph_uncertainty_scale",
+                "graph_uncertainty_risk_gain",
                 "dynamic_obstacle_enabled",
                 "cbf_enabled",
+                "cbf_communication_uncertainty_margin_gain",
+                "cbf_max_communication_uncertainty_margin",
             }.issubset(payload)
         )
+        self.assertGreater(config.graph_config().uncertainty_risk_gain, 0.0)
         self.assertEqual(
             build_hierarchical_training_parser().parse_args(["--stage", "low"]).stage, "low"
         )

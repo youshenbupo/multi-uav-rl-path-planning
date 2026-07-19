@@ -19,6 +19,12 @@ from multiuav.learning.conflict_graph import ConflictGraphBuilder, GraphBuildCon
 from multiuav.learning.graph_runner import build_graph_from_environments, make_graph_scenario
 from multiuav.safety import CBFConfig, NormalizedActionCBFAdapter, OSQPSafetyFilter
 
+COMMUNICATION_UNCERTAINTY_GROWTH_PER_STEP = 1.0
+GRAPH_UNCERTAINTY_SCALE = 10.0
+GRAPH_UNCERTAINTY_RISK_GAIN = 1.0
+CBF_UNCERTAINTY_MARGIN_GAIN = 0.5
+CBF_UNCERTAINTY_MARGIN_MAXIMUM = 5.0
+
 
 def resolve_device(requested: str) -> torch.device:
     """Resolve the requested neural-inference device without silently ignoring CUDA."""
@@ -56,6 +62,17 @@ def create_experiment_output(spec: ExperimentSpec, output_root: Path) -> Experim
             "delay_steps": configuration.communication_delay_steps,
             "drop_probability": configuration.communication_drop_probability,
             "max_staleness_steps": configuration.communication_max_staleness_steps,
+            "uncertainty_growth_per_step": (
+                configuration.communication_uncertainty_growth_per_step
+            ),
+        },
+        "uncertainty_graph": {
+            "uncertainty_scale": GRAPH_UNCERTAINTY_SCALE,
+            "risk_gain": GRAPH_UNCERTAINTY_RISK_GAIN,
+        },
+        "cbf_uncertainty_margin": {
+            "gain": CBF_UNCERTAINTY_MARGIN_GAIN,
+            "maximum": CBF_UNCERTAINTY_MARGIN_MAXIMUM,
         },
         "metric_limitations": {
             "expert_gap": "unavailable without a matched CA-HGALO expert reference rollout",
@@ -101,6 +118,7 @@ def dynamic_evaluation_config() -> EnvironmentConfig:
         communication_delay_steps=1,
         communication_drop_probability=0.10,
         communication_max_staleness_steps=3,
+        communication_uncertainty_growth_per_step=COMMUNICATION_UNCERTAINTY_GROWTH_PER_STEP,
     )
 
 
@@ -133,6 +151,8 @@ def evaluate_goal_controller(
             current_distance_edges=True,
             predicted_conflict_edges=True,
             self_loops=True,
+            uncertainty_scale=GRAPH_UNCERTAINTY_SCALE,
+            uncertainty_risk_gain=GRAPH_UNCERTAINTY_RISK_GAIN,
         )
     )
     results: list[SeedResult] = []
@@ -356,7 +376,15 @@ def _run_episode(
     environment = MultiUAVParallelEnv(scenario, configuration)
     environment.reset(seed=seed)
     adapter = (
-        NormalizedActionCBFAdapter(OSQPSafetyFilter(CBFConfig(max_solve_time_seconds=0.1)))
+        NormalizedActionCBFAdapter(
+            OSQPSafetyFilter(
+                CBFConfig(
+                    max_solve_time_seconds=0.1,
+                    communication_uncertainty_margin_gain=CBF_UNCERTAINTY_MARGIN_GAIN,
+                    max_communication_uncertainty_margin=CBF_UNCERTAINTY_MARGIN_MAXIMUM,
+                )
+            )
+        )
         if use_cbf
         else None
     )

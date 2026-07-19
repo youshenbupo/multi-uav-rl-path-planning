@@ -273,3 +273,25 @@ strictly an end-to-end execution check, not a performance, safety, or learning
 claim. The implementation phase is complete; sufficiently long multi-seed
 training and comparison runs remain future experimental evidence, not missing
 software functionality.
+
+## AAMAS 2027 - uncertainty-calibrated coordination (implementation baseline 2026-07-19)
+
+The active paper mechanism now treats a valid delayed packet as an immutable received state
+plus an actor-side dead-reckoned position and deterministic age-growing uncertainty bound.
+Invalid packets remain absent from actor observations and graph edges. Local neighbour rows
+now include relative predicted position/velocity, packet age, and uncertainty; predictive
+graph edges add an uncertainty feature and use uncertainty-tightened CPA risk for conflict
+adjacency.
+
+The simulated joint CBF still builds geometry rows from centralized truth, but now increases
+the inter-UAV separation margin from the worst valid directed communication uncertainty. This
+is recorded as a centralized risk-aware shield, not a decentralized CBF guarantee.
+`docs/aamas2027_research_brief.md` fixes the research question, equations, required evidence,
+and claims prohibited before multi-seed experiments.
+
+The complete regression suite passed `129` tests, Ruff, and mypy in the `multiuav_rl`
+environment. A fresh `--device cuda` no-BC 12-transition smoke run completed one real PPO
+update and persisted uncertainty settings in
+`outputs/aamas_uncertainty_cuda_smoke_v2/environment.json`. It reported an OSQP
+maximum-iteration emergency fallback, so the run is plumbing evidence only and highlights a
+CBF tuning/diagnosis task before formal training.

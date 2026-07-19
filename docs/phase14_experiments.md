@@ -6,6 +6,14 @@ dynamic-world evaluation**. BC is an initialization source, not a competing
 final policy. Dynamic obstacles and delayed/lossy communication are environment
 semantics shared by all applicable comparisons.
 
+For the AAMAS mainline, the predictive graph must consume only delivered packets:
+it dead-reckons a valid packet forward from its timestamp and velocity, derives an
+age-growing uncertainty bound, and applies that bound to CPA risk and the CBF
+pairwise-margin tightening. The actor never receives current hidden-neighbour truth.
+The centralized CBF uses simulation truth for constraint geometry, so its
+communication-sensitive margin is a risk-aware shield rather than a decentralized
+safety guarantee. See `docs/aamas2027_research_brief.md` for the claim boundary.
+
 `scripts/train.py`, `scripts/evaluate.py`, `scripts/run_benchmark.py`, and
 `scripts/run_ablation.py` share `--config`, `--seed`, `--device`, `--num-uavs`,
 `--scenario`, `--checkpoint`, `--render`, `--use-expert-pretrain`,

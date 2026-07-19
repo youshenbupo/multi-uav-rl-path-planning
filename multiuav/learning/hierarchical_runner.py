@@ -78,8 +78,13 @@ class HierarchicalExperimentConfig:
     communication_delay_steps: int = 0
     communication_drop_probability: float = 0.0
     communication_max_staleness_steps: int = 0
+    communication_uncertainty_growth_per_step: float = 0.0
+    graph_uncertainty_scale: float = 1.0
+    graph_uncertainty_risk_gain: float = 0.0
     dynamic_obstacle_enabled: bool = False
     cbf_enabled: bool = False
+    cbf_communication_uncertainty_margin_gain: float = 0.0
+    cbf_max_communication_uncertainty_margin: float = 0.0
 
     def __post_init__(self) -> None:
         if (
@@ -111,6 +116,8 @@ class HierarchicalExperimentConfig:
             current_distance_edges=True,
             predicted_conflict_edges=True,
             self_loops=True,
+            uncertainty_scale=self.graph_uncertainty_scale,
+            uncertainty_risk_gain=self.graph_uncertainty_risk_gain,
         )
 
     def policy_config(self) -> HierarchicalConfig:
@@ -199,6 +206,9 @@ class HierarchicalMAPPOExperiment:
             communication_delay_steps=config.communication_delay_steps,
             communication_drop_probability=config.communication_drop_probability,
             communication_max_staleness_steps=config.communication_max_staleness_steps,
+            communication_uncertainty_growth_per_step=(
+                config.communication_uncertainty_growth_per_step
+            ),
         )
         self.environments = [
             MultiUAVParallelEnv(scenario, environment_config) for _ in range(config.num_envs)
@@ -250,7 +260,19 @@ class HierarchicalMAPPOExperiment:
         )
         self.graph_builder = ConflictGraphBuilder(config.graph_config())
         self.cbf_adapter = (
-            NormalizedActionCBFAdapter(OSQPSafetyFilter(CBFConfig(max_solve_time_seconds=0.1)))
+            NormalizedActionCBFAdapter(
+                OSQPSafetyFilter(
+                    CBFConfig(
+                        max_solve_time_seconds=0.1,
+                        communication_uncertainty_margin_gain=(
+                            config.cbf_communication_uncertainty_margin_gain
+                        ),
+                        max_communication_uncertainty_margin=(
+                            config.cbf_max_communication_uncertainty_margin
+                        ),
+                    )
+                )
+            )
             if config.cbf_enabled
             else None
         )

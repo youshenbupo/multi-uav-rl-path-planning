@@ -21,6 +21,8 @@ class CommunicationConfig:
     delay_steps: int = 0
     drop_probability: float = 0.0
     max_staleness_steps: int = 0
+    prediction_dt: float = 1.0
+    uncertainty_growth_per_step: float = 0.0
 
     def __post_init__(self) -> None:
         if self.range <= 0.0 or np.isnan(self.range):
@@ -29,6 +31,12 @@ class CommunicationConfig:
             raise ValueError("Communication delay and max staleness must be nonnegative.")
         if not 0.0 <= self.drop_probability <= 1.0:
             raise ValueError("Communication drop probability must be in [0, 1].")
+        if self.prediction_dt <= 0.0 or not np.isfinite(self.prediction_dt):
+            raise ValueError("Communication prediction_dt must be finite and positive.")
+        if self.uncertainty_growth_per_step < 0.0 or not np.isfinite(
+            self.uncertainty_growth_per_step
+        ):
+            raise ValueError("Communication uncertainty growth must be finite and nonnegative.")
 
 
 @dataclass(frozen=True)
@@ -39,26 +47,44 @@ class AgentKnowledgeState:
     velocities: FloatArray
     valid: BoolArray
     ages: IntArray
+    predicted_positions: FloatArray
+    position_uncertainty: FloatArray
 
     def __post_init__(self) -> None:
         positions = _readonly_float_matrix(self.positions, "positions")
         velocities = _readonly_float_matrix(self.velocities, "velocities")
         valid = np.asarray(self.valid, dtype=bool)
         ages = np.asarray(self.ages, dtype=np.int64)
+        predicted_positions = _readonly_float_matrix(
+            self.predicted_positions, "predicted_positions"
+        )
+        position_uncertainty = np.asarray(self.position_uncertainty, dtype=float)
         if positions.shape != velocities.shape or positions.shape[1:] != (3,):
             raise ValueError("Knowledge positions and velocities must have shape [N, 3].")
         if valid.shape != (len(positions),) or ages.shape != (len(positions),):
             raise ValueError("Knowledge validity and ages must have shape [N].")
+        if predicted_positions.shape != positions.shape:
+            raise ValueError("Knowledge predicted_positions must have shape [N, 3].")
+        if position_uncertainty.shape != (len(positions),) or not np.isfinite(
+            position_uncertainty
+        ).all():
+            raise ValueError("Knowledge position_uncertainty must be finite with shape [N].")
+        if np.any(position_uncertainty < 0.0):
+            raise ValueError("Knowledge position_uncertainty must be nonnegative.")
         if np.any(ages < -1):
             raise ValueError("Knowledge ages must be at least -1.")
         valid = valid.copy()
         ages = ages.copy()
         valid.setflags(write=False)
         ages.setflags(write=False)
+        position_uncertainty = position_uncertainty.copy()
+        position_uncertainty.setflags(write=False)
         object.__setattr__(self, "positions", positions)
         object.__setattr__(self, "velocities", velocities)
         object.__setattr__(self, "valid", valid)
         object.__setattr__(self, "ages", ages)
+        object.__setattr__(self, "predicted_positions", predicted_positions)
+        object.__setattr__(self, "position_uncertainty", position_uncertainty)
 
 
 @dataclass(frozen=True)
@@ -174,9 +200,12 @@ class CommunicationChannel:
         velocities = np.zeros((self._count, 3), dtype=float)
         valid = np.zeros(self._count, dtype=bool)
         ages = np.full(self._count, -1, dtype=np.int64)
+        predicted_positions = np.zeros((self._count, 3), dtype=float)
+        position_uncertainty = np.zeros(self._count, dtype=float)
         if self._current_active[receiver]:
             positions[receiver] = self._current_positions[receiver]
             velocities[receiver] = self._current_velocities[receiver]
+            predicted_positions[receiver] = self._current_positions[receiver]
             valid[receiver] = True
             ages[receiver] = 0
         for sender in range(self._count):
@@ -188,9 +217,20 @@ class CommunicationChannel:
                 continue
             positions[sender] = self._received_positions[receiver, sender]
             velocities[sender] = self._received_velocities[receiver, sender]
+            predicted_positions[sender] = (
+                positions[sender] + age * self.config.prediction_dt * velocities[sender]
+            )
+            position_uncertainty[sender] = self.config.uncertainty_growth_per_step * age
             valid[sender] = True
             ages[sender] = age
-        return AgentKnowledgeState(positions, velocities, valid, ages)
+        return AgentKnowledgeState(
+            positions,
+            velocities,
+            valid,
+            ages,
+            predicted_positions,
+            position_uncertainty,
+        )
 
     def _receive_all_current(self, step: int) -> None:
         assert self._current_positions is not None

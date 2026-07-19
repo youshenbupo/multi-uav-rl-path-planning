@@ -135,7 +135,7 @@ class BehaviorCloningTests(unittest.TestCase):
             ),
         )
 
-        self.assertEqual(features.node_features.shape, (1, 2, 23))
+        self.assertEqual(features.node_features.shape, (1, 2, 25))
         self.assertEqual(features.edge_features.shape, (1, 2, 2, EDGE_FEATURE_DIMENSION))
         self.assertTrue(torch.equal(features.active_mask, torch.tensor([[True, True]])))
         self.assertTrue(bool(features.adjacency[0, 0, 1]))

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -10,6 +11,7 @@ from unittest.mock import patch
 import numpy as np
 
 from multiuav.core.models import DynamicCylinder, Scenario, TerrainMap, UAVMission
+from multiuav.envs.communication import AgentKnowledgeState
 from multiuav.envs.dynamic_world import DynamicWorldState
 from multiuav.envs.observations import EnvironmentSnapshot
 from multiuav.safety.action_adapter import NormalizedActionCBFAdapter
@@ -29,6 +31,32 @@ class CBFSafetyTests(unittest.TestCase):
 
         self.assertTrue(np.allclose(separation.coefficients[:3], -separation.coefficients[3:]))
         self.assertLess(separation.barrier, 0.0)
+
+    def test_pairwise_margin_grows_with_delivered_information_uncertainty(self) -> None:
+        snapshot = _snapshot(np.array([[20.0, 50.0, 40.0], [60.0, 50.0, 40.0]]))
+        knowledge = AgentKnowledgeState(
+            positions=snapshot.positions,
+            velocities=np.zeros((2, 3)),
+            valid=np.array([True, True]),
+            ages=np.array([0, 2]),
+            predicted_positions=snapshot.positions,
+            position_uncertainty=np.array([0.0, 4.0]),
+        )
+        uncertain_snapshot = replace(snapshot, knowledge_states=(knowledge, knowledge))
+        config = CBFConfig(communication_uncertainty_margin_gain=1.0)
+
+        certain_row = next(
+            row
+            for row in CBFConstraintBuilder(config).build(snapshot)
+            if row.kind == "uav_separation"
+        )
+        uncertain_row = next(
+            row
+            for row in CBFConstraintBuilder(config).build(uncertain_snapshot)
+            if row.kind == "uav_separation"
+        )
+
+        self.assertLess(uncertain_row.barrier, certain_row.barrier)
 
     def test_joint_qp_changes_a_head_on_command_before_separation_is_lost(self) -> None:
         snapshot = _snapshot(np.array([[33.0, 50.0, 40.0], [67.0, 50.0, 40.0]]))

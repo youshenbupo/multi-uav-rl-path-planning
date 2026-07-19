@@ -24,6 +24,8 @@ class CBFConfig:
     horizontal_speed_polygon_sides: int = 16
     slack_penalty: float = 1_000.0
     max_solve_time_seconds: float = 0.02
+    communication_uncertainty_margin_gain: float = 0.0
+    max_communication_uncertainty_margin: float = 0.0
 
     def __post_init__(self) -> None:
         if self.alpha <= 0.0 or self.terrain_gradient_epsilon <= 0.0:
@@ -32,6 +34,11 @@ class CBFConfig:
             raise ValueError("CBF threat influence and slack penalty are invalid.")
         if self.horizontal_speed_polygon_sides < 4 or self.max_solve_time_seconds <= 0.0:
             raise ValueError("CBF speed polygon and solve-time settings are invalid.")
+        if (
+            self.communication_uncertainty_margin_gain < 0.0
+            or self.max_communication_uncertainty_margin < 0.0
+        ):
+            raise ValueError("CBF communication uncertainty margins must be nonnegative.")
 
 
 @dataclass(frozen=True)
@@ -45,7 +52,11 @@ class CBFConstraintRow:
 
 
 class CBFConstraintBuilder:
-    """Build joint-control CBF rows only for currently active UAVs."""
+    """Build joint CBF rows from true geometry with optional information-risk margin tightening.
+
+    The simulation safety filter sees centralized true geometry. Communication-derived
+    uncertainty only tightens pairwise margins; it does not make this a decentralized CBF.
+    """
 
     def __init__(self, config: CBFConfig) -> None:
         self.config = config
@@ -77,12 +88,33 @@ class CBFConstraintBuilder:
         self, snapshot: EnvironmentSnapshot, first: int, second: int
     ) -> CBFConstraintRow:
         relative = snapshot.positions[first] - snapshot.positions[second]
-        safe_distance = snapshot.scenario.safe_separation
+        safe_distance = snapshot.scenario.safe_separation + self._communication_margin(
+            snapshot, first, second
+        )
         barrier = float(relative @ relative - safe_distance**2)
         coefficients = np.zeros(3 * len(snapshot.positions), dtype=float)
         coefficients[3 * first : 3 * first + 3] = 2.0 * relative
         coefficients[3 * second : 3 * second + 3] = -2.0 * relative
         return self._row("uav_separation", barrier, coefficients)
+
+    def _communication_margin(
+        self, snapshot: EnvironmentSnapshot, first: int, second: int
+    ) -> float:
+        if self.config.communication_uncertainty_margin_gain == 0.0:
+            return 0.0
+        if len(snapshot.knowledge_states) != len(snapshot.positions):
+            return 0.0
+        uncertainty_values: list[float] = []
+        for receiver, sender in ((first, second), (second, first)):
+            knowledge = snapshot.knowledge_states[receiver]
+            if knowledge.valid[sender]:
+                uncertainty_values.append(float(knowledge.position_uncertainty[sender]))
+        if not uncertainty_values:
+            return 0.0
+        margin = self.config.communication_uncertainty_margin_gain * max(uncertainty_values)
+        if self.config.max_communication_uncertainty_margin > 0.0:
+            margin = min(margin, self.config.max_communication_uncertainty_margin)
+        return margin
 
     def _terrain_row(self, snapshot: EnvironmentSnapshot, index: int) -> CBFConstraintRow:
         point = snapshot.positions[index]

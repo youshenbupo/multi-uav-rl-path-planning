@@ -99,3 +99,12 @@
 - The planned ablation manifest is present, but its nine separately trained
   checkpoint artifacts have not yet been produced. The ablation command writes
   unavailable resolution records until an arm-specific artifact is supplied.
+- The AAMAS uncertainty model currently uses a deterministic age-growth bound,
+  not an empirically calibrated sensor or motion-error distribution. Its growth,
+  graph risk gain, and CBF margin cap require sensitivity analysis. The CBF
+  remains centralized in simulation: true geometry builds constraints while
+  communication uncertainty only tightens its clearance margin.
+- Introducing age and uncertainty features changes local observation width from
+  six to eight values per neighbour and graph edge width from 15 to 16. Existing
+  BC and hierarchical checkpoints are intentionally incompatible and cannot be
+  silently reused for the new method.

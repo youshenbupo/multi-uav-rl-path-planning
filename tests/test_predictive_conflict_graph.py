@@ -89,7 +89,7 @@ class PredictiveConflictGraphTests(unittest.TestCase):
             active_mask=torch.tensor([[True, True, False]]),
         )
 
-        self.assertEqual(graph.edge_features.shape, (1, 3, 3, 15))
+        self.assertEqual(graph.edge_features.shape, (1, 3, 3, 16))
         self.assertEqual(graph.adjacency.shape, (1, 3, 3))
         self.assertTrue(graph.adjacency[0, 0, 0])
         self.assertTrue(graph.adjacency[0, 1, 1])
@@ -125,6 +125,41 @@ class PredictiveConflictGraphTests(unittest.TestCase):
         self.assertTrue(graph.adjacency[0, 1, 1])
         self.assertFalse(graph.adjacency[0, 0, 1])
         self.assertFalse(graph.adjacency[0, 1, 0])
+
+    def test_knowledge_graph_uses_predicted_position_and_uncertainty_risk(self) -> None:
+        builder = ConflictGraphBuilder(
+            GraphBuildConfig(
+                communication_radius=100.0,
+                risk_distance=5.0,
+                prediction_horizon=5.0,
+                top_k_neighbors=0,
+                current_distance_edges=False,
+                predicted_conflict_edges=True,
+                self_loops=True,
+                uncertainty_scale=10.0,
+                uncertainty_risk_gain=1.0,
+            )
+        )
+        predicted_positions = torch.tensor(
+            [[[[0.0, 0.0, 0.0], [6.0, 0.0, 0.0]], [[0.0, 0.0, 0.0], [10.0, 0.0, 0.0]]]]
+        )
+        graph = builder.build_from_knowledge(
+            positions=torch.tensor([[[0.0, 0.0, 0.0], [10.0, 0.0, 0.0]]]),
+            received_positions=torch.zeros((1, 2, 2, 3)),
+            predicted_positions=predicted_positions,
+            received_velocities=torch.tensor(
+                [[[[0.0, 0.0, 0.0], [-1.0, 0.0, 0.0]], [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]]]
+            ),
+            goals=torch.tensor([[[20.0, 0.0, 0.0], [20.0, 0.0, 0.0]]]),
+            active_mask=torch.tensor([[True, True]]),
+            knowledge_valid=torch.tensor([[[True, True], [False, True]]]),
+            knowledge_ages=torch.tensor([[[0, 2], [-1, 0]]]),
+            knowledge_uncertainty=torch.tensor([[[0.0, 3.0], [0.0, 0.0]]]),
+        )
+
+        self.assertEqual(graph.edge_features.shape[-1], 16)
+        self.assertAlmostEqual(float(graph.edge_features[0, 0, 1, -1]), 0.3)
+        self.assertTrue(graph.adjacency[0, 0, 1])
 
     def test_graph_runner_uses_environment_knowledge_when_communication_is_delayed(self) -> None:
         environment = MultiUAVParallelEnv(

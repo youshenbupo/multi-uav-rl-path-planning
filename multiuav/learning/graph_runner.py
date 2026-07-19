@@ -227,6 +227,13 @@ def build_graph_from_environments(
         dtype=torch.float32,
         device=device,
     )
+    predicted_positions = torch.as_tensor(
+        np.asarray(
+            [[knowledge.predicted_positions for knowledge in batch] for batch in knowledge_batches]
+        ),
+        dtype=torch.float32,
+        device=device,
+    )
     knowledge_valid = torch.as_tensor(
         np.asarray([[knowledge.valid for knowledge in batch] for batch in knowledge_batches]),
         dtype=torch.bool,
@@ -235,6 +242,13 @@ def build_graph_from_environments(
     knowledge_ages = torch.as_tensor(
         np.asarray([[knowledge.ages for knowledge in batch] for batch in knowledge_batches]),
         dtype=torch.int64,
+        device=device,
+    )
+    knowledge_uncertainty = torch.as_tensor(
+        np.asarray(
+            [[knowledge.position_uncertainty for knowledge in batch] for batch in knowledge_batches]
+        ),
+        dtype=torch.float32,
         device=device,
     )
     goals = torch.as_tensor(
@@ -260,6 +274,8 @@ def build_graph_from_environments(
         active_mask=active_mask,
         knowledge_valid=knowledge_valid,
         knowledge_ages=knowledge_ages,
+        predicted_positions=predicted_positions,
+        knowledge_uncertainty=knowledge_uncertainty,
     )
 
 

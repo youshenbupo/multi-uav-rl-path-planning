@@ -13,7 +13,11 @@ import torch
 from multiuav.data.bc_dataset import load_bc_scenario
 from multiuav.envs.multi_uav_env import EnvironmentConfig, MultiUAVParallelEnv
 from multiuav.learning.behavior_cloning import ExpertLowLevelPolicy
-from multiuav.learning.conflict_graph import ConflictGraphBuilder, GraphBuildConfig
+from multiuav.learning.conflict_graph import (
+    EDGE_FEATURE_DIMENSION,
+    ConflictGraphBuilder,
+    GraphBuildConfig,
+)
 
 
 @dataclass(frozen=True)
@@ -42,7 +46,7 @@ def evaluate_bc_low_checkpoint(
     stats = _load_stats(checkpoint.parent / "normalization_stats.json", device)
     policy = ExpertLowLevelPolicy(
         node_feature_dim=len(stats["mean"]),
-        edge_feature_dim=15,
+        edge_feature_dim=EDGE_FEATURE_DIMENSION,
         embedding_dim=int(config["embedding_dim"]),
         num_heads=int(config["graph_heads"]),
         num_layers=int(config["graph_layers"]),

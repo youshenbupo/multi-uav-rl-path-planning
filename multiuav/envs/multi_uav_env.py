@@ -54,6 +54,7 @@ class EnvironmentConfig:
     communication_delay_steps: int = 0
     communication_drop_probability: float = 0.0
     communication_max_staleness_steps: int = 0
+    communication_uncertainty_growth_per_step: float = 0.0
     rewards: dict[str, float] = field(
         default_factory=lambda: {
             "progress": 1.0,
@@ -108,6 +109,8 @@ class EnvironmentConfig:
             delay_steps=self.communication_delay_steps,
             drop_probability=self.communication_drop_probability,
             max_staleness_steps=self.communication_max_staleness_steps,
+            prediction_dt=self.dt,
+            uncertainty_growth_per_step=self.communication_uncertainty_growth_per_step,
         )
 
 

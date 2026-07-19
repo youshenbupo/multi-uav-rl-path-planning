@@ -31,5 +31,10 @@ communication_enabled: true
 communication_delay_steps: 1
 communication_drop_probability: 0.1
 communication_max_staleness_steps: 3
+communication_uncertainty_growth_per_step: 1.0
+graph_uncertainty_scale: 10.0
+graph_uncertainty_risk_gain: 1.0
 dynamic_obstacle_enabled: true
 cbf_enabled: true
+cbf_communication_uncertainty_margin_gain: 0.5
+cbf_max_communication_uncertainty_margin: 5.0

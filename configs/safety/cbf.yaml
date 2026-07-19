@@ -5,3 +5,5 @@ threat_vertical_influence: 0.0
 horizontal_speed_polygon_sides: 16
 slack_penalty: 1000.0
 max_solve_time_seconds: 0.1
+communication_uncertainty_margin_gain: 0.5
+max_communication_uncertainty_margin: 5.0

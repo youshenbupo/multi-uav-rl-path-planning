@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import torch
 from torch import Tensor
 
-EDGE_FEATURE_DIMENSION = 15
+EDGE_FEATURE_DIMENSION = 16
 
 
 @dataclass(frozen=True)
@@ -23,6 +23,8 @@ class GraphBuildConfig:
     self_loops: bool
     position_scale: float = 100.0
     velocity_scale: float = 20.0
+    uncertainty_scale: float = 1.0
+    uncertainty_risk_gain: float = 0.0
     epsilon: float = 1e-8
 
     def __post_init__(self) -> None:
@@ -33,6 +35,7 @@ class GraphBuildConfig:
                 self.prediction_horizon,
                 self.position_scale,
                 self.velocity_scale,
+                self.uncertainty_scale,
                 self.epsilon,
             )
             <= 0.0
@@ -40,6 +43,8 @@ class GraphBuildConfig:
             raise ValueError("Graph distance, horizon, scales, and epsilon must be positive.")
         if self.top_k_neighbors < 0:
             raise ValueError("top_k_neighbors must be nonnegative.")
+        if self.uncertainty_risk_gain < 0.0:
+            raise ValueError("uncertainty_risk_gain must be nonnegative.")
 
 
 @dataclass(frozen=True)
@@ -115,6 +120,7 @@ class ConflictGraphBuilder:
                 relative_goal_direction,
                 communication_available.to(dtype=positions.dtype).unsqueeze(dim=-1),
                 pair_active.to(dtype=positions.dtype).unsqueeze(dim=-1),
+                torch.zeros_like(current_distance).unsqueeze(dim=-1),
             ),
             dim=-1,
         )
@@ -139,6 +145,8 @@ class ConflictGraphBuilder:
         active_mask: Tensor,
         knowledge_valid: Tensor,
         knowledge_ages: Tensor,
+        predicted_positions: Tensor | None = None,
+        knowledge_uncertainty: Tensor | None = None,
     ) -> ConflictGraph:
         """Build actor edges only from each receiver's delivered neighbour state."""
         self._validate_inputs(positions, positions, goals, active_mask)
@@ -151,9 +159,19 @@ class ConflictGraphBuilder:
             raise ValueError("knowledge_valid must be a boolean tensor with shape [B,N,N].")
         if knowledge_ages.shape != expected_pair_shape:
             raise ValueError("knowledge_ages must have shape [B,N,N].")
+        if predicted_positions is None:
+            predicted_positions = received_positions
+        if predicted_positions.shape != received_positions.shape:
+            raise ValueError("predicted_positions must match received_positions.")
+        if knowledge_uncertainty is None:
+            knowledge_uncertainty = torch.zeros_like(knowledge_ages, dtype=positions.dtype)
+        if knowledge_uncertainty.shape != expected_pair_shape:
+            raise ValueError("knowledge_uncertainty must have shape [B,N,N].")
+        if not torch.isfinite(knowledge_uncertainty).all() or (knowledge_uncertainty < 0.0).any():
+            raise ValueError("knowledge_uncertainty must be finite and nonnegative.")
         receiver_indices = torch.arange(positions.shape[1], device=positions.device)
         receiver_velocities = received_velocities[:, receiver_indices, receiver_indices, :]
-        relative_positions = received_positions - positions[:, :, None, :]
+        relative_positions = predicted_positions - positions[:, :, None, :]
         relative_velocities = received_velocities - receiver_velocities[:, :, None, :]
         current_distance = torch.linalg.vector_norm(relative_positions, dim=-1)
         time_to_cpa, distance_at_cpa = compute_cpa_features(
@@ -164,11 +182,19 @@ class ConflictGraphBuilder:
         )
         pair_active = active_mask[:, :, None] & active_mask[:, None, :]
         known_pair = pair_active & knowledge_valid
-        predicted_shortfall = (self.config.risk_distance - distance_at_cpa).clamp_min(
+        normalized_uncertainty = knowledge_uncertainty.to(dtype=positions.dtype)
+        normalized_uncertainty = normalized_uncertainty / self.config.uncertainty_scale
+        normalized_uncertainty = torch.where(
+            known_pair, normalized_uncertainty, torch.zeros_like(normalized_uncertainty)
+        )
+        risk_adjusted_cpa_distance = (
+            distance_at_cpa - self.config.uncertainty_risk_gain * knowledge_uncertainty
+        ).clamp_min(0.0)
+        predicted_shortfall = (self.config.risk_distance - risk_adjusted_cpa_distance).clamp_min(
             0.0
         ) / self.config.risk_distance
         relative_goal_direction = self._relative_goal_direction_from_knowledge(
-            positions, received_positions, goals
+            positions, predicted_positions, goals
         )
         normalized_age = knowledge_ages.to(dtype=positions.dtype).clamp_min(0.0)
         normalized_age = normalized_age / self.config.prediction_horizon
@@ -184,12 +210,13 @@ class ConflictGraphBuilder:
                 relative_goal_direction,
                 known_pair.to(dtype=positions.dtype).unsqueeze(dim=-1),
                 normalized_age.unsqueeze(dim=-1),
+                normalized_uncertainty.unsqueeze(dim=-1),
             ),
             dim=-1,
         )
         adjacency = self._adjacency(
             current_distance=current_distance,
-            distance_at_cpa=distance_at_cpa,
+            distance_at_cpa=risk_adjusted_cpa_distance,
             pair_active=pair_active,
             knowledge_available=known_pair,
         )

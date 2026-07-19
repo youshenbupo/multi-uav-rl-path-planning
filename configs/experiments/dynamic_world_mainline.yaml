@@ -24,6 +24,13 @@ communication:
   delay_steps: 1
   drop_probability: 0.1
   max_staleness_steps: 3
+  uncertainty_growth_per_step: 1.0
+uncertainty_graph:
+  uncertainty_scale: 10.0
+  risk_gain: 1.0
+cbf_uncertainty_margin:
+  gain: 0.5
+  maximum: 5.0
 statistics:
   confidence_interval: 0.95
   keep_all_seed_records: true

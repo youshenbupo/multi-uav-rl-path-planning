@@ -9,7 +9,11 @@ from multiuav.experiments.ablation import load_ablation_manifest
 from multiuav.experiments.metrics import SeedResult
 from multiuav.experiments.outputs import ExperimentOutput
 from multiuav.experiments.registry import MethodRegistry
-from multiuav.experiments.runner import evaluate_goal_controller, evaluate_hierarchical_checkpoint
+from multiuav.experiments.runner import (
+    create_experiment_output,
+    evaluate_goal_controller,
+    evaluate_hierarchical_checkpoint,
+)
 from multiuav.experiments.scales import load_scale_profiles
 from multiuav.experiments.spec import ExperimentSpec
 
@@ -64,6 +68,18 @@ def test_dynamic_communication_evaluation_writes_auditable_seed_metrics(tmp_path
     raw = (layout.root / "raw_results" / "seed_13.jsonl").read_text(encoding="utf-8")
     assert '"dynamic_obstacle_count": 1' in raw
     assert '"communication_delay_steps": 1' in raw
+
+
+def test_dynamic_experiment_metadata_records_uncertainty_model(tmp_path: Path) -> None:
+    """An experiment artifact must identify the graph and CBF uncertainty assumptions."""
+    spec = ExperimentSpec(name="uncertainty_metadata", seeds=(13,), num_uavs=3, device="cpu")
+
+    layout = create_experiment_output(spec, tmp_path)
+    metadata = json.loads((layout.root / "environment.json").read_text(encoding="utf-8"))
+
+    assert metadata["communication"]["uncertainty_growth_per_step"] > 0.0
+    assert metadata["uncertainty_graph"]["risk_gain"] > 0.0
+    assert metadata["cbf_uncertainty_margin"]["maximum"] > 0.0
 
 
 def test_checkpoint_evaluation_runs_hierarchy_cbf_and_writes_episode_figure(tmp_path: Path) -> None:
