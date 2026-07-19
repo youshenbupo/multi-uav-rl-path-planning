@@ -172,6 +172,78 @@ def make_graph_scenario(*, num_uavs: int, obstacle: bool = False) -> Scenario:
     )
 
 
+def build_graph_from_environments(
+    builder: ConflictGraphBuilder,
+    environments: list[MultiUAVParallelEnv],
+    *,
+    device: torch.device,
+) -> ConflictGraph:
+    """Build actor graph edges from delivered channel knowledge, not hidden neighbour truth."""
+    if not environments:
+        raise ValueError("At least one environment is required to build a graph.")
+    knowledge_batches = []
+    for environment in environments:
+        if environment.communication_channel is None:
+            raise RuntimeError(
+                "Environment must be reset before building a communication-aware graph."
+            )
+        knowledge_batches.append(
+            tuple(
+                environment.communication_channel.knowledge_for(index, step=environment.step_count)
+                for index in range(len(environment.possible_agents))
+            )
+        )
+    positions = torch.as_tensor(
+        np.asarray([environment.positions for environment in environments]),
+        dtype=torch.float32,
+        device=device,
+    )
+    received_positions = torch.as_tensor(
+        np.asarray([[knowledge.positions for knowledge in batch] for batch in knowledge_batches]),
+        dtype=torch.float32,
+        device=device,
+    )
+    received_velocities = torch.as_tensor(
+        np.asarray([[knowledge.velocities for knowledge in batch] for batch in knowledge_batches]),
+        dtype=torch.float32,
+        device=device,
+    )
+    knowledge_valid = torch.as_tensor(
+        np.asarray([[knowledge.valid for knowledge in batch] for batch in knowledge_batches]),
+        dtype=torch.bool,
+        device=device,
+    )
+    knowledge_ages = torch.as_tensor(
+        np.asarray([[knowledge.ages for knowledge in batch] for batch in knowledge_batches]),
+        dtype=torch.int64,
+        device=device,
+    )
+    goals = torch.as_tensor(
+        np.asarray(
+            [
+                [mission.goal for mission in environment.scenario.missions]
+                for environment in environments
+            ]
+        ),
+        dtype=torch.float32,
+        device=device,
+    )
+    active_mask = torch.as_tensor(
+        np.asarray([environment.active_mask for environment in environments]),
+        dtype=torch.bool,
+        device=device,
+    )
+    return builder.build_from_knowledge(
+        positions=positions,
+        received_positions=received_positions,
+        received_velocities=received_velocities,
+        goals=goals,
+        active_mask=active_mask,
+        knowledge_valid=knowledge_valid,
+        knowledge_ages=knowledge_ages,
+    )
+
+
 class GraphMAPPOExperiment:
     """Manage vectorized graph rollouts while retaining native PettingZoo environments."""
 
@@ -487,34 +559,7 @@ class GraphMAPPOExperiment:
         return self._build_graph_for(self.environments)
 
     def _build_graph_for(self, environments: list[MultiUAVParallelEnv]) -> ConflictGraph:
-        positions = torch.as_tensor(
-            np.asarray([environment.positions for environment in environments]),
-            dtype=torch.float32,
-            device=self.device,
-        )
-        velocities = torch.as_tensor(
-            np.asarray([environment.velocities for environment in environments]),
-            dtype=torch.float32,
-            device=self.device,
-        )
-        goals = torch.as_tensor(
-            np.asarray(
-                [
-                    [mission.goal for mission in environment.scenario.missions]
-                    for environment in environments
-                ]
-            ),
-            dtype=torch.float32,
-            device=self.device,
-        )
-        active_mask = torch.as_tensor(
-            np.asarray([environment.active_mask for environment in environments]),
-            dtype=torch.bool,
-            device=self.device,
-        )
-        return self.graph_builder.build(
-            positions=positions, velocities=velocities, goals=goals, active_mask=active_mask
-        )
+        return build_graph_from_environments(self.graph_builder, environments, device=self.device)
 
     def _positions_tensor(self) -> torch.Tensor:
         return torch.as_tensor(

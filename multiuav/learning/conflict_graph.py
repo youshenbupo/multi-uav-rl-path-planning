@@ -129,18 +129,88 @@ class ConflictGraphBuilder:
             node_mask=active_mask,
         )
 
+    def build_from_knowledge(
+        self,
+        *,
+        positions: Tensor,
+        received_positions: Tensor,
+        received_velocities: Tensor,
+        goals: Tensor,
+        active_mask: Tensor,
+        knowledge_valid: Tensor,
+        knowledge_ages: Tensor,
+    ) -> ConflictGraph:
+        """Build actor edges only from each receiver's delivered neighbour state."""
+        self._validate_inputs(positions, positions, goals, active_mask)
+        expected_pair_shape = (*positions.shape[:2], positions.shape[1])
+        if received_positions.shape != (*expected_pair_shape, 3):
+            raise ValueError("received_positions must have shape [B,N,N,3].")
+        if received_velocities.shape != received_positions.shape:
+            raise ValueError("received_velocities must match received_positions.")
+        if knowledge_valid.shape != expected_pair_shape or knowledge_valid.dtype != torch.bool:
+            raise ValueError("knowledge_valid must be a boolean tensor with shape [B,N,N].")
+        if knowledge_ages.shape != expected_pair_shape:
+            raise ValueError("knowledge_ages must have shape [B,N,N].")
+        receiver_indices = torch.arange(positions.shape[1], device=positions.device)
+        receiver_velocities = received_velocities[:, receiver_indices, receiver_indices, :]
+        relative_positions = received_positions - positions[:, :, None, :]
+        relative_velocities = received_velocities - receiver_velocities[:, :, None, :]
+        current_distance = torch.linalg.vector_norm(relative_positions, dim=-1)
+        time_to_cpa, distance_at_cpa = compute_cpa_features(
+            relative_positions=relative_positions,
+            relative_velocities=relative_velocities,
+            prediction_horizon=self.config.prediction_horizon,
+            epsilon=self.config.epsilon,
+        )
+        pair_active = active_mask[:, :, None] & active_mask[:, None, :]
+        known_pair = pair_active & knowledge_valid
+        predicted_shortfall = (self.config.risk_distance - distance_at_cpa).clamp_min(
+            0.0
+        ) / self.config.risk_distance
+        relative_goal_direction = self._relative_goal_direction_from_knowledge(
+            positions, received_positions, goals
+        )
+        normalized_age = knowledge_ages.to(dtype=positions.dtype).clamp_min(0.0)
+        normalized_age = normalized_age / self.config.prediction_horizon
+        normalized_age = torch.where(known_pair, normalized_age, torch.zeros_like(normalized_age))
+        edge_features = torch.cat(
+            (
+                relative_positions / self.config.position_scale,
+                relative_velocities / self.config.velocity_scale,
+                (current_distance / self.config.position_scale).unsqueeze(dim=-1),
+                (time_to_cpa / self.config.prediction_horizon).unsqueeze(dim=-1),
+                (distance_at_cpa / self.config.position_scale).unsqueeze(dim=-1),
+                predicted_shortfall.unsqueeze(dim=-1),
+                relative_goal_direction,
+                known_pair.to(dtype=positions.dtype).unsqueeze(dim=-1),
+                normalized_age.unsqueeze(dim=-1),
+            ),
+            dim=-1,
+        )
+        adjacency = self._adjacency(
+            current_distance=current_distance,
+            distance_at_cpa=distance_at_cpa,
+            pair_active=pair_active,
+            knowledge_available=known_pair,
+        )
+        return ConflictGraph(
+            edge_features=edge_features, adjacency=adjacency, node_mask=active_mask
+        )
+
     def _adjacency(
         self,
         *,
         current_distance: Tensor,
         distance_at_cpa: Tensor,
         pair_active: Tensor,
+        knowledge_available: Tensor | None = None,
     ) -> Tensor:
         batch_size, node_count, _ = current_distance.shape
         diagonal = torch.eye(node_count, dtype=torch.bool, device=current_distance.device).expand(
             batch_size, -1, -1
         )
-        non_self_active = pair_active & ~diagonal
+        available_pairs = pair_active if knowledge_available is None else knowledge_available
+        non_self_active = available_pairs & ~diagonal
         adjacency = torch.zeros_like(pair_active)
         if self.config.current_distance_edges:
             adjacency |= non_self_active & (current_distance <= self.config.communication_radius)
@@ -173,6 +243,27 @@ class ConflictGraphBuilder:
             norms > self.config.epsilon, directions, torch.zeros_like(directions)
         )
         return directions[:, None, :, :] - directions[:, :, None, :]
+
+    def _relative_goal_direction_from_knowledge(
+        self, positions: Tensor, received_positions: Tensor, goals: Tensor
+    ) -> Tensor:
+        receiver_goal_vectors = goals - positions
+        receiver_norms = torch.linalg.vector_norm(receiver_goal_vectors, dim=-1, keepdim=True)
+        receiver_directions = receiver_goal_vectors / receiver_norms.clamp_min(self.config.epsilon)
+        receiver_directions = torch.where(
+            receiver_norms > self.config.epsilon,
+            receiver_directions,
+            torch.zeros_like(receiver_directions),
+        )
+        sender_goal_vectors = goals[:, None, :, :] - received_positions
+        sender_norms = torch.linalg.vector_norm(sender_goal_vectors, dim=-1, keepdim=True)
+        sender_directions = sender_goal_vectors / sender_norms.clamp_min(self.config.epsilon)
+        sender_directions = torch.where(
+            sender_norms > self.config.epsilon,
+            sender_directions,
+            torch.zeros_like(sender_directions),
+        )
+        return sender_directions - receiver_directions[:, :, None, :]
 
     @staticmethod
     def _validate_inputs(

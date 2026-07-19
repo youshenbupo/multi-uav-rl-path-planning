@@ -10,6 +10,7 @@ import torch
 import yaml
 from numpy.testing import assert_allclose
 
+from multiuav.envs.multi_uav_env import EnvironmentConfig, MultiUAVParallelEnv
 from multiuav.learning.conflict_graph import (
     ConflictGraphBuilder,
     GraphBuildConfig,
@@ -35,6 +36,7 @@ from multiuav.learning.graph_rollout_buffer import (
 from multiuav.learning.graph_runner import (
     GraphExperimentConfig,
     GraphMAPPOExperiment,
+    build_graph_from_environments,
     load_graph_experiment_config,
     make_graph_scenario,
 )
@@ -96,6 +98,68 @@ class PredictiveConflictGraphTests(unittest.TestCase):
         self.assertFalse(graph.adjacency[0, 2].any())
         self.assertFalse(graph.adjacency[0, :, 2].any())
         self.assertEqual(int(graph.adjacency.sum()), 4)
+
+    def test_knowledge_builder_omits_edges_for_unreceived_neighbors(self) -> None:
+        builder = ConflictGraphBuilder(
+            GraphBuildConfig(
+                communication_radius=100.0,
+                risk_distance=20.0,
+                prediction_horizon=5.0,
+                top_k_neighbors=1,
+                current_distance_edges=True,
+                predicted_conflict_edges=True,
+                self_loops=True,
+            )
+        )
+        graph = builder.build_from_knowledge(
+            positions=torch.tensor([[[0.0, 0.0, 0.0], [10.0, 0.0, 0.0]]]),
+            received_positions=torch.zeros((1, 2, 2, 3)),
+            received_velocities=torch.zeros((1, 2, 2, 3)),
+            goals=torch.tensor([[[20.0, 0.0, 0.0], [20.0, 0.0, 0.0]]]),
+            active_mask=torch.tensor([[True, True]]),
+            knowledge_valid=torch.tensor([[[True, False], [False, True]]]),
+            knowledge_ages=torch.tensor([[[0, -1], [-1, 0]]]),
+        )
+
+        self.assertTrue(graph.adjacency[0, 0, 0])
+        self.assertTrue(graph.adjacency[0, 1, 1])
+        self.assertFalse(graph.adjacency[0, 0, 1])
+        self.assertFalse(graph.adjacency[0, 1, 0])
+
+    def test_graph_runner_uses_environment_knowledge_when_communication_is_delayed(self) -> None:
+        environment = MultiUAVParallelEnv(
+            make_graph_scenario(num_uavs=3),
+            EnvironmentConfig(
+                max_steps=20,
+                max_horizontal_speed=8.0,
+                max_vertical_speed=6.0,
+                goal_radius=5.0,
+                collision_distance=6.0,
+                severe_clearance_shortfall=8.0,
+                severe_threat_penetration=5.0,
+                max_neighbors=2,
+                communication_enabled=True,
+                communication_range=float("inf"),
+                communication_delay_steps=1,
+                communication_max_staleness_steps=2,
+            ),
+        )
+        environment.reset(seed=3)
+        builder = ConflictGraphBuilder(
+            GraphBuildConfig(
+                communication_radius=100.0,
+                risk_distance=20.0,
+                prediction_horizon=5.0,
+                top_k_neighbors=2,
+                current_distance_edges=True,
+                predicted_conflict_edges=True,
+                self_loops=True,
+            )
+        )
+
+        graph = build_graph_from_environments(builder, [environment], device=torch.device("cpu"))
+
+        self.assertTrue(torch.equal(graph.adjacency[0], torch.eye(3, dtype=torch.bool)))
 
     def test_graph_attention_preserves_shapes_and_handles_empty_neighbourhoods(self) -> None:
         torch.manual_seed(4)
