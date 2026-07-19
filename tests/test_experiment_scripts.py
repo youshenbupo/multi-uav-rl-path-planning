@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 import torch
+import yaml
 
 from multiuav.learning.hierarchical_mappo import save_hierarchical_checkpoint
 from multiuav.learning.hierarchical_runner import (
@@ -111,3 +112,33 @@ def test_benchmark_rejects_checkpointless_learned_full_method(tmp_path: Path) ->
 
     assert completed.returncode == 2
     assert "requires --checkpoint" in completed.stderr
+
+
+def test_checkpointless_evaluation_is_recorded_as_semantic_smoke(tmp_path: Path) -> None:
+    """A no-checkpoint run must not be labelled as the learned full method."""
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(PROJECT_ROOT / "scripts" / "evaluate.py"),
+            "--device",
+            "cpu",
+            "--seed",
+            "71",
+            "--episodes-per-seed",
+            "1",
+            "--max-steps",
+            "2",
+            "--output-root",
+            str(tmp_path),
+            "--experiment-name",
+            "semantic_smoke_cli",
+        ],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert "semantic_smoke_cli" in completed.stdout
+    config = yaml.safe_load((tmp_path / "semantic_smoke_cli" / "config.yaml").read_text())
+    assert config["method"] == "semantic_smoke"

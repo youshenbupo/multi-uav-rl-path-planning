@@ -92,3 +92,7 @@
   executed. In particular, no claim is made yet for expert gap or
   generalization gap because matched CA-HGALO references and paired
   within/out-of-distribution runs are unavailable.
+- The unified dynamic-world benchmark currently executes only a compatible
+  hierarchical `full_method` checkpoint. Existing straight-line, CA-HGALO,
+  MAPPO, graph-MAPPO, and hierarchy scripts are deliberately marked unavailable
+  in this unified protocol until each has a comparable dynamic-world adapter.

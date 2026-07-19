@@ -43,6 +43,14 @@ def test_unavailable_external_baseline_is_explicit() -> None:
     assert "not implemented" in method.reason
 
 
+def test_registry_does_not_claim_unified_dynamic_adapter_for_legacy_methods() -> None:
+    """Existing legacy scripts stay unavailable until they can run the shared dynamic protocol."""
+    method = MethodRegistry().resolve("predictive_graph_mappo")
+
+    assert method.availability == "unavailable"
+    assert "dynamic-world adapter" in method.reason
+
+
 def test_dynamic_communication_evaluation_writes_auditable_seed_metrics(tmp_path: Path) -> None:
     """The common evaluator exercises moving obstacles, delayed communication, and CBF."""
     spec = ExperimentSpec(name="dynamic_smoke", seeds=(13,), num_uavs=3, device="cpu")

@@ -23,7 +23,9 @@ def main() -> None:
     parser.add_argument("--episodes-per-seed", type=int, default=4)
     parser.add_argument("--max-steps", type=int)
     args = parser.parse_args()
-    spec = spec_from_args(args)
+    spec = spec_from_args(
+        args, method="full_method" if args.checkpoint is not None else "semantic_smoke"
+    )
     output = create_experiment_output(spec, args.output_root)
     results = (
         evaluate_hierarchical_checkpoint(

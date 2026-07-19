@@ -38,8 +38,10 @@ intervals; no outlier deletion is permitted.
 
 The required scale and method matrix is in
 `configs/experiments/dynamic_world_mainline.yaml`. It covers 3, 5, 8, 12, and
-16 UAVs. A*, RRT*, and ORCA are explicitly registered as unavailable, so they
-cannot silently receive invented results.
+16 UAVs. The unified dynamic-world executor currently implements only the
+checkpointed `full_method`; prior baseline scripts are registered as unavailable
+until they receive comparable dynamic-world adapters. A*, RRT*, and ORCA are
+also explicitly unavailable, so no method can silently receive invented results.
 
 Reported finite metrics include success/collision/terrain/threat rates, path
 length, mission time, mean and 5th-percentile separation, temporal conflicts,

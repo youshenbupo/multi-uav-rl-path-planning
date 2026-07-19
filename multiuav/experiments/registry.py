@@ -18,7 +18,7 @@ class MethodRegistry:
     """Keep executable methods and unavailable external baselines equally auditable."""
 
     def __init__(self) -> None:
-        available = (
+        legacy_without_dynamic_adapter = (
             "straight_line_greedy",
             "python_ca_hgalo",
             "rule_conflict_coordinator",
@@ -26,11 +26,19 @@ class MethodRegistry:
             "predictive_graph_mappo",
             "hierarchical_graph_mappo",
             "bc_initialized_hierarchical_graph_mappo",
-            "full_method",
         )
         unavailable = ("astar", "rrt_star", "orca")
         self._methods = {
-            name: MethodDefinition(name, "available", "implemented adapter") for name in available
+            "full_method": MethodDefinition(
+                "full_method", "available", "hierarchical checkpoint dynamic-world adapter"
+            )
+        } | {
+            name: MethodDefinition(
+                name,
+                "unavailable",
+                "legacy implementation exists but no unified dynamic-world adapter is implemented",
+            )
+            for name in legacy_without_dynamic_adapter
         } | {
             name: MethodDefinition(name, "unavailable", "not implemented in this repository")
             for name in unavailable
