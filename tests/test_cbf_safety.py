@@ -9,7 +9,8 @@ from unittest.mock import patch
 
 import numpy as np
 
-from multiuav.core.models import Scenario, TerrainMap, UAVMission
+from multiuav.core.models import DynamicCylinder, Scenario, TerrainMap, UAVMission
+from multiuav.envs.dynamic_world import DynamicWorldState
 from multiuav.envs.observations import EnvironmentSnapshot
 from multiuav.safety.action_adapter import NormalizedActionCBFAdapter
 from multiuav.safety.cbf_constraints import CBFConfig, CBFConstraintBuilder, load_cbf_config
@@ -49,6 +50,24 @@ class CBFSafetyTests(unittest.TestCase):
             float(separation.coefficients @ decision.u_safe.reshape(-1)) + decision.slack_value,
             separation.lower - 1e-4,
         )
+
+    def test_dynamic_obstacle_row_accounts_for_relative_velocity(self) -> None:
+        snapshot = _dynamic_snapshot()
+
+        rows = CBFConstraintBuilder(CBFConfig()).build(snapshot)
+        obstacle_row = next(row for row in rows if row.kind == "dynamic_cylinder_crossing")
+
+        self.assertTrue(np.allclose(obstacle_row.coefficients[:3], [20.0, 0.0, 0.0]))
+        self.assertEqual(obstacle_row.barrier, 0.0)
+        self.assertEqual(obstacle_row.lower, 20.0)
+
+    def test_qp_reports_dynamic_constraint_count(self) -> None:
+        decision = OSQPSafetyFilter(CBFConfig(max_solve_time_seconds=0.2)).filter(
+            _dynamic_snapshot(), np.zeros((1, 3), dtype=float)
+        )
+
+        self.assertFalse(decision.emergency_fallback_used)
+        self.assertEqual(decision.dynamic_constraint_count, 1)
 
     def test_infeasible_qp_uses_bounded_emergency_action_not_raw_action(self) -> None:
         snapshot = _snapshot(np.array([[2.0, 50.0, 5.0], [20.0, 50.0, 5.0]]))
@@ -138,6 +157,50 @@ def _snapshot(positions: np.ndarray) -> EnvironmentSnapshot:
         max_horizontal_speed=20.0,
         max_vertical_speed=10.0,
         boundary_clipped=np.zeros(count, dtype=bool),
+    )
+
+
+def _dynamic_snapshot() -> EnvironmentSnapshot:
+    terrain = TerrainMap(
+        x_grid=np.array([0.0, 100.0]),
+        y_grid=np.array([0.0, 100.0]),
+        heights=np.zeros((2, 2)),
+    )
+    obstacle = DynamicCylinder(
+        identifier="crossing",
+        initial_center=np.array([0.0, 50.0, 40.0]),
+        velocity=np.array([1.0, 0.0, 0.0]),
+        radius=5.0,
+        height=80.0,
+    )
+    scenario = Scenario(
+        terrain=terrain,
+        threats=(),
+        missions=(
+            UAVMission(
+                start=np.array([10.0, 50.0, 40.0]), goal=np.array([90.0, 50.0, 40.0])
+            ),
+        ),
+        safe_separation=30.0,
+        min_clearance=10.0,
+        threat_margin=5.0,
+        world_x=(0.0, 100.0),
+        world_y=(0.0, 100.0),
+        world_z=(0.0, 100.0),
+        dynamic_obstacles=(obstacle,),
+    )
+    return EnvironmentSnapshot(
+        scenario=scenario,
+        positions=np.array([[10.0, 50.0, 40.0]]),
+        velocities=np.zeros((1, 3)),
+        active_mask=np.array([True]),
+        previous_goal_distances=np.ones(1),
+        step_count=0,
+        max_steps=100,
+        max_horizontal_speed=20.0,
+        max_vertical_speed=10.0,
+        boundary_clipped=np.zeros(1, dtype=bool),
+        dynamic_world=DynamicWorldState((obstacle,), dt=1.0),
     )
 
 

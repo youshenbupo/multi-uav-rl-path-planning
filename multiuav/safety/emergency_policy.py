@@ -47,6 +47,19 @@ class EmergencyPolicy:
                 direction[:2] += self._unit(relative_xy, fallback_axis=index) * (
                     safe_radius - distance
                 )
+        if snapshot.dynamic_world is not None:
+            for center, obstacle in zip(
+                snapshot.dynamic_world.centers, snapshot.dynamic_world.obstacles, strict=True
+            ):
+                if abs(point[2] - center[2]) > obstacle.height / 2.0:
+                    continue
+                relative_xy = point[:2] - center[:2]
+                distance = float(np.linalg.norm(relative_xy))
+                safe_radius = obstacle.radius + snapshot.scenario.threat_margin
+                if distance < safe_radius:
+                    direction[:2] += self._unit(relative_xy, fallback_axis=index) * (
+                        safe_radius - distance
+                    )
         ground = float(terrain_height(snapshot.scenario.terrain, point[:2])[0])
         if point[2] - ground < snapshot.scenario.min_clearance:
             direction[2] += snapshot.scenario.min_clearance - (point[2] - ground)

@@ -69,6 +69,7 @@ class CBFConstraintBuilder:
                     rows.append(self._separation_row(snapshot, first, second))
             rows.append(self._terrain_row(snapshot, first))
             rows.extend(self._threat_rows(snapshot, first))
+            rows.extend(self._dynamic_obstacle_rows(snapshot, first))
             rows.extend(self._boundary_rows(snapshot, first))
         return tuple(rows)
 
@@ -109,6 +110,36 @@ class CBFConstraintBuilder:
             rows.append(self._row(f"cylindrical_threat_{threat_index}", barrier, coefficients))
         return rows
 
+    def _dynamic_obstacle_rows(
+        self, snapshot: EnvironmentSnapshot, index: int
+    ) -> list[CBFConstraintRow]:
+        """Build horizontal relative-velocity barriers for moving vertical cylinders."""
+        if snapshot.dynamic_world is None:
+            return []
+        point = snapshot.positions[index]
+        rows: list[CBFConstraintRow] = []
+        for obstacle_index, (center, obstacle) in enumerate(
+            zip(snapshot.dynamic_world.centers, snapshot.dynamic_world.obstacles, strict=True)
+        ):
+            vertical_limit = obstacle.height / 2.0 + self.config.threat_vertical_influence
+            if abs(point[2] - center[2]) > vertical_limit:
+                continue
+            relative = point[:2] - center[:2]
+            safe_radius = obstacle.radius + snapshot.scenario.threat_margin
+            barrier = float(relative @ relative - safe_radius**2)
+            coefficients = np.zeros(3 * len(snapshot.positions), dtype=float)
+            coefficients[3 * index : 3 * index + 2] = 2.0 * relative
+            lower = float(-self.config.alpha * barrier + 2.0 * relative @ obstacle.velocity[:2])
+            rows.append(
+                CBFConstraintRow(
+                    kind=f"dynamic_cylinder_{obstacle.identifier}",
+                    barrier=barrier,
+                    coefficients=coefficients,
+                    lower=lower,
+                )
+            )
+        return rows
+
     def _boundary_rows(self, snapshot: EnvironmentSnapshot, index: int) -> list[CBFConstraintRow]:
         point = snapshot.positions[index]
         axes = (snapshot.scenario.world_x, snapshot.scenario.world_y, snapshot.scenario.world_z)
@@ -140,8 +171,8 @@ class CBFConstraintBuilder:
 
     def _terrain_gradient(self, terrain: TerrainMap, point_xy: np.ndarray) -> np.ndarray:
         epsilon = self.config.terrain_gradient_epsilon
-        query_x = np.asarray(point_xy, dtype=float)
-        query_y = np.asarray(point_xy, dtype=float)
+        query_x = np.array(point_xy, dtype=float, copy=True)
+        query_y = np.array(point_xy, dtype=float, copy=True)
         query_x[0] += epsilon
         query_y[1] += epsilon
         base_height = float(terrain_height(terrain, point_xy)[0])

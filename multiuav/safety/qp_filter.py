@@ -25,6 +25,7 @@ class SafetyFilterDecision:
     u_safe: np.ndarray
     intervention_norm: float
     active_constraint_count: int
+    dynamic_constraint_count: int
     slack_value: float
     solver_status: str
     solve_time: float
@@ -59,10 +60,14 @@ class OSQPSafetyFilter:
                 np.nan_to_num(requested),
                 "nonfinite_requested_velocity",
                 0,
+                0,
                 0.0,
             )
         try:
             rows = self.builder.build(snapshot)
+            dynamic_constraint_count = sum(
+                row.kind.startswith("dynamic_cylinder_") for row in rows
+            )
             solution, status, solve_time = self._solve(snapshot, requested, rows)
         except (ValueError, FloatingPointError, RuntimeError) as error:
             return self._emergency(
@@ -70,15 +75,23 @@ class OSQPSafetyFilter:
                 requested,
                 f"solver_exception:{type(error).__name__}",
                 0,
+                0,
                 0.0,
             )
         if solution is None:
-            return self._emergency(snapshot, requested, status, len(rows), solve_time)
+            return self._emergency(
+                snapshot, requested, status, len(rows), dynamic_constraint_count, solve_time
+            )
         controls = solution[: 3 * len(requested)].reshape(requested.shape)
         slacks = solution[3 * len(requested) :]
         if not np.isfinite(controls).all() or not np.isfinite(slacks).all():
             return self._emergency(
-                snapshot, requested, "nonfinite_solver_output", len(rows), solve_time
+                snapshot,
+                requested,
+                "nonfinite_solver_output",
+                len(rows),
+                dynamic_constraint_count,
+                solve_time,
             )
         self._last_solution = solution.copy()
         return SafetyFilterDecision(
@@ -86,6 +99,7 @@ class OSQPSafetyFilter:
             u_safe=controls,
             intervention_norm=float(np.linalg.norm(controls - requested)),
             active_constraint_count=len(rows),
+            dynamic_constraint_count=dynamic_constraint_count,
             slack_value=float(np.max(slacks, initial=0.0)),
             solver_status=status,
             solve_time=solve_time,
@@ -220,6 +234,7 @@ class OSQPSafetyFilter:
         requested: np.ndarray,
         reason: str,
         active_constraint_count: int,
+        dynamic_constraint_count: int,
         solve_time: float,
     ) -> SafetyFilterDecision:
         safe = self.emergency_policy.safe_actions(snapshot)
@@ -229,6 +244,7 @@ class OSQPSafetyFilter:
             u_safe=safe,
             intervention_norm=float(np.linalg.norm(safe - np.nan_to_num(requested))),
             active_constraint_count=active_constraint_count,
+            dynamic_constraint_count=dynamic_constraint_count,
             slack_value=0.0,
             solver_status=reason,
             solve_time=solve_time,
