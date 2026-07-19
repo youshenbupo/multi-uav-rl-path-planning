@@ -170,3 +170,50 @@ def test_ablation_script_writes_missing_artifact_resolution_without_metrics(tmp_
     )
     assert all(entry["availability"] == "unavailable" for entry in resolution["entries"])
     assert not (tmp_path / "ablation_resolution" / "summary.json").exists()
+
+
+def test_ablation_script_evaluates_available_arm_checkpoint(tmp_path: Path) -> None:
+    """A manifest arm with a compatible checkpoint receives its own evaluated output."""
+    from dataclasses import replace
+
+    config_path = PROJECT_ROOT / "configs/experiments/mainline_smoke.yaml"
+    config = replace(load_hierarchical_experiment_config(config_path), num_envs=1, total_steps=1)
+    fixture = HierarchicalMAPPOExperiment(config, device=torch.device("cpu"))
+    checkpoint = tmp_path / "fixture.pt"
+    save_hierarchical_checkpoint(checkpoint, fixture.trainer, stage="low", step=0)
+    manifest = tmp_path / "available_manifest.yaml"
+    manifest.write_text(
+        "entries:\n"
+        "  - name: full_method\n"
+        f"    checkpoint: {checkpoint.as_posix()}\n"
+        "    disabled: []\n",
+        encoding="utf-8",
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(PROJECT_ROOT / "scripts" / "run_ablation.py"),
+            "--manifest",
+            str(manifest),
+            "--config",
+            str(config_path),
+            "--device",
+            "cpu",
+            "--seed",
+            "73",
+            "--episodes-per-seed",
+            "1",
+            "--output-root",
+            str(tmp_path),
+            "--experiment-name",
+            "available_ablation",
+        ],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert "available" in completed.stdout
+    assert (tmp_path / "available_ablation" / "full_method" / "summary.json").is_file()
