@@ -418,6 +418,37 @@ class HierarchicalPolicyTests(unittest.TestCase):
             "high",
         )
 
+    @unittest.skipUnless(
+        torch.cuda.is_available(), "CUDA is required for checkpoint map-location coverage"
+    )
+    def test_cuda_checkpoint_load_keeps_rng_state_on_cpu(self) -> None:
+        """CUDA map_location must not move the CPU RNG-state tensor into CUDA."""
+        trainer = HierarchicalMAPPOTrainer(
+            high_actor=hierarchical_networks()[0],
+            high_critic=hierarchical_networks()[1],
+            low_actor=hierarchical_networks()[2],
+            low_critic=hierarchical_networks()[3],
+            config=hierarchical_trainer_config(),
+            device=torch.device("cpu"),
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            checkpoint = Path(directory) / "cpu_checkpoint.pt"
+            save_hierarchical_checkpoint(checkpoint, trainer, stage="low", step=7)
+            restored = HierarchicalMAPPOTrainer(
+                high_actor=hierarchical_networks()[0],
+                high_critic=hierarchical_networks()[1],
+                low_actor=hierarchical_networks()[2],
+                low_critic=hierarchical_networks()[3],
+                config=trainer.config,
+                device=torch.device("cuda"),
+            )
+
+            stage, step = load_hierarchical_checkpoint(
+                checkpoint, restored, map_location=torch.device("cuda")
+            )
+
+        self.assertEqual((stage, step), ("low", 7))
+
 
 def policy_context(*, actions: torch.Tensor, remaining_steps: torch.Tensor):
     """Create minimal context without a state machine for actor contract testing."""
@@ -458,6 +489,20 @@ def hierarchical_networks() -> tuple[
             num_layers=1,
             high_interval=3,
         ),
+    )
+
+
+def hierarchical_trainer_config() -> HierarchicalMAPPOConfig:
+    """Create the compact optimizer configuration used by checkpoint tests."""
+    return HierarchicalMAPPOConfig(
+        learning_rate=3e-4,
+        clip_ratio=0.2,
+        entropy_coef=0.01,
+        value_coef=0.5,
+        max_grad_norm=0.5,
+        batch_size=2,
+        ppo_epochs=1,
+        allow_joint_finetune=False,
     )
 
 

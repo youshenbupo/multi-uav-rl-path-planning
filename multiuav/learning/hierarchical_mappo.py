@@ -377,6 +377,7 @@ def save_hierarchical_checkpoint(
             "python_rng": random.getstate(),
             "numpy_rng": np.random.get_state(),
             "torch_rng": torch.get_rng_state(),
+            "torch_cuda_rng": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
         },
         path,
     )
@@ -395,5 +396,8 @@ def load_hierarchical_checkpoint(
     trainer.low_optimizer.load_state_dict(payload["low_optimizer"])
     random.setstate(payload["python_rng"])
     np.random.set_state(payload["numpy_rng"])
-    torch.set_rng_state(payload["torch_rng"])
+    torch.set_rng_state(payload["torch_rng"].cpu())
+    cuda_rng = payload.get("torch_cuda_rng")
+    if cuda_rng is not None and torch.cuda.is_available():
+        torch.cuda.set_rng_state_all([state.cpu() for state in cuda_rng])
     return str(payload["stage"]), int(payload["step"])

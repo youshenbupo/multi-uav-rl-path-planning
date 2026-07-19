@@ -262,3 +262,11 @@ A CUDA smoke command resolved the local RTX 5060 device and wrote its output
 artifacts. Its no-checkpoint controller is explicitly labelled a semantic smoke
 controller, not a learned result. Phase 14 remains in progress because the
 complete trained-baseline/ablation experiment matrix has not yet been run.
+
+A separate CUDA run loaded the existing BC low/high artifacts, trained the
+dynamic hierarchy for one 12-transition update, then restored the resulting
+checkpoint through `scripts/evaluate.py` for a bounded three-step episode.
+The checkpoint evaluator resolved CUDA and wrote raw metrics plus a PNG. Its
+success rate was `0.0` and the CBF recorded two emergency fallbacks, so this is
+strictly an end-to-end execution check, not a performance, safety, or learning
+claim.
