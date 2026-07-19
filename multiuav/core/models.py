@@ -11,6 +11,29 @@ FloatArray = NDArray[np.float64]
 
 
 @dataclass(frozen=True)
+class DynamicCylinder:
+    """Finite-height vertical cylinder moving at a constant three-dimensional velocity."""
+
+    identifier: str
+    initial_center: FloatArray
+    velocity: FloatArray
+    radius: float
+    height: float
+
+    def __post_init__(self) -> None:
+        if not self.identifier:
+            raise ValueError("Dynamic cylinder identifier must be nonempty.")
+        initial_center = _immutable_vector(self.initial_center, "initial_center")
+        velocity = _immutable_vector(self.velocity, "velocity")
+        if self.radius <= 0.0 or not np.isfinite(self.radius):
+            raise ValueError("Dynamic cylinder radius must be finite and positive.")
+        if self.height <= 0.0 or not np.isfinite(self.height):
+            raise ValueError("Dynamic cylinder height must be finite and positive.")
+        object.__setattr__(self, "initial_center", initial_center)
+        object.__setattr__(self, "velocity", velocity)
+
+
+@dataclass(frozen=True)
 class CylindricalThreat:
     """Vertical cylinder represented as ``[x, y, radius, height]``."""
 
@@ -59,6 +82,7 @@ class Scenario:
     world_x: tuple[float, float] = (0.0, 1000.0)
     world_y: tuple[float, float] = (0.0, 1000.0)
     world_z: tuple[float, float] = (0.0, 320.0)
+    dynamic_obstacles: tuple[DynamicCylinder, ...] = ()
     weights: dict[str, float] = field(
         default_factory=lambda: {
             "length": 1.0,
@@ -112,3 +136,13 @@ class EvaluationResult:
     minimum_separation: float
     temporal_conflict_count: int
     constraint_details: ConstraintResult
+
+
+def _immutable_vector(value: FloatArray, name: str) -> FloatArray:
+    """Return a finite read-only three-vector for immutable model records."""
+    vector = np.asarray(value, dtype=float)
+    if vector.shape != (3,) or not np.isfinite(vector).all():
+        raise ValueError(f"Dynamic cylinder {name} must be a finite vector with shape [3].")
+    copied = vector.copy()
+    copied.setflags(write=False)
+    return copied
