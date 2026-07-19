@@ -8,7 +8,8 @@ from pathlib import Path
 from multiuav.experiments.metrics import SeedResult
 from multiuav.experiments.outputs import ExperimentOutput
 from multiuav.experiments.registry import MethodRegistry
-from multiuav.experiments.runner import evaluate_goal_controller
+from multiuav.experiments.runner import evaluate_goal_controller, evaluate_hierarchical_checkpoint
+from multiuav.experiments.scales import load_scale_profiles
 from multiuav.experiments.spec import ExperimentSpec
 
 
@@ -50,6 +51,53 @@ def test_dynamic_communication_evaluation_writes_auditable_seed_metrics(tmp_path
 
     assert result[0].seed == 13
     assert "CBF_intervention_rate" in result[0].metrics
+    assert (layout.root / "figures" / "seed_13_episode_0.png").is_file()
     raw = (layout.root / "raw_results" / "seed_13.jsonl").read_text(encoding="utf-8")
     assert '"dynamic_obstacle_count": 1' in raw
     assert '"communication_delay_steps": 1' in raw
+
+
+def test_checkpoint_evaluation_runs_hierarchy_cbf_and_writes_episode_figure(tmp_path: Path) -> None:
+    """A compatible fixture checkpoint traverses the learned hierarchy evaluation path."""
+    from dataclasses import replace
+
+    import torch
+
+    from multiuav.learning.hierarchical_mappo import save_hierarchical_checkpoint
+    from multiuav.learning.hierarchical_runner import (
+        HierarchicalMAPPOExperiment,
+        load_hierarchical_experiment_config,
+    )
+
+    config_path = Path(__file__).parents[1] / "configs/rl/hierarchical_mappo.yaml"
+    config = replace(
+        load_hierarchical_experiment_config(config_path),
+        seed=41,
+        num_envs=1,
+        total_steps=1,
+    )
+    fixture = HierarchicalMAPPOExperiment(config, device=torch.device("cpu"))
+    checkpoint = tmp_path / "fixture_random_policy.pt"
+    save_hierarchical_checkpoint(checkpoint, fixture.trainer, stage="low", step=0)
+    spec = ExperimentSpec(
+        name="checkpoint_smoke", seeds=(43,), num_uavs=3, device="cpu", checkpoint=checkpoint
+    )
+    output = ExperimentOutput.create(tmp_path, spec, metadata={"fixture_checkpoint": True})
+
+    results = evaluate_hierarchical_checkpoint(
+        spec, output, config_path=config_path, episodes_per_seed=1, max_steps=3
+    )
+
+    assert "CBF_intervention_rate" in results[0].metrics
+    assert (output.root / "figures" / "seed_43_episode_0.png").is_file()
+    raw = (output.root / "raw_results" / "seed_43.jsonl").read_text(encoding="utf-8")
+    assert '"controller": "hierarchical_checkpoint"' in raw
+
+
+def test_scale_profiles_define_every_required_uav_count() -> None:
+    """The scale matrix is an executable source for every supported team size."""
+    path = Path(__file__).parents[1] / "configs/experiments/scale_profiles.yaml"
+    profiles = load_scale_profiles(path)
+
+    assert tuple(profile.num_uavs for profile in profiles) == (3, 5, 8, 12, 16)
+    assert all(profile.communication_radius > 0.0 for profile in profiles)

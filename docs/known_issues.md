@@ -83,3 +83,12 @@
   on CUDA, but this small joint QP has no GPU execution path in the current
   implementation. Larger fleets require timing studies and possibly a sparse
   or decomposed safety-solver design before real-time claims are made.
+- The Phase-14 CUDA smoke run uses a deterministic goal-directed semantic
+  controller when no hierarchy checkpoint is supplied. It verifies dynamic
+  environment, communication, graph, CBF, output, and GPU selection plumbing,
+  but it is not an algorithm-performance measurement. Learned evaluation now
+  requires an explicit compatible checkpoint.
+- The complete multi-seed trained-baseline and ablation matrix has not been
+  executed. In particular, no claim is made yet for expert gap or
+  generalization gap because matched CA-HGALO references and paired
+  within/out-of-distribution runs are unavailable.

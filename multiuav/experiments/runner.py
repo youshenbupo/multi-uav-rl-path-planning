@@ -35,7 +35,11 @@ def create_experiment_output(spec: ExperimentSpec, output_root: Path) -> Experim
     configuration = dynamic_evaluation_config()
     metadata: dict[str, Any] = {
         "resolved_device": str(device),
-        "controller": "goal_directed_semantic_smoke",
+        "controller": (
+            "hierarchical_checkpoint"
+            if spec.checkpoint is not None
+            else "goal_directed_semantic_smoke"
+        ),
         "dynamic_obstacles": [
             {
                 "identifier": obstacle.identifier,
@@ -133,7 +137,7 @@ def evaluate_goal_controller(
     )
     results: list[SeedResult] = []
     for seed in spec.seeds:
-        records = [
+        episode_runs = [
             _run_episode(
                 scenario,
                 configuration,
@@ -146,11 +150,196 @@ def evaluate_goal_controller(
             )
             for episode in range(episodes_per_seed)
         ]
+        records = [record for record, _ in episode_runs]
+        for episode, (record, positions) in enumerate(episode_runs):
+            output.write_raw_result(seed=seed, episode=episode, result=record)
+            _write_episode_figure(
+                output.root / "figures" / f"seed_{seed}_episode_{episode}.png", positions
+            )
+        results.append(SeedResult(seed=seed, metrics=_aggregate_episode_records(records)))
+    output.write_summary(results)
+    return results
+
+
+def evaluate_hierarchical_checkpoint(
+    spec: ExperimentSpec,
+    output: ExperimentOutput,
+    *,
+    config_path: Path,
+    episodes_per_seed: int = 4,
+    max_steps: int | None = None,
+) -> list[SeedResult]:
+    """Evaluate a compatible trained hierarchy in the dynamic communication world.
+
+    Unlike ``evaluate_goal_controller``, this function always loads and executes
+    the supplied learned high- and low-level checkpoint weights.  A missing
+    checkpoint is an explicit input error rather than an opportunity to fall
+    back to a rule controller.
+    """
+    from multiuav.learning.hierarchical_mappo import load_hierarchical_checkpoint
+    from multiuav.learning.hierarchical_policy import HierarchicalPolicy
+    from multiuav.learning.hierarchical_runner import (
+        HierarchicalMAPPOExperiment,
+        load_hierarchical_experiment_config,
+    )
+
+    if spec.checkpoint is None:
+        raise ValueError("Checkpoint evaluation requires ExperimentSpec.checkpoint.")
+    if episodes_per_seed < 1:
+        raise ValueError("episodes_per_seed must be positive.")
+    device = resolve_device(spec.device)
+    results: list[SeedResult] = []
+    source_config = load_hierarchical_experiment_config(config_path)
+    for seed in spec.seeds:
+        records: list[dict[str, float | int | str]] = []
+        for episode in range(episodes_per_seed):
+            config = replace(
+                source_config,
+                seed=seed + episode,
+                num_envs=1,
+                num_uavs=spec.num_uavs,
+                communication_enabled=True,
+                dynamic_obstacle_enabled=True,
+                cbf_enabled=spec.use_cbf,
+            )
+            experiment = HierarchicalMAPPOExperiment(config, device=device)
+            load_hierarchical_checkpoint(spec.checkpoint, experiment.trainer, map_location=device)
+            environment = experiment.environments[0]
+            if max_steps is not None:
+                environment.config = replace(environment.config, max_steps=max_steps)
+            observations, _ = environment.reset(seed=seed + episode)
+            experiment.observations = [observations]
+            experiment.policy_state = HierarchicalPolicy(
+                config.policy_config(),
+                num_envs=1,
+                num_agents=spec.num_uavs,
+                device=device,
+            )
+            record, positions = _run_hierarchical_episode(experiment, environment)
+            record["controller"] = "hierarchical_checkpoint"
+            record["checkpoint"] = str(spec.checkpoint)
+            figure_path = output.root / "figures" / f"seed_{seed}_episode_{episode}.png"
+            _write_episode_figure(figure_path, positions)
+            records.append(record)
         for episode, record in enumerate(records):
             output.write_raw_result(seed=seed, episode=episode, result=record)
         results.append(SeedResult(seed=seed, metrics=_aggregate_episode_records(records)))
     output.write_summary(results)
     return results
+
+
+def _run_hierarchical_episode(
+    experiment: Any, environment: MultiUAVParallelEnv
+) -> tuple[dict[str, float | int | str], list[np.ndarray]]:
+    """Run deterministic high/low graph-policy inference and execution-side CBF."""
+    path_length = 0.0
+    energy_proxy = 0.0
+    minimum_separations: list[float] = []
+    decision_latencies: list[float] = []
+    corrections: list[float] = []
+    emergency_count = 0
+    conflict_count = 0
+    terrain_violation = 0
+    threat_violation = 0
+    reason = "max_steps"
+    positions = [environment.positions.copy()]
+    while environment.agents:
+        started = time.perf_counter()
+        node_features = experiment._node_features()
+        graph = experiment._build_graph()
+        with torch.no_grad():
+            high_proposals, _, _ = experiment.trainer.high_actor.sample(
+                node_features,
+                graph.edge_features,
+                graph.adjacency,
+                graph.node_mask,
+                deterministic=True,
+            )
+            _, _ = experiment.policy_state.begin_low_step(high_proposals, graph.node_mask)
+            low_actions, _, _ = experiment.trainer.low_actor.sample(
+                node_features,
+                graph.edge_features,
+                graph.adjacency,
+                graph.node_mask,
+                experiment.policy_state.context(),
+                deterministic=True,
+            )
+        proposed = low_actions[0].detach().cpu().numpy()
+        if experiment.cbf_adapter is not None:
+            safe_actions, decision = experiment.cbf_adapter.filter_normalized(
+                environment._snapshot(), proposed
+            )
+            corrections.append(decision.intervention_norm)
+            emergency_count += int(decision.emergency_fallback_used)
+        else:
+            safe_actions = proposed
+        decision_latencies.append(time.perf_counter() - started)
+        previous = environment.positions.copy()
+        observations, _, terminations, truncations, infos = environment.step(
+            {
+                agent: safe_actions[environment.agent_name_mapping[agent]].astype(np.float32)
+                for agent in environment.agents
+            }
+        )
+        experiment.observations = [observations]
+        experiment.policy_state.finish_low_step(experiment._build_graph().node_mask)
+        positions.append(environment.positions.copy())
+        path_length += float(np.linalg.norm(environment.positions - previous, axis=1).sum())
+        energy_proxy += float(np.square(safe_actions).sum())
+        separation = environment.minimum_separation
+        minimum_separations.append(separation)
+        conflict_count += int(separation < environment.scenario.safe_separation)
+        reason = str(infos["uav_0"]["termination_reason"])
+        costs = infos["uav_0"]["safety_costs"]
+        terrain_violation += int(costs["terrain_violation_cost"] > 0.0)
+        threat_violation += int(costs["threat_violation_cost"] > 0.0)
+        if all(terminations.values()) or all(truncations.values()):
+            break
+    return (
+        {
+            "termination_reason": reason,
+            "success": float(reason == "all_arrived"),
+            "collision": float(reason == "collision"),
+            "terrain_violation": float(reason == "terrain_violation" or terrain_violation > 0),
+            "threat_violation": float(reason == "threat_violation" or threat_violation > 0),
+            "path_length": path_length,
+            "mission_time": float(environment.step_count * environment.config.dt),
+            "minimum_separation": float(min(minimum_separations, default=np.inf)),
+            "temporal_conflict_count": conflict_count,
+            "energy_proxy": energy_proxy,
+            "decision_latency": float(np.mean(decision_latencies, dtype=float)),
+            "cbf_intervention": float(np.count_nonzero(corrections)),
+            "cbf_mean_correction": float(np.mean(corrections, dtype=float)) if corrections else 0.0,
+            "cbf_emergency_count": emergency_count,
+            "dynamic_obstacle_count": len(environment.scenario.dynamic_obstacles),
+            "communication_delay_steps": environment.config.communication_delay_steps,
+            "communication_drop_probability": environment.config.communication_drop_probability,
+        },
+        positions,
+    )
+
+
+def _write_episode_figure(path: Path, positions: list[np.ndarray]) -> None:
+    """Write a compact top-view trajectory artifact for each retained episode."""
+    import matplotlib
+
+    matplotlib.use("Agg", force=True)
+    import matplotlib.pyplot as plt
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    trajectory = np.asarray(positions, dtype=float)
+    figure, axis = plt.subplots(figsize=(6, 4))
+    for agent_index in range(trajectory.shape[1]):
+        axis.plot(
+            trajectory[:, agent_index, 0],
+            trajectory[:, agent_index, 1],
+            label=f"uav_{agent_index}",
+        )
+    axis.set(xlabel="x", ylabel="y", title="Hierarchical checkpoint evaluation")
+    axis.legend(loc="best")
+    figure.tight_layout()
+    figure.savefig(path, dpi=150)
+    plt.close(figure)
 
 
 def _run_episode(
@@ -163,7 +352,7 @@ def _run_episode(
     use_graph: bool,
     use_hierarchy: bool,
     use_cbf: bool,
-) -> dict[str, float | int | str]:
+) -> tuple[dict[str, float | int | str], list[np.ndarray]]:
     environment = MultiUAVParallelEnv(scenario, configuration)
     environment.reset(seed=seed)
     adapter = (
@@ -181,6 +370,7 @@ def _run_episode(
     terrain_violation = 0
     threat_violation = 0
     reason = "max_steps"
+    positions = [environment.positions.copy()]
     while environment.agents:
         started = time.perf_counter()
         proposed = _goal_actions(environment, graph_builder, device, use_graph, use_hierarchy)
@@ -199,6 +389,7 @@ def _run_episode(
             }
         )
         path_length += float(np.linalg.norm(environment.positions - previous, axis=1).sum())
+        positions.append(environment.positions.copy())
         energy_proxy += float(np.square(safe_actions).sum())
         separation = environment.minimum_separation
         minimum_separations.append(separation)
@@ -209,25 +400,30 @@ def _run_episode(
         threat_violation += int(costs["threat_violation_cost"] > 0.0)
         if all(terminations.values()) or all(truncations.values()):
             break
-    return {
-        "termination_reason": reason,
-        "success": float(reason == "all_arrived"),
-        "collision": float(reason == "collision"),
-        "terrain_violation": float(reason == "terrain_violation" or terrain_violation > 0),
-        "threat_violation": float(reason == "threat_violation" or threat_violation > 0),
-        "path_length": path_length,
-        "mission_time": float(environment.step_count * configuration.dt),
-        "minimum_separation": float(min(minimum_separations, default=np.inf)),
-        "temporal_conflict_count": conflict_count,
-        "energy_proxy": energy_proxy,
-        "decision_latency": float(np.mean(decision_latencies, dtype=float)),
-        "cbf_intervention": float(np.count_nonzero(corrections)),
-        "cbf_mean_correction": float(np.mean(corrections, dtype=float)) if corrections else 0.0,
-        "cbf_emergency_count": emergency_count,
-        "dynamic_obstacle_count": len(scenario.dynamic_obstacles),
-        "communication_delay_steps": configuration.communication_delay_steps,
-        "communication_drop_probability": configuration.communication_drop_probability,
-    }
+    return (
+        {
+            "termination_reason": reason,
+            "success": float(reason == "all_arrived"),
+            "collision": float(reason == "collision"),
+            "terrain_violation": float(reason == "terrain_violation" or terrain_violation > 0),
+            "threat_violation": float(reason == "threat_violation" or threat_violation > 0),
+            "path_length": path_length,
+            "mission_time": float(environment.step_count * configuration.dt),
+            "minimum_separation": float(min(minimum_separations, default=np.inf)),
+            "temporal_conflict_count": conflict_count,
+            "energy_proxy": energy_proxy,
+            "decision_latency": float(np.mean(decision_latencies, dtype=float)),
+            "cbf_intervention": float(np.count_nonzero(corrections)),
+            "cbf_mean_correction": float(np.mean(corrections, dtype=float))
+            if corrections
+            else 0.0,
+            "cbf_emergency_count": emergency_count,
+            "dynamic_obstacle_count": len(scenario.dynamic_obstacles),
+            "communication_delay_steps": configuration.communication_delay_steps,
+            "communication_drop_probability": configuration.communication_drop_probability,
+        },
+        positions,
+    )
 
 
 def _goal_actions(

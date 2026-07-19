@@ -14,7 +14,10 @@ def main() -> None:
     """Parse the common experiment contract before registered baseline dispatch."""
     from multiuav.experiments.cli import build_mainline_parser, spec_from_args
     from multiuav.experiments.registry import MethodRegistry
-    from multiuav.experiments.runner import create_experiment_output, evaluate_goal_controller
+    from multiuav.experiments.runner import (
+        create_experiment_output,
+        evaluate_hierarchical_checkpoint,
+    )
 
     parser = build_mainline_parser("benchmark")
     parser.add_argument("--methods", nargs="+", default=("full_method",))
@@ -30,8 +33,17 @@ def main() -> None:
     if tuple(args.methods) != ("full_method",):
         parser.error("Unified benchmark execution currently supports only full_method.")
     spec = spec_from_args(args)
+    if spec.checkpoint is None:
+        parser.error(
+            "full_method requires --checkpoint; no smoke-controller substitution is allowed."
+        )
     output = create_experiment_output(spec, args.output_root)
-    results = evaluate_goal_controller(spec, output, episodes_per_seed=args.episodes_per_seed)
+    results = evaluate_hierarchical_checkpoint(
+        spec,
+        output,
+        config_path=args.config,
+        episodes_per_seed=args.episodes_per_seed,
+    )
     print(json.dumps({"output": str(output.root), "seeds": [result.seed for result in results]}))
 
 

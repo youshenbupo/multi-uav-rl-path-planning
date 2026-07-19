@@ -1,0 +1,22 @@
+# Fixed compute/communication profiles for each required multi-UAV scale.
+profiles:
+  - num_uavs: 3
+    num_envs: 2
+    rollout_length: 32
+    communication_radius: 45.0
+  - num_uavs: 5
+    num_envs: 2
+    rollout_length: 32
+    communication_radius: 45.0
+  - num_uavs: 8
+    num_envs: 2
+    rollout_length: 24
+    communication_radius: 45.0
+  - num_uavs: 12
+    num_envs: 1
+    rollout_length: 16
+    communication_radius: 50.0
+  - num_uavs: 16
+    num_envs: 1
+    rollout_length: 12
+    communication_radius: 55.0

@@ -2,9 +2,18 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
+
+import torch
+
+from multiuav.learning.hierarchical_mappo import save_hierarchical_checkpoint
+from multiuav.learning.hierarchical_runner import (
+    HierarchicalMAPPOExperiment,
+    load_hierarchical_experiment_config,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -33,3 +42,72 @@ def test_all_phase14_entry_points_share_mainline_switches() -> None:
             check=True,
         )
         assert all(option in completed.stdout for option in required_options)
+
+
+def test_evaluate_script_uses_checkpoint_evaluator_for_compatible_weights(tmp_path: Path) -> None:
+    """The public evaluator executes checkpoint weights rather than replacing them."""
+    from dataclasses import replace
+
+    config_path = PROJECT_ROOT / "configs/rl/hierarchical_mappo.yaml"
+    config = replace(load_hierarchical_experiment_config(config_path), num_envs=1, total_steps=1)
+    fixture = HierarchicalMAPPOExperiment(config, device=torch.device("cpu"))
+    checkpoint = tmp_path / "fixture.pt"
+    save_hierarchical_checkpoint(checkpoint, fixture.trainer, stage="low", step=0)
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(PROJECT_ROOT / "scripts" / "evaluate.py"),
+            "--config",
+            str(config_path),
+            "--checkpoint",
+            str(checkpoint),
+            "--device",
+            "cpu",
+            "--seed",
+            "59",
+            "--episodes-per-seed",
+            "1",
+            "--max-steps",
+            "2",
+            "--output-root",
+            str(tmp_path),
+            "--experiment-name",
+            "checkpoint_cli",
+        ],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert "checkpoint_cli" in completed.stdout
+    assert (tmp_path / "checkpoint_cli" / "figures" / "seed_59_episode_0.png").is_file()
+    metadata = json.loads(
+        (tmp_path / "checkpoint_cli" / "environment.json").read_text(encoding="utf-8")
+    )
+    assert metadata["controller"] == "hierarchical_checkpoint"
+
+
+def test_benchmark_rejects_checkpointless_learned_full_method(tmp_path: Path) -> None:
+    """A benchmark must not substitute a smoke controller for the learned full method."""
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(PROJECT_ROOT / "scripts" / "run_benchmark.py"),
+            "--methods",
+            "full_method",
+            "--device",
+            "cpu",
+            "--episodes-per-seed",
+            "1",
+            "--output-root",
+            str(tmp_path),
+        ],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+    )
+
+    assert completed.returncode == 2
+    assert "requires --checkpoint" in completed.stderr

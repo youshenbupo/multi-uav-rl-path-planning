@@ -245,3 +245,20 @@ conflict QP took approximately `0.0313 s`, below the checked-in `0.1 s` limit.
 This is execution-path evidence, not a guarantee of safety for an arbitrary
 learned policy or an initially unrecoverable state. The phase-thirteen stop
 gate is active.
+
+## Phase 14 - dynamic-world mainline (in progress 2026-07-19)
+
+The environment now has deterministic constant-velocity cylinders and seeded
+range/delay/drop/staleness communication. Actor graph construction uses only
+delivered neighbour knowledge while centralized training state retains truth;
+the CBF adds moving-cylinder relative-velocity rows. The hierarchy training
+entrypoint enables these world semantics and the execution-side CBF.
+
+The unified experiment kernel preserves each raw seed episode, 95% Student-t
+summary intervals, CUDA selection metadata, and per-episode trajectory PNGs.
+`evaluate.py --checkpoint` now executes compatible high- and low-level
+hierarchy weights in this dynamic world rather than substituting a rule policy.
+A CUDA smoke command resolved the local RTX 5060 device and wrote its output
+artifacts. Its no-checkpoint controller is explicitly labelled a semantic smoke
+controller, not a learned result. Phase 14 remains in progress because the
+complete trained-baseline/ablation experiment matrix has not yet been run.

@@ -13,21 +13,30 @@ if str(PROJECT_ROOT) not in sys.path:
 def main() -> None:
     """Parse the common experiment contract before deterministic evaluation dispatch."""
     from multiuav.experiments.cli import build_mainline_parser, spec_from_args
-    from multiuav.experiments.runner import create_experiment_output, evaluate_goal_controller
+    from multiuav.experiments.runner import (
+        create_experiment_output,
+        evaluate_goal_controller,
+        evaluate_hierarchical_checkpoint,
+    )
 
     parser = build_mainline_parser("evaluation")
     parser.add_argument("--episodes-per-seed", type=int, default=4)
     parser.add_argument("--max-steps", type=int)
     args = parser.parse_args()
     spec = spec_from_args(args)
-    if spec.checkpoint is not None:
-        parser.error(
-            "Checkpoint policy evaluation is not yet wired to this semantic smoke evaluator; "
-            "use scripts/evaluate_hierarchical_mappo.py for a checkpoint rollout."
-        )
     output = create_experiment_output(spec, args.output_root)
-    results = evaluate_goal_controller(
-        spec, output, episodes_per_seed=args.episodes_per_seed, max_steps=args.max_steps
+    results = (
+        evaluate_hierarchical_checkpoint(
+            spec,
+            output,
+            config_path=args.config,
+            episodes_per_seed=args.episodes_per_seed,
+            max_steps=args.max_steps,
+        )
+        if spec.checkpoint is not None
+        else evaluate_goal_controller(
+            spec, output, episodes_per_seed=args.episodes_per_seed, max_steps=args.max_steps
+        )
     )
     print(json.dumps({"output": str(output.root), "seeds": [result.seed for result in results]}))
 
