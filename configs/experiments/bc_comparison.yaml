@@ -1,0 +1,12 @@
+# Phase-12 required BC/MAPPO initialization comparison interface.
+seed: 20260718
+modes:
+  - random
+  - low_bc_only
+  - high_bc_only
+  - full_bc
+  - bc_mappo_finetune
+bc_checkpoint_dir: data/rl/behavior_cloning
+freeze_encoder_updates: 2
+ppo_learning_rate: 0.0001
+imitation_coef: 0.0

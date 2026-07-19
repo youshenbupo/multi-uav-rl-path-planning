@@ -1,0 +1,106 @@
+请执行阶段 11：实现分层多智能体策略。
+
+架构：
+
+预测冲突图
+    -> 高层协调策略
+    -> 低层速度策略
+
+一、高层执行频率
+
+高层每 H 个低层 step 执行一次，H 从配置读取。
+
+二、高层动作
+
+第一版使用离散协调动作：
+
+0 continue
+1 wait_or_yield
+2 shift_left
+3 shift_right
+4 climb
+5 descend
+
+同时允许输出：
+
+- local subgoal offset；
+- priority score；
+- suggested delay。
+
+为了保证第一版可训练，可以先只启用离散动作，将连续字段保留为可选扩展。
+
+三、低层动作
+
+低层每步输出：
+
+vx
+vy
+vz
+
+低层观测包含：
+
+- 自身状态；
+- 局部环境；
+- 图嵌入；
+- 当前高层动作；
+- 当前高层动作剩余持续时间；
+- local subgoal。
+
+四、训练方式
+
+优先实现稳定且可调试的两阶段训练：
+
+阶段 A：
+固定规则型高层协调器，训练低层策略。
+
+阶段 B：
+加载低层策略，训练高层策略。
+
+阶段 C：
+可选联合微调。
+
+不要最开始同时从随机初始化联合训练两层。
+
+五、优势函数
+
+高层和低层分别维护：
+
+- reward accumulation；
+- action log probability；
+- value estimate；
+- GAE；
+- update interval。
+
+明确处理高层时间尺度下的折扣。
+
+六、接口
+
+实现：
+
+HierarchicalPolicy
+HighLevelActor
+LowLevelActor
+HierarchicalRolloutBuffer
+HierarchicalMAPPOTrainer
+
+七、测试
+
+- 高层动作保持 H 步；
+- high-level boundary 正确；
+- episode 提前结束正确；
+- 两层 buffer 对齐；
+- 高层 discount 正确；
+- checkpoint save/load；
+- 固定规则高层下低层可训练。
+
+八、消融接口
+
+必须可配置关闭：
+
+- high-level policy；
+- local subgoal；
+- priority；
+- delay；
+- altitude maneuver。
+
+完成后停止，不加入行为克隆和 CBF。

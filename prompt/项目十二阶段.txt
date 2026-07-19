@@ -1,0 +1,92 @@
+请执行阶段 12：使用 CA-HGALO 专家数据进行行为克隆预训练。
+
+一、数据
+
+使用 data/expert 下经过验证的 HDF5 数据集。
+
+必须支持：
+
+- train/validation/test 按 scenario 和 seed 划分；
+- episode-level split，禁止同一 episode 泄漏到不同集合；
+- high_level_action_mask；
+- low_level_action_mask；
+- variable num_uavs；
+- active mask；
+- graph edge mask。
+
+二、低层行为克隆
+
+输入：
+
+local observation
+graph embedding
+high-level command
+
+输出：
+
+expert desired velocity
+
+损失优先使用：
+
+- normalized MSE；
+- cosine direction loss；
+- speed magnitude loss。
+
+记录：
+
+velocity RMSE
+direction cosine
+endpoint rollout error
+
+三、高层行为克隆
+
+对有标签的时间步训练：
+
+- maneuver classification；
+- delay regression；
+- priority regression；
+- local subgoal regression。
+
+对无标签时间步必须使用 mask，不得当成 continue 标签。
+
+四、训练产物
+
+保存：
+
+bc_low_level.pt
+bc_high_level.pt
+normalization_stats.json
+training_config.yaml
+dataset_manifest.json
+
+五、闭环验证
+
+不仅验证单步动作误差，还要在环境中进行闭环 rollout：
+
+- 到达率；
+- 碰撞率；
+- 最小距离；
+- 路径长度；
+- 与专家路径偏差。
+
+六、与 MAPPO 集成
+
+支持：
+
+1. 从 BC checkpoint 初始化；
+2. 冻结 encoder 若干更新；
+3. 逐渐解冻；
+4. 使用较低学习率进行 PPO 微调；
+5. 可配置 imitation loss auxiliary term。
+
+七、对比实验接口
+
+支持：
+
+- random initialization；
+- low-level BC only；
+- high-level BC only；
+- full BC；
+- BC + MAPPO fine-tuning。
+
+完成后停止，不加入 CBF。

@@ -1,0 +1,25 @@
+# Values transcribed from +config/defaultConfig.m and +algorithms/run_HGALO_planner.m.
+algorithm: HGALO_PYTHON_COORDINATED_RECONSTRUCTION
+population_size: 45
+max_iterations: 55
+seed: 20260716
+use_chaos_init: true
+use_levy_flight: true
+use_elite_local_search: true
+use_opposition_learning: true
+use_feasibility_repair: true
+use_gwo_guidance: true
+use_alo_local: true
+local_probability: 0.3
+top_k_ratio: 0.2
+local_scale0: 0.05
+local_decay: 2.0
+levy_beta: 1.5
+elite_preserve: true
+greedy_selection: true
+use_deb_feasibility_rules: false
+use_feasibility_preserving_mutation: false
+adaptive_threat_penalty: false
+adaptive_threat_alpha: 0.8
+adaptive_threat_min_scale: 0.8
+adaptive_threat_max_scale: 6.0

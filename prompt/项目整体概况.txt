@@ -1,0 +1,65 @@
+你现在需要协助我实现一个多无人机强化学习路径规划研究项目。
+
+【已有代码】
+MATLAB 版 CA-HGALO 论文算法位于：
+
+D:\yolo\multiuav\legacy_hgalo
+
+【新项目目录】
+所有新的 Python 代码、配置、数据转换脚本、测试和文档必须放在：
+
+D:\yolo\multiuav\reinforcement_learning
+
+【研究主线】
+项目最终要实现：
+
+CA-HGALO 专家示范
+    + 预测型时空冲突图
+    + 分层 MAPPO
+    + CBF 安全过滤器
+
+用于三维地形和威胁环境中的多无人机时空路径规划。
+
+【重要原则】
+
+1. D:\yolo\multiuav\legacy_hgalo 是论文使用的 MATLAB 基准版本。
+2. 默认不得直接修改 legacy_hgalo 中的文件。
+3. 可以读取、分析和调用 legacy_hgalo。
+4. 需要新增 MATLAB 导出或包装脚本时，优先放到新项目的 tools/matlab 目录。
+5. 不要逐行机械翻译 MATLAB，而要按照功能模块重构为 Python。
+6. Python 实现必须通过 MATLAB 基准数据进行回归验证。
+7. 在环境评估器验证完成前，不要开始实现 MAPPO。
+8. 在普通 MAPPO 能正常训练前，不要加入 GNN、分层策略或 CBF。
+9. 不得伪造实验结果、专家数据、MATLAB 输出或测试通过记录。
+10. 遇到 MATLAB 不可用、缺少文件或无法确定算法含义时，明确报告，不要自行猜测结果。
+11. 所有代码使用清晰的英文变量名、类型注解和必要的文档字符串。
+12. 所有随机实验必须支持显式 random seed。
+13. 所有实验配置使用 YAML，不要把关键参数散落在代码中。
+14. 所有路径通过 pathlib 管理，避免在核心代码中写死绝对路径。
+15. Windows 下的命令优先使用 PowerShell。
+16. 训练代码后续应能迁移到 Linux GPU 服务器运行。
+17. 初期不要依赖 PyTorch Geometric；预测冲突图优先使用纯 PyTorch 实现，降低 Windows 安装风险。
+18. 每完成一个阶段后必须停止，不要自行进入下一阶段。
+
+【每个阶段完成后必须报告】
+
+1. 本阶段完成了什么；
+2. 新增和修改了哪些文件；
+3. 执行了哪些命令；
+4. 测试结果；
+5. 与 MATLAB 是否一致；
+6. 当前仍存在的问题；
+7. 下一阶段建议；
+8. 不要只给出代码片段，必须实际在项目目录中创建文件并运行可执行测试。
+
+【长期文档】
+
+在新项目中持续维护：
+
+docs/legacy_inventory.md
+docs/matlab_python_mapping.md
+docs/technical_decisions.md
+docs/progress.md
+docs/known_issues.md
+
+现在只确认你理解上述规则，不要立即开始写全部系统。

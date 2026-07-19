@@ -1,0 +1,32 @@
+# Python bytecode and tooling caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environments and editor state
+.venv/
+venv/
+.vscode/
+.idea/
+
+# Generated experiment data; keep directory placeholders only
+data/regression/*
+!data/regression/.gitkeep
+!data/regression/matlab/
+!data/regression/matlab/reference_cases.mat
+!data/regression/matlab/metadata.json
+data/expert/*
+!data/expert/.gitkeep
+
+# Generated reinforcement-learning checkpoints, TensorBoard logs, and experiment reports
+data/rl/
+outputs/
+
+# MATLAB exports and generated videos
+tools/matlab/exports/
+*.mat
+*.mp4

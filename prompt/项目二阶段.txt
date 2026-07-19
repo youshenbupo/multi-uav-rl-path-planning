@@ -1,0 +1,125 @@
+请执行阶段 2：创建 Python 项目环境和基础工程结构。
+
+项目目录：
+
+D:\yolo\multiuav\reinforcement_learning
+
+Conda 环境名称：
+
+multiuav_rl
+
+要求先检查当前机器状态，再安装依赖。
+
+一、检查环境
+
+执行并记录：
+
+conda --version
+conda info
+python --version
+nvidia-smi
+
+如果 multiuav_rl 环境已经存在，不要直接删除，先检查其中的 Python 和依赖状态。
+
+二、创建 Conda 环境
+
+优先使用 Python 3.11。
+
+安装基础依赖：
+
+numpy
+scipy
+pandas
+matplotlib
+pyyaml
+h5py
+networkx
+tqdm
+pytest
+pytest-cov
+gymnasium
+pettingzoo
+tensorboard
+cvxpy
+osqp
+ruff
+mypy
+
+PyTorch：
+
+1. 根据 nvidia-smi 和当前驱动判断安装方式。
+2. 使用官方支持的 PyTorch 安装命令。
+3. 不要随意安装不兼容的 CUDA Toolkit。
+4. 记录准确的 torch、CUDA 和 GPU 检测结果。
+5. 暂时不安装 PyTorch Geometric。
+
+三、创建项目结构
+
+创建：
+
+reinforcement_learning/
+├─ README.md
+├─ environment.yml
+├─ pyproject.toml
+├─ .gitignore
+├─ configs/
+├─ data/
+│  ├─ regression/
+│  ├─ expert/
+│  └─ scenarios/
+├─ docs/
+├─ multiuav/
+│  ├─ __init__.py
+│  ├─ core/
+│  ├─ geometry/
+│  ├─ evaluation/
+│  ├─ expert/
+│  ├─ envs/
+│  ├─ learning/
+│  ├─ safety/
+│  └─ data/
+├─ scripts/
+├─ tools/
+│  └─ matlab/
+└─ tests/
+
+四、基础工程要求
+
+1. 配置 pyproject.toml。
+2. 配置 pytest。
+3. 配置 ruff。
+4. 配置基础 mypy。
+5. 编写一个环境检测脚本：
+
+scripts/check_environment.py
+
+脚本输出：
+
+- Python 版本；
+- NumPy 版本；
+- PyTorch 版本；
+- CUDA 是否可用；
+- GPU 名称；
+- Gymnasium 是否可用；
+- CVXPY 和 OSQP 是否可用。
+
+6. 编写最小 smoke test。
+7. 创建或初始化 Git 仓库，但不要提交 legacy_hgalo。
+8. README 中写明：
+   - 项目目标；
+   - 环境创建方式；
+   - 激活环境方式；
+   - 环境检测命令；
+   - 测试命令。
+
+五、验证
+
+至少运行：
+
+python scripts/check_environment.py
+pytest
+ruff check .
+
+将成功安装后的准确依赖版本写入 environment.yml。
+
+不要实现路径规划算法。完成后停止。

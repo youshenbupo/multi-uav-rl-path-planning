@@ -1,0 +1,7 @@
+# Phase-13 direct-OSQP CBF settings for the single-integrator execution filter.
+alpha: 1.0
+terrain_gradient_epsilon: 0.25
+threat_vertical_influence: 0.0
+horizontal_speed_polygon_sides: 16
+slack_penalty: 1000.0
+max_solve_time_seconds: 0.1

@@ -1,0 +1,16 @@
+# +config/makeScenario.m: high_threat_5uav
+scenario_key: high_threat_5uav
+scenario_id: s3_high_threat_5uav
+num_uavs: 5
+num_waypoints: 7
+safe_separation: 75.0
+threat_margin: 35.0
+cruise_speed: 35.0
+world_x: [0.0, 1000.0]
+world_y: [0.0, 1000.0]
+world_z: [0.0, 320.0]
+min_clearance: 35.0
+max_clearance: 140.0
+target_clearance: 80.0
+max_turn_degrees: 65.0
+collision_samples: 45

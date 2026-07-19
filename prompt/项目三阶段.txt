@@ -1,0 +1,93 @@
+请执行阶段 3：为 MATLAB 到 Python 的迁移建立回归基准数据。
+
+旧代码：
+
+D:\yolo\multiuav\legacy_hgalo
+
+新项目：
+
+D:\yolo\multiuav\reinforcement_learning
+
+一、目标
+
+从 MATLAB 代码中导出固定输入和固定输出，用于后续 Python 单元测试。
+
+回归数据至少覆盖：
+
+1. 地形高度查询；
+2. 球坐标到笛卡尔坐标解码；
+3. 路径长度；
+4. 转角序列；
+5. 路径重采样；
+6. 圆柱威胁距离；
+7. 地形净空；
+8. 两架无人机同步距离；
+9. 最小空间分离距离；
+10. 时间冲突数量和时间冲突代价；
+11. 到达时间一致性；
+12. 七项代价分量；
+13. 总代价；
+14. 严格成功判定；
+15. 时间调度前后的轨迹和延迟；
+16. 空间修复前后的轨迹；
+17. S1、S2、S3、S4 场景参数。
+
+二、实现方式
+
+在新项目中创建：
+
+tools/matlab/export_reference_cases.m
+
+该脚本可以通过 addpath 读取 legacy_hgalo，但不得修改 legacy_hgalo 文件。
+
+导出目录：
+
+data/regression/matlab/
+
+建议格式：
+
+- 小型数组使用 .mat；
+- 大型数组可使用 MATLAB v7.3 HDF5；
+- 同时生成 metadata.json，记录：
+  - MATLAB 版本；
+  - 导出时间；
+  - 随机种子；
+  - 单位；
+  - 数组维度；
+  - 场景名称；
+  - 源函数名称。
+
+三、确定性要求
+
+1. 对所有随机函数设置固定随机种子。
+2. 基础几何测试使用人工构造的简单数据，便于手工检查。
+3. 算法级测试额外保存固定种子下的一次 CA-HGALO 输出。
+4. 不要求此时运行完整 30 次实验。
+5. 保存代价总值时必须同时保存各分项，不能只保存 total_cost。
+
+四、MATLAB 不可用时
+
+如果当前终端不能执行 MATLAB：
+
+1. 仍然完成 export_reference_cases.m。
+2. 创建 docs/matlab_export_instructions.md。
+3. 写出我需要在 MATLAB 命令行执行的准确命令。
+4. 不生成虚假 .mat 数据。
+5. 明确标记本阶段等待 MATLAB 输出。
+
+五、Python 读取验证
+
+创建：
+
+scripts/inspect_matlab_reference.py
+
+用于读取导出的数据并输出：
+
+- 文件列表；
+- 字段名；
+- shape；
+- dtype；
+- 数值范围；
+- NaN 和 Inf 检查。
+
+完成导出或导出脚本后停止，不要开始迁移算法。

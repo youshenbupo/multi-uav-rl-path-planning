@@ -1,0 +1,93 @@
+请执行阶段 7：将完整 CA-HGALO 专家规划器迁移到 Python。
+
+前提：
+
+1. Python evaluator 已通过 MATLAB 回归测试。
+2. 冲突图、时间调度和空间修复已实现。
+3. 不要重复实现第二套代价函数，所有算法统一调用同一个 evaluator。
+
+一、实现算法组件
+
+根据 MATLAB 代码准确迁移：
+
+1. chaotic initialization；
+2. population representation；
+3. spherical-coordinate encoding；
+4. GWO alpha/beta/delta guidance；
+5. ALO-style local exploitation；
+6. Levy flight；
+7. adaptive local-search scale；
+8. elite attraction；
+9. bounded projection；
+10. feasibility-oriented repair；
+11. greedy survivor selection；
+12. global elite preservation；
+13. conflict-aware scheduling；
+14. conflict-aware spatial repair；
+15. convergence history。
+
+二、实现文件
+
+multiuav/expert/encoding.py
+multiuav/expert/geometric_repair.py
+multiuav/expert/gwo.py
+multiuav/expert/alo.py
+multiuav/expert/ca_hgalo.py
+scripts/run_ca_hgalo.py
+scripts/generate_expert_data.py
+
+三、配置
+
+创建：
+
+configs/expert/ca_hgalo.yaml
+configs/scenarios/s1.yaml
+configs/scenarios/s2.yaml
+configs/scenarios/s3.yaml
+configs/scenarios/s4.yaml
+
+所有参数来自 MATLAB，不要自行改变。
+
+四、并行与性能
+
+第一版先保证正确性。
+
+正确后再考虑：
+
+- NumPy 向量化；
+- multiprocessing；
+- 多 seed 并行。
+
+不要在算法尚未验证时使用复杂并行导致结果难以调试。
+
+五、验证方式
+
+确定性模块要求数值一致。
+
+随机优化器不要求 MATLAB 和 Python 每次得到完全相同路径，但需要比较固定配置下多次运行统计：
+
+- best cost；
+- mean cost；
+- std；
+- success rate；
+- mean minimum separation；
+- temporal conflict count；
+- runtime；
+- convergence curve。
+
+至少先运行 5 个 seed 做调试。
+通过后再运行 30 个 seed。
+
+六、专家日志
+
+Python CA-HGALO 每次运行必须保存：
+
+- 最终轨迹；
+- 每项代价；
+- 冲突图；
+- 每轮调度日志；
+- 每次空间修复日志；
+- 高层专家动作标签；
+- 收敛历史。
+
+完成后停止，不实现 RL。

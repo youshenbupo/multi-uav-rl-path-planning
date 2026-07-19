@@ -1,0 +1,119 @@
+请执行阶段 6：建立 CA-HGALO 专家示范数据管线。
+
+目标是把完整路径规划结果转换为强化学习可使用的 episode 数据，而不是只保存最终 waypoint。
+
+一、数据格式
+
+使用 HDF5，每个 episode 建立独立 group。
+
+建议字段：
+
+scenario_id
+seed
+num_uavs
+dt
+nominal_speed
+terrain
+threats
+starts
+goals
+raw_waypoints
+repaired_waypoints
+positions
+velocities
+timestamps
+start_delays
+cost_breakdown
+strict_success
+minimum_separation
+temporal_conflict_count
+
+动态图数据：
+
+node_features
+edge_index
+edge_features
+edge_mask
+conflict_labels
+
+专家动作：
+
+high_level_actions
+high_level_action_mask
+low_level_actions
+low_level_action_mask
+
+日志：
+
+schedule_log
+spatial_repair_log
+
+二、统一 shape 约定
+
+请明确并记录，例如：
+
+positions: [T, N, 3]
+velocities: [T, N, 3]
+active_mask: [T, N]
+low_level_actions: [T, N, 3]
+
+变长图不要强行存成错误的定长数组。
+可以使用：
+
+- 每个时间步独立 HDF5 group；
+- padding + mask；
+- flattened edge arrays + offsets。
+
+三、低层专家动作
+
+初期使用三维期望速度：
+
+v_t = (p_{t+1} - p_t) / dt
+
+对最大速度进行一致的裁剪，并记录裁剪比例。
+
+四、高层专家标签
+
+优先从时间调度和空间修复日志中提取：
+
+- continue；
+- wait/yield；
+- climb；
+- descend；
+- shift_left；
+- shift_right；
+- local_subgoal；
+- assigned_delay；
+- conflict_priority。
+
+如果旧 MATLAB 输出没有足够日志：
+
+1. 不伪造高层标签；
+2. 使用 high_level_action_mask 标记无标签位置；
+3. 在文档中说明缺失；
+4. 为后续 Python CA-HGALO 日志预留接口。
+
+五、实现文件
+
+multiuav/data/expert_schema.py
+multiuav/data/matlab_import.py
+multiuav/data/expert_dataset.py
+scripts/convert_matlab_experts.py
+scripts/validate_expert_dataset.py
+scripts/visualize_expert_episode.py
+
+六、验证
+
+检查：
+
+- NaN；
+- Inf；
+- shape；
+- 时间单调；
+- 速度范围；
+- 起终点一致；
+- 轨迹是否匹配场景；
+- cost 是否能够由 Python evaluator 重新计算；
+- 随机抽取 episode 绘制 3D 和 top-view 图。
+
+完成数据管线后停止。

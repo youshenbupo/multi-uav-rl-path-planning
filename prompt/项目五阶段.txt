@@ -1,0 +1,119 @@
+请执行阶段 5：迁移 CA-HGALO 的协同冲突处理模块。
+
+本阶段只实现规则型冲突模块，不实现学习策略。
+
+一、冲突图
+
+实现：
+
+multiuav/expert/conflict_graph.py
+
+图中：
+
+- 节点代表无人机；
+- 边代表同步轨迹存在安全距离违反；
+- 边权为累计时间冲突 shortfall；
+- 支持返回最严重冲突边；
+- 支持返回每架 UAV 的冲突负担；
+- 支持无冲突图。
+
+输出至少包括：
+
+node_ids
+edge_index
+edge_weights
+conflict_intervals
+minimum_pairwise_distances
+worst_conflict_pair
+
+二、时间调度
+
+实现：
+
+multiuav/expert/temporal_scheduler.py
+
+要求：
+
+1. 根据最严重冲突边选择延迟对象；
+2. 记录选择理由；
+3. 延迟增量受最大预算限制；
+4. 支持多轮调度；
+5. 每轮重新计算同步冲突；
+6. 无法消除冲突时明确返回 unresolved；
+7. 输出完整调度日志。
+
+调度日志至少包括：
+
+iteration
+uav_pair
+delayed_uav
+delay_increment
+total_delay
+conflict_weight_before
+conflict_weight_after
+
+三、空间修复
+
+实现：
+
+multiuav/expert/spatial_repair.py
+
+要求：
+
+1. 找到最危险 UAV 对；
+2. 找到冲突中心位置；
+3. 计算局部路径切向和水平法向；
+4. 使用局部 Gaussian 权重进行横向移动；
+5. 支持局部高度偏移；
+6. 重新执行地形、边界和威胁可行性修复；
+7. 修复后重新计算最小分离距离；
+8. 输出完整修复日志。
+
+四、接口
+
+实现：
+
+ConflictAwareCoordinator
+
+输入：
+
+trajectories
+scenario
+nominal_speed
+
+输出：
+
+repaired_trajectories
+start_delays
+conflict_graph
+schedule_log
+repair_log
+evaluation_before
+evaluation_after
+
+五、回归测试
+
+与 MATLAB 导出的以下数据对比：
+
+- 冲突边；
+- 边权；
+- 最严重冲突对；
+- 延迟对象；
+- 延迟量；
+- 修复位置；
+- 修复后最小距离；
+- 修复后代价。
+
+随机或存在同值分支时，不强制最终路径逐点一致，但必须验证：
+
+- 冲突趋势一致；
+- 可行性判断一致；
+- 代价变化方向合理；
+- 固定 tie-breaking 规则。
+
+六、限制
+
+不要实现 GNN。
+不要实现 MAPPO。
+不要实现 CBF。
+完成测试后停止。

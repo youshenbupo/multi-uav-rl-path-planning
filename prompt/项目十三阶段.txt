@@ -1,0 +1,99 @@
+请执行阶段 13：实现 CBF 安全过滤器。
+
+第一版针对三维单积分器：
+
+p_dot = u
+
+RL 输出期望速度 u_rl。
+
+一、安全约束
+
+至少包含：
+
+1. UAV-UAV 安全距离；
+2. 地形最低净空；
+3. 圆柱威胁安全距离；
+4. 空间边界；
+5. 最大速度和最大垂直速度。
+
+对 UAV i、j：
+
+h_ij = ||p_i - p_j||^2 - d_safe^2
+
+要求：
+
+h_dot + alpha * h >= -slack
+
+二、QP
+
+求解：
+
+minimize
+    ||u_safe - u_rl||^2
+    + slack_penalty * ||slack||^2
+
+subject to：
+
+- CBF constraints；
+- velocity limits；
+- vertical limits；
+- nonnegative slack。
+
+三、实现方式
+
+优先使用 OSQP。
+CVXPY 可以用于原型和正确性测试，但训练和批量评估优先使用直接 OSQP 接口。
+
+实现：
+
+multiuav/safety/cbf_constraints.py
+multiuav/safety/qp_filter.py
+multiuav/safety/emergency_policy.py
+scripts/test_cbf_scenarios.py
+
+四、无解和数值异常处理
+
+必须实现：
+
+- QP status 检查；
+- warm start；
+- slack；
+- maximum solve time；
+- emergency stop；
+- safe hover；
+- 与威胁相反方向的紧急动作；
+- 日志记录。
+
+不能在 QP 失败时直接使用原始不安全动作。
+
+五、输出统计
+
+每步返回：
+
+u_rl
+u_safe
+intervention_norm
+active_constraint_count
+slack_value
+solver_status
+solve_time
+emergency_fallback_used
+
+六、测试场景
+
+1. 两机正面对飞；
+2. 两机交叉；
+3. 三机交汇；
+4. 靠近地形；
+5. 靠近圆柱威胁；
+6. 初始状态已经不安全；
+7. 多个约束冲突；
+8. QP 人工设置为不可行；
+9. 无风险时应基本保持原动作。
+
+七、性能说明
+
+CBF 第一版用于执行和评估，不要求可微。
+不要将 QP 放入 PPO 反向传播图。
+
+完成后停止。

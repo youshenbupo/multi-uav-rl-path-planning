@@ -1,0 +1,112 @@
+请执行阶段 8：实现多无人机强化学习环境 MVP。
+
+本阶段只建立环境，不实现 MAPPO。
+
+一、环境标准
+
+使用：
+
+- Gymnasium 基础接口；
+- PettingZoo Parallel API 或兼容的并行多智能体接口。
+
+创建：
+
+multiuav/envs/multi_uav_env.py
+multiuav/envs/dynamics.py
+multiuav/envs/observations.py
+multiuav/envs/rewards.py
+multiuav/envs/wrappers.py
+
+二、第一版动力学
+
+先使用三维单积分器：
+
+p_{t+1} = p_t + dt * v_t
+
+策略动作是三维期望速度。
+
+要求：
+
+- 最大水平速度；
+- 最大垂直速度；
+- 边界裁剪；
+- 可配置动作归一化；
+- 支持后续替换成双积分器。
+
+三、局部观测
+
+每架 UAV 至少观察：
+
+- 自身位置；
+- 自身速度；
+- 目标相对位置；
+- 目标距离；
+- 局部地形净空；
+- 最近威胁相对信息；
+- 邻居相对位置和速度；
+- 剩余时间；
+- 当前高层指令占位字段。
+
+四、集中式状态
+
+为 centralized critic 提供全局状态：
+
+- 所有 UAV 状态；
+- 目标；
+- active mask；
+- 地形摘要；
+- 威胁摘要；
+- 冲突图摘要。
+
+五、奖励和成本分开
+
+性能奖励：
+
+- progress；
+- goal arrival；
+- path efficiency；
+- smoothness；
+- energy proxy；
+- time penalty。
+
+安全成本单独返回：
+
+- inter_uav_collision_cost；
+- terrain_violation_cost；
+- threat_violation_cost；
+- boundary_violation_cost。
+
+不要仅依赖一个巨大碰撞负奖励。
+
+六、终止条件
+
+- 全部 UAV 到达；
+- 发生不可恢复碰撞；
+- 严重地形或威胁违反；
+- 达到 max_steps；
+- 数值异常。
+
+七、测试
+
+至少实现：
+
+1. reset shape；
+2. step shape；
+3. 固定 seed 可复现；
+4. 直线飞向目标；
+5. 零动作；
+6. 两机相向冲突；
+7. 地形违反；
+8. 圆柱威胁违反；
+9. 全部到达；
+10. variable num_uavs。
+
+八、可视化
+
+实现简单的：
+
+- 3D trajectory；
+- top-view；
+- minimum separation curve。
+
+不要实现 MAPPO。完成后停止。

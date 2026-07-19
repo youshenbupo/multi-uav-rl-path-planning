@@ -1,0 +1,23 @@
+# Phase-12 strict-mask expert behavior cloning over the six verified 30-seed shards.
+shards:
+  - data/expert/s1_30seed_verified_experts.h5
+  - data/expert/s1_30seed_verified_part02_experts.h5
+  - data/expert/s1_30seed_verified_part03_experts.h5
+  - data/expert/s1_30seed_verified_part04_experts.h5
+  - data/expert/s1_30seed_verified_part05_experts.h5
+  - data/expert/s1_30seed_verified_part06_experts.h5
+split:
+  seed: 20260718
+  train_fraction: 0.7
+  validation_fraction: 0.15
+epochs: 8
+learning_rate: 0.0003
+embedding_dim: 64
+graph_heads: 4
+graph_layers: 2
+max_neighbors: 2
+max_horizontal_speed: 35.0
+max_vertical_speed: 35.0
+normalized_mse_coef: 1.0
+direction_coef: 0.2
+speed_coef: 0.1

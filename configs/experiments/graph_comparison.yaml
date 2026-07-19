@@ -1,0 +1,6 @@
+# Required Phase-10 comparison matrix. One deterministic seed per cell.
+seed: 20260718
+num_uavs: [3, 5, 8]
+graph_modes: [mappo, distance_graph, predictive_graph]
+total_steps: 3072
+evaluation_episodes: 8

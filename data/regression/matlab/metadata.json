@@ -1,0 +1,35 @@
+{
+  "schema_version": "matlab_reference_cases_v1",
+  "matlab_version": "25.1.0.2943329 (R2025a)",
+  "exported_at": "2026-07-16T17:56:42",
+  "random_seed": 2.0260716E+7,
+  "distance_unit": "unlabelled legacy distance unit",
+  "time_unit": "seconds where legacy configuration names values in seconds",
+  "angle_unit": "radians internally; degrees only for reported turn metrics",
+  "array_conventions": {
+    "path": "N-by-3 row matrix [x,y,z]",
+    "candidate": "1-by-(numUavs*numWaypoints*3) length/azimuth/elevation",
+    "threats": "T-by-4 [x,y,radius,height]",
+    "conflict_graph": "U-by-U matrices; delay profiles are samples-by-U"
+  },
+  "scenario_names": [
+    "S1_LowThreat_3UAV",
+    "S2_Base_5UAV",
+    "S3_HighThreat_5UAV",
+    "S4_HighThreat_8UAV"
+  ],
+  "source_functions": [
+    "core.terrain_height",
+    "core.decode_path_for_uav",
+    "core.resample_path",
+    "core.min_distance_to_cylinder",
+    "core.single_uav_cost",
+    "core.build_conflict_graph",
+    "core.evaluate_multi_uav_cost",
+    "core.resolve_conflict_schedule",
+    "core.repair_spatial_conflicts",
+    "config.makeScenario"
+  ],
+  "ca_hgalo_output_available": false,
+  "ca_hgalo_reason": "No standalone CA-HGALO entrypoint exists in the restored legacy source."
+}

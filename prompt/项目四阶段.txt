@@ -1,0 +1,122 @@
+请执行阶段 4：迁移 MATLAB 中的几何、轨迹和代价评估模块。
+
+前提：
+
+1. 阅读 docs/legacy_inventory.md。
+2. 阅读 docs/matlab_python_mapping.md。
+3. 使用 data/regression/matlab 中的基准数据。
+4. 不开始实现 MAPPO。
+
+一、实现 Python 数据模型
+
+在 multiuav/core 中实现类型明确的数据结构，例如：
+
+Scenario
+TerrainMap
+CylindricalThreat
+UAVMission
+Trajectory
+EvaluationResult
+CostBreakdown
+ConstraintResult
+
+使用 dataclass 或等价结构。
+
+二、实现几何模块
+
+在 multiuav/geometry 中实现：
+
+1. 地形高度插值；
+2. 球坐标路径解码；
+3. 笛卡尔路径数据结构；
+4. 路径弧长；
+5. 路径均匀重采样；
+6. 转角计算；
+7. 点到线段距离；
+8. 线段到圆柱威胁区域距离；
+9. 地形净空计算；
+10. 轨迹有限差分速度。
+
+三、实现严格评估器
+
+在 multiuav/evaluation 中实现：
+
+J_len
+J_alt
+J_turn
+J_thr
+J_spa
+J_tmp
+J_sync
+total_cost
+
+并实现：
+
+- minimum_separation；
+- temporal_conflict_count；
+- terrain_feasible；
+- threat_feasible；
+- turning_feasible；
+- spatial_feasible；
+- temporal_feasible；
+- strict_success。
+
+必须保持与 MATLAB 一致的：
+
+- 单位；
+- 阈值；
+- penalty；
+- resampling 数量；
+- common time axis；
+- constant-speed 时间参数化；
+- 边界条件；
+- 小于和小于等于的判断区别。
+
+四、统一接口
+
+实现类似：
+
+result = evaluator.evaluate(
+    trajectories=trajectories,
+    scenario=scenario,
+    start_delays=start_delays,
+)
+
+EvaluationResult 至少返回：
+
+total_cost
+cost_breakdown
+strict_success
+minimum_separation
+temporal_conflict_count
+constraint_details
+
+五、测试
+
+为每个模块创建 pytest 测试。
+
+使用 MATLAB 回归数据进行：
+
+numpy.testing.assert_allclose
+
+确定性基础函数优先使用：
+
+rtol <= 1e-6
+atol <= 1e-8
+
+如果 MATLAB 与 Python 插值实现存在数值差异，可以放宽，但必须：
+
+1. 解释差异来源；
+2. 记录到 docs/known_issues.md；
+3. 不能直接把容差调到很大使测试通过。
+
+六、验收标准
+
+1. 所有基础几何测试通过。
+2. 七项代价均有独立测试。
+3. 总代价与 MATLAB 基准基本一致。
+4. 严格成功判定一致。
+5. pytest、ruff 均通过。
+6. 更新 matlab_python_mapping.md。
+
+完成后停止。

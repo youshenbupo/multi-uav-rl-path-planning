@@ -1,0 +1,108 @@
+请执行阶段 9：实现不含 GNN、不含分层策略、不含 CBF 的基础 MAPPO。
+
+目标是先证明训练管线正确。
+
+一、算法要求
+
+实现参数共享的 MAPPO：
+
+- shared actor；
+- centralized critic；
+- decentralized execution；
+- PPO clipped objective；
+- GAE；
+- entropy bonus；
+- value loss clipping；
+- gradient clipping；
+- observation normalization；
+- reward normalization可配置；
+- action Gaussian distribution；
+- deterministic evaluation。
+
+二、文件
+
+multiuav/learning/networks.py
+multiuav/learning/rollout_buffer.py
+multiuav/learning/gae.py
+multiuav/learning/mappo.py
+multiuav/learning/runner.py
+scripts/train_mappo.py
+scripts/evaluate_mappo.py
+
+三、配置
+
+创建：
+
+configs/rl/mappo_baseline.yaml
+
+包含：
+
+seed
+num_envs
+num_uavs
+rollout_length
+total_steps
+learning_rate
+gamma
+gae_lambda
+clip_ratio
+entropy_coef
+value_coef
+max_grad_norm
+batch_size
+ppo_epochs
+hidden_dims
+evaluation_interval
+checkpoint_interval
+
+四、必须先完成的小环境验证
+
+先用简单无障碍 2-UAV 场景训练，目标是确认：
+
+- reward 上升；
+- 到达率上升；
+- policy loss 和 value loss 数值正常；
+- 不出现 NaN；
+- checkpoint 可保存和恢复；
+- deterministic evaluation 可运行。
+
+之后再加入简单圆柱障碍物。
+
+五、单元测试
+
+测试：
+
+- GAE 数值；
+- PPO ratio；
+- clipped loss；
+- buffer shape；
+- action log probability；
+- checkpoint save/load；
+- seed reproducibility。
+
+六、日志
+
+TensorBoard 至少记录：
+
+episode_return
+success_rate
+collision_rate
+mean_path_length
+minimum_separation
+policy_loss
+value_loss
+entropy
+approx_kl
+clip_fraction
+explained_variance
+fps
+
+七、限制
+
+不加入 GNN。
+不加入冲突预测。
+不加入分层动作。
+不加入专家预训练。
+不加入 CBF。
+
+完成普通 MAPPO 最小训练验证后停止。

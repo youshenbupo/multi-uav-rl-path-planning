@@ -1,0 +1,20 @@
+# Phase-9 ordinary MAPPO baseline. No GNN, hierarchy, expert pretraining, or CBF.
+seed: 20260718
+num_envs: 4
+num_uavs: 2
+rollout_length: 64
+total_steps: 32768
+learning_rate: 0.0003
+gamma: 0.99
+gae_lambda: 0.95
+clip_ratio: 0.2
+entropy_coef: 0.01
+value_coef: 0.5
+max_grad_norm: 0.5
+batch_size: 256
+ppo_epochs: 4
+hidden_dims: [64, 64]
+evaluation_interval: 1024
+checkpoint_interval: 1024
+normalize_rewards: false
+obstacle: false

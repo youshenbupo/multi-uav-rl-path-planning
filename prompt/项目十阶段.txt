@@ -1,0 +1,109 @@
+请执行阶段 10：实现预测型时空冲突图和图编码器。
+
+本阶段先替换 MAPPO 的观测编码器，不实现分层策略和 CBF。
+
+一、预测型边特征
+
+对 UAV i 和 j 定义：
+
+delta_p = p_j - p_i
+delta_v = v_j - v_i
+
+计算有限预测时域内的最近接时间：
+
+t_cpa = clip(
+    -dot(delta_p, delta_v) /
+    (dot(delta_v, delta_v) + eps),
+    0,
+    prediction_horizon
+)
+
+计算预测最近接距离：
+
+d_cpa = norm(delta_p + t_cpa * delta_v)
+
+边特征至少包括：
+
+- relative_position；
+- relative_velocity；
+- current_distance；
+- t_cpa；
+- d_cpa；
+- predicted_shortfall；
+- relative_goal_direction；
+- communication_available；
+- both_active。
+
+二、建图规则
+
+支持配置：
+
+- communication radius；
+- risk distance；
+- top-k neighbors；
+- current-distance edge；
+- predicted-conflict edge；
+- self-loop；
+- inactive mask。
+
+避免始终使用全连接图。
+
+三、图编码器
+
+第一版使用纯 PyTorch：
+
+- masked multi-head graph attention；
+- node encoder；
+- edge encoder；
+- residual connection；
+- layer normalization；
+- permutation-equivariant aggregation。
+
+不要引入 PyTorch Geometric。
+
+四、与 MAPPO 集成
+
+实现：
+
+GraphActor
+GraphCentralizedCritic
+GraphMAPPO
+
+参数共享，支持不同 UAV 数量和 agent mask。
+
+五、辅助冲突预测任务
+
+增加可配置 auxiliary head，预测：
+
+- 未来 H 步是否发生冲突；
+- 未来最小距离。
+
+损失：
+
+classification loss
++
+regression loss
+
+该辅助任务不能破坏 PPO 主损失，需要独立权重。
+
+六、测试
+
+1. UAV 顺序置换后输出应保持对应置换；
+2. inactive mask 正确；
+3. 无邻居时不出现 NaN；
+4. 相向飞行时 t_cpa 和 d_cpa 正确；
+5. 平行同速时数值稳定；
+6. variable N 正常；
+7. graph attention shape 正确。
+
+七、实验
+
+比较：
+
+- MAPPO；
+- 当前距离图 MAPPO；
+- 预测冲突图 MAPPO。
+
+先使用 3、5、8 架无人机。
+
+完成后停止，不加入分层和 CBF。

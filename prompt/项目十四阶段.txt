@@ -1,0 +1,166 @@
+请执行阶段 14：集成完整研究主线并建立可复现实验框架。
+
+完整方法：
+
+CA-HGALO expert demonstrations
+    -> behavior cloning
+    -> predictive conflict graph
+    -> hierarchical MAPPO
+    -> CBF-QP safety filter
+
+一、统一训练入口
+
+实现：
+
+scripts/train.py
+scripts/evaluate.py
+scripts/run_benchmark.py
+scripts/run_ablation.py
+
+支持命令行：
+
+--config
+--seed
+--device
+--num-uavs
+--scenario
+--checkpoint
+--render
+--use-expert-pretrain
+--use-graph
+--use-hierarchy
+--use-cbf
+
+二、基线
+
+至少建立统一接口：
+
+1. Straight-line / greedy；
+2. MATLAB 或 Python CA-HGALO；
+3. rule-based conflict coordinator；
+4. MAPPO；
+5. predictive-graph MAPPO；
+6. hierarchical graph MAPPO；
+7. BC initialized hierarchical graph MAPPO；
+8. full method with CBF。
+
+如果 A*、RRT*、ORCA 尚未实现，先建立 adapter 接口和 TODO 文档，不得伪造其结果。
+
+三、规模设置
+
+支持：
+
+3
+5
+8
+12
+16
+
+重点支持：
+
+- 训练规模内测试；
+- 小规模训练，大规模零样本测试；
+- 未见地图；
+- 未见威胁密度；
+- 动态障碍；
+- 通信丢失或延迟扩展接口。
+
+四、指标
+
+必须输出：
+
+success_rate
+collision_rate
+terrain_violation_rate
+threat_violation_rate
+mean_path_length
+mission_time
+minimum_separation_mean
+minimum_separation_5th_percentile
+temporal_conflict_count
+energy_proxy
+decision_latency
+CBF_intervention_rate
+CBF_mean_correction
+CBF_emergency_count
+expert_gap
+generalization_gap
+
+五、统计要求
+
+- 多 seed；
+- 保存每个 seed 原始结果；
+- 输出 mean 和 std；
+- 输出置信区间；
+- 不只保留平均值；
+- 保留失败 episode；
+- 不删除异常结果；
+- 自动生成 CSV 和 JSON 汇总。
+
+六、消融实验
+
+至少支持关闭：
+
+- expert pretraining；
+- predictive CPA features；
+- graph encoder；
+- hierarchy；
+- high-level delay；
+- altitude maneuver；
+- CBF；
+- auxiliary conflict prediction；
+- curriculum learning。
+
+七、结果目录
+
+outputs/
+└─ experiment_name/
+   ├─ config.yaml
+   ├─ environment.json
+   ├─ checkpoints/
+   ├─ tensorboard/
+   ├─ raw_results/
+   ├─ summary.csv
+   ├─ summary.json
+   ├─ figures/
+   └─ logs/
+
+八、复现
+
+生成：
+
+README.md
+docs/training.md
+docs/evaluation.md
+docs/reproducibility.md
+
+每个实验保存：
+
+- Git commit；
+- Python 版本；
+- PyTorch 版本；
+- CUDA 版本；
+- GPU；
+- seed；
+- 配置；
+- 运行命令。
+
+九、最终检查
+
+执行：
+
+pytest
+ruff check .
+mypy multiuav
+
+运行一个小规模端到端 smoke experiment，确认：
+
+- 专家 checkpoint 可以加载；
+- 环境可以运行；
+- 图策略可以推理；
+- 分层动作可以执行；
+- CBF 可以过滤动作；
+- 结果可以保存；
+- 可视化可以生成。
+
+完成后报告所有尚未达到论文正式实验要求的内容，不要声称整个研究已经完成。
