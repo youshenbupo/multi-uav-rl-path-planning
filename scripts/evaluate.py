@@ -20,6 +20,11 @@ def main() -> None:
     parser.add_argument("--max-steps", type=int)
     args = parser.parse_args()
     spec = spec_from_args(args)
+    if spec.checkpoint is not None:
+        parser.error(
+            "Checkpoint policy evaluation is not yet wired to this semantic smoke evaluator; "
+            "use scripts/evaluate_hierarchical_mappo.py for a checkpoint rollout."
+        )
     output = create_experiment_output(spec, args.output_root)
     results = evaluate_goal_controller(
         spec, output, episodes_per_seed=args.episodes_per_seed, max_steps=args.max_steps
