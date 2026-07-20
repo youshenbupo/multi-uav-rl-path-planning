@@ -102,6 +102,10 @@
   protocol runner. MLP-MAPPO remains unavailable in that protocol until its
   separate actor/critic implementation uses the same dynamic environment and
   CBF execution path.
+- The dynamic MLP-MAPPO adapter is now implemented and its CUDA smoke completed,
+  but it exposed an evaluation-side `solved inaccurate` CBF fallback. Training
+  and evaluation now record separate fallback rates, yet the five-seed CBF
+  stress analysis required before any safety statement remains outstanding.
 - The planned ablation manifest is present, but its nine separately trained
   checkpoint artifacts have not yet been produced. The ablation command writes
   unavailable resolution records until an arm-specific artifact is supplied.

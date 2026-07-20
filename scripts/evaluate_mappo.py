@@ -28,6 +28,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--episodes", type=int, default=16)
     parser.add_argument("--device", default="auto", choices=("auto", "cpu", "cuda"))
+    parser.add_argument("--num-uavs", type=int, choices=(3, 5, 8))
     parser.add_argument("--with-cylinder", action="store_true")
     parser.add_argument(
         "--output", type=Path, default=PROJECT_ROOT / "data/rl/mappo_baseline/evaluation.json"
@@ -46,6 +47,8 @@ def main() -> None:
     config = load_mappo_experiment_config(args.config)
     if args.with_cylinder:
         config = replace(config, obstacle=True)
+    if args.num_uavs is not None:
+        config = replace(config, num_uavs=args.num_uavs)
     device = _resolve_device(args.device)
     experiment = MAPPOExperiment(config, device=device)
     step = load_checkpoint(args.checkpoint, experiment.trainer, map_location=device)

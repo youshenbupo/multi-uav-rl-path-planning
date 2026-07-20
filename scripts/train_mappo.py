@@ -23,6 +23,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--output-dir", type=Path, default=PROJECT_ROOT / "data/rl/mappo_baseline")
     parser.add_argument("--device", default="auto", choices=("auto", "cpu", "cuda"))
+    parser.add_argument("--num-uavs", type=int, choices=(3, 5, 8))
+    parser.add_argument("--total-steps", type=int)
     parser.add_argument("--with-cylinder", action="store_true")
     return parser
 
@@ -36,6 +38,12 @@ def main() -> None:
     config = load_mappo_experiment_config(args.config)
     if args.with_cylinder:
         config = replace(config, obstacle=True)
+    if args.num_uavs is not None:
+        config = replace(config, num_uavs=args.num_uavs)
+    if args.total_steps is not None:
+        if args.total_steps < 1:
+            raise ValueError("--total-steps must be positive.")
+        config = replace(config, total_steps=args.total_steps)
     device = _resolve_device(args.device)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     experiment = MAPPOExperiment(config, device=device, log_dir=args.output_dir / "tensorboard")
@@ -47,11 +55,14 @@ def main() -> None:
     summary = {
         "config": str(args.config),
         "device": str(device),
+        "num_uavs": config.num_uavs,
+        "dynamic_obstacle_enabled": config.dynamic_obstacle_enabled,
         "initial_evaluation": initial,
         "final_evaluation": final,
         "update_count": len(records),
         "last_update": records[-1] if records else {},
         "checkpoint": str(checkpoint),
+        "cbf": experiment.cbf_telemetry.as_dict(),
     }
     (args.output_dir / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     experiment.close()

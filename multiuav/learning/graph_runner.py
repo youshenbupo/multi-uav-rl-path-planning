@@ -541,6 +541,10 @@ class GraphMAPPOExperiment:
         collisions: list[float] = []
         path_lengths: list[float] = []
         separations: list[float] = []
+        cbf_decisions = 0
+        cbf_interventions = 0
+        cbf_fallbacks = 0
+        cbf_solve_times: list[float] = []
         scenario = make_graph_scenario(
             num_uavs=self.config.num_uavs,
             obstacle=self.config.obstacle,
@@ -569,9 +573,13 @@ class GraphMAPPOExperiment:
                 previous_positions = environment.positions.copy()
                 proposed_actions = actions[0].cpu().numpy()
                 if evaluation_cbf_adapter is not None:
-                    proposed_actions, _ = evaluation_cbf_adapter.filter_normalized(
+                    proposed_actions, decision = evaluation_cbf_adapter.filter_normalized(
                         environment._snapshot(), proposed_actions
                     )
+                    cbf_decisions += 1
+                    cbf_interventions += int(decision.intervention_norm > 0.0)
+                    cbf_fallbacks += int(decision.emergency_fallback_used)
+                    cbf_solve_times.append(decision.solve_time)
                 observations, rewards, terminations, truncations, infos = environment.step(
                     {
                         agent: proposed_actions[environment.agent_name_mapping[agent]]
@@ -591,12 +599,18 @@ class GraphMAPPOExperiment:
             collisions.append(float(reason == "collision"))
             path_lengths.append(path_length)
             separations.append(float(minimum_separation))
+        cbf_intervention_rate = cbf_interventions / cbf_decisions if cbf_decisions else 0.0
+        cbf_fallback_rate = cbf_fallbacks / cbf_decisions if cbf_decisions else 0.0
+        cbf_mean_solve_time = float(np.mean(cbf_solve_times)) if cbf_solve_times else 0.0
         return {
             "episode_return": float(np.mean(returns)),
             "success_rate": float(np.mean(successes)),
             "collision_rate": float(np.mean(collisions)),
             "mean_path_length": float(np.mean(path_lengths)),
             "minimum_separation": float(np.mean(separations)),
+            "CBF_intervention_rate": cbf_intervention_rate,
+            "CBF_emergency_fallback_rate": cbf_fallback_rate,
+            "CBF_mean_solve_time_seconds": cbf_mean_solve_time,
         }
 
     def close(self) -> None:

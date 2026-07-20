@@ -325,5 +325,16 @@ change. `configs/rl/dynamic_graph_baseline.yaml` is the common long-run protocol
 
 The complete uncertainty arm completed a CUDA smoke run with one PPO update. Its retained CBF
 telemetry reports four solved decisions and zero fallbacks. This verifies the fair-executor path,
-not relative policy quality. MLP-MAPPO is still not attached to this dynamic executor and remains
-unavailable as a main comparison arm until it receives the same environment and CBF contract.
+not relative policy quality. At that point, MLP-MAPPO had not yet been attached to the dynamic
+executor; the subsequent entry records that adapter separately.
+
+## AAMAS 2027 - dynamic MLP-MAPPO control arm (2026-07-20)
+
+The non-graph baseline now uses the original shared Gaussian MLP actor and centralized MLP critic
+with the same three-UAV dynamic-world, delayed/lossy communication, normalized action interface,
+and execution-only CBF configuration as the graph arms. Its new common long-run configuration is
+`configs/rl/dynamic_mappo_baseline.yaml`. A one-update CUDA smoke ran through the actual MLP
+policy and saved CBF training telemetry with four solved training decisions and zero training
+fallbacks. The evaluation episode stream separately recorded a `solved inaccurate` CBF fallback;
+evaluation metrics now include CBF intervention rate, fallback rate, and mean QP time for both MLP
+and graph methods. These are diagnostic smoke observations only, and preclude any safety claim.

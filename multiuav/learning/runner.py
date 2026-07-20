@@ -15,9 +15,16 @@ from torch.utils.tensorboard import SummaryWriter
 
 from multiuav.core.models import CylindricalThreat, Scenario, TerrainMap, UAVMission
 from multiuav.envs.multi_uav_env import EnvironmentConfig, MultiUAVParallelEnv
+from multiuav.learning.graph_runner import make_graph_scenario
 from multiuav.learning.mappo import MAPPOConfig, MAPPOTrainer, save_checkpoint
 from multiuav.learning.networks import CentralizedCritic, SharedGaussianActor
 from multiuav.learning.rollout_buffer import RolloutBuffer
+from multiuav.safety import (
+    CBFConfig,
+    NormalizedActionCBFAdapter,
+    OSQPSafetyFilter,
+    SafetyFilterTelemetry,
+)
 
 
 @dataclass(frozen=True)
@@ -43,6 +50,17 @@ class MAPPOExperimentConfig:
     checkpoint_interval: int
     normalize_rewards: bool
     obstacle: bool
+    communication_enabled: bool = False
+    communication_delay_steps: int = 0
+    communication_drop_probability: float = 0.0
+    communication_max_staleness_steps: int = 0
+    communication_uncertainty_growth_per_step: float = 0.0
+    dynamic_obstacle_enabled: bool = False
+    cbf_enabled: bool = False
+    cbf_slack_penalty: float = 1_000.0
+    cbf_max_iterations: int = 20_000
+    cbf_communication_uncertainty_margin_gain: float = 0.0
+    cbf_max_communication_uncertainty_margin: float = 0.0
 
     def __post_init__(self) -> None:
         if (
@@ -59,10 +77,12 @@ class MAPPOExperimentConfig:
             < 1
         ):
             raise ValueError("MAPPO count fields must be positive.")
-        if self.num_uavs != 2:
-            raise ValueError("Phase-9 baseline verification is intentionally fixed to two UAVs.")
+        if self.num_uavs < 2:
+            raise ValueError("MAPPO requires at least two UAVs.")
         if not self.hidden_dims or any(value < 1 for value in self.hidden_dims):
             raise ValueError("hidden_dims must contain positive layer widths.")
+        if self.cbf_slack_penalty <= 0.0 or self.cbf_max_iterations < 1:
+            raise ValueError("CBF slack penalty and iteration budget must be positive.")
 
     def optimizer_config(self) -> MAPPOConfig:
         """Project runner fields to the trainer-only optimizer configuration."""
@@ -77,6 +97,20 @@ class MAPPOExperimentConfig:
             batch_size=self.batch_size,
             ppo_epochs=self.ppo_epochs,
             normalize_rewards=self.normalize_rewards,
+        )
+
+    def cbf_config(self) -> CBFConfig:
+        """Use the same execution-only CBF configuration as every learned comparison arm."""
+        return CBFConfig(
+            max_solve_time_seconds=0.1,
+            slack_penalty=self.cbf_slack_penalty,
+            max_iterations=self.cbf_max_iterations,
+            communication_uncertainty_margin_gain=(
+                self.cbf_communication_uncertainty_margin_gain
+            ),
+            max_communication_uncertainty_margin=(
+                self.cbf_max_communication_uncertainty_margin
+            ),
         )
 
 
@@ -115,9 +149,7 @@ class MAPPOExperiment:
         self.config = config
         self.device = device
         _seed_everything(config.seed)
-        scenario = (
-            make_cylinder_two_uav_scenario() if config.obstacle else make_empty_two_uav_scenario()
-        )
+        scenario = self._scenario()
         environment_config = EnvironmentConfig(
             dt=1.0,
             max_steps=20,
@@ -125,10 +157,19 @@ class MAPPOExperiment:
             max_vertical_speed=6.0,
             normalize_actions=True,
             goal_radius=5.0,
-            collision_distance=8.0,
+            collision_distance=6.0 if self._uses_dynamic_protocol() else 8.0,
             severe_clearance_shortfall=8.0,
             severe_threat_penetration=5.0,
-            max_neighbors=1,
+            max_neighbors=min(3, config.num_uavs - 1),
+            max_dynamic_obstacles=int(config.dynamic_obstacle_enabled),
+            communication_enabled=config.communication_enabled,
+            communication_range=45.0,
+            communication_delay_steps=config.communication_delay_steps,
+            communication_drop_probability=config.communication_drop_probability,
+            communication_max_staleness_steps=config.communication_max_staleness_steps,
+            communication_uncertainty_growth_per_step=(
+                config.communication_uncertainty_growth_per_step
+            ),
         )
         self.environments = [
             MultiUAVParallelEnv(scenario, environment_config) for _ in range(config.num_envs)
@@ -145,6 +186,8 @@ class MAPPOExperiment:
             config.optimizer_config(),
             device=device,
         )
+        self.cbf_adapter = self._make_cbf_adapter() if config.cbf_enabled else None
+        self.cbf_telemetry = SafetyFilterTelemetry()
         self.writer = SummaryWriter(log_dir=str(log_dir)) if log_dir is not None else None
         self.total_transitions = 0
         self.reset_counts = [0 for _ in self.environments]
@@ -256,12 +299,13 @@ class MAPPOExperiment:
         collisions: list[float] = []
         path_lengths: list[float] = []
         separations: list[float] = []
-        scenario = (
-            make_cylinder_two_uav_scenario()
-            if self.config.obstacle
-            else make_empty_two_uav_scenario()
-        )
+        cbf_decisions = 0
+        cbf_interventions = 0
+        cbf_fallbacks = 0
+        cbf_solve_times: list[float] = []
+        scenario = self._scenario()
         environment_config = self.environments[0].config
+        evaluation_cbf_adapter = self._make_cbf_adapter() if self.config.cbf_enabled else None
         for episode in range(episodes):
             environment = MultiUAVParallelEnv(scenario, environment_config)
             observations, _ = environment.reset(seed=self.config.seed + 10_000 + episode)
@@ -281,6 +325,14 @@ class MAPPOExperiment:
                         .numpy()
                     )
                 previous_positions = environment.positions.copy()
+                if evaluation_cbf_adapter is not None:
+                    actions, decision = evaluation_cbf_adapter.filter_normalized(
+                        environment._snapshot(), actions
+                    )
+                    cbf_decisions += 1
+                    cbf_interventions += int(decision.intervention_norm > 0.0)
+                    cbf_fallbacks += int(decision.emergency_fallback_used)
+                    cbf_solve_times.append(decision.solve_time)
                 observations, rewards, terminations, truncations, infos = environment.step(
                     {
                         agent: actions[environment.agent_name_mapping[agent]]
@@ -300,12 +352,18 @@ class MAPPOExperiment:
             collisions.append(float(reason == "collision"))
             path_lengths.append(path_length)
             separations.append(float(minimum_separation))
+        cbf_intervention_rate = cbf_interventions / cbf_decisions if cbf_decisions else 0.0
+        cbf_fallback_rate = cbf_fallbacks / cbf_decisions if cbf_decisions else 0.0
+        cbf_mean_solve_time = float(np.mean(cbf_solve_times)) if cbf_solve_times else 0.0
         return {
             "episode_return": float(np.mean(returns)),
             "success_rate": float(np.mean(successes)),
             "collision_rate": float(np.mean(collisions)),
             "mean_path_length": float(np.mean(path_lengths)),
             "minimum_separation": float(np.mean(separations)),
+            "CBF_intervention_rate": cbf_intervention_rate,
+            "CBF_emergency_fallback_rate": cbf_fallback_rate,
+            "CBF_mean_solve_time_seconds": cbf_mean_solve_time,
         }
 
     def close(self) -> None:
@@ -320,10 +378,22 @@ class MAPPOExperiment:
         next_states: list[np.ndarray] = []
         for environment_index, environment in enumerate(self.environments):
             previous_positions = environment.positions.copy()
+            filtered_actions = actions[environment_index]
+            if self.cbf_adapter is not None:
+                filtered_actions, decision = self.cbf_adapter.filter_normalized(
+                    environment._snapshot(), filtered_actions
+                )
+                self.cbf_telemetry.record(
+                    decision,
+                    context={
+                        "environment_index": environment_index,
+                        "environment_step": environment.step_count,
+                    },
+                )
             next_observations, reward_dict, terminal_dict, truncation_dict, infos = (
                 environment.step(
                     {
-                        agent: actions[environment_index, environment.agent_name_mapping[agent]]
+                        agent: filtered_actions[environment.agent_name_mapping[agent]]
                         for agent in environment.possible_agents
                     }
                 )
@@ -417,6 +487,25 @@ class MAPPOExperiment:
         if self.writer is not None:
             for name, value in metrics.items():
                 self.writer.add_scalar(name, value, self.total_transitions)
+
+    def _uses_dynamic_protocol(self) -> bool:
+        return self.config.num_uavs != 2 or self.config.dynamic_obstacle_enabled
+
+    def _scenario(self) -> Scenario:
+        if self._uses_dynamic_protocol():
+            return make_graph_scenario(
+                num_uavs=self.config.num_uavs,
+                obstacle=self.config.obstacle,
+                dynamic_obstacle=self.config.dynamic_obstacle_enabled,
+            )
+        return (
+            make_cylinder_two_uav_scenario()
+            if self.config.obstacle
+            else make_empty_two_uav_scenario()
+        )
+
+    def _make_cbf_adapter(self) -> NormalizedActionCBFAdapter:
+        return NormalizedActionCBFAdapter(OSQPSafetyFilter(self.config.cbf_config()))
 
 
 def _two_uav_scenario(*, threats: tuple[CylindricalThreat, ...]) -> Scenario:
