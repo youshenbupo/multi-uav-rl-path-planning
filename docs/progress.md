@@ -346,3 +346,26 @@ while a slack penalty of 10 solved only by accepting a large slack (about 75).
 The mainline penalty remains 100; no numerical setting was silently relaxed to
 hide the fallback. The event is now a reproducible candidate for the paper's
 QP-failure analysis.
+
+## AAMAS 2027 - uniform core-checkpoint evaluator (2026-07-20)
+
+The four paper-facing learned arms now have a common checkpoint evaluator:
+MLP-MAPPO and all GraphMAPPO variants execute their actual saved actor through
+the same seeded dynamic environment, CPU-side CBF shield, per-episode JSONL
+schema, and seed-level statistical summary. Every raw record identifies the
+controller family, exact checkpoint, checkpoint step, termination reason,
+communication condition, dynamic-obstacle count, path/energy/separation/conflict
+metrics, decision latency, and full CBF telemetry. CBF intervention, emergency
+fallback, and QP time are aggregated by CBF decision count rather than by a
+coarser episode indicator.
+
+`scripts/evaluate_core_checkpoint.py` evaluates exactly one independently
+trained checkpoint and refuses a missing checkpoint; it never falls back to a
+goal controller. The six paper scenarios are executable semantics: nominal,
+delay-only, loss-only, dynamic-only, combined, and an OOD condition that
+increases delay, loss/staleness/uncertainty growth, and moving-obstacle speed.
+`scripts/plan_core_evaluation.py` materializes the 120 independent
+method/seed/scenario evaluation commands, each tied to its matching training
+checkpoint. The associated tests use random saved MLP and graph actors as
+plumbing fixtures only; no performance claim or core experiment result exists
+yet.

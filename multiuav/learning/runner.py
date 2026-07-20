@@ -56,6 +56,7 @@ class MAPPOExperimentConfig:
     communication_max_staleness_steps: int = 0
     communication_uncertainty_growth_per_step: float = 0.0
     dynamic_obstacle_enabled: bool = False
+    dynamic_obstacle_velocity_scale: float = 1.0
     cbf_enabled: bool = False
     cbf_slack_penalty: float = 1_000.0
     cbf_max_iterations: int = 20_000
@@ -81,7 +82,11 @@ class MAPPOExperimentConfig:
             raise ValueError("MAPPO requires at least two UAVs.")
         if not self.hidden_dims or any(value < 1 for value in self.hidden_dims):
             raise ValueError("hidden_dims must contain positive layer widths.")
-        if self.cbf_slack_penalty <= 0.0 or self.cbf_max_iterations < 1:
+        if (
+            self.cbf_slack_penalty <= 0.0
+            or self.cbf_max_iterations < 1
+            or self.dynamic_obstacle_velocity_scale <= 0.0
+        ):
             raise ValueError("CBF slack penalty and iteration budget must be positive.")
 
     def optimizer_config(self) -> MAPPOConfig:
@@ -521,6 +526,7 @@ class MAPPOExperiment:
                 num_uavs=self.config.num_uavs,
                 obstacle=self.config.obstacle,
                 dynamic_obstacle=self.config.dynamic_obstacle_enabled,
+                dynamic_obstacle_velocity_scale=self.config.dynamic_obstacle_velocity_scale,
             )
         return (
             make_cylinder_two_uav_scenario()

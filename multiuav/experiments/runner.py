@@ -488,6 +488,12 @@ def _aggregate_episode_records(records: list[dict[str, float | int | str]]) -> d
         return float(np.mean([float(record[name]) for record in records], dtype=float))
 
     separations = np.asarray([float(record["minimum_separation"]) for record in records])
+    cbf_decisions = sum(float(record.get("cbf_decision_count", 0.0)) for record in records)
+    cbf_interventions = sum(float(record.get("cbf_intervention", 0.0)) for record in records)
+    cbf_emergencies = sum(float(record.get("cbf_emergency_count", 0.0)) for record in records)
+    cbf_total_solve_time = sum(
+        float(record.get("cbf_total_solve_time_seconds", 0.0)) for record in records
+    )
     return {
         "success_rate": mean("success"),
         "collision_rate": mean("collision"),
@@ -500,9 +506,15 @@ def _aggregate_episode_records(records: list[dict[str, float | int | str]]) -> d
         "temporal_conflict_count": mean("temporal_conflict_count"),
         "energy_proxy": mean("energy_proxy"),
         "decision_latency": mean("decision_latency"),
-        "CBF_intervention_rate": float(
-            np.mean([float(record["cbf_intervention"]) > 0 for record in records])
+        "CBF_intervention_rate": (
+            cbf_interventions / cbf_decisions
+            if cbf_decisions
+            else float(np.mean([float(record["cbf_intervention"]) > 0 for record in records]))
         ),
         "CBF_mean_correction": mean("cbf_mean_correction"),
         "CBF_emergency_count": mean("cbf_emergency_count"),
+        "CBF_emergency_fallback_rate": cbf_emergencies / cbf_decisions if cbf_decisions else 0.0,
+        "CBF_mean_solve_time_seconds": (
+            cbf_total_solve_time / cbf_decisions if cbf_decisions else 0.0
+        ),
     }

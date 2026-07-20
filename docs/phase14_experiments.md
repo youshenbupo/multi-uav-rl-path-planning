@@ -46,10 +46,14 @@ intervals; no outlier deletion is permitted.
 
 The required scale and method matrix is in
 `configs/experiments/dynamic_world_mainline.yaml`. It covers 3, 5, 8, 12, and
-16 UAVs. The unified dynamic-world executor currently implements only the
-checkpointed `full_method`; prior baseline scripts are registered as unavailable
-until they receive comparable dynamic-world adapters. A*, RRT*, and ORCA are
-also explicitly unavailable, so no method can silently receive invented results.
+16 UAVs. The legacy unified registry still implements only the checkpointed
+`full_method`, but `scripts/evaluate_core_checkpoint.py` now provides a separate
+common learned-checkpoint path for MLP-MAPPO and GraphMAPPO. It evaluates the
+actual checkpoint, retains per-episode JSONL, and exposes the six core scenario
+semantics; `scripts/plan_core_evaluation.py` materializes the 120 independent
+3-UAV evaluation commands after the 20 matching training runs. A*, RRT*, and
+ORCA remain explicitly unavailable, so no method can silently receive invented
+results.
 
 Reported finite metrics include success/collision/terrain/threat rates, path
 length, mission time, mean and 5th-percentile separation, temporal conflicts,

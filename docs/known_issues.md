@@ -96,12 +96,11 @@
   hierarchical `full_method` checkpoint. Existing straight-line, CA-HGALO,
   MAPPO, graph-MAPPO, and hierarchy scripts are deliberately marked unavailable
   in this unified protocol until each has a comparable dynamic-world adapter.
-- A dynamic GraphMAPPO training executor now exists for the raw-packet,
-  predictive-without-uncertainty, and uncertainty-aware predictive graph arms,
-  but it is not yet wired into the public unified benchmark registry or five-seed
-  protocol runner. MLP-MAPPO remains unavailable in that protocol until its
-  separate actor/critic implementation uses the same dynamic environment and
-  CBF execution path.
+- A dynamic GraphMAPPO training executor exists for the raw-packet,
+  predictive-without-uncertainty, and uncertainty-aware predictive graph arms.
+  MLP-MAPPO now shares the dynamic environment, CBF execution path, and the
+  separate core-checkpoint evaluator, but neither family is yet wired into the
+  legacy public benchmark registry or executed as the five-seed protocol.
 - The dynamic MLP-MAPPO adapter is now implemented and its CUDA smoke completed,
   but it exposed an evaluation-side `solved inaccurate` CBF fallback. Training
   and evaluation now record separate fallback rates, yet the five-seed CBF
@@ -134,3 +133,10 @@
   six to eight values per neighbour and graph edge width from 15 to 16. Existing
   BC and hierarchical checkpoints are intentionally incompatible and cannot be
   silently reused for the new method.
+- The four learned comparison arms now share a checkpoint evaluator, but the
+  20 independent 3-UAV training checkpoints and their 120 six-scenario
+  evaluations have not been run. The materialized command manifest is a
+  reproducibility aid, not experimental evidence.
+- The OOD scenario increases the deterministic obstacle's velocity scale and
+  communication degradation. It is a controlled simulation stress condition,
+  not a calibrated physical motion, sensor, or radio model.

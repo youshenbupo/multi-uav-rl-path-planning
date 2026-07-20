@@ -85,6 +85,7 @@ class GraphExperimentConfig:
     communication_max_staleness_steps: int = 0
     communication_uncertainty_growth_per_step: float = 0.0
     dynamic_obstacle_enabled: bool = False
+    dynamic_obstacle_velocity_scale: float = 1.0
     graph_uncertainty_scale: float = 1.0
     graph_uncertainty_risk_gain: float = 0.0
     cbf_enabled: bool = False
@@ -121,7 +122,11 @@ class GraphExperimentConfig:
             raise ValueError("graph_mode is not a supported fair-comparison graph variant.")
         if self.embedding_dim % self.graph_heads != 0:
             raise ValueError("embedding_dim must be divisible by graph_heads.")
-        if self.cbf_slack_penalty <= 0.0 or self.cbf_max_iterations < 1:
+        if (
+            self.cbf_slack_penalty <= 0.0
+            or self.cbf_max_iterations < 1
+            or self.dynamic_obstacle_velocity_scale <= 0.0
+        ):
             raise ValueError("CBF slack penalty and iteration budget must be positive.")
 
     def optimizer_config(self) -> GraphMAPPOConfig:
@@ -203,11 +208,17 @@ def load_graph_experiment_config(path: Path) -> GraphExperimentConfig:
 
 
 def make_graph_scenario(
-    *, num_uavs: int, obstacle: bool = False, dynamic_obstacle: bool = False
+    *,
+    num_uavs: int,
+    obstacle: bool = False,
+    dynamic_obstacle: bool = False,
+    dynamic_obstacle_velocity_scale: float = 1.0,
 ) -> Scenario:
     """Create reproducible parallel missions for any supported graph size."""
     if num_uavs < 2:
         raise ValueError("num_uavs must be at least two.")
+    if dynamic_obstacle_velocity_scale <= 0.0:
+        raise ValueError("dynamic_obstacle_velocity_scale must be positive.")
     terrain = TerrainMap(
         x_grid=np.array([0.0, 100.0]),
         y_grid=np.array([0.0, 100.0]),
@@ -237,7 +248,7 @@ def make_graph_scenario(
             DynamicCylinder(
                 identifier="crossing_0",
                 initial_center=np.array([22.0, 50.0, 30.0]),
-                velocity=np.array([0.0, 2.0, 0.0]),
+                velocity=np.array([0.0, 2.0 * dynamic_obstacle_velocity_scale, 0.0]),
                 radius=3.0,
                 height=20.0,
             ),
@@ -364,6 +375,7 @@ class GraphMAPPOExperiment:
             num_uavs=config.num_uavs,
             obstacle=config.obstacle,
             dynamic_obstacle=config.dynamic_obstacle_enabled,
+            dynamic_obstacle_velocity_scale=config.dynamic_obstacle_velocity_scale,
         )
         environment_config = EnvironmentConfig(
             dt=1.0,
@@ -551,6 +563,7 @@ class GraphMAPPOExperiment:
             num_uavs=self.config.num_uavs,
             obstacle=self.config.obstacle,
             dynamic_obstacle=self.config.dynamic_obstacle_enabled,
+            dynamic_obstacle_velocity_scale=self.config.dynamic_obstacle_velocity_scale,
         )
         environment_config = self.environments[0].config
         evaluation_cbf_adapter = self._make_cbf_adapter() if self.config.cbf_enabled else None
