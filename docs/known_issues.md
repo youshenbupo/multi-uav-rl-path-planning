@@ -151,3 +151,8 @@
   evaluator directories are retained as failed attempts and must never be
   included in statistical aggregation; only the `_schemafix_rngfix_rerun2`
   nominal directory contains a valid repaired result for seed `20260719`.
+- The initial OOD obstacle-speed evaluator directory is also invalid: its
+  1.5x constant-velocity trajectory left the world boundary before any episode
+  could start. The generator and a regression test now enforce a valid
+  twenty-step horizon, and only the `_trajectoryfix_rerun1` OOD directory is
+  eligible for later aggregation.

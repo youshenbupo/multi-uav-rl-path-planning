@@ -239,6 +239,14 @@ def make_graph_scenario(
         if obstacle
         else ()
     )
+    crossing_velocity_y = 2.0 * dynamic_obstacle_velocity_scale
+    crossing_horizon_steps = 20
+    crossing_terminal_y = 90.0
+    crossing_initial_y = crossing_terminal_y - crossing_horizon_steps * crossing_velocity_y
+    if not 0.0 <= crossing_initial_y <= crossing_terminal_y:
+        raise ValueError(
+            "dynamic_obstacle_velocity_scale does not fit the fixed twenty-step world horizon."
+        )
     return Scenario(
         terrain=terrain,
         threats=threats,
@@ -253,8 +261,8 @@ def make_graph_scenario(
         dynamic_obstacles=(
             DynamicCylinder(
                 identifier="crossing_0",
-                initial_center=np.array([22.0, 50.0, 30.0]),
-                velocity=np.array([0.0, 2.0 * dynamic_obstacle_velocity_scale, 0.0]),
+                initial_center=np.array([22.0, crossing_initial_y, 30.0]),
+                velocity=np.array([0.0, crossing_velocity_y, 0.0]),
                 radius=3.0,
                 height=20.0,
             ),

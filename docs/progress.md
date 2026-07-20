@@ -411,3 +411,25 @@ The first repaired nominal evaluation was written to
 Its single-seed, single-condition metrics are retained solely as raw protocol
 evidence; the remaining five scenarios, four additional seeds, and all three
 other comparison arms are required before any comparative statement.
+
+## AAMAS 2027 - related-work evidence gate (2026-07-20)
+
+`docs/related_work_matrix.md` now records the first source-verified entries
+without turning titles into novelty claims. The AAAI landing-page abstract for
+DACOM and the deposited IJCAI abstract for DHCG were reviewed; the AAMAS 2026
+neural graph-CBF paper is retained as metadata-only pending primary-paper
+inspection. The current paper text may describe a testable uncertainty-prediction
+and CBF-margin design, but cannot claim to be the first combination until the
+remaining primary-paper comparisons are complete.
+
+## AAMAS 2027 - executable OOD obstacle perturbation (2026-07-20)
+
+The six-scenario protocol's OOD obstacle-speed setting was initially
+non-executable: the old constant-velocity trajectory ran from y=50 to y=110 at
+1.5x speed and correctly failed the world-boundary validator. The scenario
+generator now derives the crossing obstacle's initial y-coordinate from the
+fixed 20-step horizon and a terminal y=90. Thus the in-distribution 1.0x case
+is unchanged (y=50 to y=90), while the 1.5x OOD case is a valid faster y=30 to
+y=90 trajectory. A regression test instantiates the OOD environment and checks
+its velocity and endpoint. The prior failed OOD evaluator directory is retained
+as invalid; the repaired raw result uses the `_trajectoryfix_rerun1` identity.
