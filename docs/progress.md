@@ -338,3 +338,11 @@ policy and saved CBF training telemetry with four solved training decisions and 
 fallbacks. The evaluation episode stream separately recorded a `solved inaccurate` CBF fallback;
 evaluation metrics now include CBF intervention rate, fallback rate, and mean QP time for both MLP
 and graph methods. These are diagnostic smoke observations only, and preclude any safety claim.
+
+The retained MLP evaluation event was replayed with
+`scripts/diagnose_cbf_failure.py --telemetry-key final_evaluation_cbf`.
+Raising the 20,000-iteration cap to 100,000 reached the 0.1-second time limit,
+while a slack penalty of 10 solved only by accepting a large slack (about 75).
+The mainline penalty remains 100; no numerical setting was silently relaxed to
+hide the fallback. The event is now a reproducible candidate for the paper's
+QP-failure analysis.

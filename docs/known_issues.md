@@ -106,6 +106,13 @@
   but it exposed an evaluation-side `solved inaccurate` CBF fallback. Training
   and evaluation now record separate fallback rates, yet the five-seed CBF
   stress analysis required before any safety statement remains outstanding.
+- The retained MLP evaluation fallback was replayed from its saved dynamic
+  context. Increasing OSQP from 20,000 to 100,000 iterations reached the
+  configured 0.1-second solve limit instead of a reliable solution. Reducing
+  the slack penalty from 100 to 10 did solve the replay, but only with a large
+  slack value (about 75); that setting is deliberately not adopted as a safety
+  fix. Formal experiments must retain and analyze these events rather than
+  silently changing the numerical penalty to reduce the fallback count.
 - The planned ablation manifest is present, but its nine separately trained
   checkpoint artifacts have not yet been produced. The ablation command writes
   unavailable resolution records until an arm-specific artifact is supplied.

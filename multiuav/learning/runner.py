@@ -188,6 +188,7 @@ class MAPPOExperiment:
         )
         self.cbf_adapter = self._make_cbf_adapter() if config.cbf_enabled else None
         self.cbf_telemetry = SafetyFilterTelemetry()
+        self.last_evaluation_cbf_telemetry = SafetyFilterTelemetry()
         self.writer = SummaryWriter(log_dir=str(log_dir)) if log_dir is not None else None
         self.total_transitions = 0
         self.reset_counts = [0 for _ in self.environments]
@@ -303,6 +304,7 @@ class MAPPOExperiment:
         cbf_interventions = 0
         cbf_fallbacks = 0
         cbf_solve_times: list[float] = []
+        evaluation_telemetry = SafetyFilterTelemetry()
         scenario = self._scenario()
         environment_config = self.environments[0].config
         evaluation_cbf_adapter = self._make_cbf_adapter() if self.config.cbf_enabled else None
@@ -326,13 +328,34 @@ class MAPPOExperiment:
                     )
                 previous_positions = environment.positions.copy()
                 if evaluation_cbf_adapter is not None:
-                    actions, decision = evaluation_cbf_adapter.filter_normalized(
-                        environment._snapshot(), actions
-                    )
+                    snapshot = environment._snapshot()
+                    actions, decision = evaluation_cbf_adapter.filter_normalized(snapshot, actions)
                     cbf_decisions += 1
                     cbf_interventions += int(decision.intervention_norm > 0.0)
                     cbf_fallbacks += int(decision.emergency_fallback_used)
                     cbf_solve_times.append(decision.solve_time)
+                    evaluation_telemetry.record(
+                        decision,
+                        context={
+                            "episode": episode,
+                            "environment_step": environment.step_count,
+                            "positions": environment.positions.tolist(),
+                            "requested_velocities": decision.u_rl.tolist(),
+                            "velocities": snapshot.velocities.tolist(),
+                            "knowledge_valid": [
+                                state.valid.tolist() for state in snapshot.knowledge_states
+                            ],
+                            "knowledge_uncertainty": [
+                                state.position_uncertainty.tolist()
+                                for state in snapshot.knowledge_states
+                            ],
+                            "dynamic_obstacle_centers": (
+                                snapshot.dynamic_world.centers.tolist()
+                                if snapshot.dynamic_world is not None
+                                else []
+                            ),
+                        },
+                    )
                 observations, rewards, terminations, truncations, infos = environment.step(
                     {
                         agent: actions[environment.agent_name_mapping[agent]]
@@ -355,6 +378,7 @@ class MAPPOExperiment:
         cbf_intervention_rate = cbf_interventions / cbf_decisions if cbf_decisions else 0.0
         cbf_fallback_rate = cbf_fallbacks / cbf_decisions if cbf_decisions else 0.0
         cbf_mean_solve_time = float(np.mean(cbf_solve_times)) if cbf_solve_times else 0.0
+        self.last_evaluation_cbf_telemetry = evaluation_telemetry
         return {
             "episode_return": float(np.mean(returns)),
             "success_rate": float(np.mean(successes)),

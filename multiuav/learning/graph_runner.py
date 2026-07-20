@@ -397,6 +397,7 @@ class GraphMAPPOExperiment:
         self.graph_builder = ConflictGraphBuilder(config.graph_build_config())
         self.cbf_adapter = self._make_cbf_adapter() if config.cbf_enabled else None
         self.cbf_telemetry = SafetyFilterTelemetry()
+        self.last_evaluation_cbf_telemetry = SafetyFilterTelemetry()
         self.trainer = GraphMAPPOTrainer(
             GraphActor(
                 node_feature_dim=node_feature_dim,
@@ -545,6 +546,7 @@ class GraphMAPPOExperiment:
         cbf_interventions = 0
         cbf_fallbacks = 0
         cbf_solve_times: list[float] = []
+        evaluation_telemetry = SafetyFilterTelemetry()
         scenario = make_graph_scenario(
             num_uavs=self.config.num_uavs,
             obstacle=self.config.obstacle,
@@ -573,13 +575,36 @@ class GraphMAPPOExperiment:
                 previous_positions = environment.positions.copy()
                 proposed_actions = actions[0].cpu().numpy()
                 if evaluation_cbf_adapter is not None:
+                    snapshot = environment._snapshot()
                     proposed_actions, decision = evaluation_cbf_adapter.filter_normalized(
-                        environment._snapshot(), proposed_actions
+                        snapshot, proposed_actions
                     )
                     cbf_decisions += 1
                     cbf_interventions += int(decision.intervention_norm > 0.0)
                     cbf_fallbacks += int(decision.emergency_fallback_used)
                     cbf_solve_times.append(decision.solve_time)
+                    evaluation_telemetry.record(
+                        decision,
+                        context={
+                            "episode": episode,
+                            "environment_step": environment.step_count,
+                            "positions": environment.positions.tolist(),
+                            "requested_velocities": decision.u_rl.tolist(),
+                            "velocities": snapshot.velocities.tolist(),
+                            "knowledge_valid": [
+                                state.valid.tolist() for state in snapshot.knowledge_states
+                            ],
+                            "knowledge_uncertainty": [
+                                state.position_uncertainty.tolist()
+                                for state in snapshot.knowledge_states
+                            ],
+                            "dynamic_obstacle_centers": (
+                                snapshot.dynamic_world.centers.tolist()
+                                if snapshot.dynamic_world is not None
+                                else []
+                            ),
+                        },
+                    )
                 observations, rewards, terminations, truncations, infos = environment.step(
                     {
                         agent: proposed_actions[environment.agent_name_mapping[agent]]
@@ -602,6 +627,7 @@ class GraphMAPPOExperiment:
         cbf_intervention_rate = cbf_interventions / cbf_decisions if cbf_decisions else 0.0
         cbf_fallback_rate = cbf_fallbacks / cbf_decisions if cbf_decisions else 0.0
         cbf_mean_solve_time = float(np.mean(cbf_solve_times)) if cbf_solve_times else 0.0
+        self.last_evaluation_cbf_telemetry = evaluation_telemetry
         return {
             "episode_return": float(np.mean(returns)),
             "success_rate": float(np.mean(successes)),

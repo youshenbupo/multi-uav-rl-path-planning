@@ -25,6 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
     """Expose every numerical setting varied by a recorded-QP replay."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("telemetry", type=Path)
+    parser.add_argument("--telemetry-key", default="cbf")
     parser.add_argument("--event-index", type=int, default=0)
     parser.add_argument("--max-iterations", type=int, default=20_000)
     parser.add_argument("--max-solve-time-seconds", type=float, default=0.1)
@@ -95,7 +96,12 @@ def main() -> None:
     """Load one training artifact event and print a direct-OSQP replay result."""
     arguments = build_parser().parse_args()
     telemetry = json.loads(arguments.telemetry.read_text(encoding="utf-8"))
-    events = telemetry["cbf"]["emergency_events"]
+    selected_telemetry = telemetry.get(arguments.telemetry_key)
+    if not isinstance(selected_telemetry, dict):
+        raise ValueError("telemetry-key does not select a retained CBF telemetry mapping.")
+    events = selected_telemetry.get("emergency_events")
+    if not isinstance(events, list):
+        raise ValueError("Selected telemetry has no emergency-event list.")
     if not 0 <= arguments.event_index < len(events):
         raise ValueError("event-index is outside the retained emergency-event list.")
     snapshot, requested = build_snapshot_and_requested(events[arguments.event_index])

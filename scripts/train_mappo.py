@@ -48,8 +48,10 @@ def main() -> None:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     experiment = MAPPOExperiment(config, device=device, log_dir=args.output_dir / "tensorboard")
     initial = experiment.evaluate(episodes=8)
+    initial_cbf_telemetry = experiment.last_evaluation_cbf_telemetry.as_dict()
     records = experiment.train(checkpoint_dir=args.output_dir / "checkpoints")
     final = experiment.evaluate(episodes=8)
+    final_cbf_telemetry = experiment.last_evaluation_cbf_telemetry.as_dict()
     checkpoint = args.output_dir / "checkpoints" / "mappo_final.pt"
     save_checkpoint(checkpoint, experiment.trainer, step=experiment.total_transitions)
     summary = {
@@ -58,7 +60,9 @@ def main() -> None:
         "num_uavs": config.num_uavs,
         "dynamic_obstacle_enabled": config.dynamic_obstacle_enabled,
         "initial_evaluation": initial,
+        "initial_evaluation_cbf": initial_cbf_telemetry,
         "final_evaluation": final,
+        "final_evaluation_cbf": final_cbf_telemetry,
         "update_count": len(records),
         "last_update": records[-1] if records else {},
         "checkpoint": str(checkpoint),
