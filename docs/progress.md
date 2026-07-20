@@ -313,3 +313,17 @@ cap. A fresh CUDA 12-transition training smoke on the same semantics recorded 4/
 decisions, zero emergency fallbacks, maximum 7,950 iterations, and maximum CPU QP time about
 0.0095 seconds. This validates traceability and a local numerical improvement only; multi-seed,
 long-horizon and stress-scenario fallback analysis remains mandatory before any safety claim.
+
+## AAMAS 2027 - dynamic GraphMAPPO comparison executor (2026-07-20)
+
+The ordinary raw-packet graph, predictive graph without uncertainty, and uncertainty-aware
+predictive graph now share one GraphMAPPO dynamic-world executor. Each arm uses the same seeded
+three-UAV scenario, delayed/lossy communication, moving cylinder, rewards, action bounds and
+execution-side CPU CBF; only graph-state prediction, information-age and uncertainty inputs
+change. `configs/rl/dynamic_graph_baseline.yaml` is the common long-run protocol and
+`configs/experiments/dynamic_graph_smoke.yaml` is a bounded plumbing configuration.
+
+The complete uncertainty arm completed a CUDA smoke run with one PPO update. Its retained CBF
+telemetry reports four solved decisions and zero fallbacks. This verifies the fair-executor path,
+not relative policy quality. MLP-MAPPO is still not attached to this dynamic executor and remains
+unavailable as a main comparison arm until it receives the same environment and CBF contract.

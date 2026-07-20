@@ -39,6 +39,12 @@ from multiuav.learning.graph_networks import (
     GraphCentralizedCritic,
 )
 from multiuav.learning.graph_rollout_buffer import GraphRolloutBuffer
+from multiuav.safety import (
+    CBFConfig,
+    NormalizedActionCBFAdapter,
+    OSQPSafetyFilter,
+    SafetyFilterTelemetry,
+)
 
 
 @dataclass(frozen=True)
@@ -73,6 +79,19 @@ class GraphExperimentConfig:
     aux_conflict_coef: float
     aux_distance_coef: float
     obstacle: bool
+    communication_enabled: bool = False
+    communication_delay_steps: int = 0
+    communication_drop_probability: float = 0.0
+    communication_max_staleness_steps: int = 0
+    communication_uncertainty_growth_per_step: float = 0.0
+    dynamic_obstacle_enabled: bool = False
+    graph_uncertainty_scale: float = 1.0
+    graph_uncertainty_risk_gain: float = 0.0
+    cbf_enabled: bool = False
+    cbf_slack_penalty: float = 1_000.0
+    cbf_max_iterations: int = 20_000
+    cbf_communication_uncertainty_margin_gain: float = 0.0
+    cbf_max_communication_uncertainty_margin: float = 0.0
 
     def __post_init__(self) -> None:
         count_values = (
@@ -93,10 +112,17 @@ class GraphExperimentConfig:
             raise ValueError("Graph experiment count fields must be positive.")
         if self.num_uavs < 2:
             raise ValueError("GraphMAPPO requires at least two UAVs.")
-        if self.graph_mode not in {"mappo", "distance_graph", "predictive_graph"}:
-            raise ValueError("graph_mode must be mappo, distance_graph, or predictive_graph.")
+        if self.graph_mode not in {
+            "mappo",
+            "distance_graph",
+            "predictive_graph",
+            "uncertainty_predictive_graph",
+        }:
+            raise ValueError("graph_mode is not a supported fair-comparison graph variant.")
         if self.embedding_dim % self.graph_heads != 0:
             raise ValueError("embedding_dim must be divisible by graph_heads.")
+        if self.cbf_slack_penalty <= 0.0 or self.cbf_max_iterations < 1:
+            raise ValueError("CBF slack penalty and iteration budget must be positive.")
 
     def optimizer_config(self) -> GraphMAPPOConfig:
         """Project experiment settings to the trainer-only configuration."""
@@ -122,8 +148,38 @@ class GraphExperimentConfig:
             prediction_horizon=self.prediction_horizon,
             top_k_neighbors=0 if self.graph_mode == "mappo" else self.top_k_neighbors,
             current_distance_edges=self.graph_mode != "mappo",
-            predicted_conflict_edges=self.graph_mode == "predictive_graph",
+            predicted_conflict_edges=self.uses_predicted_knowledge,
             self_loops=True,
+            uncertainty_scale=self.graph_uncertainty_scale,
+            uncertainty_risk_gain=(
+                self.graph_uncertainty_risk_gain
+                if self.graph_mode == "uncertainty_predictive_graph"
+                else 0.0
+            ),
+        )
+
+    @property
+    def uses_predicted_knowledge(self) -> bool:
+        """Only predictive variants may dead-reckon delivered neighbour packets."""
+        return self.graph_mode in {"predictive_graph", "uncertainty_predictive_graph"}
+
+    @property
+    def uses_uncertainty(self) -> bool:
+        """Expose uncertainty only to the complete predictive-graph comparison arm."""
+        return self.graph_mode == "uncertainty_predictive_graph"
+
+    def cbf_config(self) -> CBFConfig:
+        """Project shared execution-only safety settings into every comparison arm."""
+        return CBFConfig(
+            max_solve_time_seconds=0.1,
+            slack_penalty=self.cbf_slack_penalty,
+            max_iterations=self.cbf_max_iterations,
+            communication_uncertainty_margin_gain=(
+                self.cbf_communication_uncertainty_margin_gain
+            ),
+            max_communication_uncertainty_margin=(
+                self.cbf_max_communication_uncertainty_margin
+            ),
         )
 
 
@@ -196,6 +252,9 @@ def build_graph_from_environments(
     environments: list[MultiUAVParallelEnv],
     *,
     device: torch.device,
+    use_predicted_knowledge: bool = True,
+    use_information_age: bool = True,
+    use_uncertainty: bool = True,
 ) -> ConflictGraph:
     """Build actor graph edges from delivered channel knowledge, not hidden neighbour truth."""
     if not environments:
@@ -266,6 +325,13 @@ def build_graph_from_environments(
         dtype=torch.bool,
         device=device,
     )
+    selected_positions = predicted_positions if use_predicted_knowledge else received_positions
+    selected_ages = knowledge_ages if use_information_age else torch.zeros_like(knowledge_ages)
+    selected_uncertainty = (
+        knowledge_uncertainty
+        if use_uncertainty
+        else torch.zeros_like(knowledge_uncertainty)
+    )
     return builder.build_from_knowledge(
         positions=positions,
         received_positions=received_positions,
@@ -273,9 +339,9 @@ def build_graph_from_environments(
         goals=goals,
         active_mask=active_mask,
         knowledge_valid=knowledge_valid,
-        knowledge_ages=knowledge_ages,
-        predicted_positions=predicted_positions,
-        knowledge_uncertainty=knowledge_uncertainty,
+        knowledge_ages=selected_ages,
+        predicted_positions=selected_positions,
+        knowledge_uncertainty=selected_uncertainty,
     )
 
 
@@ -294,7 +360,11 @@ class GraphMAPPOExperiment:
         self.config = config
         self.device = device
         _seed_everything(config.seed)
-        scenario = make_graph_scenario(num_uavs=config.num_uavs, obstacle=config.obstacle)
+        scenario = make_graph_scenario(
+            num_uavs=config.num_uavs,
+            obstacle=config.obstacle,
+            dynamic_obstacle=config.dynamic_obstacle_enabled,
+        )
         environment_config = EnvironmentConfig(
             dt=1.0,
             max_steps=20,
@@ -306,6 +376,15 @@ class GraphMAPPOExperiment:
             severe_clearance_shortfall=8.0,
             severe_threat_penetration=5.0,
             max_neighbors=min(3, config.num_uavs - 1),
+            max_dynamic_obstacles=int(config.dynamic_obstacle_enabled),
+            communication_enabled=config.communication_enabled,
+            communication_range=config.communication_radius,
+            communication_delay_steps=config.communication_delay_steps,
+            communication_drop_probability=config.communication_drop_probability,
+            communication_max_staleness_steps=config.communication_max_staleness_steps,
+            communication_uncertainty_growth_per_step=(
+                config.communication_uncertainty_growth_per_step
+            ),
         )
         self.environments = [
             MultiUAVParallelEnv(scenario, environment_config) for _ in range(config.num_envs)
@@ -316,6 +395,8 @@ class GraphMAPPOExperiment:
         ]
         node_feature_dim = self.environments[0].observation_space("uav_0").shape[0]
         self.graph_builder = ConflictGraphBuilder(config.graph_build_config())
+        self.cbf_adapter = self._make_cbf_adapter() if config.cbf_enabled else None
+        self.cbf_telemetry = SafetyFilterTelemetry()
         self.trainer = GraphMAPPOTrainer(
             GraphActor(
                 node_feature_dim=node_feature_dim,
@@ -460,8 +541,13 @@ class GraphMAPPOExperiment:
         collisions: list[float] = []
         path_lengths: list[float] = []
         separations: list[float] = []
-        scenario = make_graph_scenario(num_uavs=self.config.num_uavs, obstacle=self.config.obstacle)
+        scenario = make_graph_scenario(
+            num_uavs=self.config.num_uavs,
+            obstacle=self.config.obstacle,
+            dynamic_obstacle=self.config.dynamic_obstacle_enabled,
+        )
         environment_config = self.environments[0].config
+        evaluation_cbf_adapter = self._make_cbf_adapter() if self.config.cbf_enabled else None
         for episode in range(episodes):
             environment = MultiUAVParallelEnv(scenario, environment_config)
             observations, _ = environment.reset(seed=self.config.seed + 10_000 + episode)
@@ -481,9 +567,14 @@ class GraphMAPPOExperiment:
                         deterministic=True,
                     )
                 previous_positions = environment.positions.copy()
+                proposed_actions = actions[0].cpu().numpy()
+                if evaluation_cbf_adapter is not None:
+                    proposed_actions, _ = evaluation_cbf_adapter.filter_normalized(
+                        environment._snapshot(), proposed_actions
+                    )
                 observations, rewards, terminations, truncations, infos = environment.step(
                     {
-                        agent: actions[0, environment.agent_name_mapping[agent]].cpu().numpy()
+                        agent: proposed_actions[environment.agent_name_mapping[agent]]
                         for agent in environment.possible_agents
                     }
                 )
@@ -521,10 +612,22 @@ class GraphMAPPOExperiment:
         next_environments: list[MultiUAVParallelEnv] = []
         for environment_index, environment in enumerate(self.environments):
             previous_positions = environment.positions.copy()
+            filtered_actions = actions[environment_index]
+            if self.cbf_adapter is not None:
+                filtered_actions, decision = self.cbf_adapter.filter_normalized(
+                    environment._snapshot(), filtered_actions
+                )
+                self.cbf_telemetry.record(
+                    decision,
+                    context={
+                        "environment_index": environment_index,
+                        "environment_step": environment.step_count,
+                    },
+                )
             next_observations, reward_dict, terminal_dict, truncation_dict, infos = (
                 environment.step(
                     {
-                        agent: actions[environment_index, environment.agent_name_mapping[agent]]
+                        agent: filtered_actions[environment.agent_name_mapping[agent]]
                         for agent in environment.possible_agents
                     }
                 )
@@ -594,7 +697,18 @@ class GraphMAPPOExperiment:
         return self._build_graph_for(self.environments)
 
     def _build_graph_for(self, environments: list[MultiUAVParallelEnv]) -> ConflictGraph:
-        return build_graph_from_environments(self.graph_builder, environments, device=self.device)
+        return build_graph_from_environments(
+            self.graph_builder,
+            environments,
+            device=self.device,
+            use_predicted_knowledge=self.config.uses_predicted_knowledge,
+            use_information_age=self.config.uses_predicted_knowledge,
+            use_uncertainty=self.config.uses_uncertainty,
+        )
+
+    def _make_cbf_adapter(self) -> NormalizedActionCBFAdapter:
+        """Create an isolated CPU QP solver for a training or evaluation rollout."""
+        return NormalizedActionCBFAdapter(OSQPSafetyFilter(self.config.cbf_config()))
 
     def _positions_tensor(self) -> torch.Tensor:
         return torch.as_tensor(

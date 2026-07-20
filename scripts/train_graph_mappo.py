@@ -22,7 +22,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output-dir", type=Path, default=PROJECT_ROOT / "data/rl/graph_mappo")
     parser.add_argument("--device", default="auto", choices=("auto", "cpu", "cuda"))
     parser.add_argument("--num-uavs", type=int, choices=(3, 5, 8))
-    parser.add_argument("--graph-mode", choices=("mappo", "distance_graph", "predictive_graph"))
+    parser.add_argument(
+        "--graph-mode",
+        choices=(
+            "mappo",
+            "distance_graph",
+            "predictive_graph",
+            "uncertainty_predictive_graph",
+        ),
+    )
     parser.add_argument("--total-steps", type=int)
     parser.add_argument("--with-cylinder", action="store_true")
     parser.add_argument("--bc-low-checkpoint", type=Path)
@@ -85,6 +93,10 @@ def main() -> None:
     summary = {
         "config": str(args.config),
         "graph_mode": config.graph_mode,
+        "information_model": {
+            "uses_predicted_knowledge": config.uses_predicted_knowledge,
+            "uses_uncertainty": config.uses_uncertainty,
+        },
         "num_uavs": config.num_uavs,
         "device": str(device),
         "initial_evaluation": initial,
@@ -92,6 +104,7 @@ def main() -> None:
         "update_count": len(records),
         "last_update": records[-1] if records else {},
         "checkpoint": str(checkpoint),
+        "cbf": experiment.cbf_telemetry.as_dict(),
         "bc_low_checkpoint": str(args.bc_low_checkpoint) if args.bc_low_checkpoint else None,
         "bc_fine_tune": {
             "freeze_encoder_updates": schedule.freeze_encoder_updates,

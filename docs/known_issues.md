@@ -96,6 +96,12 @@
   hierarchical `full_method` checkpoint. Existing straight-line, CA-HGALO,
   MAPPO, graph-MAPPO, and hierarchy scripts are deliberately marked unavailable
   in this unified protocol until each has a comparable dynamic-world adapter.
+- A dynamic GraphMAPPO training executor now exists for the raw-packet,
+  predictive-without-uncertainty, and uncertainty-aware predictive graph arms,
+  but it is not yet wired into the public unified benchmark registry or five-seed
+  protocol runner. MLP-MAPPO remains unavailable in that protocol until its
+  separate actor/critic implementation uses the same dynamic environment and
+  CBF execution path.
 - The planned ablation manifest is present, but its nine separately trained
   checkpoint artifacts have not yet been produced. The ablation command writes
   unavailable resolution records until an arm-specific artifact is supplied.
