@@ -1,0 +1,37 @@
+# First paper-facing experiment gate: train every arm independently before any comparison.
+seeds: [20260719, 20260720, 20260721, 20260722, 20260723]
+initial_num_uavs: 3
+later_num_uavs: [5, 8]
+training_transitions_per_seed: 100000
+evaluation_episodes_per_seed: 20
+scenarios:
+  - nominal
+  - delay_only
+  - loss_only
+  - dynamic_only
+  - combined
+  - ood_communication_obstacle
+methods:
+  - name: mlp_mappo
+    family: mappo
+    config: configs/rl/dynamic_mappo_baseline.yaml
+    artifact_prefix: core_3uav_mlp_mappo
+    use_cbf: true
+  - name: raw_graph_mappo
+    family: graph_mappo
+    config: configs/rl/dynamic_graph_baseline.yaml
+    graph_mode: distance_graph
+    artifact_prefix: core_3uav_raw_graph
+    use_cbf: true
+  - name: predictive_graph_mappo
+    family: graph_mappo
+    config: configs/rl/dynamic_graph_baseline.yaml
+    graph_mode: predictive_graph
+    artifact_prefix: core_3uav_predictive_graph
+    use_cbf: true
+  - name: uncertainty_predictive_graph_mappo
+    family: graph_mappo
+    config: configs/rl/dynamic_graph_baseline.yaml
+    graph_mode: uncertainty_predictive_graph
+    artifact_prefix: core_3uav_uncertainty_graph
+    use_cbf: true
