@@ -85,9 +85,9 @@ class _ForcedFailureFilter(OSQPSafetyFilter):
         snapshot: EnvironmentSnapshot,
         requested: np.ndarray,
         rows: tuple[object, ...],
-    ) -> tuple[np.ndarray | None, str, float]:
+    ) -> tuple[np.ndarray | None, str, float, int, float, float]:
         del snapshot, requested, rows
-        return None, "forced_infeasible_qp", 0.0
+        return None, "forced_infeasible_qp", 0.0, 0, 0.0, 0.0
 
 
 def _scenario_cases() -> tuple[

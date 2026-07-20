@@ -39,7 +39,12 @@ from multiuav.learning.hierarchical_policy import (
     LowLevelCritic,
 )
 from multiuav.learning.hierarchical_rollout_buffer import compute_duration_aware_gae
-from multiuav.safety import CBFConfig, NormalizedActionCBFAdapter, OSQPSafetyFilter
+from multiuav.safety import (
+    CBFConfig,
+    NormalizedActionCBFAdapter,
+    OSQPSafetyFilter,
+    SafetyFilterTelemetry,
+)
 
 
 @dataclass(frozen=True)
@@ -83,6 +88,8 @@ class HierarchicalExperimentConfig:
     graph_uncertainty_risk_gain: float = 0.0
     dynamic_obstacle_enabled: bool = False
     cbf_enabled: bool = False
+    cbf_slack_penalty: float = 1_000.0
+    cbf_max_iterations: int = 20_000
     cbf_communication_uncertainty_margin_gain: float = 0.0
     cbf_max_communication_uncertainty_margin: float = 0.0
 
@@ -105,6 +112,8 @@ class HierarchicalExperimentConfig:
             raise ValueError("Hierarchical experiment count fields must be positive.")
         if self.num_uavs < 2 or self.embedding_dim % self.graph_heads != 0:
             raise ValueError("num_uavs must be >=2 and embedding_dim divisible by graph_heads.")
+        if self.cbf_slack_penalty <= 0.0 or self.cbf_max_iterations < 1:
+            raise ValueError("CBF slack penalty and iteration budget must be positive.")
 
     def graph_config(self) -> GraphBuildConfig:
         """Use predictive graph features for both hierarchy levels."""
@@ -264,6 +273,8 @@ class HierarchicalMAPPOExperiment:
                 OSQPSafetyFilter(
                     CBFConfig(
                         max_solve_time_seconds=0.1,
+                        slack_penalty=config.cbf_slack_penalty,
+                        max_iterations=config.cbf_max_iterations,
                         communication_uncertainty_margin_gain=(
                             config.cbf_communication_uncertainty_margin_gain
                         ),
@@ -276,6 +287,7 @@ class HierarchicalMAPPOExperiment:
             if config.cbf_enabled
             else None
         )
+        self.cbf_telemetry = SafetyFilterTelemetry()
         self.total_transitions = 0
 
     def train(self, *, stage: str) -> list[dict[str, float]]:
@@ -625,8 +637,31 @@ class HierarchicalMAPPOExperiment:
         for environment_index, environment in enumerate(self.environments):
             filtered_actions = actions[environment_index]
             if self.cbf_adapter is not None:
-                filtered_actions, _ = self.cbf_adapter.filter_normalized(
-                    environment._snapshot(), filtered_actions
+                snapshot = environment._snapshot()
+                filtered_actions, decision = self.cbf_adapter.filter_normalized(
+                    snapshot, filtered_actions
+                )
+                self.cbf_telemetry.record(
+                    decision,
+                    context={
+                        "environment_index": environment_index,
+                        "environment_step": snapshot.step_count,
+                        "positions": snapshot.positions.tolist(),
+                        "velocities": snapshot.velocities.tolist(),
+                        "requested_velocities": decision.u_rl.tolist(),
+                        "knowledge_uncertainty": [
+                            state.position_uncertainty.tolist()
+                            for state in snapshot.knowledge_states
+                        ],
+                        "knowledge_valid": [
+                            state.valid.tolist() for state in snapshot.knowledge_states
+                        ],
+                        "dynamic_obstacle_centers": (
+                            snapshot.dynamic_world.centers.tolist()
+                            if snapshot.dynamic_world is not None
+                            else []
+                        ),
+                    },
                 )
             observation, reward_dict, terminal_dict, truncation_dict, _ = environment.step(
                 {

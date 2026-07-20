@@ -409,11 +409,14 @@ class HierarchicalPolicyTests(unittest.TestCase):
                 "graph_uncertainty_risk_gain",
                 "dynamic_obstacle_enabled",
                 "cbf_enabled",
+                "cbf_slack_penalty",
+                "cbf_max_iterations",
                 "cbf_communication_uncertainty_margin_gain",
                 "cbf_max_communication_uncertainty_margin",
             }.issubset(payload)
         )
         self.assertGreater(config.graph_config().uncertainty_risk_gain, 0.0)
+        self.assertEqual(config.cbf_slack_penalty, 100.0)
         self.assertEqual(
             build_hierarchical_training_parser().parse_args(["--stage", "low"]).stage, "low"
         )

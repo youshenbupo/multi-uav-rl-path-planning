@@ -7,7 +7,7 @@ from multiuav.safety.cbf_constraints import (
     CBFConstraintRow,
     load_cbf_config,
 )
-from multiuav.safety.qp_filter import OSQPSafetyFilter, SafetyFilterDecision
+from multiuav.safety.qp_filter import OSQPSafetyFilter, SafetyFilterDecision, SafetyFilterTelemetry
 
 __all__ = [
     "CBFConfig",
@@ -16,5 +16,6 @@ __all__ = [
     "NormalizedActionCBFAdapter",
     "OSQPSafetyFilter",
     "SafetyFilterDecision",
+    "SafetyFilterTelemetry",
     "load_cbf_config",
 ]

@@ -16,7 +16,7 @@ from multiuav.envs.dynamic_world import DynamicWorldState
 from multiuav.envs.observations import EnvironmentSnapshot
 from multiuav.safety.action_adapter import NormalizedActionCBFAdapter
 from multiuav.safety.cbf_constraints import CBFConfig, CBFConstraintBuilder, load_cbf_config
-from multiuav.safety.qp_filter import OSQPSafetyFilter
+from multiuav.safety.qp_filter import OSQPSafetyFilter, SafetyFilterDecision, SafetyFilterTelemetry
 from scripts.test_cbf_scenarios import run_scenarios
 
 
@@ -152,6 +152,50 @@ class CBFSafetyTests(unittest.TestCase):
 
         self.assertEqual(config.horizontal_speed_polygon_sides, 16)
         self.assertGreater(config.slack_penalty, 0.0)
+        self.assertEqual(config.max_iterations, 20_000)
+
+    def test_telemetry_reports_fallback_rate_and_solver_statuses(self) -> None:
+        telemetry = SafetyFilterTelemetry()
+        telemetry.record(_decision(solver_status="solved", intervention_norm=0.5))
+        telemetry.record(
+            _decision(
+                solver_status="maximum iterations reached",
+                emergency_fallback_used=True,
+                solve_time=0.1,
+            ),
+            context={"environment_step": 3},
+        )
+
+        report = telemetry.as_dict()
+
+        self.assertEqual(report["decision_count"], 2)
+        self.assertEqual(report["intervention_count"], 1)
+        self.assertEqual(report["emergency_fallback_count"], 1)
+        self.assertEqual(report["emergency_fallback_rate"], 0.5)
+        self.assertEqual(report["max_solver_iterations"], 0)
+        self.assertEqual(report["solver_status_counts"]["maximum iterations reached"], 1)
+        self.assertEqual(report["emergency_events"][0]["decision_index"], 2)
+        self.assertEqual(report["emergency_events"][0]["context"]["environment_step"], 3)
+
+
+def _decision(
+    *,
+    solver_status: str,
+    intervention_norm: float = 0.0,
+    emergency_fallback_used: bool = False,
+    solve_time: float = 0.01,
+) -> SafetyFilterDecision:
+    return SafetyFilterDecision(
+        u_rl=np.zeros((1, 3)),
+        u_safe=np.zeros((1, 3)),
+        intervention_norm=intervention_norm,
+        active_constraint_count=1,
+        dynamic_constraint_count=0,
+        slack_value=0.0,
+        solver_status=solver_status,
+        solve_time=solve_time,
+        emergency_fallback_used=emergency_fallback_used,
+    )
 
 
 def _snapshot(positions: np.ndarray) -> EnvironmentSnapshot:

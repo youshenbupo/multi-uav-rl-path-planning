@@ -144,6 +144,43 @@ def test_checkpointless_evaluation_is_recorded_as_semantic_smoke(tmp_path: Path)
     assert config["method"] == "semantic_smoke"
 
 
+def test_training_script_records_controller_and_cbf_telemetry(tmp_path: Path) -> None:
+    """A real training invocation must retain CBF fallback evidence for later exclusion analysis."""
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(PROJECT_ROOT / "scripts" / "train.py"),
+            "--config",
+            str(PROJECT_ROOT / "configs" / "experiments" / "mainline_smoke.yaml"),
+            "--device",
+            "cpu",
+            "--no-use-expert-pretrain",
+            "--stage",
+            "low",
+            "--total-steps",
+            "4",
+            "--output-root",
+            str(tmp_path),
+            "--experiment-name",
+            "training_telemetry_cli",
+        ],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert "training_telemetry_cli" in completed.stdout
+    output = tmp_path / "training_telemetry_cli"
+    metadata = json.loads((output / "environment.json").read_text(encoding="utf-8"))
+    telemetry = json.loads((output / "runtime_telemetry.json").read_text(encoding="utf-8"))
+    assert metadata["controller"] == "hierarchical_training"
+    assert telemetry["training"]["update_count"] == 1
+    assert telemetry["cbf_configuration"]["slack_penalty"] == 100.0
+    assert telemetry["cbf"]["decision_count"] == 4
+    assert sum(telemetry["cbf"]["solver_status_counts"].values()) == 4
+
+
 def test_ablation_script_writes_missing_artifact_resolution_without_metrics(tmp_path: Path) -> None:
     """Untrained ablation arms produce an auditable resolution instead of synthetic results."""
     manifest = PROJECT_ROOT / "configs/experiments/ablation_manifest.yaml"

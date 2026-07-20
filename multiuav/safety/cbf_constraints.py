@@ -24,6 +24,7 @@ class CBFConfig:
     horizontal_speed_polygon_sides: int = 16
     slack_penalty: float = 1_000.0
     max_solve_time_seconds: float = 0.02
+    max_iterations: int = 20_000
     communication_uncertainty_margin_gain: float = 0.0
     max_communication_uncertainty_margin: float = 0.0
 
@@ -32,7 +33,11 @@ class CBFConfig:
             raise ValueError("CBF alpha and terrain gradient epsilon must be positive.")
         if self.threat_vertical_influence < 0.0 or self.slack_penalty <= 0.0:
             raise ValueError("CBF threat influence and slack penalty are invalid.")
-        if self.horizontal_speed_polygon_sides < 4 or self.max_solve_time_seconds <= 0.0:
+        if (
+            self.horizontal_speed_polygon_sides < 4
+            or self.max_solve_time_seconds <= 0.0
+            or self.max_iterations < 1
+        ):
             raise ValueError("CBF speed polygon and solve-time settings are invalid.")
         if (
             self.communication_uncertainty_margin_gain < 0.0

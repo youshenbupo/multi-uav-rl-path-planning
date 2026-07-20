@@ -104,6 +104,15 @@
   graph risk gain, and CBF margin cap require sensitivity analysis. The CBF
   remains centralized in simulation: true geometry builds constraints while
   communication uncertainty only tightens its clearance margin.
+- The first 12-transition CUDA uncertainty smoke run produced one CBF
+  `maximum iterations reached` fallback in four decisions with a slack penalty
+  of 1000. A persisted-event replay showed the same QP converges with penalty
+  100 before the 20,000-iteration budget; the checked-in mainline configuration
+  now uses 100 and a subsequent four-decision CUDA smoke had zero fallbacks.
+  This is a narrow numerical regression check, not evidence of low fallback
+  rate, safety, or real-time performance under trained policies. Formal
+  experiments must report all retained emergency events and rates across every
+  seed and scenario.
 - Introducing age and uncertainty features changes local observation width from
   six to eight values per neighbour and graph edge width from 15 to 16. Existing
   BC and hierarchical checkpoints are intentionally incompatible and cannot be

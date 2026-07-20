@@ -82,6 +82,23 @@ def test_dynamic_experiment_metadata_records_uncertainty_model(tmp_path: Path) -
     assert metadata["cbf_uncertainty_margin"]["maximum"] > 0.0
 
 
+def test_experiment_output_records_explicit_training_controller_and_runtime_telemetry(
+    tmp_path: Path,
+) -> None:
+    """Training artifacts must not masquerade as checkpointless semantic smoke runs."""
+    spec = ExperimentSpec(name="training_metadata", seeds=(13,), num_uavs=3, device="cpu")
+
+    layout = create_experiment_output(spec, tmp_path, controller="hierarchical_training")
+    layout.write_runtime_telemetry(
+        {"cbf": {"decision_count": 4, "emergency_fallback_rate": 0.25}}
+    )
+
+    metadata = json.loads((layout.root / "environment.json").read_text(encoding="utf-8"))
+    telemetry = json.loads((layout.root / "runtime_telemetry.json").read_text(encoding="utf-8"))
+    assert metadata["controller"] == "hierarchical_training"
+    assert telemetry["cbf"]["emergency_fallback_rate"] == 0.25
+
+
 def test_checkpoint_evaluation_runs_hierarchy_cbf_and_writes_episode_figure(tmp_path: Path) -> None:
     """A compatible fixture checkpoint traverses the learned hierarchy evaluation path."""
     from dataclasses import replace

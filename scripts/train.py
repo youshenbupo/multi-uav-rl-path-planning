@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
+import subprocess
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -34,7 +36,9 @@ def main() -> None:
     parser.add_argument("--bc-fine-tune-learning-rate", type=float, default=0.0001)
     args = parser.parse_args()
     spec = spec_from_args(args)
-    output = create_experiment_output(spec, args.output_root)
+    output = create_experiment_output(
+        spec, args.output_root, controller="hierarchical_training"
+    )
     configuration = load_hierarchical_experiment_config(args.config)
     configuration = replace(
         configuration,
@@ -68,11 +72,48 @@ def main() -> None:
     save_hierarchical_checkpoint(
         checkpoint, experiment.trainer, stage=args.stage, step=experiment.total_transitions
     )
+    output.write_runtime_telemetry(
+        {
+            "command": sys.argv[1:],
+            "configuration": {
+                "filename": args.config.name,
+                "sha256": hashlib.sha256(args.config.read_bytes()).hexdigest(),
+            },
+            "git_revision": _git_revision(),
+            "training": {
+                "stage": args.stage,
+                "total_transitions": experiment.total_transitions,
+                "update_count": len(records),
+            },
+            "cbf_configuration": {
+                "enabled": configuration.cbf_enabled,
+                "slack_penalty": configuration.cbf_slack_penalty,
+                "max_iterations": configuration.cbf_max_iterations,
+                "uncertainty_margin_gain": (
+                    configuration.cbf_communication_uncertainty_margin_gain
+                ),
+                "max_uncertainty_margin": configuration.cbf_max_communication_uncertainty_margin,
+            },
+            "cbf": experiment.cbf_telemetry.as_dict(),
+        }
+    )
     print(
         json.dumps(
             {"output": str(output.root), "checkpoint": str(checkpoint), "updates": len(records)}
         )
     )
+
+
+def _git_revision() -> str:
+    """Return the source revision that produced a training artifact when available."""
+    completed = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        check=False,
+        text=True,
+    )
+    return completed.stdout.strip() if completed.returncode == 0 else "unavailable"
 
 
 if __name__ == "__main__":

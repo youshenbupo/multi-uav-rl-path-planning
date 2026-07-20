@@ -295,3 +295,21 @@ update and persisted uncertainty settings in
 `outputs/aamas_uncertainty_cuda_smoke_v2/environment.json`. It reported an OSQP
 maximum-iteration emergency fallback, so the run is plumbing evidence only and highlights a
 CBF tuning/diagnosis task before formal training.
+
+## AAMAS 2027 - CBF auditability and numerical diagnosis (2026-07-20)
+
+Training outputs now distinguish `hierarchical_training` from semantic-smoke and checkpoint
+controllers, record the training command, source-config SHA-256, Git revision, resolved CBF
+configuration, and JSON telemetry for every CBF decision. The telemetry retains solver-status
+counts, solve times, iteration counts, intervention/fallback rates, and the CBF-relevant state
+of each emergency event. `scripts/diagnose_cbf_failure.py` independently reconstructs a retained
+dynamic-world emergency event and replays the direct OSQP solve with explicit numerical settings.
+
+The earlier four-decision CUDA smoke fallback was reproduced from its saved artifact: with the
+previous slack penalty of 1000 the QP reached 20,000 iterations with nontrivial residuals. The
+same event solved with a penalty of 100 in 7,100 iterations. The mainline hierarchical and smoke
+YAML files therefore set `cbf_slack_penalty: 100.0` while retaining the explicit 20,000 iteration
+cap. A fresh CUDA 12-transition training smoke on the same semantics recorded 4/4 solved CBF
+decisions, zero emergency fallbacks, maximum 7,950 iterations, and maximum CPU QP time about
+0.0095 seconds. This validates traceability and a local numerical improvement only; multi-seed,
+long-horizon and stress-scenario fallback analysis remains mandatory before any safety claim.

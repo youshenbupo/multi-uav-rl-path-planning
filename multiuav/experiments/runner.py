@@ -35,13 +35,17 @@ def resolve_device(requested: str) -> torch.device:
     return torch.device(requested)
 
 
-def create_experiment_output(spec: ExperimentSpec, output_root: Path) -> ExperimentOutput:
+def create_experiment_output(
+    spec: ExperimentSpec, output_root: Path, *, controller: str | None = None
+) -> ExperimentOutput:
     """Persist the exact dynamic-world semantics and resolved neural device before a run."""
     device = resolve_device(spec.device)
     configuration = dynamic_evaluation_config()
     metadata: dict[str, Any] = {
         "resolved_device": str(device),
-        "controller": (
+        "controller": controller
+        if controller is not None
+        else (
             "hierarchical_checkpoint"
             if spec.checkpoint is not None
             else "goal_directed_semantic_smoke"

@@ -77,3 +77,9 @@ class ExperimentOutput:
                     }
                 )
         return summary
+
+    def write_runtime_telemetry(self, telemetry: dict[str, Any]) -> None:
+        """Persist execution telemetry separately from immutable pre-run metadata."""
+        (self.root / "runtime_telemetry.json").write_text(
+            json.dumps(telemetry, indent=2, sort_keys=True), encoding="utf-8"
+        )

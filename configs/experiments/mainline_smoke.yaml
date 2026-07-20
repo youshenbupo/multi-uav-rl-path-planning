@@ -36,5 +36,7 @@ graph_uncertainty_scale: 10.0
 graph_uncertainty_risk_gain: 1.0
 dynamic_obstacle_enabled: true
 cbf_enabled: true
+cbf_slack_penalty: 100.0
+cbf_max_iterations: 20000
 cbf_communication_uncertainty_margin_gain: 0.5
 cbf_max_communication_uncertainty_margin: 5.0
