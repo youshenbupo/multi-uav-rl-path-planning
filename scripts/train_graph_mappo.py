@@ -21,6 +21,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--config", type=Path, default=PROJECT_ROOT / "configs/rl/graph_mappo.yaml")
     parser.add_argument("--output-dir", type=Path, default=PROJECT_ROOT / "data/rl/graph_mappo")
     parser.add_argument("--device", default="auto", choices=("auto", "cpu", "cuda"))
+    parser.add_argument("--seed", type=int)
     parser.add_argument("--num-uavs", type=int, choices=(3, 5, 8))
     parser.add_argument(
         "--graph-mode",
@@ -48,6 +49,8 @@ def main() -> None:
 
     args = build_parser().parse_args()
     config = load_graph_experiment_config(args.config)
+    if args.seed is not None:
+        config = replace(config, seed=args.seed)
     config = replace(config, obstacle=args.with_cylinder or config.obstacle)
     if args.num_uavs is not None:
         config = replace(config, num_uavs=args.num_uavs)
