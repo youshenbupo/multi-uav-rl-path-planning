@@ -214,7 +214,7 @@ def load_checkpoint(path: Path, trainer: MAPPOTrainer, *, map_location: torch.de
     trainer.reward_normalizer.load_state_dict(payload["reward_normalizer"])
     random.setstate(payload["python_rng"])
     np.random.set_state(payload["numpy_rng"])
-    torch.set_rng_state(payload["torch_rng"])
+    torch.set_rng_state(payload["torch_rng"].cpu())
     if payload["cuda_rng"] is not None and torch.cuda.is_available():
-        torch.cuda.set_rng_state_all(payload["cuda_rng"])
+        torch.cuda.set_rng_state_all([state.cpu() for state in payload["cuda_rng"]])
     return int(payload["step"])

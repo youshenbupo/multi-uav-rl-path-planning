@@ -145,3 +145,9 @@
   diagnostic evaluation have none. These events are now persisted immediately;
   formal reports must distinguish initial, interval, and final evaluation CBF
   rates and retain all events rather than averaging them away.
+- The first core checkpoint evaluator invocation exposed feature-schema and CUDA
+  RNG-map-location defects before it emitted any raw episode record. Both are
+  covered by regression tests and fixed for subsequent runs. The two incomplete
+  evaluator directories are retained as failed attempts and must never be
+  included in statistical aggregation; only the `_schemafix_rngfix_rerun2`
+  nominal directory contains a valid repaired result for seed `20260719`.

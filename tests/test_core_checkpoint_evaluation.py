@@ -45,19 +45,21 @@ def test_checkpoint_evaluation_factory_identifies_the_real_controller(tmp_path: 
 
 
 @pytest.mark.parametrize(
-    ("family", "config_name", "checkpoint_name", "evaluator"),
+    ("family", "config_name", "checkpoint_name", "evaluator", "scenario"),
     (
         (
             "mappo",
             "dynamic_mappo_smoke.yaml",
             "mappo_fixture.pt",
             evaluate_mappo_checkpoint,
+            "nominal",
         ),
         (
             "graph_mappo",
             "dynamic_graph_smoke.yaml",
             "graph_fixture.pt",
             evaluate_graph_checkpoint,
+            "nominal",
         ),
     ),
 )
@@ -67,8 +69,9 @@ def test_checkpoint_evaluators_write_the_same_episode_metric_contract(
     config_name: str,
     checkpoint_name: str,
     evaluator: object,
+    scenario: str,
 ) -> None:
-    """MLP and graph checkpoints must use real actors and retain comparable JSONL records."""
+    """Dynamic-world checkpoints retain their learned feature layout in every scenario."""
     root = Path(__file__).parents[1]
     config_path = root / "configs/experiments" / config_name
     checkpoint = tmp_path / checkpoint_name
@@ -103,6 +106,7 @@ def test_checkpoint_evaluators_write_the_same_episode_metric_contract(
         device="cpu",
         checkpoint=checkpoint,
         use_cbf=True,
+        scenario=scenario,
     )
     output = ExperimentOutput.create(tmp_path, spec, metadata={"fixture_checkpoint": True})
 
@@ -129,5 +133,5 @@ def test_checkpoint_evaluators_write_the_same_episode_metric_contract(
     raw = json.loads((output.root / "raw_results" / "seed_43.jsonl").read_text(encoding="utf-8"))
     assert raw["controller"] == f"{family}_checkpoint"
     assert raw["checkpoint"] == str(checkpoint)
-    assert raw["scenario"] == "within_distribution"
+    assert raw["scenario"] == scenario
     assert raw["cbf"]["decision_count"] == 2

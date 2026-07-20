@@ -157,6 +157,40 @@ class MAPPOTests(unittest.TestCase):
         second_action, _, _ = second.actor.sample(torch.zeros(1, 5), deterministic=False)
         assert_allclose(first_action.detach().numpy(), second_action.detach().numpy())
 
+    @unittest.skipUnless(torch.cuda.is_available(), "CUDA is required for map-location coverage")
+    def test_cuda_checkpoint_load_keeps_rng_state_on_cpu(self) -> None:
+        """CUDA weight loading must not place the CPU RNG-state tensor on the GPU."""
+        config = MAPPOConfig(
+            learning_rate=3e-4,
+            gamma=0.99,
+            gae_lambda=0.95,
+            clip_ratio=0.2,
+            entropy_coef=0.01,
+            value_coef=0.5,
+            max_grad_norm=0.5,
+            batch_size=4,
+            ppo_epochs=1,
+            normalize_rewards=False,
+        )
+        source = MAPPOTrainer(
+            SharedGaussianActor(5, 3, (16, 16)),
+            CentralizedCritic(4, (16, 16)),
+            config,
+            device=torch.device("cpu"),
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            checkpoint = Path(directory) / "cpu_checkpoint.pt"
+            save_checkpoint(checkpoint, source, step=7)
+            restored = MAPPOTrainer(
+                SharedGaussianActor(5, 3, (16, 16)),
+                CentralizedCritic(4, (16, 16)),
+                config,
+                device=torch.device("cuda"),
+            )
+            step = load_checkpoint(checkpoint, restored, map_location=torch.device("cuda"))
+
+        self.assertEqual(step, 7)
+
     def test_runner_collects_parallel_rollout_and_evaluates_deterministically(self) -> None:
         config = MAPPOExperimentConfig(
             seed=17,

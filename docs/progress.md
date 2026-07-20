@@ -387,3 +387,27 @@ fallbacks, and 0/160 final-evaluation fallbacks. The initial failures arise
 from the untrained actor's QP requests and are retained; no slack penalty,
 solver limit, or numerical tolerance was relaxed to suppress them. This is a
 numerical/telemetry diagnosis only, not a learned-policy performance result.
+
+## AAMAS 2027 - checkpoint evaluation schema repair (2026-07-20)
+
+The first full 3-UAV MLP-MAPPO seed (`20260719`) completed 100,032 transitions
+on CUDA and produced its final checkpoint. Its training telemetry retained one
+emergency fallback across 33,344 CBF decisions, 16 fallbacks in the separate
+initial untrained-policy evaluation, and zero in the final interval evaluation.
+These are retained diagnostic telemetry, not performance results.
+
+Attempting the required six-scenario evaluator exposed two reproducible
+checkpoint portability defects: changing from a dynamic to a nominal scenario
+changed the learned actor/critic feature widths, and CUDA checkpoint loading
+moved CPU RNG-state tensors to GPU. The evaluator now pins both local-observation
+and centralized-state dynamic-obstacle capacities to the training schema while
+allowing scenario semantics to remove the actual obstacle. MAPPO and GraphMAPPO
+loaders now restore CPU and CUDA RNG state from CPU tensors after CUDA weight
+loading. Regression tests cover nominal evaluation for both learned families
+and CUDA map-location loading for both checkpoint formats.
+
+The first repaired nominal evaluation was written to
+`outputs/core_3uav_evaluations/core_3uav_mlp_mappo_seed_20260719_nominal_schemafix_rngfix_rerun2`.
+Its single-seed, single-condition metrics are retained solely as raw protocol
+evidence; the remaining five scenarios, four additional seeds, and all three
+other comparison arms are required before any comparative statement.

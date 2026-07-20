@@ -444,6 +444,69 @@ class PredictiveConflictGraphTests(unittest.TestCase):
         self.assertEqual(step, 9)
         self.assertTrue(all(torch.isfinite(torch.tensor(value)) for value in metrics.values()))
 
+    @unittest.skipUnless(torch.cuda.is_available(), "CUDA is required for map-location coverage")
+    def test_cuda_graph_checkpoint_load_keeps_rng_state_on_cpu(self) -> None:
+        """CUDA graph checkpoint loading must restore CPU RNG state from CPU tensors."""
+        config = GraphMAPPOConfig(
+            learning_rate=3e-4,
+            gamma=0.99,
+            gae_lambda=0.95,
+            clip_ratio=0.2,
+            entropy_coef=0.01,
+            value_coef=0.5,
+            max_grad_norm=0.5,
+            batch_size=2,
+            ppo_epochs=1,
+            aux_conflict_coef=0.2,
+            aux_distance_coef=0.1,
+        )
+        source = GraphMAPPOTrainer(
+            GraphActor(
+                node_feature_dim=5,
+                edge_feature_dim=15,
+                embedding_dim=16,
+                num_heads=4,
+                num_layers=1,
+                action_dim=3,
+            ),
+            GraphCentralizedCritic(
+                node_feature_dim=5,
+                edge_feature_dim=15,
+                embedding_dim=16,
+                num_heads=4,
+                num_layers=1,
+            ),
+            ConflictPredictionHead(embedding_dim=16, edge_feature_dim=15),
+            config,
+            device=torch.device("cpu"),
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            checkpoint = Path(directory) / "cpu_graph_checkpoint.pt"
+            save_graph_checkpoint(checkpoint, source, step=7)
+            restored = GraphMAPPOTrainer(
+                GraphActor(
+                    node_feature_dim=5,
+                    edge_feature_dim=15,
+                    embedding_dim=16,
+                    num_heads=4,
+                    num_layers=1,
+                    action_dim=3,
+                ),
+                GraphCentralizedCritic(
+                    node_feature_dim=5,
+                    edge_feature_dim=15,
+                    embedding_dim=16,
+                    num_heads=4,
+                    num_layers=1,
+                ),
+                ConflictPredictionHead(embedding_dim=16, edge_feature_dim=15),
+                config,
+                device=torch.device("cuda"),
+            )
+            step = load_graph_checkpoint(checkpoint, restored, map_location=torch.device("cuda"))
+
+        self.assertEqual(step, 7)
+
     def test_variable_uav_graph_runner_collects_and_evaluates_deterministically(self) -> None:
         self.assertEqual(len(make_graph_scenario(num_uavs=3).missions), 3)
         self.assertEqual(len(make_graph_scenario(num_uavs=5).missions), 5)

@@ -98,8 +98,10 @@ def build_local_observation(
     return np.asarray(np.nan_to_num(values), dtype=np.float32)
 
 
-def build_centralized_state(snapshot: EnvironmentSnapshot) -> NDArray[np.float32]:
-    """Build a flat centralized-critic state without exposing mutable environment arrays."""
+def build_centralized_state(
+    snapshot: EnvironmentSnapshot, max_dynamic_obstacles: int | None = None
+) -> NDArray[np.float32]:
+    """Build a flat centralized-critic state with an optional fixed obstacle capacity."""
     scenario = snapshot.scenario
     spans = _world_spans(scenario)
     uav_rows = np.concatenate(
@@ -151,7 +153,7 @@ def build_centralized_state(snapshot: EnvironmentSnapshot) -> NDArray[np.float32
         ],
         dtype=float,
     ).reshape(-1)
-    dynamic_rows = _dynamic_centralized_rows(snapshot, spans)
+    dynamic_rows = _dynamic_centralized_rows(snapshot, spans, max_dynamic_obstacles)
     minimum_distance, conflict_count = pairwise_conflict_summary(snapshot)
     conflict_summary = np.array(
         [minimum_distance / np.linalg.norm(spans), conflict_count], dtype=float
@@ -159,7 +161,11 @@ def build_centralized_state(snapshot: EnvironmentSnapshot) -> NDArray[np.float32
     values = np.concatenate(
         (uav_rows, terrain_summary, threat_rows, dynamic_rows, conflict_summary)
     )
-    dynamic_count = len(snapshot.dynamic_world.obstacles) if snapshot.dynamic_world else 0
+    dynamic_count = (
+        len(snapshot.dynamic_world.obstacles)
+        if max_dynamic_obstacles is None and snapshot.dynamic_world
+        else max_dynamic_obstacles or 0
+    )
     expected = 10 * len(scenario.missions) + 4 + 4 * len(scenario.threats) + 8 * dynamic_count + 2
     if values.shape != (expected,):
         raise RuntimeError("Centralized state layout invariant was violated.")
@@ -332,24 +338,39 @@ def _dynamic_obstacle_features(
     return np.concatenate(rows)
 
 
-def _dynamic_centralized_rows(snapshot: EnvironmentSnapshot, spans: FloatArray) -> FloatArray:
-    if snapshot.dynamic_world is None or not snapshot.dynamic_world.obstacles:
-        return np.empty(0, dtype=float)
-    return np.asarray(
-        [
-            [
-                *(_normalise_position(center, snapshot.scenario)),
-                *(_normalise_velocity(
-                    obstacle.velocity,
-                    snapshot.max_horizontal_speed,
-                    snapshot.max_vertical_speed,
-                )),
-                obstacle.radius / min(spans[:2]),
-                obstacle.height / spans[2],
-            ]
-            for center, obstacle in zip(
-                snapshot.dynamic_world.centers, snapshot.dynamic_world.obstacles, strict=True
+def _dynamic_centralized_rows(
+    snapshot: EnvironmentSnapshot, spans: FloatArray, max_dynamic_obstacles: int | None
+) -> FloatArray:
+    dynamic_world = snapshot.dynamic_world
+    obstacles = () if dynamic_world is None else dynamic_world.obstacles
+    if max_dynamic_obstacles is not None and len(obstacles) > max_dynamic_obstacles:
+        raise ValueError("Dynamic obstacle count exceeds the centralized-state capacity.")
+    if not obstacles:
+        return np.zeros(8 * (max_dynamic_obstacles or 0), dtype=float)
+    if dynamic_world is None:
+        raise RuntimeError("Dynamic-world presence invariant was violated.")
+    rows: list[FloatArray] = []
+    for center, obstacle in zip(dynamic_world.centers, dynamic_world.obstacles, strict=True):
+        rows.append(
+            np.concatenate(
+                (
+                    _normalise_position(center, snapshot.scenario),
+                    _normalise_velocity(
+                        obstacle.velocity,
+                        snapshot.max_horizontal_speed,
+                        snapshot.max_vertical_speed,
+                    ),
+                    np.array(
+                        [
+                            obstacle.radius / min(spans[:2]),
+                            obstacle.height / spans[2],
+                        ],
+                        dtype=float,
+                    ),
+                )
             )
-        ],
-        dtype=float,
-    ).reshape(-1)
+        )
+    values = np.asarray(rows, dtype=float).reshape(-1, 8)
+    if max_dynamic_obstacles is not None:
+        values = np.pad(values, ((0, max_dynamic_obstacles - len(values)), (0, 0)))
+    return cast(FloatArray, values.reshape(-1))

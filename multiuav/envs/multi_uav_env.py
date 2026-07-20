@@ -195,7 +195,7 @@ class MultiUAVParallelEnv(ParallelEnv):
             10 * len(self.possible_agents)
             + 4
             + 4 * len(self.scenario.threats)
-            + 8 * len(self.scenario.dynamic_obstacles)
+            + 8 * self.config.max_dynamic_obstacles
             + 2
         )
         return spaces.Box(low=-np.inf, high=np.inf, shape=(size,), dtype=np.float32)
@@ -316,7 +316,9 @@ class MultiUAVParallelEnv(ParallelEnv):
 
     def state(self) -> np.ndarray:
         """Return a copy-safe centralized critic state for all potential UAVs."""
-        return build_centralized_state(self._snapshot())
+        return build_centralized_state(
+            self._snapshot(), max_dynamic_obstacles=self.config.max_dynamic_obstacles
+        )
 
     @property
     def minimum_separation(self) -> float:
@@ -366,7 +368,9 @@ class MultiUAVParallelEnv(ParallelEnv):
         safety_costs: dict[str, SafetyCosts],
         performance_rewards: dict[str, PerformanceReward],
     ) -> dict[str, dict[str, Any]]:
-        state = build_centralized_state(snapshot)
+        state = build_centralized_state(
+            snapshot, max_dynamic_obstacles=self.config.max_dynamic_obstacles
+        )
         default_cost = SafetyCosts()
         return {
             agent: {

@@ -138,6 +138,7 @@ def evaluate_mappo_checkpoint(
                 num_envs=1,
                 num_uavs=spec.num_uavs,
                 cbf_enabled=spec.use_cbf,
+                observation_dynamic_obstacle_slots=_dynamic_obstacle_slots(base_config),
             ),
             device=torch.device(spec.device),
         )
@@ -197,6 +198,7 @@ def evaluate_graph_checkpoint(
                 num_envs=1,
                 num_uavs=spec.num_uavs,
                 cbf_enabled=spec.use_cbf,
+                observation_dynamic_obstacle_slots=_dynamic_obstacle_slots(base_config),
             ),
             device=torch.device(spec.device),
         )
@@ -431,3 +433,9 @@ def _checkpoint(spec: ExperimentSpec) -> Path:
     if not spec.checkpoint.is_file():
         raise FileNotFoundError(f"Checkpoint does not exist: {spec.checkpoint}")
     return spec.checkpoint
+
+
+def _dynamic_obstacle_slots(config: Any) -> int:
+    """Preserve the checkpoint feature schema while scenario semantics change."""
+    configured_slots = config.observation_dynamic_obstacle_slots
+    return int(config.dynamic_obstacle_enabled) if configured_slots is None else configured_slots

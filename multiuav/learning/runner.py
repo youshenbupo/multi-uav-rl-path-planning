@@ -57,6 +57,7 @@ class MAPPOExperimentConfig:
     communication_max_staleness_steps: int = 0
     communication_uncertainty_growth_per_step: float = 0.0
     dynamic_obstacle_enabled: bool = False
+    observation_dynamic_obstacle_slots: int | None = None
     dynamic_obstacle_velocity_scale: float = 1.0
     cbf_enabled: bool = False
     cbf_slack_penalty: float = 1_000.0
@@ -89,6 +90,10 @@ class MAPPOExperimentConfig:
             or self.dynamic_obstacle_velocity_scale <= 0.0
         ):
             raise ValueError("CBF slack penalty and iteration budget must be positive.")
+        if self.observation_dynamic_obstacle_slots is not None and (
+            self.observation_dynamic_obstacle_slots < 0
+        ):
+            raise ValueError("observation_dynamic_obstacle_slots must be non-negative.")
 
     def optimizer_config(self) -> MAPPOConfig:
         """Project runner fields to the trainer-only optimizer configuration."""
@@ -167,7 +172,7 @@ class MAPPOExperiment:
             severe_clearance_shortfall=8.0,
             severe_threat_penetration=5.0,
             max_neighbors=min(3, config.num_uavs - 1),
-            max_dynamic_obstacles=int(config.dynamic_obstacle_enabled),
+            max_dynamic_obstacles=self._observation_dynamic_obstacle_slots(),
             communication_enabled=config.communication_enabled,
             communication_range=45.0,
             communication_delay_steps=config.communication_delay_steps,
@@ -556,6 +561,11 @@ class MAPPOExperiment:
 
     def _uses_dynamic_protocol(self) -> bool:
         return self.config.num_uavs != 2 or self.config.dynamic_obstacle_enabled
+
+    def _observation_dynamic_obstacle_slots(self) -> int:
+        """Keep the learned observation schema independent from a test scenario's obstacles."""
+        slots = self.config.observation_dynamic_obstacle_slots
+        return int(self.config.dynamic_obstacle_enabled) if slots is None else slots
 
     def _scenario(self) -> Scenario:
         if self._uses_dynamic_protocol():

@@ -332,7 +332,7 @@ def load_graph_checkpoint(
     trainer.optimizer.load_state_dict(payload["optimizer"])
     random.setstate(payload["python_rng"])
     np.random.set_state(payload["numpy_rng"])
-    torch.set_rng_state(payload["torch_rng"])
+    torch.set_rng_state(payload["torch_rng"].cpu())
     if payload["cuda_rng"] is not None and torch.cuda.is_available():
-        torch.cuda.set_rng_state_all(payload["cuda_rng"])
+        torch.cuda.set_rng_state_all([state.cpu() for state in payload["cuda_rng"]])
     return int(payload["step"])
