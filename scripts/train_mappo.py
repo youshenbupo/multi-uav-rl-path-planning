@@ -34,6 +34,7 @@ def main() -> None:
     """Run training, write TensorBoard/checkpoints, and save an auditable JSON summary."""
     from multiuav.learning.mappo import save_checkpoint
     from multiuav.learning.runner import MAPPOExperiment, load_mappo_experiment_config
+    from multiuav.learning.telemetry import write_live_training_telemetry
 
     args = build_parser().parse_args()
     config = load_mappo_experiment_config(args.config)
@@ -52,9 +53,31 @@ def main() -> None:
     experiment = MAPPOExperiment(config, device=device, log_dir=args.output_dir / "tensorboard")
     initial = experiment.evaluate(episodes=8)
     initial_cbf_telemetry = experiment.last_evaluation_cbf_telemetry.as_dict()
-    records = experiment.train(checkpoint_dir=args.output_dir / "checkpoints")
+    telemetry_path = args.output_dir / "live_training_telemetry.json"
+    write_live_training_telemetry(
+        telemetry_path,
+        total_transitions=experiment.total_transitions,
+        cbf=experiment.cbf_telemetry,
+        extra={
+            "initial_evaluation": initial,
+            "initial_evaluation_cbf": initial_cbf_telemetry,
+        },
+    )
+    records = experiment.train(
+        checkpoint_dir=args.output_dir / "checkpoints",
+        telemetry_path=telemetry_path,
+    )
     final = experiment.evaluate(episodes=8)
     final_cbf_telemetry = experiment.last_evaluation_cbf_telemetry.as_dict()
+    write_live_training_telemetry(
+        telemetry_path,
+        total_transitions=experiment.total_transitions,
+        cbf=experiment.cbf_telemetry,
+        extra={
+            "final_evaluation": final,
+            "final_evaluation_cbf": final_cbf_telemetry,
+        },
+    )
     checkpoint = args.output_dir / "checkpoints" / "mappo_final.pt"
     save_checkpoint(checkpoint, experiment.trainer, step=experiment.total_transitions)
     summary = {

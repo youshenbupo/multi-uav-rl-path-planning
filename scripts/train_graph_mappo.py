@@ -46,6 +46,7 @@ def main() -> None:
     from multiuav.learning.bc_finetuning import BCFineTuneSchedule
     from multiuav.learning.graph_mappo import save_graph_checkpoint
     from multiuav.learning.graph_runner import GraphMAPPOExperiment, load_graph_experiment_config
+    from multiuav.learning.telemetry import write_live_training_telemetry
 
     args = build_parser().parse_args()
     config = load_graph_experiment_config(args.config)
@@ -90,9 +91,31 @@ def main() -> None:
     )
     initial = experiment.evaluate(episodes=8)
     initial_cbf_telemetry = experiment.last_evaluation_cbf_telemetry.as_dict()
-    records = experiment.train(checkpoint_dir=args.output_dir / "checkpoints")
+    telemetry_path = args.output_dir / "live_training_telemetry.json"
+    write_live_training_telemetry(
+        telemetry_path,
+        total_transitions=experiment.total_transitions,
+        cbf=experiment.cbf_telemetry,
+        extra={
+            "initial_evaluation": initial,
+            "initial_evaluation_cbf": initial_cbf_telemetry,
+        },
+    )
+    records = experiment.train(
+        checkpoint_dir=args.output_dir / "checkpoints",
+        telemetry_path=telemetry_path,
+    )
     final = experiment.evaluate(episodes=8)
     final_cbf_telemetry = experiment.last_evaluation_cbf_telemetry.as_dict()
+    write_live_training_telemetry(
+        telemetry_path,
+        total_transitions=experiment.total_transitions,
+        cbf=experiment.cbf_telemetry,
+        extra={
+            "final_evaluation": final,
+            "final_evaluation_cbf": final_cbf_telemetry,
+        },
+    )
     checkpoint = args.output_dir / "checkpoints" / "graph_mappo_final.pt"
     save_graph_checkpoint(checkpoint, experiment.trainer, step=experiment.total_transitions)
     summary = {

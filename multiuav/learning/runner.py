@@ -19,6 +19,7 @@ from multiuav.learning.graph_runner import make_graph_scenario
 from multiuav.learning.mappo import MAPPOConfig, MAPPOTrainer, save_checkpoint
 from multiuav.learning.networks import CentralizedCritic, SharedGaussianActor
 from multiuav.learning.rollout_buffer import RolloutBuffer
+from multiuav.learning.telemetry import write_live_training_telemetry
 from multiuav.safety import (
     CBFConfig,
     NormalizedActionCBFAdapter,
@@ -268,7 +269,9 @@ class MAPPOExperiment:
         )
         return buffer, self._rollout_metrics()
 
-    def train(self, *, checkpoint_dir: Path | None = None) -> list[dict[str, float]]:
+    def train(
+        self, *, checkpoint_dir: Path | None = None, telemetry_path: Path | None = None
+    ) -> list[dict[str, float]]:
         """Run on-policy updates until the configured transition budget is reached."""
         records: list[dict[str, float]] = []
         started = time.perf_counter()
@@ -284,6 +287,12 @@ class MAPPOExperiment:
             }
             records.append(record)
             self._log(record)
+            if telemetry_path is not None:
+                write_live_training_telemetry(
+                    telemetry_path,
+                    total_transitions=self.total_transitions,
+                    cbf=self.cbf_telemetry,
+                )
             if (
                 checkpoint_dir is not None
                 and self.total_transitions % self.config.checkpoint_interval == 0
@@ -296,6 +305,18 @@ class MAPPOExperiment:
             if self.total_transitions % self.config.evaluation_interval == 0:
                 evaluation = self.evaluate(episodes=4)
                 self._log({f"evaluation/{name}": value for name, value in evaluation.items()})
+                if telemetry_path is not None:
+                    write_live_training_telemetry(
+                        telemetry_path,
+                        total_transitions=self.total_transitions,
+                        cbf=self.cbf_telemetry,
+                        extra={
+                            "last_interval_evaluation": evaluation,
+                            "last_interval_evaluation_cbf": (
+                                self.last_evaluation_cbf_telemetry.as_dict()
+                            ),
+                        },
+                    )
         return records
 
     def evaluate(self, *, episodes: int) -> dict[str, float]:
@@ -409,14 +430,30 @@ class MAPPOExperiment:
             previous_positions = environment.positions.copy()
             filtered_actions = actions[environment_index]
             if self.cbf_adapter is not None:
+                snapshot = environment._snapshot()
                 filtered_actions, decision = self.cbf_adapter.filter_normalized(
-                    environment._snapshot(), filtered_actions
+                    snapshot, filtered_actions
                 )
                 self.cbf_telemetry.record(
                     decision,
                     context={
                         "environment_index": environment_index,
                         "environment_step": environment.step_count,
+                        "positions": environment.positions.tolist(),
+                        "requested_velocities": decision.u_rl.tolist(),
+                        "velocities": snapshot.velocities.tolist(),
+                        "knowledge_valid": [
+                            state.valid.tolist() for state in snapshot.knowledge_states
+                        ],
+                        "knowledge_uncertainty": [
+                            state.position_uncertainty.tolist()
+                            for state in snapshot.knowledge_states
+                        ],
+                        "dynamic_obstacle_centers": (
+                            snapshot.dynamic_world.centers.tolist()
+                            if snapshot.dynamic_world is not None
+                            else []
+                        ),
                     },
                 )
             next_observations, reward_dict, terminal_dict, truncation_dict, infos = (

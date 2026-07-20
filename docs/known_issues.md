@@ -140,3 +140,8 @@
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.
+- Initial untrained-policy evaluations can produce CBF `solve_time_limit`
+  fallbacks even while subsequent training rollouts and a short trained
+  diagnostic evaluation have none. These events are now persisted immediately;
+  formal reports must distinguish initial, interval, and final evaluation CBF
+  rates and retain all events rather than averaging them away.

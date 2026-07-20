@@ -369,3 +369,21 @@ method/seed/scenario evaluation commands, each tied to its matching training
 checkpoint. The associated tests use random saved MLP and graph actors as
 plumbing fixtures only; no performance claim or core experiment result exists
 yet.
+
+## AAMAS 2027 - CBF live-telemetry diagnosis gate (2026-07-20)
+
+The first attempted formal MLP seed was deliberately stopped after its initial
+untrained-policy evaluation emitted repeated `solve_time_limit` fallbacks. Its
+partial checkpoint directory is retained with `ABORTED.json` and is explicitly
+ineligible for the five-seed comparison. This was a diagnosis gate, not an
+experiment result.
+
+Training now atomically writes `live_training_telemetry.json` after every PPO
+update. It retains training CBF telemetry plus initial and interval-evaluation
+telemetry, so an interrupted job preserves every emergency event and replay
+context. A fresh controlled CUDA diagnostic of 9,216 transitions with the same
+seed found 16/160 initial-evaluation fallbacks (10%), 0/3,072 training-rollout
+fallbacks, and 0/160 final-evaluation fallbacks. The initial failures arise
+from the untrained actor's QP requests and are retained; no slack penalty,
+solver limit, or numerical tolerance was relaxed to suppress them. This is a
+numerical/telemetry diagnosis only, not a learned-policy performance result.
