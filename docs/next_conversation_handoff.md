@@ -29,6 +29,11 @@ processes before relying on any status below.
   checkpoint yet.  Do not start another training job.  On completion, verify
   the final checkpoint/summary, document all CBF events, then start
   `20260723` serially with the same frozen protocol.
+- During active seed `20260722` monitoring, its dedicated stderr log recorded
+  `CBF filter emergency fallback: solve_time_limit`.  The training process
+  remained live; preserve the log and final summary as the authoritative full
+  event record.  Do not respond by changing the solve-time limit, slack,
+  iteration cap, tolerances, or any other safety parameter.
 - Commit `23c9da0` is pushed to `origin/codex/phase14-dynamic-world`; it
   records completion evidence for uncertainty-aware predictive seed
   `20260720`.  Its final checkpoint and `summary.json` are present under
