@@ -965,3 +965,38 @@ fallback-rate estimate.  Next, verify no legacy training process remains and
 run seed `20260721` serially with the identical command; defer all
 six-scenario evaluations and aggregation until all five uncertainty-aware
 predictive final checkpoints are complete.
+
+## AAMAS 2027 - third uncertainty-aware predictive GraphMAPPO seed retained (2026-07-23)
+
+Independent seed `20260721` completed the same frozen 100,000-transition CUDA
+command as the preceding uncertainty-aware seeds, changing only `--seed
+20260721` and the output directory:
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_baseline.yaml --device cuda --seed 20260721
+--num-uavs 3 --graph-mode uncertainty_predictive_graph --total-steps 100000
+--output-dir
+outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260721`.
+It was launched at Git revision `23c9da0` with configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+The output directory retains `summary.json`, final checkpoint
+`checkpoints/graph_mappo_final.pt`, live telemetry, TensorBoard data, and
+dedicated launcher stdout/stderr logs.  The summary confirms
+`uses_predicted_knowledge: true`, `uses_uncertainty: true`, three UAVs, and
+CUDA network execution; OSQP CBF remained CPU-side.
+
+The summary records 1,042 updates and one retained training emergency fallback
+in 33,344 CBF decisions: `maximum iterations reached` at decision index 4,994,
+after the unchanged 20,000 iteration cap (solve time 0.0335165 seconds,
+primal residual 0.00643271, dual residual 0.0003267405).  Its complete
+position, requested-velocity, delivered-knowledge, uncertainty, and dynamic
+obstacle context remains in `summary.json`; the prior dedicated stderr notice
+is retained too.  Initial evaluation has zero fallbacks in 160 decisions and
+final interval evaluation zero in 160 decisions.  The slack penalty,
+iteration cap, solve-time limit, and tolerances were not changed.
+
+This is third-seed completion and traceability evidence, not a performance,
+safety, generalization, or cross-seed fallback-rate result.  The next action
+is to confirm no Python training process remains, then launch seed `20260722`
+serially with the identical frozen command.  Do not start the six-scenario
+matrix or aggregate results until seeds `20260719`--`20260723` all have final
+checkpoints.
