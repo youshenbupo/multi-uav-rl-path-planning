@@ -6,6 +6,20 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-23, supersedes stale status below)
 
+- Commit `024d537` is pushed to `origin/codex/phase14-dynamic-world`; it
+  records the completed first predictive-without-uncertainty GraphMAPPO seed.
+  The active serial CUDA job is now seed `20260720`, PID `28928` at the last
+  health check, launched with
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_baseline.yaml --device cuda --seed
+  20260720 --num-uavs 3 --graph-mode predictive_graph --total-steps 100000
+  --output-dir outputs/core_3uav/core_3uav_predictive_graph_seed_20260720`.
+  Its unique launcher logs are
+  `outputs/core_3uav/core_3uav_predictive_graph_seed_20260720_launcher_stdout.log`
+  and `_launcher_stderr.log`.  Confirm the final checkpoint and summary before
+  acting; do not overwrite those paths.  After documenting completion, launch
+  `20260721` serially, then `20260722`, then `20260723` using the identical
+  frozen protocol.
 - Commit `faca19a` is pushed to `origin/codex/phase14-dynamic-world`; it
   records completion of the raw-packet GraphMAPPO five-seed 3-UAV matrix and
   CBF replay.  The user's `.gitignore` is the only intended dirty worktree
