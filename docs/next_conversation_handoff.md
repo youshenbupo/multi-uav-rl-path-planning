@@ -4,6 +4,36 @@
 point for the next Codex conversation.  Inspect the worktree and running
 processes before relying on any status below.
 
+## Current continuation update (2026-07-22, supersedes stale status below)
+
+- Commit `1a7800ccb383943a8d160d41856f1e1ff65a23e5` is pushed to
+  `origin/codex/phase14-dynamic-world`.  It records the completed MLP protocol,
+  CBF audit, and `scripts/replay_cbf_fallbacks.py`.  The only remaining dirty
+  file is the user's unstaged `.gitignore`; never stage or alter it.
+- MLP seeds 20260722 and 20260723 are complete at 100,032 CUDA transitions.
+  Their training/initial/final CBF fallback counts are respectively 1/13/0 and
+  0/0/0.  All five MLP final checkpoints now have all six 20-episode scenario
+  evaluations: 30 valid directories and 600 raw JSONL records.  Seed-20260719
+  must use the `nominal_schemafix_rngfix_rerun2` nominal and
+  `ood_communication_obstacle_trajectoryfix_rerun1` OOD reruns; its three
+  earlier failed directories remain retained and excluded.
+- Formal MLP summaries retain 47 CBF fallback events.  They were replayed under
+  unchanged mainline solver values into
+  `outputs/cbf_diagnostics/core_mlp_5seed_replay_20260722.jsonl`, all without
+  context errors.  Historical diagnostics have a separate 21-event replay
+  JSONL with three explicit nonreplayable legacy records; do not impute them.
+- The first matching raw-packet GraphMAPPO job is currently active and must be
+  checked before taking action: PID `36556` at the last check, command
+  `D:\anaconda3\envs\multiuav_rl\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_baseline.yaml --device cuda --seed
+  20260719 --num-uavs 3 --graph-mode distance_graph --total-steps 100000
+  --output-dir outputs/core_3uav/core_3uav_raw_graph_seed_20260719`.  At the
+  last health check it had 10,944 transitions and zero training/initial/interval
+  fallbacks.  Keep Graph jobs serial; complete raw graph five seeds and six
+  scenarios, then predictive-without-uncertainty, then uncertainty-aware graph.
+- Verified before the commit: Ruff and mypy for the new replay utility passed;
+  full pytest passed 147 tests with 28 existing OSQP deprecation warnings.
+
 ## Fixed research mainline
 
 > Communication staleness and packet loss create uncertainty about neighbour
