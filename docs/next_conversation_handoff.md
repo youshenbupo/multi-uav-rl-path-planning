@@ -31,6 +31,13 @@ processes before relying on any status below.
   last health check it had 39,648 transitions and zero training/initial/interval
   fallbacks.  Keep Graph jobs serial; complete raw graph five seeds and six
   scenarios, then predictive-without-uncertainty, then uncertainty-aware graph.
+- Superseding the preceding raw-graph status: seed `20260719` completed at
+  100,032 transitions and produced `graph_mappo_final.pt` at commit
+  `231cb8f322031db6aba8fabe41b5ddb35f3ef74e`, with training/initial/final CBF
+  fallbacks 1/0/0.  Its phase record is in `docs/progress.md`.  Seed `20260720`
+  is now the sole active CUDA job in
+  `outputs/core_3uav/core_3uav_raw_graph_seed_20260720`; verify its process and
+  final summary before acting, then document it before starting seed 20260721.
 - Primary-paper browsing remains pending one-time local setup authorization:
   the required `/browse` skill reported `NEEDS_SETUP` for its browser binary.
   Do not substitute another browser or use metadata-only entries for novelty

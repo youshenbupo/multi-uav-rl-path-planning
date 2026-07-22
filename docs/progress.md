@@ -635,3 +635,25 @@ tests with `28` existing OSQP dependency deprecation warnings. The retained
 test stdout/stderr evidence is
 `outputs/cbf_diagnostics/pytest_replay_tool_20260722_stdout.log` and
 `outputs/cbf_diagnostics/pytest_replay_tool_20260722_stderr.log`.
+
+## AAMAS 2027 - first raw-packet GraphMAPPO seed retained (2026-07-22)
+
+The first independent raw-packet GraphMAPPO job completed on CUDA with the
+exact command `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+scripts/train_graph_mappo.py --config configs/rl/dynamic_graph_baseline.yaml
+--device cuda --seed 20260719 --num-uavs 3 --graph-mode distance_graph
+--total-steps 100000 --output-dir
+outputs/core_3uav/core_3uav_raw_graph_seed_20260719`.  It used Git revision
+`231cb8f322031db6aba8fabe41b5ddb35f3ef74e` and configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`; learned
+network execution was CUDA and OSQP CBF stayed CPU-side.
+
+The job reached 100,032 transitions (1,042 updates) and wrote
+`checkpoints/graph_mappo_final.pt`, `summary.json`, live telemetry, launcher
+logs, checkpoints, and TensorBoard data under its named output directory.
+Retained CBF telemetry has 1 emergency fallback in 33,344 training decisions,
+0 in 160 initial-evaluation decisions, and 0 in 112 final-evaluation decisions.
+This proves one artifact's completion and traceability only, not graph quality,
+safety, or a comparison against MLP.  The next action is serial training of raw
+graph seed `20260720` with unchanged protocol; all five raw-graph checkpoints
+and six-scenario JSONL evaluations remain required before any aggregation.
