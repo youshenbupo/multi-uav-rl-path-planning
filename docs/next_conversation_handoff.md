@@ -28,9 +28,14 @@ processes before relying on any status below.
   --config configs/rl/dynamic_graph_baseline.yaml --device cuda --seed
   20260719 --num-uavs 3 --graph-mode distance_graph --total-steps 100000
   --output-dir outputs/core_3uav/core_3uav_raw_graph_seed_20260719`.  At the
-  last health check it had 10,944 transitions and zero training/initial/interval
+  last health check it had 39,648 transitions and zero training/initial/interval
   fallbacks.  Keep Graph jobs serial; complete raw graph five seeds and six
   scenarios, then predictive-without-uncertainty, then uncertainty-aware graph.
+- Primary-paper browsing remains pending one-time local setup authorization:
+  the required `/browse` skill reported `NEEDS_SETUP` for its browser binary.
+  Do not substitute another browser or use metadata-only entries for novelty
+  claims.  Once authorized, run the skill's setup and record only primary-source
+  evidence in `docs/related_work_matrix.md`.
 - Verified before the commit: Ruff and mypy for the new replay utility passed;
   full pytest passed 147 tests with 28 existing OSQP deprecation warnings.
 
