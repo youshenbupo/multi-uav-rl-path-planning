@@ -6,6 +6,29 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-23, supersedes stale status below)
 
+- Commit `195d03f` is pushed to `origin/codex/phase14-dynamic-world`; it
+  records completion evidence for uncertainty-aware predictive seed
+  `20260721`.  Its final checkpoint and `summary.json` are present under
+  `outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260721`.
+  The retained final telemetry has one training emergency fallback in 33,344
+  decisions (`maximum iterations reached` at decision 4,994 and the unchanged
+  20,000-iteration cap), zero in 160 initial-evaluation decisions, and zero in
+  160 final-evaluation decisions.  The summary preserves full event context;
+  these are seed-local diagnostics only, not performance, safety, or
+  cross-seed fallback-rate results.
+- After confirming no Python training process remained, the sole active serial
+  CUDA job is seed `20260722`, PID `68408` at its initial health check.  Its
+  unchanged command is `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+  scripts/train_graph_mappo.py --config configs/rl/dynamic_graph_baseline.yaml
+  --device cuda --seed 20260722 --num-uavs 3 --graph-mode
+  uncertainty_predictive_graph --total-steps 100000 --output-dir
+  outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260722`.
+  Its dedicated launcher logs are
+  `outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260722_launcher_stdout.log`
+  and `_launcher_stderr.log`; output directory exists, but no final summary or
+  checkpoint yet.  Do not start another training job.  On completion, verify
+  the final checkpoint/summary, document all CBF events, then start
+  `20260723` serially with the same frozen protocol.
 - Commit `23c9da0` is pushed to `origin/codex/phase14-dynamic-world`; it
   records completion evidence for uncertainty-aware predictive seed
   `20260720`.  Its final checkpoint and `summary.json` are present under
