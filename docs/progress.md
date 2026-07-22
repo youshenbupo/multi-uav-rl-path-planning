@@ -779,3 +779,25 @@ traceability evidence only; it proves neither a method effect nor a safety or
 fallback-rate claim.  Next: launch seed `20260720` serially with the same
 frozen command pattern, retain all telemetry, and defer the six-scenario
 evaluation until all five predictive-without-uncertainty checkpoints exist.
+
+## AAMAS 2027 - second predictive-without-uncertainty GraphMAPPO seed retained (2026-07-23)
+
+Independent seed `20260720` completed the same frozen 100,000-transition CUDA
+command as seed `20260719`, changing only `--seed 20260720` and the output path
+`outputs/core_3uav/core_3uav_predictive_graph_seed_20260720`.  It was launched
+from Git revision `024d537` with configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.  The
+retained `summary.json`, final checkpoint
+`checkpoints/graph_mappo_final.pt`, CBF contexts, and unique launcher logs all
+remain under that output name.  It reached 1,042 updates; the summary confirms
+predictive knowledge is enabled and uncertainty input is disabled, with CUDA
+for learned computation and CPU-side OSQP CBF.
+
+Training CBF telemetry retains 3 emergency fallbacks in 33,344 decisions: one
+`solve_time_limit` and two `solved inaccurate` events; all retain their solver
+and environment contexts.  Initial evaluation has 0 in 160 decisions and
+final evaluation 0 in 132 decisions.  The frozen slack penalty, iteration cap,
+time cap, and tolerances were not changed.  This remains seed-level artifact
+evidence, not a cross-method or fallback-rate conclusion.  Next: serially run
+seed `20260721` with the same command, preserving its independent telemetry;
+do not begin six-scenario evaluation before all five final checkpoints exist.
