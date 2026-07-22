@@ -842,3 +842,28 @@ decisions.  No solver setting changed.  This is traceable seed-level completion
 only, not a comparative, safety, or fallback-rate result.  Next: train final
 seed `20260723` serially with the identical frozen protocol, then verify all
 five checkpoints before beginning the six-scenario evaluation matrix.
+
+## AAMAS 2027 - predictive-without-uncertainty GraphMAPPO five-seed training complete (2026-07-23)
+
+The fifth independent seed `20260723` completed the same 100,000-transition
+CUDA command, launched at Git revision `87e6dd6` with configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.  Its
+retained final checkpoint is
+`outputs/core_3uav/core_3uav_predictive_graph_seed_20260723/checkpoints/graph_mappo_final.pt`;
+its summary, three full training-fallback contexts, and unique launcher logs
+remain in the seed output directory.  The summary confirms the arm uses
+predicted delivered-packet knowledge without uncertainty input, CUDA learned
+execution, and CPU-side OSQP CBF; it reached 1,042 updates.
+
+The fifth seed has 3 retained training emergency fallbacks in 33,344 decisions:
+one `maximum iterations reached` and two `solve_time_limit` events.  Initial
+evaluation retains zero in 160 decisions and final evaluation zero in 123.
+Across the five seed summaries, retained training counts are 1, 3, 1, 1, and 3
+for seeds `20260719`--`20260723`; these are preserved diagnostics, not a
+cross-seed fallback-rate conclusion.  No safety solver parameter changed.
+
+All five independent predictive-without-uncertainty checkpoints now exist, but
+this is not yet a method comparison, safety result, or generalization claim.
+The next action is the frozen evaluator matrix for every checkpoint and each of
+the six scenarios, 20 episodes per cell, preserving JSONL and checking all 600
+records before CBF replay under unchanged settings.

@@ -135,10 +135,11 @@
   silently reused for the new method.
 - The four learned comparison arms share a checkpoint evaluator.  The 3-UAV
   MLP and raw-packet GraphMAPPO five-seed matrices are complete (60 cells, 20
-  episodes each), but the predictive-without-uncertainty and uncertainty-aware
-  predictive graph arms have not yet received their matched independent
-  five-seed training/evaluation matrices.  No cross-method comparison,
-  statistical claim, or protocol-wide fallback claim is available yet.
+  episodes each); predictive-without-uncertainty now has five independently
+  trained checkpoints but has not yet received its 30-cell evaluation matrix.
+  The uncertainty-aware predictive graph arm has not yet received its matched
+  independent five-seed training/evaluation matrix.  No cross-method
+  comparison, statistical claim, or protocol-wide fallback claim is available.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.
