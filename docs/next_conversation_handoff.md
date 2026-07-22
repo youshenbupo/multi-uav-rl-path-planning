@@ -38,6 +38,12 @@ processes before relying on any status below.
   is now the sole active CUDA job in
   `outputs/core_3uav/core_3uav_raw_graph_seed_20260720`; verify its process and
   final summary before acting, then document it before starting seed 20260721.
+- Superseding the preceding seed-20260720 status: it completed at 100,032
+  transitions with training/initial/final CBF fallbacks 0/0/0.  Seed `20260721`
+  is the sole active CUDA job in
+  `outputs/core_3uav/core_3uav_raw_graph_seed_20260721`; the last launch PID
+  was `57388`.  Confirm its final checkpoint and summary, document completion,
+  and retain all fallback telemetry before serial seed `20260722` starts.
 - Primary-paper browsing remains pending one-time local setup authorization:
   the required `/browse` skill reported `NEEDS_SETUP` for its browser binary.
   Do not substitute another browser or use metadata-only entries for novelty
