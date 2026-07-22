@@ -673,3 +673,16 @@ completion evidence for a second independent raw-graph artifact only, not a
 performance, safety, or fallback-rate result.  Next, train seed `20260721`
 serially with the unchanged protocol; do not aggregate or start evaluation
 claims until all five raw-graph seeds and their uniform scenario JSONL exist.
+
+## AAMAS 2027 - third raw-packet GraphMAPPO seed retained (2026-07-23)
+
+Raw-packet GraphMAPPO seed `20260721` completed the unchanged 100,000-step
+CUDA protocol and produced
+`outputs/core_3uav/core_3uav_raw_graph_seed_20260721/checkpoints/graph_mappo_final.pt`
+at the current formal graph configuration.  The output directory retains its
+summary, live telemetry, launcher logs, checkpoints, and TensorBoard data.
+It reached 100,032 transitions and 1,042 updates.  Retained CBF telemetry is
+1 emergency fallback in 33,344 training decisions, 0 in 160 initial-evaluation
+decisions, and 0 in the final evaluation.  This remains seed-level traceability
+only, not a comparative or safety result.  Next is serial seed `20260722` under
+the same frozen protocol; no solver parameter is changed because of the event.

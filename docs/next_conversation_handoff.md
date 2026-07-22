@@ -44,6 +44,11 @@ processes before relying on any status below.
   `outputs/core_3uav/core_3uav_raw_graph_seed_20260721`; the last launch PID
   was `57388`.  Confirm its final checkpoint and summary, document completion,
   and retain all fallback telemetry before serial seed `20260722` starts.
+- Superseding the preceding seed-20260721 status: it completed at 100,032
+  transitions with CBF fallbacks 1/0/0 (training/initial/final).  Seed
+  `20260722` is now the only active raw-graph CUDA job in
+  `outputs/core_3uav/core_3uav_raw_graph_seed_20260722`; verify final artifacts,
+  document the phase, then continue serially with seed `20260723`.
 - Primary-paper browsing remains pending one-time local setup authorization:
   the required `/browse` skill reported `NEEDS_SETUP` for its browser binary.
   Do not substitute another browser or use metadata-only entries for novelty
