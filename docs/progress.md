@@ -910,3 +910,27 @@ changed.  The prior
 and excluded from this all-source accounting because a PowerShell path-expression
 error passed zero raw JSONL files; it is not overwritten.  Next: train the
 uncertainty-aware predictive graph arm independently with the same five seeds.
+
+## AAMAS 2027 - first uncertainty-aware predictive GraphMAPPO seed retained (2026-07-23)
+
+The first independent uncertainty-aware predictive GraphMAPPO job completed
+the 100,000-transition CUDA command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_baseline.yaml --device cuda --seed 20260719
+--num-uavs 3 --graph-mode uncertainty_predictive_graph --total-steps 100000
+--output-dir
+outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260719`.
+It was launched at Git revision `63d3f7f` with configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.  The
+summary confirms both predicted delivered-packet knowledge and uncertainty
+input are enabled; learned execution used CUDA and OSQP CBF stayed CPU-side.
+The retained final checkpoint is `checkpoints/graph_mappo_final.pt` in the
+named output directory, alongside summary, event context, and launcher logs.
+
+The summary records 1,042 updates and one retained training emergency fallback
+in 33,344 decisions: `solved inaccurate` at 20,000 iterations.  Initial
+evaluation has zero fallbacks in 160 decisions and final evaluation zero in 127
+decisions.  No solver setting changed.  This documents seed-local completion
+only, not a comparison, safety result, or fallback-rate estimate.  Next: run
+seed `20260720` serially with the same frozen protocol, retaining every event;
+postpone six-scenario evaluation until all five final checkpoints exist.
