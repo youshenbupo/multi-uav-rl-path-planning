@@ -6,6 +6,19 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-23, supersedes stale status below)
 
+- Commit `d0de541` is pushed to `origin/codex/phase14-dynamic-world`; it
+  records completion of uncertainty-aware predictive seed `20260719`.  The
+  sole active serial CUDA job is seed `20260720`, PID `18960` at launch,
+  command
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_baseline.yaml --device cuda --seed
+  20260720 --num-uavs 3 --graph-mode uncertainty_predictive_graph --total-steps
+  100000 --output-dir
+  outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260720`.
+  Its unique launcher logs end in `_seed_20260720_launcher_stdout.log` and
+  `_launcher_stderr.log` under `outputs/core_3uav/`.  Verify final checkpoint
+  and summary before acting, document each retained CBF event, then start
+  `20260721`, `20260722`, and `20260723` serially with this unchanged protocol.
 - Commit `e857715` is pushed to `origin/codex/phase14-dynamic-world`; it
   records completion of the predictive-without-uncertainty five-seed training,
   30-cell evaluation, JSONL-aware CBF replay, and explicit one-event telemetry
