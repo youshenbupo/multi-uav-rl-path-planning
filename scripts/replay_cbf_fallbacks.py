@@ -19,7 +19,12 @@ from scripts.diagnose_cbf_failure import build_snapshot_and_requested  # noqa: E
 def build_parser() -> argparse.ArgumentParser:
     """Require explicit source telemetry and a never-overwritten JSONL destination."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("telemetry", type=Path, nargs="+", help="Retained telemetry JSON files.")
+    parser.add_argument(
+        "telemetry",
+        type=Path,
+        nargs="+",
+        help="Retained telemetry JSON or JSONL files.",
+    )
     parser.add_argument("--output-jsonl", type=Path, required=True)
     parser.add_argument("--max-iterations", type=int, default=20_000)
     parser.add_argument("--max-solve-time-seconds", type=float, default=0.1)
@@ -45,6 +50,18 @@ def _event_mappings(value: Any, pointer: str = "$") -> list[tuple[str, dict[str,
         for index, nested in enumerate(value):
             found.extend(_event_mappings(nested, f"{pointer}[{index}]"))
     return found
+
+
+def _payloads_from_telemetry(path: Path) -> list[tuple[str, Any]]:
+    """Load one JSON document or every nonblank JSONL record with stable pointers."""
+    text = path.read_text(encoding="utf-8")
+    if path.suffix.lower() != ".jsonl":
+        return [("$", json.loads(text))]
+    return [
+        (f"$[{line_index}]", json.loads(line))
+        for line_index, line in enumerate(text.splitlines())
+        if line.strip()
+    ]
 
 
 def _replay(event: dict[str, Any], arguments: argparse.Namespace) -> dict[str, object]:
@@ -84,20 +101,20 @@ def main() -> None:
     records: list[dict[str, object]] = []
     with output_path.open("x", encoding="utf-8") as handle:
         for telemetry_path in arguments.telemetry:
-            payload = json.loads(telemetry_path.read_text(encoding="utf-8"))
-            for pointer, event in _event_mappings(payload):
-                record: dict[str, object] = {
-                    "telemetry": str(telemetry_path),
-                    "event_pointer": pointer,
-                    "recorded_solver_status": event.get("solver_status"),
-                    "recorded_solver_iterations": event.get("solver_iterations"),
-                }
-                try:
-                    record["replay"] = _replay(event, arguments)
-                except (KeyError, TypeError, ValueError) as error:
-                    record["replay_error"] = f"{type(error).__name__}: {error}"
-                records.append(record)
-                handle.write(json.dumps(record, sort_keys=True) + "\n")
+            for base_pointer, payload in _payloads_from_telemetry(telemetry_path):
+                for pointer, event in _event_mappings(payload, base_pointer):
+                    record: dict[str, object] = {
+                        "telemetry": str(telemetry_path),
+                        "event_pointer": pointer,
+                        "recorded_solver_status": event.get("solver_status"),
+                        "recorded_solver_iterations": event.get("solver_iterations"),
+                    }
+                    try:
+                        record["replay"] = _replay(event, arguments)
+                    except (KeyError, TypeError, ValueError) as error:
+                        record["replay_error"] = f"{type(error).__name__}: {error}"
+                    records.append(record)
+                    handle.write(json.dumps(record, sort_keys=True) + "\n")
 
     summary = {
         "telemetry_files": [str(path) for path in arguments.telemetry],

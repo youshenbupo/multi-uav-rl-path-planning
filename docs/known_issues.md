@@ -134,10 +134,9 @@
   BC and hierarchical checkpoints are intentionally incompatible and cannot be
   silently reused for the new method.
 - The four learned comparison arms share a checkpoint evaluator.  The 3-UAV
-  MLP and raw-packet GraphMAPPO five-seed matrices are complete (60 cells, 20
-  episodes each); predictive-without-uncertainty now has five independently
-  trained checkpoints but has not yet received its 30-cell evaluation matrix.
-  The uncertainty-aware predictive graph arm has not yet received its matched
+  MLP, raw-packet GraphMAPPO, and predictive-without-uncertainty each now have
+  five-seed, 30-cell 3-UAV matrices (20 episodes per cell).  The
+  uncertainty-aware predictive graph arm has not yet received its matched
   independent five-seed training/evaluation matrix.  No cross-method
   comparison, statistical claim, or protocol-wide fallback claim is available.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
@@ -182,6 +181,16 @@
   fallback.  This does not establish a fallback rate, safety property, or
   method comparison, and the two remaining predictive graph arms/matrices must remain
   independently trained rather than inferred from these artifacts.
+- The predictive-without-uncertainty matrix retains one OOD evaluation CBF
+  `solve_time_limit` event in its raw JSONL.  JSONL-aware replay locates it but
+  cannot reconstruct the complete dynamic-obstacle trajectory from the
+  center-only stored event state, so it is retained as an explicit
+  `replay_error` in
+  `outputs/cbf_diagnostics/predictive_graph_5seed_replay_20260723_jsonlfix_rerun2.jsonl`.
+  The earlier `...jsonlfix.jsonl` replay attempt omitted raw JSONL due to a
+  path-expression error and is retained/excluded, not overwritten.  This
+  telemetry gap must be addressed prospectively without altering current CBF
+  solver values; it does not permit imputation or exclusion of the event.
 - Three older diagnostic CBF events are nonreplayable because their legacy
   telemetry lacks `requested_velocities`, a complete context, or `velocities`.
   They are retained as explicit `replay_error` JSONL records in

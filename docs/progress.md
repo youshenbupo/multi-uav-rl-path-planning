@@ -867,3 +867,46 @@ this is not yet a method comparison, safety result, or generalization claim.
 The next action is the frozen evaluator matrix for every checkpoint and each of
 the six scenarios, 20 episodes per cell, preserving JSONL and checking all 600
 records before CBF replay under unchanged settings.
+
+## AAMAS 2027 - predictive-without-uncertainty unified evaluation and CBF replay complete (2026-07-23)
+
+Every predictive-without-uncertainty final checkpoint now has the frozen
+six-scenario checkpoint matrix: seeds `20260719`--`20260723`, scenarios
+`nominal`, `delay_only`, `loss_only`, `dynamic_only`, `combined`, and
+`ood_communication_obstacle`, at 20 episodes per cell.  Every invocation used
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+scripts/evaluate_core_checkpoint.py --family graph_mappo --config
+configs/rl/dynamic_graph_baseline.yaml --checkpoint
+<seed-output>/checkpoints/graph_mappo_final.pt --output-dir
+outputs/core_3uav_evaluations --experiment-name
+core_3uav_predictive_graph_seed_<seed>_<scenario> --seed <seed> --num-uavs 3
+--episodes 20 --scenario <scenario> --device cuda`, at pre-documentation Git
+revision `869c767` and frozen configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+Network inference used CUDA and OSQP CBF remained CPU-side.
+
+The 30 named directories under `outputs/core_3uav_evaluations/` each retain a
+`summary.json` and `raw_results/seed_<seed>.jsonl`; a completeness check found
+exactly 20 JSONL records in every condition (600 records total).  No directory
+was overwritten.  The seed-20260720 OOD raw JSONL retains an evaluation
+`solve_time_limit` event in episode 15; it remains included rather than
+excluded.  These are raw within-method records, not a cross-method comparison,
+safety guarantee, or generalization result.
+
+`scripts/replay_cbf_fallbacks.py` now explicitly accepts JSONL as well as JSON
+telemetry, preserving each source-line pointer.  `ruff`, `mypy`, and the full
+test suite passed (`147 passed`, with 28 existing OSQP deprecation warnings).
+The final all-source replay is
+`outputs/cbf_diagnostics/predictive_graph_5seed_replay_20260723_jsonlfix_rerun2.jsonl`
+with its companion summary: it reads the five training summaries, 30 evaluation
+summaries, and 30 evaluation JSONL files under unchanged values (20,000
+iterations, 0.1 seconds, penalty 100, uncertainty gain 0.5, cap 5.0).  It
+retains 10 source events: nine replay without an error (two emergency fallback
+replays), while the OOD evaluation event is an explicit `replay_error` because
+its retained center-only dynamic-obstacle state cannot reconstruct the full
+trajectory at the recorded step.  No data were imputed and no solver setting
+changed.  The prior
+`...predictive_graph_5seed_replay_20260723_jsonlfix.jsonl` attempt is retained
+and excluded from this all-source accounting because a PowerShell path-expression
+error passed zero raw JSONL files; it is not overwritten.  Next: train the
+uncertainty-aware predictive graph arm independently with the same five seeds.
