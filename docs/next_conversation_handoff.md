@@ -4,6 +4,36 @@
 point for the next Codex conversation.  Inspect the worktree and running
 processes before relying on any status below.
 
+## Current continuation update (2026-07-23, supersedes stale status below)
+
+- Commit `faca19a` is pushed to `origin/codex/phase14-dynamic-world`; it
+  records completion of the raw-packet GraphMAPPO five-seed 3-UAV matrix and
+  CBF replay.  The user's `.gitignore` is the only intended dirty worktree
+  file; never stage or alter it.
+- Raw-packet GraphMAPPO seeds `20260719`--`20260723` are all complete at
+  100,032 CUDA transitions.  Their six-scenario, 20-episode checkpoint
+  evaluations are complete: 30 valid directories and 600 retained JSONL
+  records under `outputs/core_3uav_evaluations/core_3uav_raw_graph_seed_*`.
+  `outputs/cbf_diagnostics/raw_graph_5seed_replay_20260723.jsonl` retains all
+  seven source events from the five training summaries; its companion summary
+  records zero replay errors under the unchanged 20,000-iteration, 0.1-second,
+  penalty-100, uncertainty-gain-0.5/cap-5 protocol.  Do not make a performance,
+  safety, or fallback-rate claim from these within-method records.
+- The next matched arm, predictive-without-uncertainty GraphMAPPO, has one
+  active serial CUDA job.  At handoff its PID is `43872`, command
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_baseline.yaml --device cuda --seed
+  20260719 --num-uavs 3 --graph-mode predictive_graph --total-steps 100000
+  --output-dir outputs/core_3uav/core_3uav_predictive_graph_seed_20260719`.
+  Check the process and final checkpoint/summary before acting.  Its independent
+  launcher logs are
+  `outputs/core_3uav/core_3uav_predictive_graph_seed_20260719_launcher_stdout.log`
+  and `_launcher_stderr.log`; do not overwrite them.  Once complete, document
+  seed-local artifact and retained fallbacks, then run seeds `20260720`--
+  `20260723` serially with the same command pattern.  Only after the five-seed
+  training and six-scenario evaluation matrix is complete may the
+  `uncertainty_predictive_graph` arm begin.
+
 ## Current continuation update (2026-07-22, supersedes stale status below)
 
 - Commit `1a7800ccb383943a8d160d41856f1e1ff65a23e5` is pushed to
