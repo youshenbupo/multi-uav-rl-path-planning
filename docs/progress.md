@@ -934,3 +934,34 @@ decisions.  No solver setting changed.  This documents seed-local completion
 only, not a comparison, safety result, or fallback-rate estimate.  Next: run
 seed `20260720` serially with the same frozen protocol, retaining every event;
 postpone six-scenario evaluation until all five final checkpoints exist.
+
+## AAMAS 2027 - second uncertainty-aware predictive GraphMAPPO seed retained (2026-07-23)
+
+Independent seed `20260720` completed the frozen 100,000-transition CUDA
+command `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+scripts/train_graph_mappo.py --config configs/rl/dynamic_graph_baseline.yaml
+--device cuda --seed 20260720 --num-uavs 3 --graph-mode
+uncertainty_predictive_graph --total-steps 100000 --output-dir
+outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260720`.
+It was launched at Git revision `d0de541` with configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+The retained output directory contains `summary.json`, the final checkpoint
+`checkpoints/graph_mappo_final.pt`, live telemetry, TensorBoard data, and the
+dedicated launcher stdout/stderr logs.  Its summary identifies
+`uncertainty_predictive_graph`; learned network work ran on CUDA while OSQP
+CBF remained CPU-side.
+
+The completed run records 1,042 updates.  Training telemetry retains one
+emergency fallback in 33,344 decisions: `solved inaccurate` at decision index
+25,156 with the unchanged 20,000-iteration cap (the full solver and
+environment context remains in `summary.json`).  Initial evaluation retains
+zero fallbacks in 160 decisions; final interval evaluation retains zero in 154
+decisions.  The frozen slack penalty, solve-time limit, iteration cap, and
+tolerances were not changed.
+
+This is second-seed artifact and traceability evidence only: it does not prove
+a method effect, safety result, generalization result, or cross-seed
+fallback-rate estimate.  Next, verify no legacy training process remains and
+run seed `20260721` serially with the identical command; defer all
+six-scenario evaluations and aggregation until all five uncertainty-aware
+predictive final checkpoints are complete.
