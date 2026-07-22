@@ -29,6 +29,11 @@ processes before relying on any status below.
   a final summary or checkpoint.  Do not start another training job.  On
   completion, verify the final checkpoint and summary, document every retained
   CBF fallback before launching seed `20260722`, then repeat for `20260723`.
+- During active seed `20260721` monitoring, its dedicated stderr log recorded
+  `CBF filter emergency fallback: maximum iterations reached`.  The process
+  remained live after that notification; retain the log and final summary as
+  authoritative for the complete count and context.  Do not change the
+  iteration cap, tolerances, slack, or any other safety parameter in response.
 - Commit `d0de541` is pushed to `origin/codex/phase14-dynamic-world`; it
   records completion of uncertainty-aware predictive seed `20260719`.  The
   sole active serial CUDA job is seed `20260720`, PID `18960` at launch,
