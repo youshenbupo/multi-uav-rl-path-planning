@@ -822,3 +822,23 @@ third seed's traceable completion, not comparative performance, a safety
 property, or a fallback-rate estimate.  Next: launch seed `20260722` serially
 under this unchanged command pattern; retain all event contexts and postpone
 the six-scenario evaluator until five final checkpoints exist.
+
+## AAMAS 2027 - fourth predictive-without-uncertainty GraphMAPPO seed retained (2026-07-23)
+
+Independent seed `20260722` completed the unchanged 100,000-transition CUDA
+protocol, launched at Git revision `69c79a3` with configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.  Its
+final checkpoint is
+`outputs/core_3uav/core_3uav_predictive_graph_seed_20260722/checkpoints/graph_mappo_final.pt`;
+the output directory preserves its summary, full CBF fallback context, and
+unique launcher logs.  The summary records 1,042 updates and confirms the
+predictive-but-no-uncertainty information model, CUDA learned execution, and
+CPU-side OSQP CBF.
+
+Training retains one emergency fallback in 33,344 decisions: `solve_time_limit`
+after 14,107 solver iterations at the frozen 0.1-second limit.  Initial
+evaluation retains zero in 160 decisions and final evaluation zero in 153
+decisions.  No solver setting changed.  This is traceable seed-level completion
+only, not a comparative, safety, or fallback-rate result.  Next: train final
+seed `20260723` serially with the identical frozen protocol, then verify all
+five checkpoints before beginning the six-scenario evaluation matrix.
