@@ -753,3 +753,29 @@ emergency fallback (`maximum iterations reached` and `solved inaccurate`),
 while the other five solved.  No CBF setting was changed.  The next concrete
 action is to train the predictive-without-uncertainty graph arm independently
 with the same five seeds, then apply the same six-scenario protocol.
+
+## AAMAS 2027 - first predictive-without-uncertainty GraphMAPPO seed retained (2026-07-23)
+
+The first independently trained predictive-without-uncertainty GraphMAPPO job
+completed its 100,000-transition CUDA budget using
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_baseline.yaml --device cuda --seed 20260719
+--num-uavs 3 --graph-mode predictive_graph --total-steps 100000 --output-dir
+outputs/core_3uav/core_3uav_predictive_graph_seed_20260719`.  It was launched
+from Git revision `faca19ac96e52013f0b436a240938b0e9b0ad3da` with configuration
+SHA-256 `1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+The summary explicitly identifies `uses_predicted_knowledge: true` and
+`uses_uncertainty: false`; learned execution used CUDA and OSQP CBF remained
+CPU-side.  The retained final checkpoint is
+`outputs/core_3uav/core_3uav_predictive_graph_seed_20260719/checkpoints/graph_mappo_final.pt`.
+Its summary, CBF event context, and independent launcher stdout/stderr logs
+remain in the named output path.
+
+The final summary records 1,042 updates, one retained training emergency
+fallback in 33,344 decisions (`solved inaccurate` at 20,000 iterations), zero
+fallbacks in 160 initial-evaluation decisions, and zero in 124 final-evaluation
+decisions.  No solver setting was altered.  This is seed-local completion and
+traceability evidence only; it proves neither a method effect nor a safety or
+fallback-rate claim.  Next: launch seed `20260720` serially with the same
+frozen command pattern, retain all telemetry, and defer the six-scenario
+evaluation until all five predictive-without-uncertainty checkpoints exist.
