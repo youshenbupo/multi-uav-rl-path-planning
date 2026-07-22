@@ -49,6 +49,11 @@ processes before relying on any status below.
   `20260722` is now the only active raw-graph CUDA job in
   `outputs/core_3uav/core_3uav_raw_graph_seed_20260722`; verify final artifacts,
   document the phase, then continue serially with seed `20260723`.
+- Superseding the preceding seed-20260722 status: it completed at 100,032
+  transitions with CBF fallbacks 3/0/0 (training/initial/final).  Seed
+  `20260723` is now the only raw-graph CUDA job in
+  `outputs/core_3uav/core_3uav_raw_graph_seed_20260723`; verify final artifacts
+  and document it before beginning the raw-graph six-scenario evaluations.
 - Primary-paper browsing remains pending one-time local setup authorization:
   the required `/browse` skill reported `NEEDS_SETUP` for its browser binary.
   Do not substitute another browser or use metadata-only entries for novelty

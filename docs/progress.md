@@ -686,3 +686,16 @@ It reached 100,032 transitions and 1,042 updates.  Retained CBF telemetry is
 decisions, and 0 in the final evaluation.  This remains seed-level traceability
 only, not a comparative or safety result.  Next is serial seed `20260722` under
 the same frozen protocol; no solver parameter is changed because of the event.
+
+## AAMAS 2027 - fourth raw-packet GraphMAPPO seed retained (2026-07-23)
+
+Raw-packet GraphMAPPO seed `20260722` completed the unchanged CUDA protocol at
+100,032 transitions and 1,042 updates.  Its retained artifact is
+`outputs/core_3uav/core_3uav_raw_graph_seed_20260722/checkpoints/graph_mappo_final.pt`,
+with summary, live telemetry, launcher logs, checkpoints, and TensorBoard data
+preserved in the same directory.  CBF telemetry records 3 emergency fallbacks
+in 33,344 training decisions and 0 in both 160 initial-evaluation decisions and
+the final evaluation.  These events are retained diagnostics, not a rate or
+method conclusion; the frozen solver values were not changed.  Next: train
+serial seed `20260723`, then evaluate all five raw-graph final checkpoints in
+the six-scenario 20-episode protocol.
