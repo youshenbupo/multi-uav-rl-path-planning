@@ -433,3 +433,16 @@ is unchanged (y=50 to y=90), while the 1.5x OOD case is a valid faster y=30 to
 y=90 trajectory. A regression test instantiates the OOD environment and checks
 its velocity and endpoint. The prior failed OOD evaluator directory is retained
 as invalid; the repaired raw result uses the `_trajectoryfix_rerun1` identity.
+
+## AAMAS 2027 - third independent MLP seed retained (2026-07-22)
+
+The third 3-UAV MLP-MAPPO seed (`20260721`) completed 100,032 CUDA transitions
+and produced `mappo_final.pt`. Its retained training telemetry has 3 emergency
+fallbacks in 33,344 CBF decisions, 11 initial untrained-policy-evaluation
+fallbacks, and zero final-evaluation fallbacks. Replaying one retained training
+event at the unchanged mainline slack penalty of 100 reached the 20,000-iteration
+limit with status `solved inaccurate`, zero slack, and an emergency fallback.
+This is retained as a numerical failure case; no solver limit, slack penalty, or
+tolerance was changed. Three of five MLP seeds are now trained, but no main
+comparison or statistical conclusion exists until the remaining seeds, methods,
+and six-scenario evaluations are complete.
