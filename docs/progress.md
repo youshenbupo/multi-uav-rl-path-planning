@@ -446,3 +446,192 @@ This is retained as a numerical failure case; no solver limit, slack penalty, or
 tolerance was changed. Three of five MLP seeds are now trained, but no main
 comparison or statistical conclusion exists until the remaining seeds, methods,
 and six-scenario evaluations are complete.
+
+## AAMAS 2027 - fourth independent MLP seed retained (2026-07-22)
+
+After confirming that no prior train/evaluation process was alive, the fourth
+independent 3-UAV MLP-MAPPO training job completed on CUDA.  The exact command
+was `D:\anaconda3\envs\multiuav_rl\python.exe scripts/train_mappo.py --config
+configs/rl/dynamic_mappo_baseline.yaml --device cuda --seed 20260722 --num-uavs
+3 --total-steps 100000 --output-dir outputs/core_3uav/core_3uav_mlp_mappo_seed_20260722`.
+It ran at Git revision `7749876e89e0a487da43df2f46f03380e34d9039`, with
+`configs/rl/dynamic_mappo_baseline.yaml` SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46` and the
+verified `multiuav_rl` CUDA runtime (PyTorch `2.13.0+cu130`, RTX 5060 Laptop
+GPU).  OSQP CBF remained CPU-side under the unchanged mainline configuration.
+
+The run reached 100,032 transitions (1,042 PPO updates) and produced
+`outputs/core_3uav/core_3uav_mlp_mappo_seed_20260722/checkpoints/mappo_final.pt`.
+Its retained raw records are `summary.json`, `live_training_telemetry.json`,
+`launcher_stderr.log`, and all checkpoint/tensorboard files in that same output
+directory.  CBF telemetry records 1 emergency fallback in 33,344 training
+decisions, 13 in 160 initial untrained-policy evaluation decisions, and 0 in
+96 final-evaluation decisions.  These are execution and traceability facts,
+not performance, safety, or comparative evidence.  The seed still needs all
+six 20-episode uniform checkpoint evaluations, and every retained fallback
+must be replayed and summarized before interpreting any aggregate statistic.
+
+The next concrete action is the serial, same-protocol CUDA training of seed
+`20260723`; GraphMAPPO training remains blocked until the fifth MLP seed and
+the MLP unified evaluation matrix are complete.
+
+## AAMAS 2027 - fifth independent MLP seed retained (2026-07-22)
+
+The fifth independent 3-UAV MLP-MAPPO training job completed serially after
+seed `20260722` exited; no MLP jobs were run concurrently.  The exact command
+was `D:\anaconda3\envs\multiuav_rl\python.exe scripts/train_mappo.py --config
+configs/rl/dynamic_mappo_baseline.yaml --device cuda --seed 20260723 --num-uavs
+3 --total-steps 100000 --output-dir outputs/core_3uav/core_3uav_mlp_mappo_seed_20260723`.
+It used Git revision `7749876e89e0a487da43df2f46f03380e34d9039` and the same
+unchanged configuration SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46` as the
+preceding formal MLP seeds.  Learned-network execution used the verified CUDA
+runtime; the OSQP CBF remained CPU-side.
+
+The run reached 100,032 transitions (1,042 PPO updates) and produced
+`outputs/core_3uav/core_3uav_mlp_mappo_seed_20260723/checkpoints/mappo_final.pt`.
+The raw `summary.json`, `live_training_telemetry.json`, launcher logs,
+checkpoints, and TensorBoard data are retained in its output directory.  The
+saved CBF telemetry records zero emergency fallbacks in 33,344 training
+decisions, 160 initial untrained-policy-evaluation decisions, and 88 final
+evaluation decisions.  This verifies completion and traceability for the fifth
+independent MLP training artifact only; it neither establishes a low fallback
+rate nor a learned-policy or safety result.
+
+All five prescribed MLP checkpoints now exist.  The next concrete action is to
+run only the missing cells of the uniform six-scenario, 20-episode evaluator
+for each checkpoint, retaining every JSONL attempt identity and excluding the
+already documented incomplete seed-20260719 evaluator directories from any
+later aggregation.  GraphMAPPO work remains deferred until that MLP matrix and
+the CBF fallback replay summary are complete.
+
+## AAMAS 2027 - seed 20260720 unified MLP evaluation completed (2026-07-22)
+
+The checkpoint
+`outputs/core_3uav/core_3uav_mlp_mappo_seed_20260720/checkpoints/mappo_final.pt`
+now has one validated 20-episode evaluation artifact for every fixed scenario:
+`nominal`, `delay_only`, `loss_only`, `dynamic_only`, `combined`, and
+`ood_communication_obstacle`.  The five newly required calls used the same
+`evaluate_core_checkpoint.py --family mappo --config
+configs/rl/dynamic_mappo_baseline.yaml --seed 20260720 --num-uavs 3 --episodes
+20 --device cuda` contract at Git revision
+`7749876e89e0a487da43df2f46f03380e34d9039`, varying only `--scenario` and the
+matching `core_3uav_mlp_mappo_seed_20260720_<scenario>` experiment name.  The
+CUDA policy actor and CPU OSQP CBF path were retained unchanged.
+
+For each of the six directories under `outputs/core_3uav_evaluations/`,
+`summary.json` exists and `raw_results/seed_20260720.jsonl` contains exactly 20
+records.  Those JSONL files, runtime telemetry, configuration snapshots, and
+summaries are the verification evidence.  This completes an evaluation row,
+not a statistical result: it proves the protocol ran and retained raw data, but
+does not prove MLP performance, safety, or generalization.  The next concrete
+action is to execute the six same-contract evaluations for seed `20260721`;
+the complete five-seed matrix and fallback replay remain required before any
+aggregation or GraphMAPPO run.
+
+## AAMAS 2027 - seed 20260721 unified MLP evaluation completed (2026-07-22)
+
+The independently trained checkpoint
+`outputs/core_3uav/core_3uav_mlp_mappo_seed_20260721/checkpoints/mappo_final.pt`
+was evaluated serially in all six fixed scenarios with the unchanged uniform
+contract: `evaluate_core_checkpoint.py --family mappo --config
+configs/rl/dynamic_mappo_baseline.yaml --seed 20260721 --num-uavs 3 --episodes
+20 --device cuda`, Git revision `7749876e89e0a487da43df2f46f03380e34d9039`.
+The matching `core_3uav_mlp_mappo_seed_20260721_<scenario>` directories retain
+the six scenario identities, CUDA actor execution, and CPU OSQP CBF protocol.
+
+Each directory has `summary.json` and exactly 20 records in
+`raw_results/seed_20260721.jsonl`; runtime telemetry and config/environment
+snapshots are retained alongside them.  This verifies the row's completeness
+and raw-result preservation only.  It does not support a seed-level or
+five-seed performance, safety, or generalization claim.  Next, run the six
+same-contract evaluations for checkpoint seed `20260722`, then seed
+`20260723`, before any aggregation or GraphMAPPO work.
+
+## AAMAS 2027 - seed 20260722 unified MLP evaluation completed (2026-07-22)
+
+The independently trained checkpoint
+`outputs/core_3uav/core_3uav_mlp_mappo_seed_20260722/checkpoints/mappo_final.pt`
+now has six serial, 20-episode evaluations under the unchanged MLP checkpoint
+contract at Git revision `7749876e89e0a487da43df2f46f03380e34d9039`.  Each
+command used the same actor/CBF split and
+`evaluate_core_checkpoint.py --family mappo --config
+configs/rl/dynamic_mappo_baseline.yaml --seed 20260722 --num-uavs 3 --episodes
+20 --device cuda`, with only the fixed scenario and matching experiment name
+changed.
+
+All six `core_3uav_mlp_mappo_seed_20260722_<scenario>` directories under
+`outputs/core_3uav_evaluations/` have `summary.json` and exactly 20 records in
+`raw_results/seed_20260722.jsonl`; their runtime telemetry and configuration
+snapshots remain retained.  This is verified raw-data completeness, not an
+outcome claim.  Seed `20260723` is the final missing MLP evaluation row; run it
+before fallback aggregation or any GraphMAPPO training.
+
+## AAMAS 2027 - five-seed MLP six-scenario evaluation matrix complete (2026-07-22)
+
+The final checkpoint
+`outputs/core_3uav/core_3uav_mlp_mappo_seed_20260723/checkpoints/mappo_final.pt`
+was evaluated in all six prescribed scenarios using the same fixed MLP command
+contract (`--episodes 20`, `--device cuda`, actor checkpoint only, CPU OSQP CBF)
+at Git revision `7749876e89e0a487da43df2f46f03380e34d9039`.  The five-seed MLP
+matrix now contains 30 eligible scenario directories and 600 retained episode
+records: each selected directory has `summary.json` plus exactly 20 lines in
+`raw_results/seed_<seed>.jsonl`.
+
+The selected seed-20260719 nominal and OOD artifacts remain respectively
+`core_3uav_mlp_mappo_seed_20260719_nominal_schemafix_rngfix_rerun2` and
+`core_3uav_mlp_mappo_seed_20260719_ood_communication_obstacle_trajectoryfix_rerun1`.
+The earlier nominal, nominal-schemafix-rerun1, and OOD directories are retained
+invalid attempts and are explicitly excluded from any aggregation.  All
+remaining seed/scenario identities use their standard matching directory under
+`outputs/core_3uav_evaluations/`.
+
+This establishes a complete, raw-data-preserving MLP evaluation protocol, not
+a comparison result or safety conclusion.  The next action is to replay and
+summarize every retained MLP training and evaluation CBF emergency fallback at
+unchanged solver settings, recording exclusions and raw diagnostic locations;
+only then may the three GraphMAPPO arms begin their matching independent runs.
+
+## AAMAS 2027 - retained CBF fallback replay audit (2026-07-22)
+
+`scripts/replay_cbf_fallbacks.py` is a diagnostic-only, append-safe replay
+utility. It replays retained contexts with the unchanged mainline solver
+protocol: 20,000 iterations, 0.1-second solve limit, slack penalty 100.0,
+uncertainty-margin gain 0.5, and uncertainty-margin cap 5.0. It refuses to
+overwrite an existing JSONL/summary identity. Its CLI load check and replay
+runs used Git revision `7749876e89e0a487da43df2f46f03380e34d9039`.
+
+The five completed MLP training summaries were replayed into
+`outputs/cbf_diagnostics/core_mlp_5seed_replay_20260722.jsonl` and its sibling
+summary. All 47 retained formal events replayed without a context error. Their
+recorded statuses were 33 `solve_time_limit`, 7 `solved inaccurate`, and 7
+`maximum iterations reached`; the same-parameter replay returned 12 `solved`,
+9 `solved inaccurate`, 19 `solve_time_limit`, and 7 `maximum iterations
+reached`, with 35 replayed emergency fallbacks. This is an event-level numerical
+audit, not a fallback-rate, safety, or policy-quality result. The 30 uniform
+checkpoint evaluations retain zero emergency events.
+
+Historical diagnostic artifacts were separately retained in
+`outputs/cbf_diagnostics/historic_cbf_replay_20260722.jsonl` and its sibling
+summary: 18 of 21 events replayed, while three legacy records were marked
+nonreplayable rather than repaired or discarded. The reasons were a missing
+`requested_velocities` field in `cbf_diagnosis_context`, no saved context in
+`cbf_diagnosis_residuals`, and missing `velocities` in the
+`dynamic_mlp_mappo_cuda_smoke_v2` final-evaluation event. The aborted training
+directory and all invalid evaluator attempts remain retained and excluded; no
+slack, iteration limit, or tolerance changed during this audit.
+
+This proves only that the formal MLP corpus is complete and its retained
+fallback contexts can be replayed under the frozen protocol. Comparative method
+advantage, safety guarantees, fallback-rate claims, and generalization remain
+unproven. Next, run static/regression checks for the replay utility, commit the
+tooling and documentation without `.gitignore`, then begin the first matched
+raw-packet GraphMAPPO seed.
+
+Verification of the replay utility passed at the same revision: `python -m
+ruff check scripts/replay_cbf_fallbacks.py` and `python -m mypy
+scripts/replay_cbf_fallbacks.py` both passed, and the full suite passed `147`
+tests with `28` existing OSQP dependency deprecation warnings. The retained
+test stdout/stderr evidence is
+`outputs/cbf_diagnostics/pytest_replay_tool_20260722_stdout.log` and
+`outputs/cbf_diagnostics/pytest_replay_tool_20260722_stderr.log`.

@@ -156,3 +156,25 @@
   could start. The generator and a regression test now enforce a valid
   twenty-step horizon, and only the `_trajectoryfix_rerun1` OOD directory is
   eligible for later aggregation.
+- The completed seed `20260722` retains 13 CBF emergency fallbacks during the
+  initial untrained-policy evaluation and 1 during 33,344 training decisions;
+  its final interval evaluation has zero fallbacks.  These seed-local diagnostic
+  counts do not establish a fallback rate or safety property.  Their raw contexts
+  remain in `outputs/core_3uav/core_3uav_mlp_mappo_seed_20260722/` and must be
+  replayed without changing the checked-in slack penalty, iteration cap, or
+  tolerance.  Its six required checkpoint-evaluation JSONL artifacts now exist,
+  but this seed-level diagnostic remains ineligible for performance or safety
+  claims without the matched GraphMAPPO matrices.
+- The five 3-UAV MLP training checkpoints and the 30-cell uniform evaluation
+  matrix now exist, but no performance comparison is available: the three
+  GraphMAPPO method families have not yet received their matched independent
+  five-seed training/evaluation matrices.  Training-script initial/interval/
+  final evaluation fields remain separate from the 20-episode checkpoint JSONL
+  records.  Formal MLP fallbacks have been replayed without changing solver
+  values, but a cross-method aggregate fallback claim remains unavailable.
+- Three older diagnostic CBF events are nonreplayable because their legacy
+  telemetry lacks `requested_velocities`, a complete context, or `velocities`.
+  They are retained as explicit `replay_error` JSONL records in
+  `outputs/cbf_diagnostics/historic_cbf_replay_20260722.jsonl`, not silently
+  imputed. Future telemetry must retain the complete replay context from the
+  first event without altering the frozen CBF solver protocol.
