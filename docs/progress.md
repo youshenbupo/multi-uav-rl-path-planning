@@ -699,3 +699,57 @@ the final evaluation.  These events are retained diagnostics, not a rate or
 method conclusion; the frozen solver values were not changed.  Next: train
 serial seed `20260723`, then evaluate all five raw-graph final checkpoints in
 the six-scenario 20-episode protocol.
+
+## AAMAS 2027 - raw-packet GraphMAPPO five-seed training complete (2026-07-23)
+
+The fifth independent raw-packet GraphMAPPO seed `20260723` completed 100,032
+CUDA transitions and 1,042 updates.  Its retained final checkpoint is
+`outputs/core_3uav/core_3uav_raw_graph_seed_20260723/checkpoints/graph_mappo_final.pt`;
+summary, live telemetry, launcher logs, checkpoints, and TensorBoard data are
+kept with it.  At Git revision `13fceb826cb2bfc9b2fc929ea7054f69152b7561`, CBF
+telemetry records 2 emergency fallbacks in 33,344 training decisions, 0 in 160
+initial-evaluation decisions, and 0 in 110 final-evaluation decisions.
+
+All five raw-packet graph checkpoints now exist, but this is not a method
+comparison, safety result, or fallback-rate claim.  The next action is the
+uniform evaluator for every raw-graph final checkpoint, six fixed scenarios and
+20 episodes each, preserving every JSONL and then replaying raw-graph fallbacks
+at unchanged solver settings before starting the predictive graph arm.
+
+## AAMAS 2027 - raw-packet GraphMAPPO unified evaluation and CBF replay complete (2026-07-23)
+
+All five independently trained raw-packet GraphMAPPO final checkpoints now
+have the frozen six-scenario checkpoint evaluation matrix: seeds `20260719`
+through `20260723`, scenarios `nominal`, `delay_only`, `loss_only`,
+`dynamic_only`, `combined`, and `ood_communication_obstacle`, with 20 episodes
+per condition.  The evaluator command for every cell was
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/evaluate_core_checkpoint.py
+--family graph_mappo --config configs/rl/dynamic_graph_baseline.yaml
+--checkpoint <seed-output>/checkpoints/graph_mappo_final.pt --output-dir
+outputs/core_3uav_evaluations --experiment-name
+core_3uav_raw_graph_seed_<seed>_<scenario> --seed <seed> --num-uavs 3
+--episodes 20 --scenario <scenario> --device cuda`.  It used the frozen graph
+configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D` at
+pre-documentation Git revision `13fceb826cb2bfc9b2fc929ea7054f69152b7561`;
+network inference ran on CUDA and OSQP CBF remained CPU-side.
+
+The 30 named directories under `outputs/core_3uav_evaluations/` each retain a
+`summary.json` and `raw_results/seed_<seed>.jsonl`; an explicit completeness
+check verified exactly 20 JSONL records in every cell (600 records total).
+No attempt directory was overwritten.  These are raw within-method records,
+not a five-seed aggregate, cross-method comparison, safety guarantee, or
+generalization conclusion.
+
+The unchanged CBF replay command was
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/replay_cbf_fallbacks.py
+--output-jsonl outputs/cbf_diagnostics/raw_graph_5seed_replay_20260723.jsonl
+<five training summaries> <thirty evaluation summaries>`.  Its companion
+`outputs/cbf_diagnostics/raw_graph_5seed_replay_20260723.summary.json` records
+the frozen protocol (20,000 iterations, 0.1 seconds, slack penalty 100,
+uncertainty-margin gain 0.5, cap 5.0), seven retained events, and zero replay
+errors.  All seven sources were training summaries; two replays retained an
+emergency fallback (`maximum iterations reached` and `solved inaccurate`),
+while the other five solved.  No CBF setting was changed.  The next concrete
+action is to train the predictive-without-uncertainty graph arm independently
+with the same five seeds, then apply the same six-scenario protocol.

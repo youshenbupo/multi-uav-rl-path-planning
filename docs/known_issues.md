@@ -133,10 +133,12 @@
   six to eight values per neighbour and graph edge width from 15 to 16. Existing
   BC and hierarchical checkpoints are intentionally incompatible and cannot be
   silently reused for the new method.
-- The four learned comparison arms now share a checkpoint evaluator, but the
-  20 independent 3-UAV training checkpoints and their 120 six-scenario
-  evaluations have not been run. The materialized command manifest is a
-  reproducibility aid, not experimental evidence.
+- The four learned comparison arms share a checkpoint evaluator.  The 3-UAV
+  MLP and raw-packet GraphMAPPO five-seed matrices are complete (60 cells, 20
+  episodes each), but the predictive-without-uncertainty and uncertainty-aware
+  predictive graph arms have not yet received their matched independent
+  five-seed training/evaluation matrices.  No cross-method comparison,
+  statistical claim, or protocol-wide fallback claim is available yet.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.
@@ -172,6 +174,13 @@
   final evaluation fields remain separate from the 20-episode checkpoint JSONL
   records.  Formal MLP fallbacks have been replayed without changing solver
   values, but a cross-method aggregate fallback claim remains unavailable.
+- The raw-packet GraphMAPPO five-seed training and 30-cell evaluation matrix
+  are now retained, with 600 valid episode JSONL records.  Its seven training
+  CBF emergency events replayed under the frozen 20,000-iteration/0.1-second/
+  penalty-100 protocol without replay errors; two still used emergency
+  fallback.  This does not establish a fallback rate, safety property, or
+  method comparison, and the two remaining predictive graph arms/matrices must remain
+  independently trained rather than inferred from these artifacts.
 - Three older diagnostic CBF events are nonreplayable because their legacy
   telemetry lacks `requested_velocities`, a complete context, or `velocities`.
   They are retained as explicit `replay_error` JSONL records in
