@@ -6,6 +6,30 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-23, supersedes stale status below)
 
+- Commit `b09be13` is pushed to `origin/codex/phase14-dynamic-world`; it
+  records completion evidence for uncertainty-aware predictive seed
+  `20260722`.  Its final checkpoint and `summary.json` are present under
+  `outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260722`.
+  Final telemetry retains one training emergency fallback in 33,344 decisions
+  (`solve_time_limit` at decision 681 under the unchanged 0.1-second limit),
+  zero in 160 initial-evaluation decisions, and zero in 122 final-evaluation
+  decisions.  The full event context is retained in the summary; this is
+  seed-local diagnostic evidence, not a performance, safety, or cross-seed
+  fallback-rate result.
+- After confirming no Python training process remained, the sole active serial
+  CUDA job is final seed `20260723`, PID `66004` at its initial health check.
+  Its unchanged command is `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+  scripts/train_graph_mappo.py --config configs/rl/dynamic_graph_baseline.yaml
+  --device cuda --seed 20260723 --num-uavs 3 --graph-mode
+  uncertainty_predictive_graph --total-steps 100000 --output-dir
+  outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260723`.
+  Its dedicated launcher logs are
+  `outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260723_launcher_stdout.log`
+  and `_launcher_stderr.log`; the output directory exists but final summary and
+  checkpoint do not yet exist.  Do not start another training job.  On
+  completion, verify final artifacts and all retained CBF events, document the
+  fifth seed, then run the frozen six-scenario 20-episode evaluation matrix
+  for all five checkpoints before any aggregate claim or CBF replay.
 - Commit `195d03f` is pushed to `origin/codex/phase14-dynamic-world`; it
   records completion evidence for uncertainty-aware predictive seed
   `20260721`.  Its final checkpoint and `summary.json` are present under
