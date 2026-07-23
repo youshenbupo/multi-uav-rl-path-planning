@@ -1000,3 +1000,36 @@ is to confirm no Python training process remains, then launch seed `20260722`
 serially with the identical frozen command.  Do not start the six-scenario
 matrix or aggregate results until seeds `20260719`--`20260723` all have final
 checkpoints.
+
+## AAMAS 2027 - fourth uncertainty-aware predictive GraphMAPPO seed retained (2026-07-23)
+
+Independent seed `20260722` completed the frozen 100,000-transition CUDA
+command `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+scripts/train_graph_mappo.py --config configs/rl/dynamic_graph_baseline.yaml
+--device cuda --seed 20260722 --num-uavs 3 --graph-mode
+uncertainty_predictive_graph --total-steps 100000 --output-dir
+outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260722`.
+It was launched at Git revision `195d03f` with configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+The output directory preserves `summary.json`, final checkpoint
+`checkpoints/graph_mappo_final.pt`, live telemetry, TensorBoard data, and
+dedicated launcher stdout/stderr logs.  The summary confirms three UAVs,
+`uses_predicted_knowledge: true`, `uses_uncertainty: true`, CUDA network work,
+and the CPU-side OSQP CBF path.
+
+The final summary records 1,042 updates and one retained training emergency
+fallback in 33,344 CBF decisions: `solve_time_limit` at decision index 681
+under the unchanged 0.1-second limit (0.100514 seconds, 6,942 iterations,
+primal residual 0.0418170, dual residual 1.4419138).  Its complete initial
+position, requested-velocity, delivered-knowledge, uncertainty, and dynamic
+obstacle context remains in `summary.json`; the dedicated stderr notice is
+also retained.  Initial evaluation retains zero fallbacks in 160 decisions and
+final interval evaluation zero in 122 decisions.  No slack penalty, solve-time
+limit, iteration cap, tolerance, or other safety setting changed.
+
+This establishes a fourth traceable seed artifact only; it is not a
+performance, safety, generalization, or cross-seed fallback-rate result.  Next,
+verify that no Python training process remains, then launch the final seed
+`20260723` serially with this identical frozen protocol.  Six-scenario
+evaluation and any aggregation remain deferred until all five final
+checkpoints exist.
