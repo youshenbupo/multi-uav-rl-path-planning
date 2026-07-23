@@ -30,6 +30,11 @@ processes before relying on any status below.
   completion, verify final artifacts and all retained CBF events, document the
   fifth seed, then run the frozen six-scenario 20-episode evaluation matrix
   for all five checkpoints before any aggregate claim or CBF replay.
+- During active seed `20260723` monitoring, its dedicated stderr log recorded
+  `CBF filter emergency fallback: solve_time_limit`.  The process remained
+  live after the notification.  Preserve the log and final summary as the
+  authoritative full event record; do not change the solve-time limit, slack,
+  iteration cap, tolerances, or any other safety setting.
 - Commit `195d03f` is pushed to `origin/codex/phase14-dynamic-world`; it
   records completion evidence for uncertainty-aware predictive seed
   `20260721`.  Its final checkpoint and `summary.json` are present under
