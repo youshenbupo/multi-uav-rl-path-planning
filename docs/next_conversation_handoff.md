@@ -6,6 +6,31 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- The frozen 5-UAV uncertainty-aware predictive checkpoint-evaluation matrix
+  is active.  After confirming no training Python process and that all 30
+  target directories were absent, a hidden serial launcher began all five
+  final checkpoints (`20260719`--`20260723`) across `nominal`, `delay_only`,
+  `loss_only`, `dynamic_only`, `combined`, and
+  `ood_communication_obstacle`, 20 episodes per unique cell.  Each invocation
+  uses `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+  scripts/evaluate_core_checkpoint.py --family graph_mappo --config
+  configs/rl/dynamic_graph_5uav.yaml --checkpoint
+  outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_<seed>/checkpoints/graph_mappo_final.pt
+  --output-dir outputs/core_5uav_evaluations --experiment-name
+  core_5uav_uncertainty_predictive_graph_seed_<seed>_<scenario> --seed <seed>
+  --num-uavs 5 --episodes 20 --scenario <scenario> --device cuda`, serially.
+  Launch revision is `bbb871a`; config SHA-256 is
+  `28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+  CUDA is used for the learned network and OSQP CBF remains CPU-side.  The
+  launcher logs are
+  `outputs/core_5uav_evaluations/uncertainty_predictive_graph_5uav_5seed_eval_20260726_launcher_stdout.log`
+  and `_launcher_stderr.log`.  Initial health evidence shows the first two
+  completed unique cells for seed `20260719` (`nominal`, `delay_only`) and the
+  active `multiuav_rl` CUDA evaluator process; stderr begins with a retained
+  PowerShell CLIXML header.  This is a matrix-in-progress observation only; do
+  not use early cells as results or start 8-UAV/ablation work.  On completion,
+  audit exactly 30 cells and 600 raw JSONL records, retain failures/invalid
+  attempts, then replay all CBF records under unchanged solver values.
 - Commit `d3a3eee` records completed final 5-UAV
   uncertainty-aware predictive seed `20260723`.  Its checkpoint, summary,
   TensorBoard data, live telemetry, and dedicated launcher stdout/stderr are
