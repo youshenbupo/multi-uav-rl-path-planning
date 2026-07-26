@@ -155,6 +155,17 @@
   launcher-level observability only; do not regenerate those missing files or
   mistake the one seed's CBF telemetry for a scale-level fallback or safety
   result.
+- The second retained 5-UAV uncertainty-aware predictive seed has complete
+  summary, checkpoint, TensorBoard, live telemetry, and dedicated launcher
+  logs.  Its 20,032 training CBF decisions retain three emergency fallbacks
+  (two `solved inaccurate` at the unchanged 20,000-iteration cap and one
+  `solve_time_limit` at the unchanged 0.1-second limit); initial and final
+  training-script evaluations each retain zero in 160 decisions.  All event
+  contexts remain in
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260720/`.
+  These seed-local diagnostics neither establish a 5-UAV fallback rate nor a
+  safety/scalability result, and they must not motivate any safety-parameter
+  change.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.
