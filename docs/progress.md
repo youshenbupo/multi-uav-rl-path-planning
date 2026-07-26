@@ -1033,3 +1033,39 @@ verify that no Python training process remains, then launch the final seed
 `20260723` serially with this identical frozen protocol.  Six-scenario
 evaluation and any aggregation remain deferred until all five final
 checkpoints exist.
+
+## AAMAS 2027 - five uncertainty-aware predictive GraphMAPPO checkpoints retained (2026-07-23)
+
+The final independent seed `20260723` completed the frozen 100,000-transition
+CUDA command `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+scripts/train_graph_mappo.py --config configs/rl/dynamic_graph_baseline.yaml
+--device cuda --seed 20260723 --num-uavs 3 --graph-mode
+uncertainty_predictive_graph --total-steps 100000 --output-dir
+outputs/core_3uav/core_3uav_uncertainty_predictive_graph_seed_20260723`.
+It was launched at Git revision `b09be13` with configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+The named output directory retains the final
+`checkpoints/graph_mappo_final.pt`, `summary.json`, live telemetry,
+TensorBoard data, and dedicated launcher stdout/stderr logs.  Its summary
+confirms three UAVs, `uses_predicted_knowledge: true`,
+`uses_uncertainty: true`, CUDA network work, and CPU-side OSQP CBF.
+
+This run has 1,042 updates and one retained training emergency fallback in
+33,344 CBF decisions: `solve_time_limit` at decision index 6,257 under the
+unchanged 0.1-second limit (0.1007939 seconds, 6,394 iterations, primal
+residual 0.0640996, dual residual 1.0995986).  The complete initial-position,
+requested-velocity, delivered-knowledge, uncertainty, and dynamic-obstacle
+context remains in `summary.json` and the dedicated stderr notification is
+retained.  Initial evaluation has zero fallbacks in 160 decisions, and final
+interval evaluation has zero in 158 decisions.  No slack penalty, solve-time
+limit, iteration cap, tolerance, or other safety parameter changed.
+
+All five independent 3-UAV uncertainty-aware predictive checkpoints for seeds
+`20260719`--`20260723` now exist.  This is completion and traceability
+evidence for the training phase only; it does not establish a method effect,
+safety property, generalization result, or fallback-rate estimate.  Next, run
+the frozen six-scenario evaluator for every final checkpoint (20 episodes per
+cell, unique directory and raw JSONL per cell), validate all 600 JSONL records,
+then replay every retained training and evaluation CBF event under unchanged
+solver settings.  Aggregate or cross-method conclusions remain prohibited
+until those steps are complete.
