@@ -206,6 +206,17 @@
   neither valid replay artifact was overwritten.  The independent 8-UAV
   five-seed/matrix/replay protocol and separately trained critical ablations
   remain required before any scalability or ablation conclusion.
+- The first retained 8-UAV uncertainty-aware predictive seed has final
+  checkpoint, summary, TensorBoard, and live telemetry, but its intended
+  launcher stdout/stderr did not materialize because the parent output folder
+  was absent at launch.  The retained telemetry has one `solved inaccurate`
+  training fallback in 12,528 decisions; initial and final training-script
+  evaluations each have zero in 160 decisions.  The complete context is under
+  `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260719/`.
+  A failed pre-launch read-only import and two subsequent read-only observability
+  checks created no experiment result.  Do not regenerate the missing logs,
+  treat this one seed as a scale-level result, or tune CBF parameters in
+  response.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.

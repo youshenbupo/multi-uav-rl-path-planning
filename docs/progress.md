@@ -1396,3 +1396,44 @@ as an artifact set, but it does not license a method comparison or any scale
 claim.  Next: begin the independently trained 8-UAV uncertainty-aware
 predictive five-seed protocol, then its matched matrix/replay, before any
 separately trained key ablation.
+
+## AAMAS 2027 - first 8-UAV uncertainty-aware predictive seed retained (2026-07-26)
+
+The first independent 8-UAV uncertainty-aware predictive GraphMAPPO job
+completed the frozen CUDA command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_8uav.yaml --device cuda --seed 20260719
+--num-uavs 8 --graph-mode uncertainty_predictive_graph --total-steps 100000
+--output-dir
+outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260719`.
+It was launched at Git revision `07d0f47` with configuration SHA-256
+`9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+The final output retains `summary.json`,
+`checkpoints/graph_mappo_final.pt`, TensorBoard data, and
+`live_training_telemetry.json`; it verifies eight UAVs, predicted
+delivered-packet knowledge with uncertainty, CUDA network execution, and
+CPU-side OSQP CBF.
+
+It reached 100,224 transitions and 261 updates.  Training CBF telemetry
+retains one `solved inaccurate` emergency fallback in 12,528 decisions at
+decision 4,222 (environment 1 step 10; obstacle center `[22.0, 70.0, 30.0]`;
+unchanged 20,000-iteration cap; 0.05533530001412146 seconds; primal/dual
+residuals 0.0011686880877244399/0.0000192246889227154).  Full eight-UAV
+positions, velocities, delivered-packet validity/uncertainty, and obstacle
+context remain in final telemetry and the summary.  Initial and final
+evaluation telemetry each retain zero emergency fallbacks in 160 decisions.
+No slack penalty, iteration cap, solve-time limit, tolerance, uncertainty
+margin, or other safety parameter changed.
+
+The intended dedicated launcher stdout/stderr logs did not materialize because
+the parent output directory did not exist at launch.  A subsequent read-only
+`Get-Content` check of the absent stderr path and a later 55-second read-only
+completion check both exited nonzero; neither wrote or invalidated an
+experiment artifact.  An earlier preflight import used nonexistent
+`load_graph_mappo_config`, failed before launch, and likewise created no
+experiment artifact; correct loading subsequently validated the frozen config.
+Do not recreate missing logs or repeat the seed.  This is a seed-local
+diagnostic artifact, not a fallback-rate, safety, scalability, or method-effect
+claim.  Next: after confirming no Python process remains, train seed
+`20260720` serially with the identical 8-UAV configuration, preserving every
+event before any 8-UAV evaluation or ablation task.

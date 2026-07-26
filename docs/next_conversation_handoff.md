@@ -6,6 +6,23 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- Commit pending at this handoff records the completed first 8-UAV
+  uncertainty-aware predictive seed `20260719`.  Its final checkpoint,
+  summary, TensorBoard data, and live telemetry are retained in
+  `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260719`.
+  It reached 100,224 transitions and 261 updates at launch revision `07d0f47`
+  with frozen config SHA-256
+  `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+  Training telemetry retains one `solved inaccurate` fallback in 12,528 CBF
+  decisions (index 4,222 at the unchanged 20,000-iteration cap); initial and
+  final evaluation telemetry each retain zero in 160 decisions.  The intended
+  launcher logs remain absent and must not be recreated.  The known preflight
+  import and subsequent read-only log/completion checks failed without
+  generating or overwriting any experiment artifact; retain them as excluded
+  observability errors.  This is seed-local diagnostic evidence only.  Before
+  action, verify the documentation commit and no Python process, then train
+  `20260720` serially with the identical 8-UAV protocol; do not start the
+  8-UAV evaluation matrix or ablations first.
 - The matched 8-UAV uncertainty-aware predictive protocol has begun with its
   first independent serial CUDA seed `20260719`, PID `43996` at health check.
   Command: `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
