@@ -1507,3 +1507,26 @@ performance, scalability, or method-effect result.  Next: verify no Python
 process remains, train seed `20260722` serially with the identical frozen
 8-UAV protocol, and defer evaluation/ablations until all five base seeds are
 retained.
+
+## AAMAS 2027 - fourth 8-UAV uncertainty-aware predictive seed retained (2026-07-26)
+
+The fourth independent 8-UAV uncertainty-aware predictive GraphMAPPO job
+completed the frozen CUDA command for seed `20260722` with
+`configs/rl/dynamic_graph_8uav.yaml`, `--device cuda`, `--num-uavs 8`,
+`--graph-mode uncertainty_predictive_graph`, 100,000 requested steps, and
+output `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260722`.
+It launched at revision `056b6d3` with configuration SHA-256
+`9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+Final checkpoint, summary, TensorBoard, live telemetry, and launcher logs are
+retained; CUDA network execution and CPU-side OSQP CBF remain verified.
+
+It reached 100,224 transitions and 261 updates.  Final telemetry retains two
+`solved inaccurate` training fallbacks in 12,528 CBF decisions: indices 10,468
+and 11,541, each at the unchanged 20,000-iteration cap (0.04474149999441579
+and 0.036341500002890825 seconds).  Full contexts remain in summary and live
+telemetry.  Initial/final evaluation telemetry each retain zero fallbacks in
+160 decisions.  Stderr has four notification lines, rather than a one-to-one
+mapping to the two telemetry events; preserve both sources without merging,
+imputation, exclusion, or parameter change.  This is seed-local diagnostics,
+not a scale, safety, fallback-rate, performance, or method-effect result.
+Next: serially train final seed `20260723` under the identical protocol.
