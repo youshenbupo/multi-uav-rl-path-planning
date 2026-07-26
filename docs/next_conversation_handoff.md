@@ -43,6 +43,21 @@ processes before relying on any status below.
   final artifacts and every event, document the full five-seed training set,
   then run the frozen six-scenario 20-episode 5-UAV evaluation matrix before
   8-UAV work or ablations.
+- During active seed `20260723` monitoring, the dedicated stderr log retained
+  one `CBF filter emergency fallback: solve_time_limit` notification.  A
+  subsequent raw-telemetry read at 42,560 transitions instead retained one
+  `solved inaccurate` event at decision 7,308 (environment 1 step 13,
+  obstacle `[22.0, 76.0, 30.0]`, unchanged 20,000-iteration cap,
+  0.04082990001188591 seconds, primal residual 0.0002440071509879367, dual
+  residual 0.0000122640447944475); its telemetry status counts were 8,511
+  `solved` and one `solved inaccurate`.  Do not infer that the stderr
+  `solve_time_limit` is the same event, or discard either record: preserve the
+  raw stderr and
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260723/live_training_telemetry.json`
+  (observed SHA-256
+  `107BABDBC2A0D9AB89A101DF699826F5180771CE326A63C63266B409A6A80325`) and
+  resolve the discrepancy only from final retained artifacts/replay.  Do not
+  alter any solver or safety parameter.
 - Commit `0310300` is pushed to `origin/codex/phase14-dynamic-world` and records completed third 5-UAV
   uncertainty-aware predictive seed `20260721`.  Its final checkpoint,
   summary, TensorBoard data, live telemetry, and dedicated launcher logs are
