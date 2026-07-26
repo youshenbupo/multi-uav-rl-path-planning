@@ -6,6 +6,22 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- After confirming no prior Python process and absent target paths, the sole
+  active serial CUDA job is final 8-UAV uncertainty-aware predictive seed
+  `20260723`, PID `54264` at health check.  Command:
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_8uav.yaml --device cuda --seed 20260723
+  --num-uavs 8 --graph-mode uncertainty_predictive_graph --total-steps 100000
+  --output-dir
+  outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260723`.
+  It was launched at revision `fd6142c` with frozen config SHA-256
+  `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+  Launcher logs, live telemetry, and TensorBoard output are retained.  At
+  health check it had 8,064 transitions and no emergency event in 1,008
+  training CBF decisions; this is in-progress only.  Do not start another job,
+  change safety settings, or begin ablations.  On completion, verify the final
+  checkpoint/summary and all events, then run the frozen six-scenario 20-episode
+  8-UAV evaluation matrix before independent ablations.
 - Commit `d27f115` records completed fourth 8-UAV uncertainty-aware predictive
   seed `20260722`: 100,224 transitions, 261 updates, final checkpoint,
   summary, TensorBoard, telemetry, and launcher logs retained under
