@@ -6,7 +6,7 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
-- Commit pending at this handoff records completed fourth 5-UAV
+- Commit `de6f286` records completed fourth 5-UAV
   uncertainty-aware predictive seed `20260722`.  Its final checkpoint,
   summary, TensorBoard data, live telemetry, and dedicated launcher logs are
   retained in
