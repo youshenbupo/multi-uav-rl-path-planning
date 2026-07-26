@@ -217,6 +217,14 @@
   checks created no experiment result.  Do not regenerate the missing logs,
   treat this one seed as a scale-level result, or tune CBF parameters in
   response.
+- The second retained 8-UAV uncertainty-aware predictive seed has complete
+  checkpoint, summary, TensorBoard, live telemetry, and launcher logs.  Its
+  final telemetry retains sixteen `solve_time_limit` events in 12,528 training
+  CBF decisions, while retained stderr has 32 notification lines that do not
+  map one-to-one to those events.  Preserve both raw sources under
+  `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260720/`;
+  do not merge, impute, drop, or use this single seed for a scale-level
+  conclusion.  The observed numerical events do not authorize CBF tuning.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.

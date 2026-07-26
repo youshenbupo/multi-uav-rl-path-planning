@@ -6,6 +6,23 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- Commit pending at this handoff records completed second 8-UAV
+  uncertainty-aware predictive seed `20260720`.  Its checkpoint, summary,
+  TensorBoard data, live telemetry, and dedicated launcher logs are retained
+  in `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260720`.
+  It reached 100,224 transitions and 261 updates at launch revision `a99f7bb`
+  with frozen config SHA-256
+  `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+  Final training telemetry retains sixteen `solve_time_limit` fallbacks in
+  12,528 decisions (indices 282, 1121, 1721, 2641, 3922, 3924, 3961, 3962,
+  3964, 4162, 5881, 5882, 6001, 8042, 8044, 11681); initial and final
+  evaluation telemetry each retain zero in 160 decisions.  The dedicated stderr
+  has 32 emergency-notification lines that do not map one-to-one to telemetry;
+  preserve this discrepancy without merging, imputation, exclusion, or
+  parameter change.  This is seed-local diagnostic evidence only.  Before
+  action, verify the documentation commit and no Python process, then train
+  seed `20260721` serially with the same 8-UAV protocol; do not begin 8-UAV
+  evaluation or ablations first.
 - After confirming no prior Python process remained and target paths were
   absent, the sole active serial CUDA job is 8-UAV uncertainty-aware predictive
   seed `20260720`, PID `35344` at health check.  Command:

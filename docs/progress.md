@@ -1437,3 +1437,40 @@ diagnostic artifact, not a fallback-rate, safety, scalability, or method-effect
 claim.  Next: after confirming no Python process remains, train seed
 `20260720` serially with the identical 8-UAV configuration, preserving every
 event before any 8-UAV evaluation or ablation task.
+
+## AAMAS 2027 - second 8-UAV uncertainty-aware predictive seed retained (2026-07-26)
+
+The second independent 8-UAV uncertainty-aware predictive GraphMAPPO job
+completed the frozen CUDA command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_8uav.yaml --device cuda --seed 20260720
+--num-uavs 8 --graph-mode uncertainty_predictive_graph --total-steps 100000
+--output-dir
+outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260720`.
+It was launched at Git revision `a99f7bb` with configuration SHA-256
+`9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+Its output directory retains `summary.json`,
+`checkpoints/graph_mappo_final.pt`, TensorBoard data, live telemetry, and
+dedicated launcher stdout/stderr.  The final summary confirms eight UAVs,
+predicted delivered-packet knowledge with uncertainty, CUDA network execution,
+and CPU-side OSQP CBF.
+
+It reached 100,224 transitions and 261 updates.  Final training telemetry
+retains sixteen `solve_time_limit` CBF emergency fallbacks in 12,528 decisions
+at indices `282, 1121, 1721, 2641, 3922, 3924, 3961, 3962, 3964, 4162, 5881,
+5882, 6001, 8042, 8044, 11681`; their complete eight-UAV contexts and exact
+residuals remain in `summary.json` and `live_training_telemetry.json`.  The
+maximum retained solve time is 0.10106859999359585 seconds and the maximum
+observed iterations are 17,750; both are descriptive telemetry, not altered
+settings.  Initial and final evaluation telemetry each retain zero emergency
+fallbacks in 160 decisions.  The dedicated stderr retains 32 emergency
+notification lines, which do not map one-to-one to the sixteen telemetry
+events.  Both raw sources are preserved as an explicit event-accounting
+discrepancy: they are not merged, imputed, or silently excluded.
+
+No slack penalty, iteration cap, solve-time limit, tolerance, uncertainty
+margin, or other safety parameter changed.  This is seed-local diagnostic
+evidence only, not a fallback-rate, safety, performance, scalability, or
+method-effect result.  Next: verify no Python process remains, then train seed
+`20260721` serially under the identical frozen 8-UAV configuration; defer
+8-UAV evaluation and all ablations until five base seeds are retained.
