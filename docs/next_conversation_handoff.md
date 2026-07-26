@@ -43,6 +43,17 @@ processes before relying on any status below.
   completion, verify checkpoint/summary and retained events, document it, then
   run final seed `20260723` serially before any 5-UAV evaluation, 8-UAV run,
   ablation, or aggregate claim.
+- Continued seed `20260722` monitoring retained one CBF emergency fallback:
+  `maximum iterations reached` at decision 4,167, environment 0 step 3, with
+  dynamic-obstacle center `[22.0, 56.0, 30.0]`, unchanged 20,000-iteration
+  cap, 0.049038999975891784 seconds, primal residual 0.005824136094528052, and
+  dual residual 0.0000491939606585269.  The full context remains in
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260722/live_training_telemetry.json`
+  (observed SHA-256
+  `D5718BBBCA5C5696C4756B340F10D73CB7664859CE3FED5EA9AD1247B28E6001` at
+  33,920 transitions) and the retained stderr log.  Preserve the event and do
+  not alter slack, iteration/solve-time limits, tolerances, or other safety
+  settings; it is not a safety, performance, or fallback-rate conclusion.
 - Commit `7c0fbc8` is pushed to `origin/codex/phase14-dynamic-world`; it
   records the completed second 5-UAV uncertainty-aware predictive seed
   `20260720`.  Its final checkpoint, summary, TensorBoard data, live
