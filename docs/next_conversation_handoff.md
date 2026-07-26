@@ -35,11 +35,12 @@ processes before relying on any status below.
   then continue serially through seeds `20260721`--`20260723` before 5-UAV
   evaluation, 8-UAV work, or ablation arms.
 - During active seed `20260720` monitoring, live telemetry and dedicated stderr
-  retained two `solved inaccurate` CBF emergency events at decision indices
-  14,582 and 14,652, each at the unchanged 20,000-iteration cap.  The process
-  remained live; preserve all recorded contexts and final summary as
-  authoritative.  Do not change slack, iteration cap, solve-time limit,
-  tolerances, or any other safety setting in response.
+  retained three CBF emergency events: `solved inaccurate` at decision indices
+  14,582 and 14,652 (each at the unchanged 20,000-iteration cap), then
+  `solve_time_limit` at decision 17,555 (0.1006264 seconds and 11,265
+  iterations).  The process remained live; preserve all recorded contexts and
+  final summary as authoritative.  Do not change slack, iteration cap,
+  solve-time limit, tolerances, or any other safety setting in response.
 - Commit `7d6486e` is pushed to `origin/codex/phase14-dynamic-world`; it
   freezes validated 5-UAV and 8-UAV uncertainty-aware predictive scale
   configurations.  The matched 3-UAV five-seed protocol is complete for MLP,
