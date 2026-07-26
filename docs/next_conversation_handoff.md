@@ -24,6 +24,25 @@ processes before relying on any status below.
   scalability, or fallback-rate result.  Before acting, verify the commit and
   no Python process, then start final seed `20260723` serially with the same
   frozen command; do not begin evaluation, 8-UAV work, or ablations first.
+- After confirming no prior Python process remained and target paths were
+  absent, the sole active serial CUDA job is final 5-UAV uncertainty-aware
+  predictive seed `20260723`, PID `9180` at its health check.  Command:
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_5uav.yaml --device cuda --seed 20260723
+  --num-uavs 5 --graph-mode uncertainty_predictive_graph --total-steps 100000
+  --output-dir
+  outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260723`.
+  It was launched at revision `31ff7cb` with configuration SHA-256
+  `28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+  Its unique launcher logs are
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260723_launcher_stdout.log`
+  and `_launcher_stderr.log`.  At health check it had 8,960 transitions,
+  TensorBoard and live telemetry output, and no emergency events in 1,792
+  training CBF decisions.  This is an in-progress observation, not a result.
+  Do not start another job or change safety parameters.  On completion, verify
+  final artifacts and every event, document the full five-seed training set,
+  then run the frozen six-scenario 20-episode 5-UAV evaluation matrix before
+  8-UAV work or ablations.
 - Commit `0310300` is pushed to `origin/codex/phase14-dynamic-world` and records completed third 5-UAV
   uncertainty-aware predictive seed `20260721`.  Its final checkpoint,
   summary, TensorBoard data, live telemetry, and dedicated launcher logs are
