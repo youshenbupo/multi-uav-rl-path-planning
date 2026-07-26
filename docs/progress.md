@@ -1159,3 +1159,35 @@ or generalization.  Next: independently train the first 5-UAV
 uncertainty-aware predictive seed with the frozen 5-UAV configuration, retain
 all CBF events, and continue serially before beginning the corresponding 8-UAV
 matrix or independent ablation arms.
+
+## AAMAS 2027 - first 5-UAV uncertainty-aware predictive seed retained (2026-07-26)
+
+The first independent 5-UAV uncertainty-aware predictive GraphMAPPO job
+completed the 100,000-transition CUDA command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_5uav.yaml --device cuda --seed 20260719
+--num-uavs 5 --graph-mode uncertainty_predictive_graph --total-steps 100000
+--output-dir
+outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260719`.
+It was launched at Git revision `7d6486e` with configuration SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+Its output directory retains `summary.json`, final checkpoint
+`checkpoints/graph_mappo_final.pt`, TensorBoard data, and live telemetry.  The
+summary confirms five UAVs, predicted delivered-packet knowledge and
+uncertainty input, CUDA network execution, and CPU-side OSQP CBF.
+
+The run reached 100,160 transitions and 313 updates.  Retained CBF telemetry
+has zero emergency fallbacks in 20,032 training decisions, zero in 160 initial
+evaluation decisions, and zero in 160 final evaluation decisions; no safety
+parameter changed.  This seed-local diagnostic artifact does not prove a
+fallback rate, safety property, scalability result, or method effect.
+
+The intended launcher stdout/stderr redirection files did not materialize,
+although the live training process, `live_training_telemetry.json`, summary,
+checkpoint, and TensorBoard outputs are retained.  A subsequent read-only
+`Get-Item` check for those absent log files returned nonzero and wrote no data;
+this is an observability/post-processing gap, not an invalidated training
+artifact.  Do not recreate or overwrite the missing logs.  Next: verify no
+Python process remains and train seed `20260720` serially with the identical
+5-UAV frozen configuration, retaining all outputs before any scale evaluation,
+aggregation, 8-UAV run, or ablation claim.

@@ -149,6 +149,12 @@
   seeds, six-scenario JSONL matrices, CBF replay, and separately trained
   critical ablations remain required at each scale before scalability or
   ablation claims.
+- The first retained 5-UAV uncertainty-aware predictive seed has final
+  checkpoint, summary, TensorBoard, and live telemetry, but its intended
+  launcher stdout/stderr redirection files did not materialize.  This limits
+  launcher-level observability only; do not regenerate those missing files or
+  mistake the one seed's CBF telemetry for a scale-level fallback or safety
+  result.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.
