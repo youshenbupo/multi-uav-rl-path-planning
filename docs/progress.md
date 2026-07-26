@@ -1266,3 +1266,39 @@ property, scalability result, or method-effect claim.  Next: confirm no Python
 training process remains, then train seed `20260722` serially using the
 identical frozen configuration; keep 5-UAV evaluation, 8-UAV work, and
 ablation arms deferred until the five-seed 5-UAV training set is complete.
+
+## AAMAS 2027 - fourth 5-UAV uncertainty-aware predictive seed retained (2026-07-26)
+
+The fourth independent 5-UAV uncertainty-aware predictive GraphMAPPO job
+completed the frozen CUDA command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_5uav.yaml --device cuda --seed 20260722
+--num-uavs 5 --graph-mode uncertainty_predictive_graph --total-steps 100000
+--output-dir
+outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260722`.
+It was launched at Git revision `0310300` with configuration SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+`summary.json`, `checkpoints/graph_mappo_final.pt`, TensorBoard output, live
+telemetry, and dedicated launcher stdout/stderr are retained under the seed
+directory and sibling `...seed_20260722_launcher_{stdout,stderr}.log` paths.
+The final summary verifies five UAVs, uncertainty-aware predicted delivered
+packet knowledge, CUDA network execution, and CPU-side OSQP CBF.
+
+It reached 100,160 transitions and 313 updates.  Training telemetry retains
+two emergency fallbacks in 20,032 CBF decisions: `maximum iterations reached`
+at decision 4,167 (environment 0 step 3; 0.049038999975891784 seconds;
+primal/dual residuals 0.005824136094528052/0.0000491939606585269) and `solved
+inaccurate` at decision 9,017 (environment 0 step 8;
+0.051416900008916855 seconds; primal/dual residuals
+0.0014887963841878208/0.00000338793323094724).  Their full positions,
+velocities, delivered-packet validity/uncertainty, and dynamic-obstacle
+contexts remain in the summary and live telemetry.  Initial and final
+evaluation telemetry each retain zero emergency fallbacks in 160 decisions.
+No slack penalty, iteration cap, solve-time limit, tolerance, or other safety
+parameter changed.
+
+This seed-local diagnostic artifact does not establish a fallback-rate,
+safety, scalability, or method-effect result.  Next: confirm no Python process
+remains and train final seed `20260723` serially under the identical frozen
+configuration.  Defer 5-UAV evaluation, 8-UAV work, and ablation arms until
+all five 5-UAV training artifacts are retained and documented.
