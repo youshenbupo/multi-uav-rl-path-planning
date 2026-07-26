@@ -27,6 +27,15 @@ processes before relying on any status below.
   training/evaluation job, modify any CBF setting, or start ablations.  On
   completion, verify final artifacts and every event, document the seed, then
   continue serially with seeds `20260721`--`20260723` before 8-UAV evaluation.
+- Continued monitoring at 33,792 transitions retained ten `solve_time_limit`
+  telemetry events (decision indices 282, 1121, 1721, 2641, 3922, 3924, 3961,
+  3962, 3964, and 4162), each at the unchanged 0.1-second solve limit; full
+  contexts and exact residuals/iterations remain in the raw telemetry.  The
+  same retained stderr log had 21 emergency-notification lines at that point.
+  Do not assume a one-to-one mapping, merge, or discard either raw source:
+  preserve the explicit count discrepancy for final audit/replay, without
+  altering the solver protocol.  Telemetry SHA-256 at this observation is
+  `F8A908F884CBEED91BD79439CF0BD590C4F78CEAA7A668BC284F61D5331C596B`.
 - Commit `2e5028e` records the completed first 8-UAV
   uncertainty-aware predictive seed `20260719`.  Its final checkpoint,
   summary, TensorBoard data, and live telemetry are retained in
