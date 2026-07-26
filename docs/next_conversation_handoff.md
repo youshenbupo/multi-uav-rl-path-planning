@@ -36,6 +36,16 @@ processes before relying on any status below.
   preserve the explicit count discrepancy for final audit/replay, without
   altering the solver protocol.  Telemetry SHA-256 at this observation is
   `F8A908F884CBEED91BD79439CF0BD590C4F78CEAA7A668BC284F61D5331C596B`.
+- At 58,368 transitions, telemetry had thirteen `solve_time_limit` events
+  (adding indices 5881, 5882, and 6001 to the preceding ten) while stderr had
+  28 notification lines.  The three added events used the same unchanged
+  0.1-second limit and have complete raw contexts; their respective
+  primal/dual residuals are 0.2613576275084453/10.318421165695543,
+  0.21177180139506407/3.5120744819073146, and
+  0.12085665689688246/1.1663214601318403.  Retain the telemetry snapshot
+  (SHA-256 `8843C8CF240FD370556C50243EA724FB2A447F3AB6721DAD9255B34BD05CC770`)
+  and raw stderr; these diagnostic observations do not justify a protocol
+  change or numerical conclusion.
 - Commit `2e5028e` records the completed first 8-UAV
   uncertainty-aware predictive seed `20260719`.  Its final checkpoint,
   summary, TensorBoard data, and live telemetry are retained in
