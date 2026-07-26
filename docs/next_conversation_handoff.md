@@ -6,7 +6,7 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
-- Commit pending records completed fourth 8-UAV uncertainty-aware predictive
+- Commit `d27f115` records completed fourth 8-UAV uncertainty-aware predictive
   seed `20260722`: 100,224 transitions, 261 updates, final checkpoint,
   summary, TensorBoard, telemetry, and launcher logs retained under
   `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260722`.
