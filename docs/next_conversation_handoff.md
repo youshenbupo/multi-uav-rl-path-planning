@@ -54,6 +54,16 @@ processes before relying on any status below.
   33,920 transitions) and the retained stderr log.  Preserve the event and do
   not alter slack, iteration/solve-time limits, tolerances, or other safety
   settings; it is not a safety, performance, or fallback-rate conclusion.
+- A second active-run event is retained at decision 9,017: `solved
+  inaccurate`, environment 0 step 8, obstacle center `[22.0, 66.0, 30.0]`,
+  unchanged 20,000-iteration cap, 0.051416900008916855 seconds, primal
+  residual 0.0014887963841878208, and dual residual
+  0.00000338793323094724.  At the later 52,160-transition observation,
+  telemetry retains both events; the full raw context remains in the same
+  telemetry file (observed SHA-256
+  `1136A8182F233F664CE630E0AF1972FE6B773DD7F6E0193D1106572C0966B18A`) and
+  stderr log.  This remains diagnostic-only and does not justify a solver or
+  safety-margin change.
 - Commit `7c0fbc8` is pushed to `origin/codex/phase14-dynamic-world`; it
   records the completed second 5-UAV uncertainty-aware predictive seed
   `20260720`.  Its final checkpoint, summary, TensorBoard data, live
