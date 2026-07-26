@@ -166,6 +166,15 @@
   These seed-local diagnostics neither establish a 5-UAV fallback rate nor a
   safety/scalability result, and they must not motivate any safety-parameter
   change.
+- The third retained 5-UAV uncertainty-aware predictive seed has complete
+  summary, checkpoint, TensorBoard, live telemetry, and dedicated launcher
+  logs.  Its 20,032 training CBF decisions retain two `solved inaccurate`
+  emergency fallbacks at the unchanged 20,000-iteration cap; initial and final
+  training-script evaluations each retain zero in 160 decisions.  All raw
+  contexts remain in
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260721/`.
+  This seed-local record cannot establish a scale-level fallback rate, safety,
+  or scalability result and does not authorize a safety-parameter change.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.

@@ -6,6 +6,24 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- Commit pending at this handoff records completed third 5-UAV
+  uncertainty-aware predictive seed `20260721`.  Its final checkpoint,
+  summary, TensorBoard data, live telemetry, and dedicated launcher logs are
+  retained under
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260721`
+  and its sibling launcher-log paths.  It reached 100,160 transitions and 313
+  updates at its launch revision `7c0fbc8` and the frozen 5-UAV configuration
+  SHA-256 `28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+  Its training telemetry retains two `solved inaccurate` emergency fallbacks
+  in 20,032 decisions, both at the unchanged 20,000-iteration cap (indices
+  4,753 and 6,341); complete contexts are in `summary.json` and
+  `live_training_telemetry.json`.  Initial and final evaluation telemetry each
+  have zero fallbacks in 160 decisions.  No safety setting changed.  This is
+  seed-local diagnostic evidence only, not a performance, safety,
+  scalability, or fallback-rate result.  Before acting, verify the commit and
+  no remaining Python process, then start seed `20260722` serially using the
+  identical command pattern; do not start any evaluation, 8-UAV, or ablation
+  job first.
 - Commit `7c0fbc8` is pushed to `origin/codex/phase14-dynamic-world`; it
   records the completed second 5-UAV uncertainty-aware predictive seed
   `20260720`.  Its final checkpoint, summary, TensorBoard data, live
