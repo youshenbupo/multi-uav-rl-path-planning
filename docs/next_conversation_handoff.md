@@ -33,6 +33,12 @@ processes before relying on any status below.
   its checkpoint/summary and all CBF events, document the seed, then proceed
   serially through the remaining 5-UAV seeds before 5-UAV evaluation, 8-UAV
   work, or any independent ablation arm.
+- The intended 5-UAV launcher stdout/stderr redirection paths had not
+  materialized at the first health checks, while the live `multiuav_rl` Python
+  process and its output-directory `live_training_telemetry.json` were present.
+  This is a retained launch-observability gap, not grounds to restart or
+  overwrite the active job.  Preserve its available output telemetry and record
+  the final summary/checkpoint or any failure state exactly as produced.
 - Commit `b09be13` is pushed to `origin/codex/phase14-dynamic-world`; it
   records completion evidence for uncertainty-aware predictive seed
   `20260722`.  Its final checkpoint and `summary.json` are present under
