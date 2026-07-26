@@ -6,6 +6,31 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- Commit pending at this handoff records the completed 5-UAV uncertainty-aware
+  predictive five-seed training/evaluation/replay artifact set.  The five
+  final checkpoints for seeds `20260719`--`20260723` each have all six frozen
+  20-episode scenario cells under `outputs/core_5uav_evaluations/`, yielding
+  30 directories and 600 raw JSONL records.  The completeness audit found
+  exactly 20 parseable nonblank records in every cell.  The serial CUDA
+  evaluator was launched at revision `bbb871a` with 5-UAV config SHA-256
+  `28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`; its
+  launcher logs are
+  `outputs/core_5uav_evaluations/uncertainty_predictive_graph_5uav_5seed_eval_20260726_launcher_stdout.log`
+  and `_launcher_stderr.log` (the latter retains a harmless first-module
+  CLIXML notice).  Scan of all 600 raw records found zero evaluation CBF
+  emergency events.  The valid all-source replay is
+  `outputs/cbf_diagnostics/uncertainty_predictive_graph_5uav_5seed_replay_20260726.jsonl`
+  plus `.summary.json`; it retains eight source events with zero replay errors
+  under unchanged 20,000-iteration/0.1-second/penalty-100/uncertainty-gain-0.5/
+  cap-5 values.  The seed-`20260723` stderr-only `solve_time_limit`
+  notification remains an explicit unreplayed accounting discrepancy, not a
+  basis for imputation/exclusion or parameter tuning.  A later read-only check
+  used the wrong `.jsonl.summary.json` companion name and failed after the
+  valid replay; it created no artifact and overwrote nothing.  This complete
+  5-UAV artifact set is not a performance, safety, fallback-rate, scale, or
+  method-effect result.  Next: verify this documentation commit, then start
+  the independent 8-UAV uncertainty-aware predictive five-seed training
+  protocol serially; defer ablations until its matched base artifacts exist.
 - The frozen 5-UAV uncertainty-aware predictive checkpoint-evaluation matrix
   is active.  After confirming no training Python process and that all 30
   target directories were absent, a hidden serial launcher began all five

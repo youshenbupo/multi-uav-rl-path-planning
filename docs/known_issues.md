@@ -191,9 +191,21 @@
   `solve_time_limit` notification that is not separately represented by the
   final telemetry.  Both sources must remain preserved and be reported as an
   event-accounting discrepancy; do not merge, impute, silently exclude, or
-  tune the CBF solver in response.  Five-seed 5-UAV training is complete, but
-  its 30-cell 20-episode evaluation JSONL matrix and all-source CBF replay are
-  still required before any scale-level fallback, safety, or performance claim.
+  tune the CBF solver in response.  The five-seed 5-UAV evaluation matrix and
+  all-source CBF replay are now retained, but neither permits a scale-level
+  fallback, safety, or performance claim.
+- The 5-UAV uncertainty-aware predictive five-seed evaluation matrix and CBF
+  replay are now retained (30 valid 20-episode cells; 600 parseable raw JSONL
+  records; eight replayed source events and zero replay errors), but they are
+  not evidence of a scale-level fallback rate, safety, performance, or method
+  effect.  The seed-`20260723` stderr-only `solve_time_limit` notification
+  remains outside replay because no distinct telemetry context exists; retain
+  it explicitly rather than imputing or excluding it.  A read-only
+  post-processing check after the successful replay used the wrong companion
+  filename (`.jsonl.summary.json` rather than `.summary.json`) and failed;
+  neither valid replay artifact was overwritten.  The independent 8-UAV
+  five-seed/matrix/replay protocol and separately trained critical ablations
+  remain required before any scalability or ablation conclusion.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.

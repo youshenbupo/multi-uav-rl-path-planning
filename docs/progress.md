@@ -1342,3 +1342,57 @@ evaluator to run every seed across six scenarios for 20 episodes per unique
 cell, retain raw JSONL, validate completeness, and replay all CBF evidence
 without changing solver values.  Only then may 8-UAV work or separately
 trained ablations begin.
+
+## AAMAS 2027 - 5-UAV uncertainty-aware predictive evaluation and CBF replay retained (2026-07-26)
+
+All five retained 5-UAV uncertainty-aware predictive checkpoints now have the
+frozen six-scenario matrix: seeds `20260719`--`20260723`, scenarios
+`nominal`, `delay_only`, `loss_only`, `dynamic_only`, `combined`, and
+`ood_communication_obstacle`, 20 episodes per unique cell.  A hidden serial
+launcher ran each invocation as
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+scripts/evaluate_core_checkpoint.py --family graph_mappo --config
+configs/rl/dynamic_graph_5uav.yaml --checkpoint
+outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_<seed>/checkpoints/graph_mappo_final.pt
+--output-dir outputs/core_5uav_evaluations --experiment-name
+core_5uav_uncertainty_predictive_graph_seed_<seed>_<scenario> --seed <seed>
+--num-uavs 5 --episodes 20 --scenario <scenario> --device cuda`, serially, at
+launch revision `bbb871a` and configuration SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+Network inference used CUDA and OSQP CBF remained CPU-side.  Launcher output
+is retained in
+`outputs/core_5uav_evaluations/uncertainty_predictive_graph_5uav_5seed_eval_20260726_launcher_stdout.log`
+and `_launcher_stderr.log`; stderr contains the retained harmless PowerShell
+first-module CLIXML notice.
+
+The post-run audit found exactly 30 uniquely named directories, each with
+`summary.json` and `raw_results/seed_<seed>.jsonl`.  Every JSONL file has
+exactly 20 nonblank, JSON-parseable records: 600 total, zero malformed cells.
+A direct scan of all 600 raw records found zero evaluation
+`cbf.emergency_events`.  This is completeness and raw-protocol evidence only,
+not a safety, fallback-rate, performance, generalization, or scalability
+claim.
+
+The append-safe replay output is
+`outputs/cbf_diagnostics/uncertainty_predictive_graph_5uav_5seed_replay_20260726.jsonl`
+with companion
+`outputs/cbf_diagnostics/uncertainty_predictive_graph_5uav_5seed_replay_20260726.summary.json`.
+It consumed five training summaries, 30 evaluation summaries, and 30 raw
+evaluation JSONL files under unchanged values: 20,000 iterations, 0.1-second
+solve limit, slack penalty 100.0, uncertainty-margin gain 0.5, and cap 5.0.
+The valid replay retains eight source events and zero replay errors.  It cannot
+replay the separately retained seed-`20260723` stderr-only `solve_time_limit`
+notification because that notification lacks a distinct telemetry event
+context; that unresolved accounting discrepancy remains reported rather than
+imputed or excluded.
+
+The replay executable itself succeeded.  A later read-only post-processing
+check incorrectly sought a companion named `.jsonl.summary.json`, then exited
+nonzero after the valid JSONL and actual `.summary.json` companion already
+existed.  It created no new result, overwrote nothing, and is retained as an
+excluded post-processing error.  No solver, safety margin, or raw telemetry
+changed.  The five-seed 5-UAV training/evaluation/replay protocol is complete
+as an artifact set, but it does not license a method comparison or any scale
+claim.  Next: begin the independently trained 8-UAV uncertainty-aware
+predictive five-seed protocol, then its matched matrix/replay, before any
+separately trained key ablation.
