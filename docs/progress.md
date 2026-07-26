@@ -1474,3 +1474,36 @@ evidence only, not a fallback-rate, safety, performance, scalability, or
 method-effect result.  Next: verify no Python process remains, then train seed
 `20260721` serially under the identical frozen 8-UAV configuration; defer
 8-UAV evaluation and all ablations until five base seeds are retained.
+
+## AAMAS 2027 - third 8-UAV uncertainty-aware predictive seed retained (2026-07-26)
+
+The third independent 8-UAV uncertainty-aware predictive GraphMAPPO job
+completed the frozen CUDA command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_8uav.yaml --device cuda --seed 20260721
+--num-uavs 8 --graph-mode uncertainty_predictive_graph --total-steps 100000
+--output-dir
+outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260721`.
+It was launched at Git revision `2fb5a0e` with configuration SHA-256
+`9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+Its output directory retains the final checkpoint, summary, TensorBoard data,
+live telemetry, and dedicated launcher logs; the summary verifies eight UAVs,
+predicted delivered-packet knowledge with uncertainty, CUDA network execution,
+and CPU-side OSQP CBF.
+
+It reached 100,224 transitions and 261 updates.  Final training telemetry
+retains five `solve_time_limit` emergency fallbacks in 12,528 CBF decisions at
+indices `3441, 5081, 5082, 5084, 5122`; full eight-UAV contexts, solve times,
+iterations, and residuals remain in the summary and telemetry.  Initial and
+final evaluation telemetry each retain zero emergency fallbacks in 160
+decisions.  Dedicated stderr retains six notification lines, rather than a
+one-to-one mapping to the five telemetry events.  Preserve this explicit raw
+source discrepancy without merging, imputation, exclusion, or protocol change.
+No slack penalty, iteration cap, solve-time limit, tolerance, uncertainty
+margin, or other safety parameter changed.
+
+This is a seed-local diagnostic artifact, not a fallback-rate, safety,
+performance, scalability, or method-effect result.  Next: verify no Python
+process remains, train seed `20260722` serially with the identical frozen
+8-UAV protocol, and defer evaluation/ablations until all five base seeds are
+retained.
