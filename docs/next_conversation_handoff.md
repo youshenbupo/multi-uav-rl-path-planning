@@ -6,6 +6,34 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-23, supersedes stale status below)
 
+- Commit `8899c15` is pushed to `origin/codex/phase14-dynamic-world`; it
+  records the first completed 5-UAV uncertainty-aware predictive seed
+  `20260719`.  Its final checkpoint, summary, TensorBoard data, and live
+  telemetry are retained under
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260719`.
+  It reached 100,160 transitions and 313 updates; retained emergency-fallback
+  counts are zero in 20,032 training decisions, 160 initial-evaluation
+  decisions, and 160 final-evaluation decisions.  This is one seed-local
+  diagnostic artifact, not a safety, performance, scalability, or
+  fallback-rate result.  Its intended launcher stdout/stderr files remain
+  absent and must not be recreated; live telemetry and final artifacts remain
+  the available audit evidence.
+- After confirming no Python training process remained, the sole active serial
+  CUDA job is 5-UAV uncertainty-aware predictive seed `20260720`, PID `22948`
+  at its initial health check.  Command:
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_5uav.yaml --device cuda --seed 20260720
+  --num-uavs 5 --graph-mode uncertainty_predictive_graph --total-steps 100000
+  --output-dir
+  outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260720`.
+  It was launched at revision `8899c15` with configuration SHA-256
+  `28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+  Its unique launcher logs are present at
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260720_launcher_stdout.log`
+  and `_launcher_stderr.log`.  Do not start another training job.  On
+  completion, verify summary/checkpoint and every CBF event, document the seed,
+  then continue serially through seeds `20260721`--`20260723` before 5-UAV
+  evaluation, 8-UAV work, or ablation arms.
 - Commit `7d6486e` is pushed to `origin/codex/phase14-dynamic-world`; it
   freezes validated 5-UAV and 8-UAV uncertainty-aware predictive scale
   configurations.  The matched 3-UAV five-seed protocol is complete for MLP,
