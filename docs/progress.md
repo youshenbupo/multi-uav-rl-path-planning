@@ -1069,3 +1069,62 @@ cell, unique directory and raw JSONL per cell), validate all 600 JSONL records,
 then replay every retained training and evaluation CBF event under unchanged
 solver settings.  Aggregate or cross-method conclusions remain prohibited
 until those steps are complete.
+
+## AAMAS 2027 - uncertainty-aware predictive unified evaluation and CBF replay complete (2026-07-26)
+
+All five uncertainty-aware predictive final checkpoints now have the frozen
+six-scenario matrix: seeds `20260719`--`20260723`, scenarios `nominal`,
+`delay_only`, `loss_only`, `dynamic_only`, `combined`, and
+`ood_communication_obstacle`, with 20 episodes per cell.  Every invocation
+used `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+scripts/evaluate_core_checkpoint.py --family graph_mappo --config
+configs/rl/dynamic_graph_baseline.yaml --checkpoint
+<seed-output>/checkpoints/graph_mappo_final.pt --output-dir
+outputs/core_3uav_evaluations --experiment-name
+core_3uav_uncertainty_predictive_graph_seed_<seed>_<scenario> --seed <seed>
+--num-uavs 3 --episodes 20 --scenario <scenario> --device cuda`, serially, at
+pre-evaluation Git revision `4bea499` and frozen configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+Network inference used CUDA and OSQP CBF remained CPU-side.  The serial
+launcher logs are
+`outputs/core_3uav_evaluations/uncertainty_predictive_graph_5seed_eval_20260726_launcher_stdout.log`
+and `_launcher_stderr.log`.
+
+The 30 uniquely named directories under `outputs/core_3uav_evaluations/` each
+retain `summary.json` and `raw_results/seed_<seed>.jsonl`.  An explicit
+completeness audit found exactly 20 nonblank JSONL records in every cell (600
+records total); no target directory existed before launch and none was
+overwritten.  A direct scan of all 600 retained raw episode records found no
+evaluation `cbf.emergency_events`.  This is raw-protocol evidence only, not a
+safety claim, fallback-rate estimate, generalization result, or cross-method
+comparison.
+
+The append-safe all-source CBF replay is
+`outputs/cbf_diagnostics/uncertainty_predictive_graph_5seed_replay_20260726.jsonl`
+with companion
+`outputs/cbf_diagnostics/uncertainty_predictive_graph_5seed_replay_20260726.summary.json`.
+It consumes the five training summaries, 30 evaluation summaries, and 30
+evaluation JSONL files under unchanged values: 20,000 iterations, 0.1-second
+solve limit, slack penalty 100.0, uncertainty-margin gain 0.5, and cap 5.0.
+It retains five source training events and records zero replay errors; the
+source status/replay status pairs are `solved inaccurate` to `solved
+inaccurate` (seed 20260719), `solved inaccurate` to `solved` (20260720),
+`maximum iterations reached` to the same status (20260721), and
+`solve_time_limit` to `solved` (20260722 and 20260723).  Emergency-fallback
+flags in the replay output remain retained diagnostics, not a fallback-rate or
+safety conclusion.
+
+The replay executable itself succeeded.  Two subsequent read-only PowerShell
+post-processing attempts incorrectly assumed companion names ending in
+`_summary.json` and `.jsonl.summary.json`; both failed after the valid replay
+had already been written, created no additional result artifact, and did not
+overwrite the valid JSONL or its actual `.summary.json` companion.  They are
+recorded here as excluded post-processing errors.  No solver setting or raw
+telemetry was changed.
+
+The matched 3-UAV five-seed/evaluation/replay protocol is now complete for all
+four learned arms, but this does not license comparative, statistical, or
+method-effect claims without a prespecified aggregation analysis.  Next:
+inspect the frozen 5/8-UAV independent-training and ablation protocol, retain
+its separate artifacts, and keep literature novelty statements gated on
+primary-paper reading.
