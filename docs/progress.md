@@ -1302,3 +1302,43 @@ safety, scalability, or method-effect result.  Next: confirm no Python process
 remains and train final seed `20260723` serially under the identical frozen
 configuration.  Defer 5-UAV evaluation, 8-UAV work, and ablation arms until
 all five 5-UAV training artifacts are retained and documented.
+
+## AAMAS 2027 - fifth 5-UAV uncertainty-aware predictive seed retained (2026-07-26)
+
+The final independent 5-UAV uncertainty-aware predictive GraphMAPPO job
+completed the frozen CUDA command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_5uav.yaml --device cuda --seed 20260723
+--num-uavs 5 --graph-mode uncertainty_predictive_graph --total-steps 100000
+--output-dir
+outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260723`.
+It was launched at Git revision `31ff7cb` with configuration SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+Its output retains `summary.json`, `checkpoints/graph_mappo_final.pt`,
+TensorBoard data, live telemetry, and dedicated launcher stdout/stderr under
+the seed directory and sibling `...seed_20260723_launcher_{stdout,stderr}.log`
+paths.  The final summary verifies five UAVs, uncertainty-aware predicted
+delivered-packet knowledge, CUDA network execution, and CPU-side OSQP CBF.
+
+The run reached 100,160 transitions and 313 updates.  Its final
+`summary.json` and live telemetry retain one training `solved inaccurate`
+emergency fallback in 20,032 CBF decisions: decision 7,308, environment 1
+step 13, obstacle center `[22.0, 76.0, 30.0]`, unchanged 20,000-iteration
+cap, 0.04082990001188591 seconds, and primal/dual residuals
+0.0002440071509879367/0.0000122640447944475.  Initial and final evaluation
+telemetry each retain zero emergency fallbacks in 160 decisions.  The
+dedicated stderr independently retains a `solve_time_limit` notification and
+a `solved inaccurate` notification; the latter corresponds to the retained
+summary event, whereas the former is not separately represented in final
+telemetry.  Both raw sources are preserved as an explicit event-accounting
+discrepancy, with no imputation, merging, exclusion, or safety-parameter
+change.
+
+All five independent 5-UAV uncertainty-aware predictive training artifacts
+for seeds `20260719`--`20260723` now exist.  This completes only their
+training-artifact phase; it does not establish a scale-level result, fallback
+rate, safety property, or method effect.  Next: use the frozen checkpoint
+evaluator to run every seed across six scenarios for 20 episodes per unique
+cell, retain raw JSONL, validate completeness, and replay all CBF evidence
+without changing solver values.  Only then may 8-UAV work or separately
+trained ablations begin.

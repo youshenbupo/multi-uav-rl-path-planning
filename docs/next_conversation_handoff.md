@@ -6,6 +6,26 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- Commit pending at this handoff records completed final 5-UAV
+  uncertainty-aware predictive seed `20260723`.  Its checkpoint, summary,
+  TensorBoard data, live telemetry, and dedicated launcher stdout/stderr are
+  retained under
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260723`
+  and sibling log paths.  It reached 100,160 transitions and 313 updates at
+  launch revision `31ff7cb`, with frozen config SHA-256
+  `28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+  Final telemetry retains one `solved inaccurate` training fallback in 20,032
+  decisions (index 7,308 at the unchanged 20,000-iteration cap); initial and
+  final evaluation telemetry each retain zero in 160 decisions.  Its stderr
+  separately retains both a `solve_time_limit` notification and the `solved
+  inaccurate` notification; do not merge or discard this unresolved
+  event-accounting discrepancy.  No safety parameter changed.  The five
+  independent 5-UAV training artifacts (seeds `20260719`--`20260723`) are now
+  complete, but this does not support a scale/safety/fallback/performance
+  conclusion.  Next: verify the documentation commit, then run the frozen
+  six-scenario 20-episode checkpoint-evaluation matrix for all five seeds,
+  retain and validate all raw JSONL, and replay all CBF evidence under the
+  unchanged protocol before any 8-UAV or ablation task.
 - Commit `de6f286` records completed fourth 5-UAV
   uncertainty-aware predictive seed `20260722`.  Its final checkpoint,
   summary, TensorBoard data, live telemetry, and dedicated launcher logs are

@@ -184,6 +184,16 @@
   `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260722/`.
   These are seed-local diagnostics only and do not license CBF tuning or a
   safety/scalability/fallback-rate conclusion.
+- The fifth retained 5-UAV uncertainty-aware predictive seed has complete
+  summary, checkpoint, TensorBoard, live telemetry, and dedicated launcher
+  logs.  Its final summary/telemetry retain one `solved inaccurate` event in
+  20,032 training CBF decisions, while the retained stderr also contains a
+  `solve_time_limit` notification that is not separately represented by the
+  final telemetry.  Both sources must remain preserved and be reported as an
+  event-accounting discrepancy; do not merge, impute, silently exclude, or
+  tune the CBF solver in response.  Five-seed 5-UAV training is complete, but
+  its 30-cell 20-episode evaluation JSONL matrix and all-source CBF replay are
+  still required before any scale-level fallback, safety, or performance claim.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.
