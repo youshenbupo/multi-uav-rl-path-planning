@@ -6,6 +6,33 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-23, supersedes stale status below)
 
+- Commit `7d6486e` is pushed to `origin/codex/phase14-dynamic-world`; it
+  freezes validated 5-UAV and 8-UAV uncertainty-aware predictive scale
+  configurations.  The matched 3-UAV five-seed protocol is complete for MLP,
+  raw-packet graph, predictive-without-uncertainty graph, and uncertainty-aware
+  predictive graph: every arm has 30 unique 20-episode evaluation cells and
+  retained raw JSONL.  The final uncertainty-aware all-source replay is
+  `outputs/cbf_diagnostics/uncertainty_predictive_graph_5seed_replay_20260726.jsonl`
+  plus `.summary.json`; it has five source training events and zero replay
+  errors under unchanged solver values.  This is raw protocol evidence only,
+  not a cross-method, safety, fallback-rate, or performance conclusion.
+- After confirming no Python process remained, the sole active serial CUDA
+  training job is the first independent 5-UAV uncertainty-aware predictive
+  seed `20260719`, PID `17372` at its initial health check.  Command:
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_5uav.yaml --device cuda --seed 20260719
+  --num-uavs 5 --graph-mode uncertainty_predictive_graph --total-steps 100000
+  --output-dir
+  outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260719`.
+  It was launched at revision `7d6486e` with frozen configuration SHA-256
+  `28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+  Its unique launcher logs are
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260719_launcher_stdout.log`
+  and `_launcher_stderr.log`; output directory exists but no final summary or
+  checkpoint yet.  Do not start another training job.  On completion, verify
+  its checkpoint/summary and all CBF events, document the seed, then proceed
+  serially through the remaining 5-UAV seeds before 5-UAV evaluation, 8-UAV
+  work, or any independent ablation arm.
 - Commit `b09be13` is pushed to `origin/codex/phase14-dynamic-world`; it
   records completion evidence for uncertainty-aware predictive seed
   `20260722`.  Its final checkpoint and `summary.json` are present under
