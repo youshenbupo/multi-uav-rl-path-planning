@@ -6,7 +6,7 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
-- Commit pending at this handoff records the completed 5-UAV uncertainty-aware
+- Commit `b3a9947` records the completed 5-UAV uncertainty-aware
   predictive five-seed training/evaluation/replay artifact set.  The five
   final checkpoints for seeds `20260719`--`20260723` each have all six frozen
   20-episode scenario cells under `outputs/core_5uav_evaluations/`, yielding
