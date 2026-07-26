@@ -6,6 +6,27 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- After confirming no prior Python process remained and target paths were
+  absent, the sole active serial CUDA job is 8-UAV uncertainty-aware predictive
+  seed `20260720`, PID `35344` at health check.  Command:
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_8uav.yaml --device cuda --seed 20260720
+  --num-uavs 8 --graph-mode uncertainty_predictive_graph --total-steps 100000
+  --output-dir
+  outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260720`.
+  It was launched at revision `a99f7bb` with config SHA-256
+  `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+  Dedicated launcher stdout/stderr are retained at the sibling
+  `...seed_20260720_launcher_{stdout,stderr}.log` paths.  At health check it
+  had 3,840 transitions; its 480 training CBF decisions retained one
+  `solve_time_limit` emergency fallback at decision 282, environment 1 step
+  0, obstacle center `[22.0, 50.0, 30.0]`, unchanged 0.1-second limit,
+  5,897 iterations, primal residual 0.051202473625902925, and dual residual
+  0.9291498430633159.  The full context remains in live telemetry and stderr.
+  This is an in-progress seed-local diagnostic only.  Do not start another
+  training/evaluation job, modify any CBF setting, or start ablations.  On
+  completion, verify final artifacts and every event, document the seed, then
+  continue serially with seeds `20260721`--`20260723` before 8-UAV evaluation.
 - Commit `2e5028e` records the completed first 8-UAV
   uncertainty-aware predictive seed `20260719`.  Its final checkpoint,
   summary, TensorBoard data, and live telemetry are retained in
