@@ -6,7 +6,7 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
-- Commit pending at this handoff records completed third 5-UAV
+- Commit `0310300` is pushed to `origin/codex/phase14-dynamic-world` and records completed third 5-UAV
   uncertainty-aware predictive seed `20260721`.  Its final checkpoint,
   summary, TensorBoard data, live telemetry, and dedicated launcher logs are
   retained under
@@ -24,6 +24,25 @@ processes before relying on any status below.
   no remaining Python process, then start seed `20260722` serially using the
   identical command pattern; do not start any evaluation, 8-UAV, or ablation
   job first.
+- After confirming no prior Python process remained and that all target paths
+  were absent, the sole active serial CUDA job is 5-UAV uncertainty-aware
+  predictive seed `20260722`, PID `43664` at its health check.  Command:
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_5uav.yaml --device cuda --seed 20260722
+  --num-uavs 5 --graph-mode uncertainty_predictive_graph --total-steps 100000
+  --output-dir
+  outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260722`.
+  It was launched at revision `0310300` with configuration SHA-256
+  `28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+  Its unique launcher logs are
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260722_launcher_stdout.log`
+  and `_launcher_stderr.log`.  At health check it had 960 transitions,
+  TensorBoard and live telemetry output, and no emergency events in 192
+  training CBF decisions; this is an in-progress observation, not a result.
+  Do not start another training job or change any safety setting.  On
+  completion, verify checkpoint/summary and retained events, document it, then
+  run final seed `20260723` serially before any 5-UAV evaluation, 8-UAV run,
+  ablation, or aggregate claim.
 - Commit `7c0fbc8` is pushed to `origin/codex/phase14-dynamic-world`; it
   records the completed second 5-UAV uncertainty-aware predictive seed
   `20260720`.  Its final checkpoint, summary, TensorBoard data, live
