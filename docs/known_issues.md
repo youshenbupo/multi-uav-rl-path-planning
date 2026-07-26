@@ -141,6 +141,14 @@
   replay.  Those raw artifacts still do not license a cross-method comparison,
   statistical claim, or protocol-wide fallback claim; prespecified aggregation
   and the required 5/8-UAV independent-training and ablation work remain.
+- The 5-UAV and 8-UAV uncertainty-aware predictive configuration files now
+  encode the fixed scale profiles and have passed loading/tests/static checks,
+  but no scale artifact exists yet.  The first load caught and corrected a
+  missing 8-UAV dynamic-obstacle enablement before execution; that pre-run
+  configuration defect must not be treated as a result.  Five independent
+  seeds, six-scenario JSONL matrices, CBF replay, and separately trained
+  critical ablations remain required at each scale before scalability or
+  ablation claims.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.

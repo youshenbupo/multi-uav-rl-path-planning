@@ -1128,3 +1128,34 @@ method-effect claims without a prespecified aggregation analysis.  Next:
 inspect the frozen 5/8-UAV independent-training and ablation protocol, retain
 its separate artifacts, and keep literature novelty statements gated on
 primary-paper reading.
+
+## AAMAS 2027 - frozen 5/8-UAV uncertainty-aware scale configurations validated (2026-07-26)
+
+Two scale-specific mainline configurations now materialize the existing fixed
+profiles in `configs/experiments/scale_profiles.yaml` without changing the
+3-UAV protocol: `configs/rl/dynamic_graph_5uav.yaml` (five UAVs, two
+environments, rollout length 32; SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`) and
+`configs/rl/dynamic_graph_8uav.yaml` (eight UAVs, two environments, rollout
+length 24; SHA-256
+`9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`).  Both
+retain delayed/lossy packet semantics, uncertainty-aware predictive graph
+mode, dynamic obstacle enablement, CUDA network execution, CPU-side OSQP CBF,
+and the frozen CBF penalty 100.0/20,000-iteration/0.1-second/margin-gain-0.5/
+margin-cap-5.0 protocol.
+
+Initial loading exposed that the new 8-UAV file omitted
+`dynamic_obstacle_enabled: true`; no training or evaluation had started, so
+the file was corrected before any artifact was generated.  The final configs
+loaded with their intended UAV count, environment count, rollout length,
+dynamic-obstacle, communication, CBF, and uncertainty-predictive settings.
+`pytest -q tests/test_dynamic_graph_baselines.py
+tests/test_core_checkpoint_evaluation.py` passed (4 tests; 7 existing OSQP
+deprecation warnings); Ruff and mypy both passed for
+`scripts/train_graph_mappo.py` and `multiuav/learning/graph_runner.py`.
+
+This validates configuration semantics only, not scalable performance, safety,
+or generalization.  Next: independently train the first 5-UAV
+uncertainty-aware predictive seed with the frozen 5-UAV configuration, retain
+all CBF events, and continue serially before beginning the corresponding 8-UAV
+matrix or independent ablation arms.
