@@ -30,6 +30,17 @@ processes before relying on any status below.
   modify CBF settings, or start ablations.  On completion, verify final
   checkpoint/summary and every retained event, document the seed, then proceed
   serially through `20260720`--`20260723` before the 8-UAV evaluation matrix.
+- Continued seed `20260719` monitoring retained one `solved inaccurate` CBF
+  emergency fallback at decision 4,222, environment 1 step 10, obstacle center
+  `[22.0, 70.0, 30.0]`, unchanged 20,000-iteration cap, 0.05533530001412146
+  seconds, primal residual 0.0011686880877244399, and dual residual
+  0.0000192246889227154.  The full eight-UAV context is retained in
+  `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260719/live_training_telemetry.json`
+  (observed SHA-256
+  `60BF79BA9759853D545FAE978F793E94E9B803D89EC065EF852B44C8BF385983` at
+  43,776 transitions).  Preserve it and do not alter slack, solver limits,
+  tolerances, uncertainty margin, or any safety setting; it is not a safety,
+  performance, or fallback-rate conclusion.
 - Commit `b3a9947` records the completed 5-UAV uncertainty-aware
   predictive five-seed training/evaluation/replay artifact set.  The five
   final checkpoints for seeds `20260719`--`20260723` each have all six frozen
