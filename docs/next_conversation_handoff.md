@@ -4,6 +4,42 @@
 point for the next Codex conversation.  Inspect the worktree and running
 processes before relying on any status below.
 
+## Current continuation update (2026-07-26, supersedes stale status below)
+
+- Commit `7c0fbc8` is pushed to `origin/codex/phase14-dynamic-world`; it
+  records the completed second 5-UAV uncertainty-aware predictive seed
+  `20260720`.  Its final checkpoint, summary, TensorBoard data, live
+  telemetry, and dedicated launcher stdout/stderr are retained under
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260720`
+  and its sibling launcher-log paths.  It reached 100,160 transitions and 313
+  updates.  Training telemetry retains three emergency fallbacks in 20,032
+  CBF decisions: `solved inaccurate` at indices 14,582 and 14,652 (unchanged
+  20,000-iteration cap), plus `solve_time_limit` at 17,555 (unchanged
+  0.1-second limit); the full contexts are in `summary.json` and
+  `live_training_telemetry.json`.  Initial and final evaluation telemetry each
+  retain zero fallback events in 160 decisions.  No CBF safety parameter
+  changed.  This is seed-local diagnostic evidence only, not a fallback-rate,
+  safety, scalability, or method-effect result.
+- After confirming no prior Python process remained and that all target paths
+  were absent, the sole active serial CUDA job is 5-UAV uncertainty-aware
+  predictive seed `20260721`, PID `38832` at its initial health check.
+  Command: `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+  scripts/train_graph_mappo.py --config configs/rl/dynamic_graph_5uav.yaml
+  --device cuda --seed 20260721 --num-uavs 5 --graph-mode
+  uncertainty_predictive_graph --total-steps 100000 --output-dir
+  outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260721`.
+  It was launched at revision `7c0fbc8` with configuration SHA-256
+  `28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+  Its unique launcher logs are
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260721_launcher_stdout.log`
+  and `_launcher_stderr.log`.  At the health check it had 1,920 transitions,
+  live telemetry, and TensorBoard output; its 384 training CBF decisions had
+  no emergency events.  This is an in-progress observation, not a result.
+  Do not start any other training job, change CBF parameters, or begin 5-UAV
+  evaluation/8-UAV/ablation work.  On completion, verify its final checkpoint
+  and summary, document every retained event, then continue serially with
+  seeds `20260722` and `20260723`.
+
 ## Current continuation update (2026-07-23, supersedes stale status below)
 
 - Commit `8899c15` is pushed to `origin/codex/phase14-dynamic-world`; it
