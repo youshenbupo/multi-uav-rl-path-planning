@@ -39,6 +39,18 @@ processes before relying on any status below.
   evaluation/8-UAV/ablation work.  On completion, verify its final checkpoint
   and summary, document every retained event, then continue serially with
   seeds `20260722` and `20260723`.
+- During continued seed `20260721` monitoring, live telemetry retained one CBF
+  emergency fallback: `solved inaccurate` at decision 4,753, environment 0
+  step 16, with the dynamic obstacle center `[22.0, 82.0, 30.0]`, unchanged
+  20,000-iteration cap, 0.05340159998741001 seconds, primal residual
+  0.0026409692851873355, and dual residual 0.00011929081440663525.  The full
+  context remains in
+  `outputs/core_5uav/core_5uav_uncertainty_predictive_graph_seed_20260721/live_training_telemetry.json`
+  (observed SHA-256
+  `03B7AA1FF5720593FA19401B4461767CEA9F865DD986EBF28294479D5B4AF4B7` at
+  29,440 transitions) and the retained stderr log.  This active-run event is
+  diagnostic only; do not alter slack, iteration limit, solve-time limit,
+  tolerances, or any other CBF setting in response.
 
 ## Current continuation update (2026-07-23, supersedes stale status below)
 
