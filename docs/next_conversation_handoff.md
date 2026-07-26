@@ -6,7 +6,7 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
-- Commit pending at this handoff records the completed first 8-UAV
+- Commit `2e5028e` records the completed first 8-UAV
   uncertainty-aware predictive seed `20260719`.  Its final checkpoint,
   summary, TensorBoard data, and live telemetry are retained in
   `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260719`.
