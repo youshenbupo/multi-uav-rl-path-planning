@@ -6,6 +6,30 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- The matched 8-UAV uncertainty-aware predictive protocol has begun with its
+  first independent serial CUDA seed `20260719`, PID `43996` at health check.
+  Command: `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+  scripts/train_graph_mappo.py --config configs/rl/dynamic_graph_8uav.yaml
+  --device cuda --seed 20260719 --num-uavs 8 --graph-mode
+  uncertainty_predictive_graph --total-steps 100000 --output-dir
+  outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260719`.
+  It was launched at revision `07d0f47` with configuration SHA-256
+  `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+  Correct pre-launch loading verified eight UAVs, two environments, rollout
+  length 24, dynamic obstacles, and uncertainty use.  An earlier read-only
+  preflight attempted to import the loader as `load_graph_mappo_config`, which
+  does not exist; it failed before launch and created no experiment artifact.
+  At health check the live telemetry and TensorBoard output existed, with 6,528
+  transitions and no emergency event in 816 training CBF decisions.  The
+  intended dedicated stdout/stderr paths did not materialize because the
+  parent output directory was absent when the process was launched.  A later
+  read-only `Get-Content` check of the absent stderr path therefore returned
+  nonzero; do not restart, recreate, or overwrite the logs.  Retain live
+  telemetry and final artifacts as available evidence.  This is an active
+  seed-local observation only.  Do not start another training/evaluation job,
+  modify CBF settings, or start ablations.  On completion, verify final
+  checkpoint/summary and every retained event, document the seed, then proceed
+  serially through `20260720`--`20260723` before the 8-UAV evaluation matrix.
 - Commit `b3a9947` records the completed 5-UAV uncertainty-aware
   predictive five-seed training/evaluation/replay artifact set.  The five
   final checkpoints for seeds `20260719`--`20260723` each have all six frozen
