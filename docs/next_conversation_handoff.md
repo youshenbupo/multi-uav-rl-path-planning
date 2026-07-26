@@ -51,6 +51,16 @@ processes before relying on any status below.
   29,440 transitions) and the retained stderr log.  This active-run event is
   diagnostic only; do not alter slack, iteration limit, solve-time limit,
   tolerances, or any other CBF setting in response.
+- Continued monitoring retained a second `solved inaccurate` emergency
+  fallback at decision 6,341, environment 0 step 10, with obstacle center
+  `[22.0, 70.0, 30.0]`, the unchanged 20,000-iteration cap,
+  0.028405999997630715 seconds, primal residual 0.001457085484388434, and dual
+  residual 0.0000303695102194086.  At the later 43,200-transition observation
+  the telemetry retains two such events; complete contexts remain in the same
+  raw telemetry file (observed SHA-256
+  `1F73AE59A97741F8D5D5A393544E05513A4092CA8F81367DDEBAECAC795858FD`) and
+  stderr log.  Preserve them without solver changes; this still provides no
+  performance, safety, or fallback-rate conclusion.
 
 ## Current continuation update (2026-07-23, supersedes stale status below)
 
