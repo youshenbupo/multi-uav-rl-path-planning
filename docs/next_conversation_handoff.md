@@ -4,6 +4,19 @@
 point for the next Codex conversation.  Inspect the worktree and running
 processes before relying on any status below.
 
+## Latest continuation update (2026-07-27, supersedes stale status below)
+
+- Seed `20260721` has completed; no Python process remains. Its independent
+  5-UAV no-uncertainty ablation output is
+  `outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260721`.
+  It reached 100,080 transitions and 417 CUDA updates. Training telemetry has
+  one `solved inaccurate` fallback in 20,016 decisions (index 7,458, 20,000
+  iterations); initial/final short evaluations have zero in 160 each and stderr
+  has one matching notice. Raw context is retained; no CBF setting changed and
+  this is not a performance/safety/ablation claim. Next: document the completed
+  seed in progress/known-issues, then launch seed `20260722` serially under the
+  same config after a no-process preflight.
+
 ## Current continuation update (2026-07-27, supersedes stale status below)
 
 - The sole active CUDA job is 5-UAV principal no-uncertainty ablation seed

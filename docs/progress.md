@@ -1653,3 +1653,17 @@ line, so both raw sources are preserved as an explicit discrepancy rather than
 merged or discarded. No solver/safety setting changed. This one seed proves no
 performance, safety, scale, fallback-rate, or ablation effect. Next: document
 and serially launch seed `20260721` with the same frozen protocol.
+
+## AAMAS 2027 - third 5-UAV principal no-uncertainty ablation seed retained (2026-07-27)
+
+Seed `20260721` completed independently at revision `d49401a`, frozen config
+SHA-256 `6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`, and
+output `outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260721`.
+Checkpoint, summary, telemetry, TensorBoard, and launcher logs are retained.
+It reached 100,080 CUDA transitions and 417 updates. Training telemetry retains
+one `solved inaccurate` fallback in 20,016 decisions (index 7,458; 20,000
+iterations; 0.04322150000371039 seconds; full context retained); initial/final
+evaluations retain zero in 160 each and stderr has one matching notice. No CBF
+setting changed. This is single-seed diagnostics only, not a performance,
+safety, fallback-rate, scale, or ablation conclusion. Next: launch seed 20260722
+serially after documentation and a no-process preflight.
