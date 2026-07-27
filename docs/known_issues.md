@@ -245,6 +245,22 @@
   `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260723/`;
   do not merge/impute/drop them or tune CBF.  The five-seed 8-UAV evaluation
   matrix and all-source replay remain required before any scale conclusion.
+- The completed 8-UAV five-seed evaluation matrix retains 30 valid
+  20-episode cells and 600 parseable raw JSONL records, but it is not yet a
+  scale-level safety, fallback-rate, performance, or method-effect result.
+  Its unchanged-protocol CBF replay retains 200 source events in
+  `outputs/cbf_diagnostics/uncertainty_predictive_graph_8uav_5seed_replay_20260727.jsonl`:
+  116 replayed and 84 are explicit `replay_error` records because the logged
+  dynamic-obstacle centers cannot be reconstructed from the event step. Do not
+  impute, drop, aggregate away, or tune CBF values in response. The initial
+  evaluation-launch PowerShell `-or` syntax error occurred before any evaluator
+  ran; its empty-root-only attempt is retained and excluded from all counts.
+- The principal no-uncertainty ablation is protocol-frozen but has no training
+  artifact yet. It must be independently trained from scratch using
+  `dynamic_graph_{5,8}uav_predictive_no_uncertainty_ablation.yaml`; no full-arm
+  checkpoint, altered controller, or unlabelled CBF parameter change may stand
+  in for it. The deliberate zero uncertainty-margin fields isolate the stated
+  `kappa_CBF = 0` ablation and must never be described as solver tuning.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.

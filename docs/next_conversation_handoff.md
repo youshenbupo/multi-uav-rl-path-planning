@@ -4,6 +4,59 @@
 point for the next Codex conversation.  Inspect the worktree and running
 processes before relying on any status below.
 
+## Current continuation update (2026-07-27, supersedes stale status below)
+
+- The 8-UAV uncertainty-aware predictive five-seed evaluation matrix and CBF
+  replay are complete and retained. The serial CUDA evaluator used the five
+  final checkpoints, frozen `configs/rl/dynamic_graph_8uav.yaml` SHA-256
+  `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`, six
+  scenarios, and 20 episodes per condition. `outputs/core_8uav_evaluations/`
+  contains exactly 30 cell directories, 30 summaries, and 30 JSONL files;
+  all 600 episode records parse and every cell has 20 records. Launcher logs:
+  `uncertainty_predictive_graph_8uav_5seed_eval_20260727_launcher_stdout.log`
+  and `_launcher_stderr.log`. The launch revision was `f90471f`; neural
+  inference was CUDA and OSQP CBF was CPU-side.
+- CBF replay is retained at
+  `outputs/cbf_diagnostics/uncertainty_predictive_graph_8uav_5seed_replay_20260727.jsonl`
+  with companion `.summary.json`, over 5 training summaries + 30 evaluation
+  summaries + 30 raw JSONL files under the unchanged 20,000-iteration,
+  0.1-second, slack-penalty-100, uncertainty-margin-gain-0.5, max-margin-5.0
+  protocol. It records 200 source events: 116 replayed and 84 explicit errors
+  (`Recorded dynamic-obstacle centers cannot be reconstructed from the event
+  step`). Preserve every error and raw event; do not tune, impute, merge, or
+  make a safety/fallback-rate/scalability claim.
+- The first 8-UAV evaluation launcher had a PowerShell `-or` syntax typo and
+  failed before an evaluator ran, creating only an empty root. It is a
+  retained, excluded invalid attempt. A subsequent read-only audit command
+  also had a path-binding error and read no JSONL; the corrected audit above is
+  the authoritative 30/600/zero-parse-error evidence.
+- Preflight found no Python process. Next concrete action: inspect and freeze
+  an existing critical-ablation arm that remains on the single communication-
+  uncertainty-predictive-graph-to-CBF mainline, then launch its independent
+  CUDA training serially. Never reuse the full-method checkpoint or stage
+  `.gitignore`; do not start literature browsing until the required local
+  `/browse` setup is explicitly authorized.
+- The principal independently trained ablation is now frozen in
+  `configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml` and
+  `configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml`.
+  It preserves delayed/lossy delivered-packet prediction, dynamic obstacles,
+  optimizer settings, CBF slack penalty 100, and iteration cap 20,000, while
+  explicitly setting `graph_mode: predictive_graph`, graph uncertainty-risk
+  gain 0, and both CBF uncertainty-margin fields 0. This implements the
+  research brief's `gamma_sigma = kappa_sigma = kappa_CBF = 0` causal ablation,
+  not covert CBF tuning. It has no results yet. After configuration checks and
+  commit, launch only 5-UAV seed 20260719 on CUDA into a distinct
+  `outputs/core_5uav_ablation/` directory, then verify/document it before the
+  next serial seed.
+- The two ablation profiles were loaded successfully as predicted-knowledge
+  enabled and uncertainty-usage disabled, with zero graph risk gain and zero
+  CBF uncertainty margins. Targeted actor-packet/graph/CBF tests passed
+  (`39 passed`, 11 OSQP deprecation warnings); Ruff passed; mypy passed with
+  `--explicit-package-bases` across 101 source files. A prior plain mypy
+  invocation stopped at an existing duplicate module-discovery error for
+  `scripts/diagnose_cbf_failure.py`; it produced no code/config change and the
+  explicit-package-bases run is authoritative.
+
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
 - The frozen 8-UAV uncertainty-aware predictive evaluation matrix is active.

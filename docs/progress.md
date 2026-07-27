@@ -1554,3 +1554,47 @@ five-seed training artifact set only; it is not a scale, safety, fallback-rate,
 performance, or method-effect conclusion.  Next: run the frozen six-scenario
 20-episode evaluation matrix and unchanged-protocol CBF replay for all five
 8-UAV checkpoints before any ablation.
+
+## AAMAS 2027 - 8-UAV uncertainty-aware predictive evaluation and CBF replay retained (2026-07-27)
+
+The frozen five-seed 8-UAV checkpoint matrix completed serially at launcher revision `f90471f`. Each final checkpoint from `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260719` through `..._20260723` was evaluated by `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/evaluate_core_checkpoint.py --family graph_mappo --config configs/rl/dynamic_graph_8uav.yaml --checkpoint <seed-dir>/checkpoints/graph_mappo_final.pt --output-dir outputs/core_8uav_evaluations --experiment-name core_8uav_uncertainty_predictive_graph_seed_<seed>_<scenario> --seed <seed> --num-uavs 8 --episodes 20 --scenario <scenario> --device cuda`, for seeds `20260719`--`20260723` and scenarios `nominal`, `delay`, `loss`, `dynamic`, `combined`, and `ood`. The frozen configuration SHA-256 is `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`. CUDA was used for learned-network inference; OSQP CBF stayed CPU-side.
+
+Outputs remain under `outputs/core_8uav_evaluations/`; dedicated serial launcher logs are `uncertainty_predictive_graph_8uav_5seed_eval_20260727_launcher_stdout.log` and `_launcher_stderr.log`. A read-only audit verified 30 cell directories, 30 `summary.json` files, and 30 raw JSONL files. Each JSONL contains exactly 20 nonblank parseable episode records: 600 records total, zero parse errors, and zero malformed-count cells. The preceding launcher-construction attempt had a PowerShell `-or` syntax error before executing any evaluator; it created only the empty output root, no cells, logs, or results, and remains a retained, excluded invalid attempt.
+
+All training summaries, 30 evaluation summaries, and 30 raw JSONL files were then supplied unchanged to `scripts/replay_cbf_fallbacks.py` with the frozen protocol `--max-iterations 20000 --max-solve-time-seconds 0.1 --slack-penalty 100.0 --uncertainty-margin-gain 0.5 --max-uncertainty-margin 5.0`. The outputs `outputs/cbf_diagnostics/uncertainty_predictive_graph_8uav_5seed_replay_20260727.jsonl` and its companion `.summary.json` retain 200 source events across 65 telemetry files. Of these, 116 replayed; their replay statuses are 87 `solve_time_limit`, 26 `solved`, 2 `solved inaccurate`, and 1 `maximum iterations reached`. The remaining 84 are explicit `replay_error` records: `ValueError: Recorded dynamic-obstacle centers cannot be reconstructed from the event step.` They are preserved rather than imputed, excluded, or used to alter CBF values. The replay is diagnostic evidence only; it establishes neither a fallback rate nor safety, performance, scalability, or method-effect claims.
+
+Before the next task, no Python process was running. Next: inspect the existing independently trained critical-ablation protocol and launch only an arm whose actor-observation contract, training configuration, and output path are explicitly frozen; no shared full-method checkpoint may be relabelled as an ablation.
+
+## AAMAS 2027 - principal no-uncertainty ablation protocol frozen (2026-07-27)
+
+The research brief defines the principal controlled ablation as the same delayed,
+lossy delivered-packet predictive graph with `gamma_sigma = 0` and
+`kappa_sigma = kappa_CBF = 0`. To make this executable without reusing a full
+checkpoint, the independently trainable 5-UAV and 8-UAV profiles are
+`configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml` and
+`configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml`.
+Relative to the corresponding frozen full profiles, the only mechanism changes
+are `graph_mode: predictive_graph`, `graph_uncertainty_risk_gain: 0.0`, and the
+two CBF uncertainty-margin fields set to `0.0`; communication delay/loss,
+delivered-packet prediction, dynamic obstacles, slack penalty 100, 20,000
+iterations, and all optimization/scale values remain matched. The CBF change is
+an explicit causal ablation, not a fallback-rate response or covert solver
+tuning. `predictive_graph` causes the graph runner to pass zero uncertainty to
+actor graph construction; it does not substitute neighbour truth.
+
+No ablation training, evaluation, or result exists yet. The first pending job
+is the independently trained 5-UAV seed `20260719`, with a distinct output
+directory and CUDA neural execution; OSQP remains CPU-side. It must be verified
+and documented before any serial next seed or six-scenario evaluation.
+
+Configuration projection verified both profiles as `uses_predicted_knowledge:
+true`, `uses_uncertainty: false`, graph uncertainty-risk gain `0.0`, and both
+CBF uncertainty margins `0.0`. The actor/packet and CBF checks passed with
+`39 passed` (`tests/test_predictive_conflict_graph.py`,
+`tests/test_multi_uav_environment.py`, `tests/test_cbf_safety.py`), retaining
+only 11 existing OSQP `PendingDeprecationWarning`s. `ruff check multiuav scripts
+tests` passed, and `mypy --explicit-package-bases multiuav scripts` passed for
+101 source files. The initial mypy invocation without explicit package bases
+failed before analysis because `scripts/diagnose_cbf_failure.py` was discovered
+under two module names; the successful explicit-package-bases invocation is the
+authoritative static-check result.
