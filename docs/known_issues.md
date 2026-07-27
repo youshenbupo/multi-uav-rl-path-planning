@@ -239,6 +239,12 @@
   `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260722/`.
   This single seed does not establish a scale-level result and does not
   authorize CBF tuning.
+- The final retained 8-UAV seed has one training telemetry event, nine initial
+  training-script evaluation events, and ten stderr notifications that are not
+  one-to-one mapped.  Preserve all sources under
+  `outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260723/`;
+  do not merge/impute/drop them or tune CBF.  The five-seed 8-UAV evaluation
+  matrix and all-source replay remain required before any scale conclusion.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.

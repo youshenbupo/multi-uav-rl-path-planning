@@ -6,6 +6,17 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- Commit pending records completed final 8-UAV seed `20260723`: final
+  checkpoint/summary/telemetry/logs retained under its seed directory; 100,224
+  transitions and 261 updates at revision `fd6142c`, frozen config SHA-256
+  `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+  Training telemetry has one `solved inaccurate` event in 12,528 decisions
+  (index 4,279); initial evaluation has nine `solve_time_limit` events in 160
+  decisions; final evaluation has zero in 160.  Stderr has ten notifications,
+  not a one-to-one mapping.  Preserve all sources without parameter changes.
+  The 8-UAV five-seed training set is complete but not a result.  Next: verify
+  the commit, run its frozen 30-cell six-scenario 20-episode matrix, audit 600
+  raw JSONL records, and replay all CBF evidence before any ablation.
 - After confirming no prior Python process and absent target paths, the sole
   active serial CUDA job is final 8-UAV uncertainty-aware predictive seed
   `20260723`, PID `54264` at health check.  Command:

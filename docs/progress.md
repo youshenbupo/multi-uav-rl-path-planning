@@ -1530,3 +1530,27 @@ mapping to the two telemetry events; preserve both sources without merging,
 imputation, exclusion, or parameter change.  This is seed-local diagnostics,
 not a scale, safety, fallback-rate, performance, or method-effect result.
 Next: serially train final seed `20260723` under the identical protocol.
+
+## AAMAS 2027 - fifth 8-UAV uncertainty-aware predictive seed retained (2026-07-27)
+
+The final independent 8-UAV uncertainty-aware predictive job completed the
+frozen CUDA command for seed `20260723`, launched at revision `fd6142c` with
+`configs/rl/dynamic_graph_8uav.yaml` SHA-256
+`9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+Its final checkpoint, summary, TensorBoard, telemetry, and launcher logs are
+retained under
+`outputs/core_8uav/core_8uav_uncertainty_predictive_graph_seed_20260723`.
+It reached 100,224 transitions and 261 updates with CUDA network execution and
+CPU-side OSQP CBF.
+
+Final training telemetry retains one `solved inaccurate` event in 12,528 CBF
+decisions (index 4,279; unchanged 20,000-iteration cap; full context retained).
+Initial training-script evaluation retains nine `solve_time_limit` events in
+160 decisions; final training-script evaluation retains zero in 160 decisions.
+The launcher stderr retains ten notifications, which are not mapped one-to-one
+to telemetry.  Preserve all raw sources and this discrepancy without merging,
+imputation, exclusion, or any parameter change.  This completes the 8-UAV
+five-seed training artifact set only; it is not a scale, safety, fallback-rate,
+performance, or method-effect conclusion.  Next: run the frozen six-scenario
+20-episode evaluation matrix and unchanged-protocol CBF replay for all five
+8-UAV checkpoints before any ablation.
