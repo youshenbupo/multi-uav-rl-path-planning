@@ -6,7 +6,7 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
-- Commit pending records completed final 8-UAV seed `20260723`: final
+- Commit `0516060` records completed final 8-UAV seed `20260723`: final
   checkpoint/summary/telemetry/logs retained under its seed directory; 100,224
   transitions and 261 updates at revision `fd6142c`, frozen config SHA-256
   `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
