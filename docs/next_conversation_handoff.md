@@ -6,6 +6,15 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-27, supersedes stale status below)
 
+- The sole active CUDA job is 5-UAV principal no-uncertainty ablation seed
+  `20260721`, PID `50760` at first check. It launched at revision `d49401a`
+  with the frozen configuration SHA-256
+  `6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`, output
+  `outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260721`,
+  CUDA learned-network execution, and CPU OSQP. First telemetry has 960
+  transitions and zero emergencies; it is in-progress only. Do not start any
+  second Python job or change CBF settings. Verify and document final artifacts
+  before launching seed 20260722.
 - The second independently trained 5-UAV principal no-uncertainty ablation
   seed `20260720` completed after no-Python-process preflight at revision
   `2402d8b`:
