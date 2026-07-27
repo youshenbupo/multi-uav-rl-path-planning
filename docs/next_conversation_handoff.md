@@ -6,6 +6,26 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
+- The frozen 8-UAV uncertainty-aware predictive evaluation matrix is active.
+  After confirming no Python training process and all 30 cell paths absent, a
+  hidden serial launcher began five final checkpoints across six scenarios, 20
+  episodes per cell, using `evaluate_core_checkpoint.py --family graph_mappo
+  --config configs/rl/dynamic_graph_8uav.yaml --checkpoint
+  <8uav-seed>/checkpoints/graph_mappo_final.pt --output-dir
+  outputs/core_8uav_evaluations --experiment-name
+  core_8uav_uncertainty_predictive_graph_seed_<seed>_<scenario> --seed <seed>
+  --num-uavs 8 --episodes 20 --scenario <scenario> --device cuda`, serially.
+  Launch revision `f90471f`, config SHA-256
+  `9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`; CUDA
+  is for network inference and OSQP remains CPU-side.  Launcher logs are
+  `outputs/core_8uav_evaluations/uncertainty_predictive_graph_8uav_5seed_eval_20260727_launcher_stdout.log`
+  and `_launcher_stderr.log`.  At health check three seed-20260719 cells had
+  been created and a `multiuav_rl` CUDA evaluator was active; stderr contained
+  only a retained PowerShell CLIXML first-module notice.  An earlier launcher
+  construction failed before launch due to a PowerShell `-or` syntax typo; it
+  created only the empty root directory, no cell/log/result, and is retained as
+  an excluded invalid attempt.  Do not start ablations or make claims.  On
+  completion audit all 30 cells/600 JSONL and replay unchanged-protocol CBF.
 - Commit `0516060` records completed final 8-UAV seed `20260723`: final
   checkpoint/summary/telemetry/logs retained under its seed directory; 100,224
   transitions and 261 updates at revision `fd6142c`, frozen config SHA-256
