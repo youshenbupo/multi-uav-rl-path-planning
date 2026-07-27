@@ -6,6 +6,13 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- All five independently trained 5-UAV principal no-uncertainty ablation seeds
+  `20260719`--`20260723` now have final checkpoints and summaries; the final
+  seed reached 100,080 transitions/417 updates with two retained `solved
+  inaccurate` training fallbacks in 20,016 decisions. No Python process
+  remains. Next: run the six-scenario, 20-episode checkpoint matrix for every
+  seed into a fresh evaluation root, retain JSONL, then replay all CBF events
+  without changing solver values. No performance or ablation conclusion yet.
 - Seed `20260721` has completed; no Python process remains. Its independent
   5-UAV no-uncertainty ablation output is
   `outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260721`.

@@ -1680,3 +1680,15 @@ initial/final short evaluations remain separate and must be checked from the
 retained summary. No safety parameter changed. This is seed-local diagnostics,
 not a performance, safety, fallback-rate, scale, or ablation conclusion. Next:
 document and serially launch seed 20260723.
+
+## AAMAS 2027 - fifth 5-UAV principal no-uncertainty ablation seed retained (2026-07-27)
+
+Seed `20260723` completed the frozen independent 5-UAV CUDA protocol at
+`outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260723`.
+Final checkpoint, summary, telemetry, TensorBoard, and launcher logs are
+retained. It reached 100,080 transitions and 417 updates; training telemetry
+retains two `solved inaccurate` emergency fallbacks in 20,016 decisions while
+20,014 are `solved`. No CBF parameter changed. The five independently trained
+5-UAV ablation seeds now exist, but no performance, safety, fallback-rate,
+scale, or ablation effect is established until the matched six-scenario,
+20-episode-per-cell evaluation and unchanged-protocol replay are retained.
