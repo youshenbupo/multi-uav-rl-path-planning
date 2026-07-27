@@ -261,6 +261,19 @@
   checkpoint, altered controller, or unlabelled CBF parameter change may stand
   in for it. The deliberate zero uncertainty-margin fields isolate the stated
   `kappa_CBF = 0` ablation and must never be described as solver tuning.
+- The initial 5-UAV ablation evaluation launcher is invalid and excluded. It
+  created only an empty nominal cell directory before rejecting the unsupported
+  scenario alias `delay`; raw stderr is retained under
+  `outputs/core_5uav_ablation_evaluations/`. No JSONL or summary was emitted.
+  A fresh output root with canonical scenario names is required; do not
+  overwrite this invalid attempt.
+- The subsequent fresh-root launcher is also invalid/excluded: a PowerShell
+  interpolation error omitted seed numbers from experiment names, causing
+  potential cross-seed directory collisions. It was stopped after detection;
+  all created directories, JSONL, stdout, and stderr under
+  `outputs/core_5uav_ablation_evaluations_rerun1/` are retained and must not be
+  aggregated. A corrected launcher must use an unambiguous `${seed}` boundary
+  and a new output root.
 - The first retained 5-UAV principal no-uncertainty ablation seed has one
   `solve_time_limit` training CBF emergency fallback in 20,016 decisions,
   while its initial and final short evaluations each have zero in 160. Preserve

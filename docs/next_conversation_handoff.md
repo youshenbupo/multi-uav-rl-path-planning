@@ -13,6 +13,17 @@ processes before relying on any status below.
   remains. Next: run the six-scenario, 20-episode checkpoint matrix for every
   seed into a fresh evaluation root, retain JSONL, then replay all CBF events
   without changing solver values. No performance or ablation conclusion yet.
+- The first evaluation launcher is invalid/excluded: it made an empty nominal
+  directory and then stopped because `delay` is not a valid evaluator scenario
+  name. Its stderr is preserved; it emitted no JSONL/summary. Launch a fresh
+  30-cell root using exactly `nominal`, `delay_only`, `loss_only`,
+  `dynamic_only`, `combined`, and `ood_communication_obstacle`.
+- The corrected-root launcher is also invalid/excluded: its PowerShell string
+  interpolation omitted seed identifiers from experiment names, risking
+  cross-seed collisions. It was stopped; preserve every artifact under
+  `outputs/core_5uav_ablation_evaluations_rerun1/` and exclude it. Before a new
+  launch, validate one rendered command uses `${seed}` boundaries, then use a
+  new root; no Python process remains.
 - Seed `20260721` has completed; no Python process remains. Its independent
   5-UAV no-uncertainty ablation output is
   `outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260721`.
