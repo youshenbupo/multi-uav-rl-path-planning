@@ -1598,3 +1598,7 @@ tests` passed, and `mypy --explicit-package-bases multiuav scripts` passed for
 failed before analysis because `scripts/diagnose_cbf_failure.py` was discovered
 under two module names; the successful explicit-package-bases invocation is the
 authoritative static-check result.
+
+The frozen protocol/configuration record was committed and pushed on
+`codex/phase14-dynamic-world` as `b30f69f` (`docs: freeze uncertainty ablation
+protocol`).

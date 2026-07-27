@@ -56,6 +56,9 @@ processes before relying on any status below.
   invocation stopped at an existing duplicate module-discovery error for
   `scripts/diagnose_cbf_failure.py`; it produced no code/config change and the
   explicit-package-bases run is authoritative.
+- Protocol/configuration record commit: `b30f69f` (`docs: freeze uncertainty
+  ablation protocol`), pushed to `origin/codex/phase14-dynamic-world`. The only
+  intentionally unstaged worktree file remains the user's `.gitignore`.
 
 ## Current continuation update (2026-07-26, supersedes stale status below)
 
