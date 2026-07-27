@@ -1636,3 +1636,20 @@ scalability, or method-effect conclusion follows from this one seed. No invalid
 training attempt was created. With no Python process remaining, next: launch
 seed `20260720` serially under the identical 5-UAV ablation protocol, retaining
 its distinct raw telemetry before any evaluation or 8-UAV ablation launch.
+
+## AAMAS 2027 - second 5-UAV principal no-uncertainty ablation seed retained (2026-07-27)
+
+Seed `20260720` completed the identical independent CUDA command at launch
+revision `2402d8b`, configuration SHA-256
+`6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`, and
+output `outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260720`.
+Final checkpoint, summary, live telemetry, TensorBoard, and launcher logs are
+retained. The summary verifies five UAVs, `predictive_graph`, CUDA network
+execution, delivered-packet prediction, and disabled uncertainty graph input.
+It reached 100,080 transitions and 417 updates. Training telemetry retains zero
+emergency fallbacks in 20,016 CBF decisions; initial and final evaluations each
+retain zero in 160. The launcher stderr nevertheless has one emergency-notice
+line, so both raw sources are preserved as an explicit discrepancy rather than
+merged or discarded. No solver/safety setting changed. This one seed proves no
+performance, safety, scale, fallback-rate, or ablation effect. Next: document
+and serially launch seed `20260721` with the same frozen protocol.

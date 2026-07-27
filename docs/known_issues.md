@@ -268,6 +268,11 @@
   `outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260719/`;
   it is a single-seed diagnostic and cannot establish a fallback rate, safety,
   performance, scale, or ablation effect. Do not tune solver values in response.
+- The second retained 5-UAV principal no-uncertainty seed has zero CBF emergency
+  events in its training telemetry and initial/final short evaluations, but its
+  launcher stderr contains one emergency-notice line. Preserve both raw sources
+  under `outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260720/`;
+  do not merge, impute, discard, or tune based on this discrepancy.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.
