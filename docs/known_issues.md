@@ -261,6 +261,13 @@
   checkpoint, altered controller, or unlabelled CBF parameter change may stand
   in for it. The deliberate zero uncertainty-margin fields isolate the stated
   `kappa_CBF = 0` ablation and must never be described as solver tuning.
+- The first retained 5-UAV principal no-uncertainty ablation seed has one
+  `solve_time_limit` training CBF emergency fallback in 20,016 decisions,
+  while its initial and final short evaluations each have zero in 160. Preserve
+  the full context under
+  `outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260719/`;
+  it is a single-seed diagnostic and cannot establish a fallback rate, safety,
+  performance, scale, or ablation effect. Do not tune solver values in response.
 - The OOD scenario increases the deterministic obstacle's velocity scale and
   communication degradation. It is a controlled simulation stress condition,
   not a calibrated physical motion, sensor, or radio model.

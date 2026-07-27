@@ -1602,3 +1602,37 @@ authoritative static-check result.
 The frozen protocol/configuration record was committed and pushed on
 `codex/phase14-dynamic-world` as `b30f69f` (`docs: freeze uncertainty ablation
 protocol`).
+
+## AAMAS 2027 - first 5-UAV principal no-uncertainty ablation seed retained (2026-07-27)
+
+The first independently trained 5-UAV principal no-uncertainty ablation
+completed the frozen CUDA command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+--config configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml
+--device cuda --seed 20260719 --num-uavs 5 --graph-mode predictive_graph
+--total-steps 100000 --output-dir
+outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260719`.
+It launched at revision `b919a81` with configuration SHA-256
+`6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`.
+The final checkpoint, `summary.json`, `live_training_telemetry.json`,
+TensorBoard data, and dedicated launcher stdout/stderr are retained under the
+distinct output root. The final summary verifies five UAVs, CUDA network
+execution, predicted delivered-packet knowledge, `uses_uncertainty: false`,
+and CPU-side OSQP CBF; it therefore neither reuses the full-arm checkpoint nor
+exposes neighbour truth to the actor.
+
+It reached 100,080 transitions and 417 updates. Training telemetry retains one
+`solve_time_limit` emergency fallback in 20,016 CBF decisions (decision index
+4,756; 0.10070149996317923 seconds; 14,524 iterations; primal residual
+0.0020588788764825863; dual residual 6.888436801064233e-05). The full position,
+requested-velocity, delivered-knowledge, uncertainty, and dynamic-obstacle
+context remains in the summary/telemetry. Initial and final training-script
+evaluations each retain zero emergency fallbacks in 160 decisions; launcher
+stderr has one matching notification line. CBF slack penalty, iteration cap,
+solve-time limit, and tolerances were not changed.
+
+No cell-level evaluation, replay, performance, safety, fallback-rate,
+scalability, or method-effect conclusion follows from this one seed. No invalid
+training attempt was created. With no Python process remaining, next: launch
+seed `20260720` serially under the identical 5-UAV ablation protocol, retaining
+its distinct raw telemetry before any evaluation or 8-UAV ablation launch.
