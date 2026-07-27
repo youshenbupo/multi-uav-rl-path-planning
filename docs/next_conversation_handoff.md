@@ -6,6 +6,23 @@ processes before relying on any status below.
 
 ## Current continuation update (2026-07-27, supersedes stale status below)
 
+- The sole active CUDA job is the second independently trained 5-UAV principal
+  no-uncertainty ablation seed `20260720`, PID `18528` at the latest health
+  check. It launched after no-Python-process preflight at revision `2402d8b`:
+  `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/train_graph_mappo.py
+  --config configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml
+  --device cuda --seed 20260720 --num-uavs 5 --graph-mode predictive_graph
+  --total-steps 100000 --output-dir
+  outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260720`.
+  Configuration SHA-256 is
+  `6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`.
+  The distinct run directory and launcher stdout/stderr are retained under
+  `outputs/core_5uav_ablation/`. At the first health check it had 10,800
+  transitions, 2,160 training CBF decisions, and zero emergency fallback
+  events; this is in-progress telemetry only, not a result. Do not start
+  another Python job. When complete, verify checkpoint/summary/raw telemetry,
+  document before seed 20260721, retain every CBF event, and do not change any
+  CBF parameter.
 - The first independently trained 5-UAV principal no-uncertainty ablation
   seed `20260719` completed after a zero-Python-process preflight at revision
   `b919a81` with
