@@ -14,7 +14,7 @@ processes before relying on any status below.
   --device cuda --seed 20260719 --num-uavs 5 --graph-mode predictive_graph
   --total-steps 100000 --output-dir
   outputs/core_5uav_ablation/core_5uav_predictive_no_uncertainty_seed_20260719`.
-  Configuration SHA-256: `C516FE19211EBEE77E1F0F0FC5B8299203971249314E80E9E6D95E43FC8F9408`.
+  Configuration SHA-256: `6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`.
   The distinct output directory and retained launcher logs are under
   `outputs/core_5uav_ablation/`. At the first 30-second health check it had
   6,960 transitions, 1,392 training CBF decisions, and zero emergency fallback
