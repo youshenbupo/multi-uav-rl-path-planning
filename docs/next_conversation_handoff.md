@@ -16,6 +16,12 @@ processes before relying on any status below.
   this is not a performance/safety/ablation claim. Next: document the completed
   seed in progress/known-issues, then launch seed `20260722` serially under the
   same config after a no-process preflight.
+- Seed `20260722` has now completed at 100,080 transitions and 417 updates;
+  its distinct output, checkpoint, summary, telemetry, TensorBoard, and logs
+  are retained under `outputs/core_5uav_ablation/`. Training telemetry has one
+  `solve_time_limit` emergency fallback in 20,016 decisions; do not change CBF
+  values. Next: complete documentation and launch final seed `20260723`
+  serially after confirming no Python process.
 
 ## Current continuation update (2026-07-27, supersedes stale status below)
 
