@@ -6,6 +6,22 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- **Post-isolation MLP seed `20260719` evaluation matrix completed,
+  2026-07-29 (revision `e625af5`; documentation pending commit; push remains
+  blocked):** the final checkpoint was evaluated in distinct new-root cells
+  for `nominal`, `delay_only`, `loss_only`, `dynamic_only`, `combined`, and
+  `ood_communication_obstacle`, each with `--episodes 20 --device cuda` using
+  `scripts/evaluate_core_checkpoint.py`; OSQP remains CPU. All six cells are
+  beneath `outputs/core_3uav_post_actor_isolation_evaluations/` with matching
+  `summary.json` and raw `raw_results/seed_20260719.jsonl`. Direct parsing
+  verified exactly 20 records/cell, constant `(seed=20260719, scenario=<cell>)`
+  identity, and 120 total raw records. No numerical performance, safety,
+  fallback-rate, significance, or baseline conclusion is permitted from this
+  one checkpoint. Next: commit this documentation without staging `.gitignore`,
+  confirm no Python job/absent targets, and perform the identical six-cell
+  matrix for the remaining four valid MLP seeds; after all 30 cells, replay and
+  summarize every retained CBF fallback source without changing CBF values.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

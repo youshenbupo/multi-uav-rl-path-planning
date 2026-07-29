@@ -2165,3 +2165,31 @@ raw; no parameter was changed. This establishes only training/replay
 provenance, not a performance, safety, fallback-rate, significance, or baseline
 claim. Next: serially evaluate every final checkpoint in six canonical scenarios
 at 20 episodes/cell into a new root, retaining JSONL before GraphMAPPO work.
+
+## AAMAS 2027 - post-isolation MLP seed 20260719 six-scenario matrix retained (2026-07-29)
+
+At revision `e625af5`, the final checkpoint
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260719/checkpoints/mappo_final.pt`
+was evaluated on CUDA with CPU OSQP under the unchanged frozen configuration
+SHA-256 `794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`.
+The command form was `D:\anaconda3\envs\multiuav_rl\python.exe
+scripts\evaluate_core_checkpoint.py --family mappo --config
+configs\rl\dynamic_mappo_baseline.yaml --checkpoint <above> --output-dir
+outputs\core_3uav_post_actor_isolation_evaluations --experiment-name <cell>
+--seed 20260719 --num-uavs 3 --episodes 20 --scenario <scenario> --device cuda`.
+The six distinct `<cell>` directories cover `nominal`, `delay_only`,
+`loss_only`, `dynamic_only`, `combined`, and `ood_communication_obstacle`.
+
+Each cell under `outputs/core_3uav_post_actor_isolation_evaluations/` retains
+its `summary.json` and `raw_results/seed_20260719.jsonl`. Direct parsing
+verified 20 records in each JSONL, fixed identity `(seed=20260719, scenario=<cell
+scenario>)`, six expected scenarios, and hence 120 retained raw episode
+records. The `nominal` launcher logs are
+`outputs/core_3uav_post_actor_isolation_eval_seed_20260719_nominal.stdout.log`
+and `.stderr.log`; subsequent scenario artifacts retain their per-cell output
+directories. This proves only protocol-complete evaluation provenance for one
+checkpoint. It does not establish performance, safety, fallback rate,
+significance, or a cross-seed conclusion. Next: perform the same no-overwrite,
+20-episode six-scenario matrix for the remaining four valid MLP checkpoints,
+then replay all retained evaluation fallback sources without changing CBF
+parameters.

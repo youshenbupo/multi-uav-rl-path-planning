@@ -539,3 +539,12 @@
   is provenance only: it is not an episode-level evaluation fallback rate and
   cannot support safety, performance, significance, or baseline claims. The
   invalid pre-retry `20260721` root is excluded from this source list.
+- The completed six-scenario evaluation matrix for valid post-isolation MLP
+  seed `20260719` is preserved at
+  `outputs/core_3uav_post_actor_isolation_evaluations/core_3uav_post_actor_isolation_mlp_mappo_seed_20260719_<scenario>/`.
+  It has 20 raw JSONL episodes per canonical scenario (120 episodes total), but
+  only one checkpoint has this matrix so far. Treat all per-cell summaries and
+  fallback records as raw provenance, not performance, safety, fallback-rate,
+  significance, baseline, or multi-seed evidence. The other four valid MLP
+  checkpoints still require matched cells; do not aggregate them with any
+  protocol-ineligible historical output.
