@@ -169,6 +169,18 @@ processes before relying on any status below.
   1,042 updates, CUDA identity, final checkpoint/summary, and fallback sources;
   document before seed `20260722`.
 
+- **Valid post-isolation raw GraphMAPPO seed `20260721` completed,
+  2026-07-29 (revision `d07b637`; documentation pending commit):** the CUDA
+  raw-graph run completed at 100,032 transitions / 1,042 updates under the
+  unchanged config, retaining final artifacts and logs. It has one training
+  `solved inaccurate` fallback in 33,344 decisions and 0/160 initial/final
+  events. Replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260721_replay_20260729.jsonl`
+  retains one source, zero errors, and a solved non-fallback replay using
+  unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP values. No outcome claim. Next:
+  commit docs without staging `.gitignore`, then preflight/train raw-graph seed
+  `20260722` serially before any evaluation.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

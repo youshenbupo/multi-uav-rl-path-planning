@@ -2374,3 +2374,22 @@ fallback. This is the second valid raw-graph training/replay artifact only, not
 a performance, safety, fallback-rate, significance, baseline, or five-seed
 conclusion. Next: new-root serial CUDA training for raw-graph seed `20260721`
 before evaluation.
+
+## AAMAS 2027 - post-isolation raw GraphMAPPO seed 20260721 retained (2026-07-29)
+
+At revision `d07b637`, raw-graph mode `mappo` seed `20260721` used the unchanged
+three-UAV dynamic-graph configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D` with
+CUDA and process-level launcher output redirection. The unique root
+`outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260721/`
+naturally reached 100,032 transitions / 1,042 updates; final checkpoint,
+summary, TensorBoard, raw telemetry, and stdout/stderr logs are retained.
+
+Training retains one `solved inaccurate` CBF fallback in 33,344 decisions;
+initial and final in-script evaluations are 0/160 and 0/160. Per-seed replay
+at `outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260721_replay_20260729.jsonl`
+has one source, zero replay errors, and replays `solved` without fallback under
+the unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP protocol. This is a third valid
+raw-graph artifact only, not a performance, safety, fallback-rate,
+significance, baseline, or five-seed conclusion. Next: new-root serial CUDA
+training for raw-graph seed `20260722` before evaluation.

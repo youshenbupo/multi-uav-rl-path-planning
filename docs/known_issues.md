@@ -604,3 +604,8 @@
   retained with zero replay errors and a `solved` non-fallback decision. This
   single diagnostic cannot justify safety-solver tuning or any outcome claim;
   preserve it alongside the prior invalid root and valid 20260719 retry.
+- Valid raw GraphMAPPO seed `20260721` retains one training `solved inaccurate`
+  fallback in 33,344 decisions. Its source/replay JSONL preserves a zero-error
+  replay which is `solved` without fallback under unchanged safety values. This
+  remains a seed-local diagnostic, not a reason to change CBF settings or make
+  an outcome claim.
