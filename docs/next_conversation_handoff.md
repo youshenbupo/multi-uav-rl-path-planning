@@ -6,6 +6,19 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- The first independent 8-UAV principal no-uncertainty seed `20260719` is
+  complete and documented. It ran at revision `0f6e011` using the frozen
+  config SHA-256 `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`,
+  CUDA network execution, CPU OSQP, predictive delivered-packet knowledge,
+  and disabled uncertainty inputs/margins. Its distinct artifact root is
+  `outputs/core_8uav_ablation/core_8uav_predictive_no_uncertainty_seed_20260719`;
+  final checkpoint, summary, telemetry, TensorBoard, and launcher logs are
+  retained. It has 100,224 transitions/261 updates; training/initial/final
+  script-evaluation fallback counts are 182/15/0 (12,528/160/160 decisions).
+  Preserve all contexts and make no result claim or CBF change. No Python
+  process remains. Next: launch seed `20260720` serially under the same config
+  and a distinct output directory only after a no-process preflight.
+
 - After a zero-Python-process preflight, the sole active CUDA job is the first
   independent 8-UAV principal no-uncertainty seed `20260719`, launched at
   revision `0f6e011`. Its retained ignored launcher is
