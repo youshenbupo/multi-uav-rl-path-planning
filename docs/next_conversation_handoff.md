@@ -6,6 +6,17 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- A first no-process check immediately before the planned seed `20260721`
+  launch transiently observed one Python process; the launcher was not run. A
+  follow-up read-only check found none, and only then launched seed `20260721`
+  serially at revision `08427a2` with the unchanged frozen config SHA-256
+  `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73` into
+  `outputs/core_8uav_ablation/core_8uav_predictive_no_uncertainty_seed_20260721`.
+  It is now the sole `multiuav_rl` CUDA job; live telemetry exists, final
+  summary does not, and its retained launcher stderr has 736 bytes. Preserve
+  that notice, do not restart or tune, and verify final artifacts/events before
+  starting seed `20260722`.
+
 - Independent 8-UAV principal no-uncertainty seed `20260720` is complete and
   documented. Launched at revision `96267be` with frozen config SHA-256
   `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`, it
