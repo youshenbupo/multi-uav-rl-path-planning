@@ -6,6 +6,13 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Primary-source verification followed the Thumiger--Deghat UAV MARL DOI to
+  official IEEE Xplore on 2026-07-29. The page returned `Unusual Traffic
+  Detected` (HTTP 418) before abstract/PDF access. The ledger remains
+  metadata-only; no statement may infer communication, dynamic-obstacle, or
+  safety assumptions. Seek an authorized IEEE or author primary copy rather
+  than bypassing the access restriction.
+
 - Primary-source verification followed Liu et al.'s DHCG DOI to the official
   IJCAI proceedings page on 2026-07-29 and reviewed its metadata/abstract.
   The page exposed the official PDF, but two browser download attempts timed

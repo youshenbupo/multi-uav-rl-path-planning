@@ -425,3 +425,9 @@
   uncertainty handling, dynamic-obstacle setting, or safety mechanism from the
   abstract. Obtain the official PDF or an author-provided primary copy before
   asserting a distinction or novelty gap.
+- The Thumiger--Deghat IEEE Control Systems Letters DOI resolves to IEEE Xplore,
+  but the official page returned `Unusual Traffic Detected` (HTTP 418) before
+  the abstract or PDF was accessible. It remains metadata-only; do not infer
+  its communication assumptions, dynamic-obstacle model, or safety mechanism.
+  Obtain an authorized IEEE or author-provided primary copy rather than
+  bypassing the access restriction.

@@ -1782,3 +1782,16 @@ or full-text inference was performed. The failed retrieval is recorded in `docs/
 claim boundary changed. Next: obtain the official PDF or an author-provided
 primary copy and read it before making any DHCG method-difference or novelty
 statement.
+
+## AAMAS 2027 - official IEEE multi-UAV source retrieval block retained (2026-07-29)
+
+At revision `fe6be1f`, primary-source inspection used
+`C:\\Users\\yun96\\.claude\\skills\\gstack\\browse\\dist\\browse.exe goto https://doi.org/10.1109/LCSYS.2021.3138941`.
+The DOI resolved to official IEEE Xplore document `9663555`, but the page
+returned `Unusual Traffic Detected (Error 418)` before presenting an abstract
+or PDF. No download, PDF parsing, source inference, experimental output, policy,
+or CBF configuration change occurred. The evidence ledger therefore remains
+metadata-only and records the block in `docs/related_work_matrix.md` and
+`docs/known_issues.md`. Next: obtain an authorized IEEE or author-provided
+primary copy; do not infer communication, obstacle, or safety assumptions from
+the title or metadata.
