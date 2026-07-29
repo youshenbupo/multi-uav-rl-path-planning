@@ -592,3 +592,10 @@
   launcher stderr log must remain untouched and excluded. A retry must use a
   unique root and process-level native-output redirection; do not change CBF
   settings or overwrite the invalid root.
+- Valid raw GraphMAPPO seed `20260719` is only the
+  `...seed_20260719_launcherretry1/` root. It retains two training
+  `solved inaccurate` emergency fallbacks in 33,344 decisions; the companion
+  replay has zero errors but one emergency fallback. Preserve all source and
+  replay records and do not change CBF values. One valid raw-graph seed, its
+  short in-script evaluations, or the replay outcome cannot support a
+  performance, safety, fallback-rate, significance, or baseline statement.

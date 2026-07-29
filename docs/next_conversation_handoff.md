@@ -124,6 +124,23 @@ processes before relying on any status below.
   retry root for a 100k final checkpoint/summary before treating it as valid;
   otherwise continue process-only monitoring.
 
+- **Valid post-isolation raw GraphMAPPO seed `20260719` retry completed,
+  2026-07-29 (training revision `461951c`; documentation pending commit):**
+  the `launcherretry1` root naturally completed on CUDA at 100,032 transitions
+  / 1,042 updates using graph mode `mappo`, three UAVs, and frozen dynamic-graph
+  config SHA-256 `1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+  Final checkpoint, summary, TensorBoard, raw telemetry, and stdout/stderr logs
+  exist and were parsed. Training retains two `solved inaccurate` fallbacks in
+  33,344 decisions; initial/final in-script evaluations retain 0/160 and
+  0/160. Per-seed replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260719_launcherretry1_replay_20260729.jsonl`
+  has two sources, zero errors, one replay fallback, under unchanged
+  20,000/0.1s/100/0.5/5.0 CPU-OSQP values. Do not call this an outcome. The
+  earlier non-retry root is invalid and excluded. Next: commit docs without
+  staging `.gitignore`; confirm zero Python jobs and absent new output/log paths,
+  then serially launch raw GraphMAPPO seed `20260720` with process-level stdio
+  redirection before any Graph checkpoint evaluation.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

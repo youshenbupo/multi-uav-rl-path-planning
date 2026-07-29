@@ -2322,3 +2322,33 @@ value changed. Next: retry the same numeric seed in a unique
 `launcherretry1` root with process-level stdout/stderr redirection that keeps
 native diagnostics out of the invoking PowerShell error stream, then audit only
 a natural 100k completion.
+
+## AAMAS 2027 - post-isolation raw GraphMAPPO seed 20260719 retry retained (2026-07-29)
+
+The only valid raw-graph seed-`20260719` artifact is the unique retry root
+`outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260719_launcherretry1/`.
+At launch revision `461951c`, it used
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py
+--config configs\rl\dynamic_graph_baseline.yaml --device cuda --seed 20260719
+--num-uavs 3 --graph-mode mappo --total-steps 100000 --output-dir <root>`;
+the frozen config SHA-256 is
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+Process-level stdout/stderr redirection avoided the first launcher's erroneous
+stderr-as-fatal handling. It naturally completed on CUDA at 100,032 transitions
+(the expected 32-step rollout boundary beyond the requested 100k) and 1,042
+updates, with `summary.json`, final `graph_mappo_final.pt`, TensorBoard, raw
+telemetry, and separate launcher logs retained.
+
+The raw training telemetry has two `solved inaccurate` emergency fallbacks over
+33,344 decisions; the initial and final in-script evaluations each retain zero
+fallbacks over 160 decisions. Its all-source per-seed replay is
+`outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260719_launcherretry1_replay_20260729.jsonl`
+plus companion summary. It retains two source events with zero replay errors
+under unchanged 20,000-iteration, 0.1-second, penalty-100,
+uncertainty-gain-0.5/cap-5 CPU-OSQP settings: one replay is `solved inaccurate`
+and falls back, one is `solved`. The preceding non-retry raw-graph root remains
+invalid/excluded via its `ABORTED.json`. This establishes one valid independent
+raw-graph training/replay artifact only, not a performance, safety,
+fallback-rate, significance, baseline, or five-seed conclusion. Next: after a
+zero-process/absent-path preflight, serially train raw-graph seed `20260720` in
+a new root before any raw-graph checkpoint evaluation.
