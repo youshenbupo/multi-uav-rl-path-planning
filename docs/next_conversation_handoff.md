@@ -122,6 +122,19 @@ processes before relying on any status below.
   Diagnostic only: no tuning/claim. Next: zero-process and absent-path
   preflight, then final serial MLP seed `20260723`; do not begin evaluation.
 
+- **Five valid post-isolation 3-UAV MLP training seeds are complete:**
+  `20260719`, `20260720`, `20260721_telemetryretry1`, `20260722`, and
+  `20260723` each reached 100,032 CUDA transitions / 1,042 updates with final
+  checkpoint/summary under the frozen config hash
+  `794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`.
+  The original `20260721` root stays invalid. The all-source replay
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_5seed_training_replay_20260729.jsonl`
+  has 26 source events, zero replay errors, and 23 replay fallbacks under
+  unchanged values; it is diagnostic provenance, not a rate/safety/result
+  claim. Next: create a new evaluation root, then serially execute six
+  canonical scenarios × 20 episodes for each matching final checkpoint, retain
+  JSONL, and only then begin GraphMAPPO retraining.
+
 - **Post-isolation MLP seed `20260719` completed:** the above process naturally
   exited at 100,032 transitions / 1,042 updates. Its final checkpoint,
   summary, TensorBoard data and `live_training_telemetry.json` are retained

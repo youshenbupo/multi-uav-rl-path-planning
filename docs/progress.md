@@ -2140,3 +2140,28 @@ emergency fallback. No CBF value changed. This is diagnostic evidence for a
 fourth independent seed only, not a performance, safety, or fallback-rate
 conclusion. Next: launch final MLP seed `20260723` serially before any checkpoint
 evaluation.
+
+## AAMAS 2027 - five post-isolation 3-UAV MLP seeds complete (2026-07-29)
+
+The five valid independent CUDA training artifacts are now
+`...seed_20260719`, `...seed_20260720`,
+`...seed_20260721_telemetryretry1`, `...seed_20260722`, and
+`...seed_20260723` beneath `outputs/core_3uav_post_actor_isolation/`. Each
+reached 100,032 transitions / 1,042 updates with its own final checkpoint,
+summary, TensorBoard and raw telemetry under frozen config SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`. The
+earlier `seed_20260721` directory with `ABORTED.json` remains invalid/excluded,
+not a sixth seed.
+
+The all-source five-seed training/initial/final telemetry replay is
+`outputs/cbf_diagnostics/post_actor_isolation_mlp_5seed_training_replay_20260729.jsonl`
+plus summary. With unchanged 20,000 iterations, 0.1 seconds, penalty 100,
+uncertainty gain 0.5 and cap 5.0, it retains all 26 source events from five
+telemetry files with zero replay errors: recorded 10 `solved inaccurate`, 7
+`maximum iterations reached`, and 9 `solve_time_limit`; replay 2 `solved
+inaccurate`, 3 `solved`, 11 `maximum iterations reached`, and 10
+`solve_time_limit`, with 23 replay fallbacks. All source and replay JSONL stay
+raw; no parameter was changed. This establishes only training/replay
+provenance, not a performance, safety, fallback-rate, significance, or baseline
+claim. Next: serially evaluate every final checkpoint in six canonical scenarios
+at 20 episodes/cell into a new root, retaining JSONL before GraphMAPPO work.

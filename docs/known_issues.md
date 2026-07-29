@@ -531,3 +531,11 @@
   `solve_time_limit`, three `maximum iterations reached`). Preserve the raw
   events and do not alter the unchanged solver protocol or infer a rate/safety
   property from this seed-local diagnostic.
+- The five valid post-isolation MLP training seeds have a single all-source
+  training/initial/final CBF replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_5seed_training_replay_20260729.jsonl`.
+  It retains 26 source events from five telemetry files and zero replay errors
+  under unchanged values, but 23 replay decisions use emergency fallback. This
+  is provenance only: it is not an episode-level evaluation fallback rate and
+  cannot support safety, performance, significance, or baseline claims. The
+  invalid pre-retry `20260721` root is excluded from this source list.
