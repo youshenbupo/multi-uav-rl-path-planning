@@ -156,6 +156,19 @@ processes before relying on any status below.
   zero-process/new-root preflight and train raw-graph seed `20260721` before
   any GraphMAPPO evaluation.
 
+- **Active post-isolation raw GraphMAPPO seed `20260721` (2026-07-29; commit
+  `d07b637`):** zero-process/new-root/CUDA preflight passed under the unchanged
+  dynamic-graph config SHA-256, then `train_graph_mappo.py --device cuda --seed
+  20260721 --num-uavs 3 --graph-mode mappo --total-steps 100000` started through
+  process-level stdout/stderr redirection. PID `23164` was alive at verification.
+  Target root is
+  `outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260721/`;
+  logs are `outputs/core_3uav_post_actor_isolation_raw_graph_mappo_seed_20260721.stdout.log`
+  and `.stderr.log`. While active, use process/file-status checks only; do not
+  read live telemetry or launch another job. On exit, audit 100,032 transitions,
+  1,042 updates, CUDA identity, final checkpoint/summary, and fallback sources;
+  document before seed `20260722`.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local
