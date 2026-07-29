@@ -67,6 +67,20 @@ processes before relying on any status below.
   input list from only these valid training/evaluation artifacts, and replay
   under unchanged CBF parameters before GraphMAPPO work.
 
+- **All-source post-isolation MLP CBF replay completed, 2026-07-29 (revision
+  `9b3fd56`; documentation pending commit):** the output
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_5seed_training_and_evaluation_replay_20260729.jsonl`
+  plus summary cover five valid training `live_training_telemetry.json` and 30
+  valid evaluation `runtime_telemetry.json` sources under explicitly unchanged
+  20,000 / 0.1s / 100 / 0.5 / 5.0 CPU-OSQP values. It retains 27 source events
+  (26 training, one evaluation): 26 replayed, 23 with emergency fallback; one
+  OOD seed-20260719 event remains an explicit replay error because its recorded
+  dynamic-obstacle centers cannot be reconstructed. Preserve it; do not tune
+  CBF or call it a rate. Next: commit documentation without staging
+  `.gitignore`, then zero-process/new-root preflight and launch only the first
+  matching post-isolation GraphMAPPO training seed after inspecting the
+  documented three-method configuration names.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

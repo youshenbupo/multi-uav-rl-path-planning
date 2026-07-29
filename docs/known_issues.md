@@ -574,3 +574,12 @@
   comparison. All source fallback contexts must still be replayed and retained
   under unchanged CBF values; invalid pre-retry and historical protocol-leaking
   artifacts remain excluded.
+- The all-source valid MLP replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_5seed_training_and_evaluation_replay_20260729.jsonl`
+  retains all 27 events from five training and 30 evaluation telemetry files,
+  but one OOD evaluation event cannot be reconstructed: seed `20260719`, OOD
+  communication-obstacle, episode 2, has no dynamic-obstacle centers at the
+  saved event step. Its `ValueError` is retained in the replay JSONL and counts
+  toward `replay_error_count=1`; it must not be omitted, counted as successful,
+  or used to justify a CBF numerical change. Diagnose telemetry fidelity before
+  interpreting replay rates.

@@ -2273,3 +2273,31 @@ provenance only; no performance, safety, fallback-rate, significance, or
 baseline result has yet been calculated or claimed. Next: replay every retained
 training and evaluation CBF fallback context under unchanged solver settings,
 retain source/replay JSONL, and explicitly record zero-event cells as such.
+
+## AAMAS 2027 - post-isolation MLP CBF all-source replay retained (2026-07-29)
+
+At revision `9b3fd56`, the no-overwrite command
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\replay_cbf_fallbacks.py
+--output-jsonl outputs\cbf_diagnostics\post_actor_isolation_mlp_5seed_training_and_evaluation_replay_20260729.jsonl
+--max-iterations 20000 --max-solve-time-seconds 0.1 --slack-penalty 100
+--uncertainty-margin-gain 0.5 --max-uncertainty-margin 5.0 <35 retained
+telemetry files>` completed on CPU OSQP. Inputs were five valid training
+`live_training_telemetry.json` files plus all 30 valid evaluation
+`runtime_telemetry.json` files; the preflight found 26 training and one
+evaluation event. The output JSONL and companion summary retain all 35 source
+paths, the unchanged numerical protocol, and 27 records.
+
+Recorded statuses are 10 `solved inaccurate`, seven `maximum iterations
+reached`, and 10 `solve_time_limit`. Of 26 successful replays, statuses are
+three `solved inaccurate`, three `solved`, 11 `maximum iterations reached`, and
+nine `solve_time_limit`, with 23 replay emergency fallbacks. One source event
+is explicitly unreplayed, not dropped: it is the `solve_time_limit` at
+`$.per_seed[0].episodes[2].emergency_events[0]` in
+`...seed_20260719_ood_communication_obstacle/runtime_telemetry.json`; replay
+reports `ValueError: Recorded dynamic-obstacle centers cannot be reconstructed
+from the event step`. Preserve this raw source/replay evidence and do not
+change slack, iteration limit, tolerance, solve-time, or uncertainty-margin
+settings. This is diagnostic/provenance evidence, not a performance, safety,
+fallback-rate, significance, or baseline claim. Next: begin fresh matching
+GraphMAPPO training only after a zero-process/new-root preflight; retain this
+unreplayable OOD context as an open telemetry-fidelity issue.
