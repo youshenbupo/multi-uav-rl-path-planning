@@ -6,8 +6,8 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
-- **Actor-information protocol repair, 2026-07-29 (parent revision
-  `55abb87`; commit/push still required):** a static audit found three
+- **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
+  blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local
   observations exposed neighbour truth, (2) current sender activity could hide
   an already delivered packet, and (3) GraphMAPPO attention passed peer private
@@ -41,10 +41,14 @@ processes before relying on any status below.
   analysis and paper claim, as documented in
   `docs/aamas2027_analysis_plan.md` and `docs/known_issues.md`. Existing Graph
   checkpoints are architecturally incompatible after the repair and must not
-  be force-loaded. Next: run full pytest, commit/push while excluding the
-  user-owned `.gitignore`, then start **new-root**, serial 3-UAV MLP five-seed
-  100k CUDA training; only after valid MLP reruns/evaluations begin the three
-  GraphMAPPO matching five-seed reruns.
+  be force-loaded. The full pytest result is recorded below. The push command
+  `git push github.com:youshenbupo/multi-uav-rl-path-planning.git
+  codex/phase14-dynamic-world` failed with `Permission denied (publickey)` and
+  made no remote change. Do not alter credentials or `.gitignore`; restore
+  authorized SSH access and push `0e048cd` plus the documentation follow-up.
+  Then start **new-root**, serial 3-UAV MLP five-seed 100k CUDA training; only
+  after valid MLP reruns/evaluations begin the three GraphMAPPO matching
+  five-seed reruns.
 
 - Neural Graph CBF is no longer metadata-only: the official AAMAS 2026
   proceedings entry and three-page extended abstract PDF were reviewed on

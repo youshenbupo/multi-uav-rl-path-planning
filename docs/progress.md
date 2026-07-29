@@ -1978,3 +1978,11 @@ before this repair; the explicit root-level exclusions are in
 and no output was deleted or overwritten. Next: commit the isolation repair,
 run the full suite, then begin a new-root five-seed 3-UAV MLP rerun on CUDA
 before any GraphMAPPO rerun or reporting.
+
+The repair was committed locally as `0e048cd` (`fix: isolate actor information
+from peer truth`). The required push command
+`git push github.com:youshenbupo/multi-uav-rl-path-planning.git
+codex/phase14-dynamic-world` failed before any remote update with
+`Permission denied (publickey)`. No credentials, remote configuration, or
+history were changed. Restore authorized SSH access, then push this commit and
+the documentation-only follow-up; `.gitignore` remains user-owned and unstaged.
