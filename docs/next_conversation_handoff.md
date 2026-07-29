@@ -114,6 +114,16 @@ processes before relying on any status below.
   without final artifacts, preserve a second unique invalid attempt—never
   overwrite either root or change CBF settings.
 
+- **Follow-up status, 2026-07-29 (commit `6df41d7`):** after the retry launch
+  and documentation correction, PID `17072` remained the sole Python process
+  in the dedicated `multiuav_rl` environment through repeated process-only
+  checks; its CPU time rose from 109.75 to 297.25 seconds, so it was active and
+  not yet ready for artifact audit. `.gitignore` remains the only unstaged
+  worktree change. Do not inspect its live telemetry or launch another job.
+  Next conversation: first check whether PID `17072` has exited, then audit the
+  retry root for a 100k final checkpoint/summary before treating it as valid;
+  otherwise continue process-only monitoring.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local
