@@ -6,6 +6,17 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- After a corrected zero-`python.exe`-training-process preflight, final 8-UAV
+  principal no-uncertainty seed `20260723` launched at revision `278129e` with
+  the frozen config SHA-256 `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`.
+  The sole verified training command uses CUDA network execution and targets
+  `outputs/core_8uav_ablation/core_8uav_predictive_no_uncertainty_seed_20260723`.
+  Live telemetry exists, final summary does not, and its retained launcher
+  stderr has 392 bytes. Do not add work, restart, overwrite, or tune CBF while
+  it runs. On completion, audit final checkpoint/summary/event contexts, write
+  docs, then run the full five-seed 8-UAV six-scenario matrix and unchanged
+  all-source replay before any ablation claim.
+
 - Independent 8-UAV principal no-uncertainty seed `20260722` is complete and
   documented. It launched at revision `59e9984` with frozen config SHA-256
   `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`; all
