@@ -50,6 +50,23 @@ processes before relying on any status below.
   after valid MLP reruns/evaluations begin the three GraphMAPPO matching
   five-seed reruns.
 
+- **Active serial rerun (do not start concurrent work):** post-isolation 3-UAV
+  MLP seed `20260719` was launched after zero-process/CUDA preflight from local
+  revision `00a970f` with
+  `D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_mappo.py --config
+  configs\rl\dynamic_mappo_baseline.yaml --device cuda --seed 20260719
+  --num-uavs 3 --total-steps 100000 --output-dir
+  outputs\core_3uav_post_actor_isolation\core_3uav_mlp_mappo_seed_20260719`.
+  Frozen config SHA-256:
+  `794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`.
+  PID `44928` was alive at launch verification; output stdout/stderr are
+  `outputs/core_3uav_post_actor_isolation_seed_20260719.stdout.log` and
+  `.stderr.log`, and live telemetry is in the new output directory. The
+  retained stderr already contains `CBF filter emergency fallback: solved
+  inaccurate`; do not tune CBF, restart, or discard it. Wait for natural exit,
+  audit/checkpoint/document it, then serially launch seed `20260720`. This is
+  an active attempt, not a performance/safety/fallback-rate result.
+
 - Neural Graph CBF is no longer metadata-only: the official AAMAS 2026
   proceedings entry and three-page extended abstract PDF were reviewed on
   2026-07-29 (SHA-256

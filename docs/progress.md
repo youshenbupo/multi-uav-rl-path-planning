@@ -1986,3 +1986,25 @@ codex/phase14-dynamic-world` failed before any remote update with
 `Permission denied (publickey)`. No credentials, remote configuration, or
 history were changed. Restore authorized SSH access, then push this commit and
 the documentation-only follow-up; `.gitignore` remains user-owned and unstaged.
+
+## AAMAS 2027 - post-isolation MLP rerun started (2026-07-29)
+
+After a zero-training-process preflight and CUDA check (PyTorch
+`2.13.0+cu130`, RTX 5060 Laptop GPU), the sole serial first rerun was launched
+from local revision `00a970f`:
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts\\train_mappo.py
+--config configs\\rl\\dynamic_mappo_baseline.yaml --device cuda --seed
+20260719 --num-uavs 3 --total-steps 100000 --output-dir
+outputs\\core_3uav_post_actor_isolation\\core_3uav_mlp_mappo_seed_20260719`.
+The frozen configuration SHA-256 is
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`.
+Network training/inference uses CUDA and OSQP remains CPU-side under unchanged
+slack/iteration/time/tolerance settings. At launch verification, PID `44928`
+was alive; raw stdout/stderr are
+`outputs/core_3uav_post_actor_isolation_seed_20260719.stdout.log` and `.stderr.log`,
+and live telemetry is under the new output root. The stderr already contains a
+retained `solved inaccurate` emergency-fallback notice; do not tune or restart
+in response. This is an active training attempt, not a result. Do not start
+another training/evaluation process until it naturally exits; then audit final
+checkpoint, summary, telemetry, and every raw fallback before launching seed
+`20260720`.
