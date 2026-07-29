@@ -590,5 +590,5 @@
   `solved inaccurate` stderr diagnostic as fatal at 10,848 transitions. Its
   `ABORTED.json`, partial checkpoints, telemetry, TensorBoard, and empty
   launcher stderr log must remain untouched and excluded. A retry must use a
-  unique root and merged native output; do not change CBF settings or overwrite
-  the invalid root.
+  unique root and process-level native-output redirection; do not change CBF
+  settings or overwrite the invalid root.

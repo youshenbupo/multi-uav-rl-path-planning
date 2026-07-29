@@ -2319,5 +2319,6 @@ raw telemetry, and TensorBoard; no final checkpoint or summary exists.
 training, evaluation, CBF replay, aggregation, and paper claim. This is a
 launcher/telemetry-stream handling failure, not a CBF parameter result; no CBF
 value changed. Next: retry the same numeric seed in a unique
-`launcherretry1` root with native stderr merged into a launcher log before
-PowerShell error handling, then audit only a natural 100k completion.
+`launcherretry1` root with process-level stdout/stderr redirection that keeps
+native diagnostics out of the invoking PowerShell error stream, then audit only
+a natural 100k completion.
