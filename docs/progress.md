@@ -2066,3 +2066,29 @@ and uses emergency fallback. Preserve it without numerical tuning. This is a
 second independent auditable training attempt, not a performance, safety,
 fallback-rate, or five-seed conclusion. Next: serial seed `20260721` under the
 same protocol; no checkpoint evaluation starts yet.
+
+## AAMAS 2027 - telemetry-lock repair and invalid MLP seed 20260721 attempt (2026-07-29)
+
+The first post-isolation seed `20260721` attempt at revision `2122b14` stopped
+at 91,776 transitions without a final checkpoint/summary. Its complete retained
+root is
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260721/`,
+with its launcher logs in the matching top-level `outputs` paths and a new
+`ABORTED.json` exclusion marker. The direct stderr cause is
+`PermissionError [WinError 5]` while atomically replacing
+`live_training_telemetry.json`; all partial checkpoints and telemetry, including
+eight initial-evaluation `solved inaccurate` fallback contexts, are preserved
+but invalid for every aggregation.
+
+The minimal repair in `multiuav/learning/telemetry.py` retains atomic replace
+but retries a transient `PermissionError` at most five times with a 50ms delay;
+it does not alter rollout, actor, CBF, slack, iteration, tolerance, or time
+settings. TDD evidence: the new transient-lock test failed first at the old
+single replacement, then passed after the bounded retry. Target telemetry tests
+passed 3 with two existing OSQP warnings; Ruff and explicit-package mypy passed
+103 sources. The full suite now has 158 passed and one retained unrelated
+legacy-inventory failure (83 MATLAB files observed vs 81 asserted), plus 28
+existing OSQP warnings. This validates telemetry persistence under the mocked
+transient lock, not training performance or a solver property. Next: commit the
+repair/documentation, preserve the invalid root, and rerun seed `20260721`
+under a unique `telemetryretry1` root before seeds `20260722`/`20260723`.

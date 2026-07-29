@@ -24,6 +24,14 @@ correction, not evidence about performance or safety. Do not delete, overwrite,
 or regenerate the old records in place. Restart with distinct post-isolation
 roots after the repaired code is committed.
 
+The later post-isolation partial run
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260721/`
+is separately invalid: it stopped at 91,776 transitions when a transient
+Windows sharing violation blocked telemetry replacement, has `ABORTED.json`,
+and lacks a final checkpoint/summary. Preserve it and exclude every partial
+checkpoint, telemetry event, and launcher log. Its replacement must use a new
+root after the bounded telemetry-retry repair; never overwrite it.
+
 ## Scope
 
 Every included analysis must follow the single manuscript mainline:

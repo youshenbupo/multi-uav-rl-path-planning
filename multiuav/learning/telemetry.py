@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 from typing import Any
 
 from multiuav.safety import SafetyFilterTelemetry
+
+_REPLACE_ATTEMPTS = 5
+_REPLACE_RETRY_SECONDS = 0.05
 
 
 def write_live_training_telemetry(
@@ -31,4 +35,11 @@ def write_live_training_telemetry(
         json.dumps(existing, indent=2, sort_keys=True),
         encoding="utf-8",
     )
-    temporary.replace(path)
+    for attempt in range(_REPLACE_ATTEMPTS):
+        try:
+            temporary.replace(path)
+            return
+        except PermissionError:
+            if attempt == _REPLACE_ATTEMPTS - 1:
+                raise
+            time.sleep(_REPLACE_RETRY_SECONDS)

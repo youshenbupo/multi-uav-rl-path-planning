@@ -82,6 +82,21 @@ processes before relying on any status below.
   only. Next: verify zero running jobs and absent target output, then serially
   launch seed `20260721`; do not start evaluation or tune CBF.
 
+- **Invalid post-isolation MLP seed `20260721` attempt and telemetry fix:** the
+  first `20260721` job at revision `2122b14` aborted at 91,776 transitions
+  without final checkpoint/summary when `Path.replace` hit
+  `PermissionError [WinError 5]` on `live_training_telemetry.json`. Preserve
+  its root `outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260721/`,
+  launcher logs, partial checkpoints, and eight initial-evaluation `solved
+  inaccurate` contexts; `ABORTED.json` marks all of it excluded from every
+  aggregation. Do not overwrite it. The new `telemetryretry1` run must use the
+  committed bounded transient-lock retry in `multiuav/learning/telemetry.py`
+  (five 50ms retries; atomic persistence otherwise unchanged), not a CBF
+  parameter change. TDD red/green passed, Ruff/mypy passed 103 sources; full
+  pytest is 158 passed / 1 retained legacy inventory failure / 28 OSQP warnings.
+  Next: confirm zero jobs and absent unique retry path, then rerun `20260721`
+  serially at 100k CUDA; only after valid completion continue seeds 22/23.
+
 - **Post-isolation MLP seed `20260719` completed:** the above process naturally
   exited at 100,032 transitions / 1,042 updates. Its final checkpoint,
   summary, TensorBoard data and `live_training_telemetry.json` are retained

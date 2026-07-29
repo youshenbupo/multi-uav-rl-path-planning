@@ -9,6 +9,36 @@ from pathlib import Path
 import pytest
 import torch
 
+from multiuav.learning.telemetry import write_live_training_telemetry
+from multiuav.safety import SafetyFilterTelemetry
+
+
+def test_live_telemetry_retries_a_transient_windows_replace_lock(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A transient sharing violation cannot abort training telemetry persistence."""
+    telemetry_path = tmp_path / "live_training_telemetry.json"
+    original_replace = Path.replace
+    attempts = 0
+
+    def replace_once_locked(source: Path, target: Path) -> Path:
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            raise PermissionError(13, "Access is denied", str(target))
+        return original_replace(source, target)
+
+    monkeypatch.setattr(Path, "replace", replace_once_locked)
+
+    write_live_training_telemetry(
+        telemetry_path,
+        total_transitions=32,
+        cbf=SafetyFilterTelemetry(),
+    )
+
+    assert attempts == 2
+    assert json.loads(telemetry_path.read_text(encoding="utf-8"))["total_transitions"] == 32
+
 
 @pytest.mark.parametrize(
     ("family", "config_name"),

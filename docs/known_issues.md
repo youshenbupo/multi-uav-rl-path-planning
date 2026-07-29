@@ -504,3 +504,13 @@
   with zero replay errors. The replay also falls back. Do not change slack,
   iteration, tolerance, or solve-time settings; this single seed supplies no
   performance, safety, or fallback-rate evidence.
+- The first post-isolation MLP seed `20260721` directory is an invalid,
+  preserved interrupted attempt. It stopped at 91,776 transitions because
+  Windows denied the atomic telemetry-file replacement, has no final checkpoint
+  or summary, and carries `ABORTED.json` under
+  `outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260721/`.
+  Its partial checkpoints, all telemetry, and eight initial-evaluation
+  `solved inaccurate` fallback contexts remain raw evidence but are excluded
+  from every training, evaluation, CBF, and manuscript aggregation. The
+  bounded-retry telemetry repair must be used only with a fresh retry root;
+  never overwrite this attempt or change CBF settings.
