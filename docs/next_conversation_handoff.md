@@ -96,6 +96,24 @@ processes before relying on any status below.
   absent distinct `...seed_20260719_launcherretry1` root, then retry with
   native stdout/stderr merged before PowerShell error handling.
 
+- **Active raw GraphMAPPO seed `20260719` launcher retry (2026-07-29; commit
+  `461951c`):** zero-process/new-root preflight passed, then
+  `D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py
+  --config configs\rl\dynamic_graph_baseline.yaml --device cuda --seed
+  20260719 --num-uavs 3 --graph-mode mappo --total-steps 100000 --output-dir
+  outputs\core_3uav_post_actor_isolation\core_3uav_raw_graph_mappo_seed_20260719_launcherretry1`
+  was started through `Start-Process` with standard output/error redirected,
+  avoiding the prior wrapper's stderr-as-fatal behavior. Python PID `17072` was
+  alive at verification; retain only process/file-status checks while it runs,
+  not live-telemetry reads. New logs are
+  `outputs/core_3uav_post_actor_isolation_raw_graph_mappo_seed_20260719_launcherretry1.stdout.log`
+  and `.stderr.log`; frozen config SHA-256 is
+  `1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`. On
+  natural exit, audit the final checkpoint/summary/transitions/updates and all
+  fallback sources; document before launching the next seed. If it stops
+  without final artifacts, preserve a second unique invalid attempt—never
+  overwrite either root or change CBF settings.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local
