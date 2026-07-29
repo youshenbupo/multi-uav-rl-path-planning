@@ -523,3 +523,11 @@
   inaccurate`, and eight replay emergency fallbacks. Preserve both source and
   replay records; do not treat the short initial evaluation, a single seed, or
   a replay status as a fallback-rate/safety result or tuning justification.
+- Valid post-isolation MLP seed `20260722` has 13 initial-evaluation CBF
+  emergency events (zero training/final-evaluation events). The retained
+  all-source replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260722_replay_20260729.jsonl`
+  has zero replay errors but all 13 replays use fallback (ten
+  `solve_time_limit`, three `maximum iterations reached`). Preserve the raw
+  events and do not alter the unchanged solver protocol or infer a rate/safety
+  property from this seed-local diagnostic.

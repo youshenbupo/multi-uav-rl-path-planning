@@ -2118,3 +2118,25 @@ These diagnostic outcomes must not trigger a numerical change. This establishes
 only a third completed independent post-isolation MLP training artifact; no
 performance, safety, fallback-rate, or five-seed conclusion exists. Next:
 serially train seed `20260722` under a new root; do not begin evaluations yet.
+
+## AAMAS 2027 - post-isolation MLP seed 20260722 retained (2026-07-29)
+
+The sole serial CUDA seed `20260722` at revision `73112f6` used the unchanged
+frozen configuration SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46` and root
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260722`.
+It naturally completed 100,032 transitions / 1,042 updates with final
+checkpoint, summary, TensorBoard, raw telemetry, and unique launcher logs.
+Training/final script evaluation retain zero fallbacks in 33,344/89 decisions;
+initial untrained-policy evaluation retains 13 events in 160 decisions.
+
+The complete per-seed source replay is
+`outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260722_replay_20260729.jsonl`
+plus summary. Its unchanged 20,000-iteration, 0.1-second, penalty-100,
+uncertainty-gain-0.5/cap-5 protocol retains 13 events with zero replay errors:
+nine recorded `solve_time_limit` and four `maximum iterations reached`; replay
+has ten `solve_time_limit` and three `maximum iterations reached`, all 13 with
+emergency fallback. No CBF value changed. This is diagnostic evidence for a
+fourth independent seed only, not a performance, safety, or fallback-rate
+conclusion. Next: launch final MLP seed `20260723` serially before any checkpoint
+evaluation.

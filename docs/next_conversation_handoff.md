@@ -110,6 +110,18 @@ processes before relying on any status below.
   original `20260721` directory remains invalid. Next: zero-process/absent-path
   preflight then serially train `20260722` at 100k CUDA; no evaluation yet.
 
+- **Post-isolation MLP seed `20260722` completed:** at revision `73112f6` it
+  naturally reached 100,032 CUDA transitions / 1,042 updates in
+  `outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260722/`.
+  Training/final script evaluation have 0/33,344 and 0/89 fallbacks; initial
+  evaluation retains 13 events in 160 decisions. The all-source replay
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260722_replay_20260729.jsonl`
+  has 13 sources, zero replay errors, nine recorded time limits/four maximum
+  iterations, and ten replay time limits/three maximum iterations; all replay
+  events use fallback under unchanged 20,000 / 0.1s / 100 / 0.5 / 5.0.
+  Diagnostic only: no tuning/claim. Next: zero-process and absent-path
+  preflight, then final serial MLP seed `20260723`; do not begin evaluation.
+
 - **Post-isolation MLP seed `20260719` completed:** the above process naturally
   exited at 100,032 transitions / 1,042 updates. Its final checkpoint,
   summary, TensorBoard data and `live_training_telemetry.json` are retained
