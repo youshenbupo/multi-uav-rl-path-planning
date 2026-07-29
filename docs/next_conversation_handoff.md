@@ -6,6 +6,17 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Independent 8-UAV principal no-uncertainty seed `20260721` is complete and
+  documented. It ran at revision `08427a2` under the unchanged frozen config
+  SHA-256 `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`;
+  its distinct final artifacts remain under
+  `outputs/core_8uav_ablation/core_8uav_predictive_no_uncertainty_seed_20260721`.
+  It reached 100,224 transitions/261 updates, with training/initial/final
+  fallback counts 139/13/10 in 12,528/160/160 decisions. All 162 contexts and
+  launcher logs are retained; no Python process remains and no CBF setting
+  changed. This is not a performance or safety result. Next: zero-process
+  preflight, then serial seed `20260722` under the identical protocol.
+
 - A first no-process check immediately before the planned seed `20260721`
   launch transiently observed one Python process; the launcher was not run. A
   follow-up read-only check found none, and only then launched seed `20260721`
