@@ -6,6 +6,14 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Primary-source verification also attempted the Neural Graph CBF DOI on
+  2026-07-29. It resolved to the official ACM page, but Cloudflare human
+  verification prevented access to abstract/PDF and network-idle timed out.
+  The related-work ledger remains metadata-only and now records this retrieval
+  block; no statement about method, assumptions, guarantees, or differences
+  may cite this unread full text. Seek an official proceedings or author copy
+  rather than bypassing the verification gate.
+
 - Primary-source verification attempted DACOM's official AAAI PDF on
   2026-07-29 through the required browser flow. The landing-page abstract and
   official PDF link were accessible, but the browser download timed out and
