@@ -554,3 +554,10 @@
   valid retry `20260721_telemetryretry1`, `20260722`, and `20260723`
   checkpoints require the same matrix, and no aggregation may include the
   invalid pre-retry `20260721` directory or legacy protocol-ineligible outputs.
+- The third matrix is associated solely with valid retry root
+  `core_3uav_mlp_mappo_seed_20260721_telemetryretry1`; its output cells carry
+  numeric seed `20260721` and six 20-record JSONL files. The original aborted
+  `...seed_20260721/` directory remains untouched and excluded. Two valid
+  checkpoints (`20260722`, `20260723`) still lack matched cells, so no
+  performance, safety, fallback-rate, significance, baseline, or five-seed
+  statement is available.

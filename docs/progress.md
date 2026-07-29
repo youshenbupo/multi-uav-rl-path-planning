@@ -2213,3 +2213,23 @@ fallback rate, significance, a baseline comparison, or a five-seed conclusion.
 Next: repeat the no-overwrite matrix for valid retry checkpoint
 `20260721_telemetryretry1`, then seeds `20260722` and `20260723`, before an
 all-source CBF fallback replay under unchanged numerical settings.
+
+## AAMAS 2027 - post-isolation MLP seed 20260721 retry six-scenario matrix retained (2026-07-29)
+
+At revision `5c81524`, the only valid seed-`20260721` checkpoint,
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260721_telemetryretry1/checkpoints/mappo_final.pt`,
+received the matched CUDA actor / CPU OSQP six-scenario, 20-episode-per-cell
+evaluation under the unchanged frozen configuration SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`. Its
+separate cells are
+`outputs/core_3uav_post_actor_isolation_evaluations/core_3uav_post_actor_isolation_mlp_mappo_seed_20260721_telemetryretry1_<scenario>`.
+
+All six `raw_results/seed_20260721.jsonl` files and their `summary.json` files
+were parsed: each JSONL has exactly 20 records with fixed numeric seed 20260721
+and the corresponding canonical scenario, totaling 120 records. The aborted
+pre-retry `...seed_20260721/` root was neither overwritten nor used. This
+documents a third valid matched matrix only; it is not evidence of performance,
+safety, fallback rate, significance, a baseline comparison, or a five-seed
+result. Next: perform the no-overwrite six-scenario matrix for seeds `20260722`
+and `20260723`, then replay retained training and evaluation fallback sources
+under unchanged CBF settings.

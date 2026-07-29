@@ -34,6 +34,16 @@ processes before relying on any status below.
   preflight and evaluate valid retry `20260721_telemetryretry1` in the same
   six cells before seeds `20260722`/`20260723`.
 
+- **Valid retry seed `20260721_telemetryretry1` evaluation matrix completed,
+  2026-07-29 (revision `5c81524`; documentation pending commit):** evaluated
+  only the retry checkpoint (never the aborted same-seed root) in six distinct
+  canonical cells at 20 CUDA/CPU-OSQP episodes/cell. Each output under
+  `outputs/core_3uav_post_actor_isolation_evaluations/` has parseable
+  `summary.json` and a 20-record `raw_results/seed_20260721.jsonl` with fixed
+  numeric seed/scenario identity, for 120 retained records. This is a third
+  matching artifact, not an outcome claim. Next: commit documentation without
+  staging `.gitignore`, preflight, and run seed `20260722` six-cell matrix.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local
