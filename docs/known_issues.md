@@ -548,3 +548,9 @@
   significance, baseline, or multi-seed evidence. The other four valid MLP
   checkpoints still require matched cells; do not aggregate them with any
   protocol-ineligible historical output.
+- A second matched matrix, for valid post-isolation MLP seed `20260720`, is
+  retained in sibling `...seed_20260720_<scenario>/` cells with six parseable
+  20-episode JSONL files (120 records). It is still incomplete evidence: the
+  valid retry `20260721_telemetryretry1`, `20260722`, and `20260723`
+  checkpoints require the same matrix, and no aggregation may include the
+  invalid pre-retry `20260721` directory or legacy protocol-ineligible outputs.

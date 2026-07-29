@@ -22,6 +22,18 @@ processes before relying on any status below.
   matrix for the remaining four valid MLP seeds; after all 30 cells, replay and
   summarize every retained CBF fallback source without changing CBF values.
 
+- **Post-isolation MLP seed `20260720` evaluation matrix completed,
+  2026-07-29 (revision `2b232ac`; documentation pending commit):** repeated
+  the exact six canonical new-root CUDA/CPU-OSQP cells at 20 episodes/cell for
+  the seed `20260720` final checkpoint. Each
+  `...seed_20260720_<scenario>/raw_results/seed_20260720.jsonl` has a parseable
+  20-record, fixed-identity JSONL and a parseable `summary.json`; all six
+  scenario names are present (120 records). It supplies another protocol
+  artifact, not a performance, safety, fallback-rate, significance, baseline,
+  or multi-seed result. Next: commit docs without staging `.gitignore`, then
+  preflight and evaluate valid retry `20260721_telemetryretry1` in the same
+  six cells before seeds `20260722`/`20260723`.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

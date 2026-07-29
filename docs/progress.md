@@ -2193,3 +2193,23 @@ significance, or a cross-seed conclusion. Next: perform the same no-overwrite,
 20-episode six-scenario matrix for the remaining four valid MLP checkpoints,
 then replay all retained evaluation fallback sources without changing CBF
 parameters.
+
+## AAMAS 2027 - post-isolation MLP seed 20260720 six-scenario matrix retained (2026-07-29)
+
+At revision `2b232ac`, the final checkpoint
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260720/checkpoints/mappo_final.pt`
+was evaluated with the same CUDA actor / CPU OSQP command form, frozen
+configuration SHA-256, six canonical scenarios, distinct output cells, and 20
+episodes per cell recorded above for seed `20260719`. The output root is
+`outputs/core_3uav_post_actor_isolation_evaluations/`, with cell names
+`core_3uav_post_actor_isolation_mlp_mappo_seed_20260720_<scenario>`.
+
+Every cell retains a parseable `summary.json` and
+`raw_results/seed_20260720.jsonl`. Direct parsing verified 20 records per cell,
+fixed `(seed=20260720, scenario=<cell scenario>)` identity, all six expected
+scenario names, and 120 total raw records. This makes a second matched
+checkpoint matrix available; it does not establish performance, safety,
+fallback rate, significance, a baseline comparison, or a five-seed conclusion.
+Next: repeat the no-overwrite matrix for valid retry checkpoint
+`20260721_telemetryretry1`, then seeds `20260722` and `20260723`, before an
+all-source CBF fallback replay under unchanged numerical settings.
