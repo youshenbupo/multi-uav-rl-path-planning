@@ -2233,3 +2233,21 @@ safety, fallback rate, significance, a baseline comparison, or a five-seed
 result. Next: perform the no-overwrite six-scenario matrix for seeds `20260722`
 and `20260723`, then replay retained training and evaluation fallback sources
 under unchanged CBF settings.
+
+## AAMAS 2027 - post-isolation MLP seed 20260722 six-scenario matrix retained (2026-07-29)
+
+At revision `fd0b487`, final checkpoint
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260722/checkpoints/mappo_final.pt`
+completed the same frozen-config SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`, CUDA
+actor / CPU OSQP, six-canonical-scenario, 20-episode-per-cell protocol. The
+six new cells are
+`outputs/core_3uav_post_actor_isolation_evaluations/core_3uav_post_actor_isolation_mlp_mappo_seed_20260722_<scenario>`.
+
+Every raw `raw_results/seed_20260722.jsonl` and its co-located `summary.json`
+is parseable; direct validation found 20 records with fixed seed/scenario
+identity per cell and all six expected scenarios (120 records). This adds a
+fourth matched matrix only. No performance, safety, fallback-rate,
+significance, baseline, or five-seed result is proven. Next: evaluate final
+seed `20260723` with the exact no-overwrite protocol, then retain a combined
+CBF source replay without changing any solver parameter.

@@ -44,6 +44,15 @@ processes before relying on any status below.
   matching artifact, not an outcome claim. Next: commit documentation without
   staging `.gitignore`, preflight, and run seed `20260722` six-cell matrix.
 
+- **Post-isolation MLP seed `20260722` evaluation matrix completed,
+  2026-07-29 (revision `fd0b487`; documentation pending commit):** the matched
+  six canonical CUDA-actor/CPU-OSQP cells at 20 episodes/cell are complete and
+  preserve parseable `summary.json` plus 20 fixed-identity records/cell in
+  `raw_results/seed_20260722.jsonl` (120 records). This is fourth-matrix
+  provenance only. Next: commit documentation without staging `.gitignore`,
+  then preflight/evaluate seed `20260723`; after its validation, conduct the
+  all-source CBF fallback replay with unchanged safety parameters.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

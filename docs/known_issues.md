@@ -561,3 +561,8 @@
   checkpoints (`20260722`, `20260723`) still lack matched cells, so no
   performance, safety, fallback-rate, significance, baseline, or five-seed
   statement is available.
+- Valid MLP seed `20260722` now has the same six-cell, 120-record raw matrix,
+  but `20260723` is still required to complete the planned five-seed grid. Do
+  not infer any aggregate outcome or tune CBF based on these four checkpoint
+  matrices; all legacy/ineligible outputs and the aborted pre-retry 20260721
+  root remain excluded.
