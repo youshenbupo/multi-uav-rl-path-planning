@@ -81,6 +81,21 @@ processes before relying on any status below.
   matching post-isolation GraphMAPPO training seed after inspecting the
   documented three-method configuration names.
 
+- **Invalid raw GraphMAPPO seed `20260719` launcher attempt retained,
+  2026-07-29 (revision `a908886`; documentation pending commit):** command was
+  `train_graph_mappo.py --config configs/rl/dynamic_graph_baseline.yaml
+  --device cuda --seed 20260719 --num-uavs 3 --graph-mode mappo --total-steps
+  100000` under config SHA-256
+  `1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+  The launch wrapper's `ErrorActionPreference=Stop` converted a normal CBF
+  `solved inaccurate` native stderr diagnostic into `NativeCommandError`, so
+  the child stopped at 10,848 transitions without final checkpoint/summary.
+  `ABORTED.json` preserves/excludes the root and its 3,072/6,144/9,216 partial
+  checkpoints, telemetry, and TensorBoard. No CBF setting changed. Next:
+  commit docs without staging `.gitignore`; verify zero Python jobs and an
+  absent distinct `...seed_20260719_launcherretry1` root, then retry with
+  native stdout/stderr merged before PowerShell error handling.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

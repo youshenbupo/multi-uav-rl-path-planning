@@ -2301,3 +2301,23 @@ settings. This is diagnostic/provenance evidence, not a performance, safety,
 fallback-rate, significance, or baseline claim. Next: begin fresh matching
 GraphMAPPO training only after a zero-process/new-root preflight; retain this
 unreplayable OOD context as an open telemetry-fidelity issue.
+
+## AAMAS 2027 - raw GraphMAPPO seed 20260719 launcher-aborted attempt retained (2026-07-29)
+
+The first fresh raw-graph attempt used revision `a908886`, CUDA, seed `20260719`,
+three UAVs, `configs/rl/dynamic_graph_baseline.yaml` SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`, graph
+mode `mappo`, and `--total-steps 100000` in
+`outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260719/`.
+The PowerShell wrapper used `ErrorActionPreference=Stop`; a normal CBF fallback
+diagnostic emitted to native stderr (`solved inaccurate`) was elevated to a
+terminating `NativeCommandError`. The child is no longer active and the root
+has only 10,848 transitions, three interval checkpoints (3,072/6,144/9,216),
+raw telemetry, and TensorBoard; no final checkpoint or summary exists.
+
+`ABORTED.json` marks this complete root as preserved and excluded from every
+training, evaluation, CBF replay, aggregation, and paper claim. This is a
+launcher/telemetry-stream handling failure, not a CBF parameter result; no CBF
+value changed. Next: retry the same numeric seed in a unique
+`launcherretry1` root with native stderr merged into a launcher log before
+PowerShell error handling, then audit only a natural 100k completion.

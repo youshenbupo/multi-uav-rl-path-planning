@@ -583,3 +583,12 @@
   toward `replay_error_count=1`; it must not be omitted, counted as successful,
   or used to justify a CBF numerical change. Diagnose telemetry fidelity before
   interpreting replay rates.
+- The first fresh raw GraphMAPPO seed `20260719` directory is invalid and
+  preserved at
+  `outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260719/`.
+  A PowerShell `ErrorActionPreference=Stop` wrapper treated the routine CBF
+  `solved inaccurate` stderr diagnostic as fatal at 10,848 transitions. Its
+  `ABORTED.json`, partial checkpoints, telemetry, TensorBoard, and empty
+  launcher stderr log must remain untouched and excluded. A retry must use a
+  unique root and merged native output; do not change CBF settings or overwrite
+  the invalid root.
