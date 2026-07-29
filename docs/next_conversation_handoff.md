@@ -6,6 +6,26 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- After a zero-Python-process preflight, the sole active CUDA job is the first
+  independent 8-UAV principal no-uncertainty seed `20260719`, launched at
+  revision `0f6e011`. Its retained ignored launcher is
+  `outputs/core_8uav_ablation/core_8uav_predictive_no_uncertainty_seed_20260719_launcher.ps1`,
+  which runs `D:\\anaconda3\\envs\\multiuav_rl\\python.exe
+  scripts/train_graph_mappo.py --config
+  configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml
+  --device cuda --seed 20260719 --num-uavs 8 --graph-mode predictive_graph
+  --total-steps 100000 --output-dir
+  outputs/core_8uav_ablation/core_8uav_predictive_no_uncertainty_seed_20260719`.
+  Frozen config SHA-256 is
+  `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`:
+  predictive graph with risk gain 0 and CBF uncertainty-margin gain/max margin
+  0; slack penalty 100, 20,000 iterations, and 0.1 seconds are unchanged.
+  Initial health shows its output directory and live telemetry, no final
+  summary, and zero-byte launcher stderr. CUDA is for the network, OSQP stays
+  CPU-side. Do not start another Python job; verify final checkpoint, summary,
+  and all CBF event context before documenting it and serially starting seed
+  `20260720`.
+
 - The valid 5-UAV principal no-uncertainty ablation evaluation matrix and its
   unchanged-protocol CBF replay are complete. At launch revision `10a9c8e`,
   rerun4 evaluated all five independent final checkpoints using frozen
