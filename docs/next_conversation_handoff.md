@@ -6,6 +6,15 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Primary-source verification attempted DACOM's official AAAI PDF on
+  2026-07-29 through the required browser flow. The landing-page abstract and
+  official PDF link were accessible, but the browser download timed out and
+  direct navigation reported a download start without producing a local file.
+  No full-paper assertion was added: `docs/related_work_matrix.md` now records
+  the failed retrieval and keeps DACOM explicitly full-text-unreviewed. Do not
+  use it to support a novelty gap until an official or author-provided primary
+  PDF can be read.
+
 - Added and verified the read-only paired-summary artifact
   `scripts/summarize_paired_checkpoint_evaluations.py` with
   `tests/test_paired_checkpoint_summary.py`. It validates 20 records/cell and
