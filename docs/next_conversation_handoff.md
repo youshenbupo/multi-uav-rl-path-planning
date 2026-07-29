@@ -6,6 +6,19 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Final independent 8-UAV principal no-uncertainty seed `20260723` is complete
+  and documented. It launched at revision `278129e` under frozen config
+  SHA-256 `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`;
+  its final artifacts are retained in
+  `outputs/core_8uav_ablation/core_8uav_predictive_no_uncertainty_seed_20260723`.
+  It reached 100,224 transitions/261 updates, with training/initial/final
+  fallback counts 3/8/0 over 12,528/160/160 decisions; all 11 raw contexts and
+  launcher logs remain. No Python training command remains and no CBF setting
+  changed. All five 8-UAV independent checkpoints now exist. Next: launch a
+  fresh serial six-scenario, 20-episode-per-cell evaluation matrix for every
+  final checkpoint, retaining JSONL; audit it before all-source replay or any
+  comparison claim.
+
 - After a corrected zero-`python.exe`-training-process preflight, final 8-UAV
   principal no-uncertainty seed `20260723` launched at revision `278129e` with
   the frozen config SHA-256 `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`.

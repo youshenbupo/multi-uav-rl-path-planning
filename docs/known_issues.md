@@ -321,6 +321,13 @@
   evaluations. Preserve all 234 event contexts and logs under
   `outputs/core_8uav_ablation/`; do not infer a rate or causal effect and do
   not alter slack, limits, or tolerances in response.
+- The final 8-UAV principal no-uncertainty seed retains three training fallback
+  contexts (one `maximum iterations reached`, two `solved inaccurate`) and
+  eight initial-evaluation `solve_time_limit` contexts, although its final
+  script evaluation has zero. Preserve all 11 events under
+  `outputs/core_8uav_ablation/`; neither this seed nor all five unevaluated
+  checkpoints establish a fallback rate, safety, performance, scale, or causal
+  ablation effect. Do not alter CBF values.
 - The first retained 5-UAV principal no-uncertainty ablation seed has one
   `solve_time_limit` training CBF emergency fallback in 20,016 decisions,
   while its initial and final short evaluations each have zero in 160. Preserve
