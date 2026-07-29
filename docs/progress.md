@@ -2008,3 +2008,35 @@ in response. This is an active training attempt, not a result. Do not start
 another training/evaluation process until it naturally exits; then audit final
 checkpoint, summary, telemetry, and every raw fallback before launching seed
 `20260720`.
+
+## AAMAS 2027 - post-isolation MLP seed 20260719 retained (2026-07-29)
+
+The sole post-isolation 3-UAV MLP seed `20260719` naturally completed at
+100,032 transitions and 1,042 updates under the exact CUDA command and frozen
+configuration recorded above (training revision `00a970f`; config SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`). Its
+final checkpoint is
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260719/checkpoints/mappo_final.pt`;
+the summary, TensorBoard data, and raw live telemetry remain in the same new
+root, with launcher logs in `outputs/core_3uav_post_actor_isolation_seed_20260719.*.log`.
+
+Training telemetry retains three emergency events across 33,344 decisions
+(one `solved inaccurate`, two `maximum iterations reached`); its initial and
+final short script evaluations retain zero fallbacks over 160 and 98 decisions
+respectively. The append-safe read-only replay command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts\\replay_cbf_fallbacks.py
+--output-jsonl outputs\\cbf_diagnostics\\post_actor_isolation_mlp_seed_20260719_replay_20260729.jsonl
+--max-iterations 20000 --max-solve-time-seconds 0.1 --slack-penalty 100.0
+--uncertainty-margin-gain 0.5 --max-uncertainty-margin 5.0
+outputs\\core_3uav_post_actor_isolation\\core_3uav_mlp_mappo_seed_20260719\\live_training_telemetry.json`
+retains all three source events with zero replay errors. Under exactly those
+unchanged values, one replay remains `solved inaccurate` with emergency
+fallback and two replay as `solved`; the latter do not authorize changing
+slack, iteration limits, tolerances, or time limits.
+
+This proves only a completed, auditable first independent post-isolation
+training attempt and its diagnostic replay. It does not establish learning,
+performance, safety, a fallback rate, or a valid five-seed comparison. No
+JSONL checkpoint evaluation has started. Next: after confirming no process and
+an absent target path, launch seed `20260720` serially with the same frozen
+protocol.

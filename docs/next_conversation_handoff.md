@@ -67,6 +67,22 @@ processes before relying on any status below.
   audit/checkpoint/document it, then serially launch seed `20260720`. This is
   an active attempt, not a performance/safety/fallback-rate result.
 
+- **Post-isolation MLP seed `20260719` completed:** the above process naturally
+  exited at 100,032 transitions / 1,042 updates. Its final checkpoint,
+  summary, TensorBoard data and `live_training_telemetry.json` are retained
+  under `outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260719/`;
+  launcher logs are in the corresponding top-level `outputs` paths. Training
+  has three retained CBF emergency events in 33,344 decisions (one `solved
+  inaccurate`, two `maximum iterations reached`); initial/final script
+  evaluations record 0/160 and 0/98 fallbacks. The new replay
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260719_replay_20260729.jsonl`
+  plus `.summary.json` has all three events and zero replay errors under
+  unchanged 20,000 / 0.1s / 100 / 0.5 / 5.0 values; one replay still uses
+  emergency fallback. This is diagnostic only. Before another job, confirm
+  zero training processes and absent target path, then launch post-isolation
+  MLP seed `20260720` serially under the same command with only seed/output
+  path changed. Do not start checkpoint evaluation yet or alter CBF.
+
 - Neural Graph CBF is no longer metadata-only: the official AAMAS 2026
   proceedings entry and three-page extended abstract PDF were reviewed on
   2026-07-29 (SHA-256

@@ -487,3 +487,13 @@
   compatible. The repaired no-communication graph fallback is self-only, so
   legacy smoke configurations with communication disabled remain executable
   without manufacturing neighbour state; this validates plumbing only.
+- The first post-isolation 3-UAV MLP seed (`20260719`) retains three training
+  CBF emergency events in 33,344 decisions (one `solved inaccurate`, two
+  `maximum iterations reached`). Its all-source-for-this-seed replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260719_replay_20260729.jsonl`
+  has zero replay errors under the unchanged 20,000-iteration, 0.1-second,
+  penalty-100, uncertainty-gain-0.5/cap-5 protocol; one replay still falls
+  back. Keep all contexts and do not tune CBF values. One new seed and its
+  short in-script evaluations cannot establish any performance, safety, or
+  fallback-rate statement; four matched post-isolation MLP seeds and their
+  six-scenario JSONL evaluations remain required.
