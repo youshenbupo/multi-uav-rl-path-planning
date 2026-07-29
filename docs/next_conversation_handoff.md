@@ -6,6 +6,17 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Independent 8-UAV principal no-uncertainty seed `20260722` is complete and
+  documented. It launched at revision `59e9984` with frozen config SHA-256
+  `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`; all
+  final artifacts are retained under
+  `outputs/core_8uav_ablation/core_8uav_predictive_no_uncertainty_seed_20260722`.
+  It reached 100,224 transitions/261 updates; training/initial/final fallback
+  counts are 218/5/11 across 12,528/160/160 decisions. All 234 contexts and
+  launcher logs remain raw. No Python training command remains and no CBF
+  setting changed. This is no result claim. Next: corrected zero-training-
+  process preflight, then final serial seed `20260723`.
+
 - Before seed `20260722`, a first command-line preflight was invalid because
   the PowerShell query matched its own command text; it launched nothing and
   created no seed artifact. A corrected preflight filtered `python.exe` plus
