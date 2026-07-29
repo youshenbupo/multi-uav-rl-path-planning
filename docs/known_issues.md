@@ -292,6 +292,13 @@
   `outputs/core_5uav_ablation_evaluations_rerun3/` are retained, but the root
   is incomplete and excluded wholesale from aggregation and CBF replay. Start
   a fresh root for a complete matrix; do not reuse or overwrite these cells.
+- The fresh rerun4 root is the only valid 5-UAV principal no-uncertainty
+  evaluation matrix: it has the audited 30 cells and 600 raw records. The
+  earlier evaluation roots (initial, rerun1, rerun2, and interrupted rerun3)
+  remain retained and explicitly excluded. Its all-source diagnostic replay
+  retains five training fallback events with zero replay errors; this does not
+  justify a safety, fallback-rate, performance, scalability, or causal-ablation
+  claim, and must not motivate any CBF setting change.
 - The first retained 5-UAV principal no-uncertainty ablation seed has one
   `solve_time_limit` training CBF emergency fallback in 20,016 decisions,
   while its initial and final short evaluations each have zero in 160. Preserve

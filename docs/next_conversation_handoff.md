@@ -6,6 +6,27 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- The valid 5-UAV principal no-uncertainty ablation evaluation matrix and its
+  unchanged-protocol CBF replay are complete. At launch revision `10a9c8e`,
+  rerun4 evaluated all five independent final checkpoints using frozen
+  `configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml`
+  (SHA-256 `6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`),
+  CUDA network inference, CPU OSQP, six canonical scenarios, and 20 episodes
+  per cell. `outputs/core_5uav_ablation_evaluations_rerun4/` contains exactly
+  30 expected directories, 30 summaries, and 30 JSONL files; all 600 records
+  parse, and launcher stderr is zero bytes. It is the sole eligible root;
+  initial/rerun1/rerun2/rerun3 roots are retained but excluded.
+- `outputs/cbf_diagnostics/predictive_no_uncertainty_5uav_5seed_replay_20260729.jsonl`
+  and its `.summary.json` use unchanged 20,000 iterations, 0.1 seconds,
+  slack penalty 100, zero uncertainty-margin gain, and zero maximum uncertainty
+  margin over 65 telemetry sources (5 training summaries + 30 valid evaluation
+  summaries + 30 valid JSONL files). It retains five training-source events,
+  no evaluation-source events, and zero replay errors. Do not read any of this
+  as a method, safety, performance, fallback-rate, or scalability conclusion;
+  no CBF parameter changed. Next: audit the matching full-method 5-UAV data
+  and define a paired, invalid-root-excluding aggregation plan before reporting
+  any ablation comparison; then continue the frozen 8-UAV ablation protocol.
+
 - A fresh, serial 5-UAV principal no-uncertainty evaluation matrix was launched
   on 2026-07-29 at revision `10a9c8e`, after a zero-Python-process preflight.
   The retained ignored launcher is
