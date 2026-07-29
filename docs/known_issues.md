@@ -274,6 +274,24 @@
   `outputs/core_5uav_ablation_evaluations_rerun1/` are retained and must not be
   aggregated. A corrected launcher must use an unambiguous `${seed}` boundary
   and a new output root.
+- A third 5-UAV evaluation-launch attempt is invalid and excluded.  Its inline
+  PowerShell quoting stripped the intended string assignment, so evaluation
+  argument validation failed before a cell could run.  Preserve its launcher
+  stderr under `outputs/core_5uav_ablation_evaluations_rerun2/`; it contains no
+  valid cell, JSONL, or summary and must not be overwritten or aggregated.
+- The currently running fourth launcher uses a retained local `.ps1` script
+  with `"core_5uav_predictive_no_uncertainty_seed_${seed}_${scenario}"` and a
+  fresh `outputs/core_5uav_ablation_evaluations_rerun3/` root.  It remains
+  in-progress until a read-only audit establishes all 30 seed-scenario cells,
+  20 raw records per cell, and parseable JSONL; do not treat partial artifacts
+  as results.
+- The fourth 5-UAV no-uncertainty evaluation launcher was interrupted after 24
+  complete cells (all six canonical scenarios for seeds `20260719`--`20260722`)
+  and before seed `20260723`; no Python process remained on the 2026-07-29
+  audit. Its zero-byte launcher stderr, stdout, summaries, and JSONL under
+  `outputs/core_5uav_ablation_evaluations_rerun3/` are retained, but the root
+  is incomplete and excluded wholesale from aggregation and CBF replay. Start
+  a fresh root for a complete matrix; do not reuse or overwrite these cells.
 - The first retained 5-UAV principal no-uncertainty ablation seed has one
   `solve_time_limit` training CBF emergency fallback in 20,016 decisions,
   while its initial and final short evaluations each have zero in 160. Preserve

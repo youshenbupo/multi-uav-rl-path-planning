@@ -6,6 +6,21 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- A third 5-UAV ablation evaluation launcher is invalid/excluded. Its inline
+  PowerShell quoting stripped the intended experiment-name string assignment,
+  causing evaluator argument validation to fail before any cell ran. Preserve
+  `outputs/core_5uav_ablation_evaluations_rerun2/` (launcher stderr only) and
+  exclude it. The fourth launcher is active in the fresh
+  `outputs/core_5uav_ablation_evaluations_rerun3/` root using a retained
+  `.ps1` file and the verified name template
+  `core_5uav_predictive_no_uncertainty_seed_${seed}_${scenario}`. That fourth
+  attempt was interrupted after the 24 complete cells for seeds `20260719`--
+  `20260722`; as of 2026-07-29 there is no Python process and rerun3 has 24
+  directories / 24 summaries / 24 JSONL files with zero-byte launcher stderr.
+  Preserve and exclude its entire root, including valid-looking raw cells, as
+  an incomplete matrix. Launch a fresh full 30-cell root, then audit exactly
+  30 cells / 30 summaries / 30 raw JSONL / 600 parseable records before replay.
+
 - All five independently trained 5-UAV principal no-uncertainty ablation seeds
   `20260719`--`20260723` now have final checkpoints and summaries; the final
   seed reached 100,080 transitions/417 updates with two retained `solved

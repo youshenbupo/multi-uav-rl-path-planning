@@ -1692,3 +1692,10 @@ retains two `solved inaccurate` emergency fallbacks in 20,016 decisions while
 5-UAV ablation seeds now exist, but no performance, safety, fallback-rate,
 scale, or ablation effect is established until the matched six-scenario,
 20-episode-per-cell evaluation and unchanged-protocol replay are retained.
+
+## AAMAS 2027 - interrupted 5-UAV no-uncertainty evaluation attempt retained and excluded (2026-07-29)
+
+The fourth launcher attempt used the frozen evaluator command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/evaluate_core_checkpoint.py --family graph_mappo --config configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml --checkpoint <seed-dir>/checkpoints/graph_mappo_final.pt --output-dir outputs/core_5uav_ablation_evaluations_rerun3 --experiment-name core_5uav_predictive_no_uncertainty_seed_${seed}_${scenario} --seed <seed> --num-uavs 5 --episodes 20 --scenario <canonical-scenario> --device cuda`, serially over the five frozen checkpoints and six canonical scenarios. It used CUDA for network inference and CPU OSQP, with no CBF parameter change. At revision `6516395`, the retained launcher stdout/stderr and all artifacts are under `outputs/core_5uav_ablation_evaluations_rerun3/`.
+
+After interruption, read-only inspection found no running Python process, 24 cell directories, 24 `summary.json` files, and 24 raw JSONL files: all six scenarios for seeds `20260719`--`20260722`, with no partial cell directory and zero-byte launcher stderr. This is not the required 30-cell matrix and is therefore retained but excluded wholesale from aggregation, replay input selection, and any result statement. The next evaluation must start in a new root and complete a fresh 30-cell / 600-record audit; do not reuse or overwrite this aborted root.
