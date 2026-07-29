@@ -6,6 +6,18 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Before seed `20260722`, a first command-line preflight was invalid because
+  the PowerShell query matched its own command text; it launched nothing and
+  created no seed artifact. A corrected preflight filtered `python.exe` plus
+  the training command, found zero training processes, and launched the sole
+  8-UAV principal no-uncertainty seed `20260722` at revision `59e9984` using
+  frozen config SHA-256 `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`.
+  The verified live command targets
+  `outputs/core_8uav_ablation/core_8uav_predictive_no_uncertainty_seed_20260722`;
+  live telemetry exists, final summary does not, and retained stderr has 441
+  bytes. Do not start another job or tune CBF. On natural completion, audit
+  final checkpoint/summary/context before serially launching `20260723`.
+
 - Independent 8-UAV principal no-uncertainty seed `20260721` is complete and
   documented. It ran at revision `08427a2` under the unchanged frozen config
   SHA-256 `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`;
