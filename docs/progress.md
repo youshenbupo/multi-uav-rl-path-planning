@@ -1908,3 +1908,32 @@ The document is an operational retrospective plan rather than a
 preregistration; it establishes no statistical, safety, performance,
 scalability, novelty, or causal conclusion. Next: use it to audit any future
 manuscript table/figure and continue primary-source full-text retrieval.
+
+## AAMAS 2027 - Neural Graph CBF official extended abstract reviewed (2026-07-29)
+
+At revision `6cfc789`, primary-source verification followed the official AAMAS
+2026 proceedings table of contents to Deng et al.'s page-3232 entry and its
+official PDF `https://ifaamas.org/Proceedings/aamas2026/pdfs/KRTJ4225.pdf`.
+The PDF completed after a browser download timeout; its SHA-256 is
+`0AE5CA03242EDE2EB5E60822729EE6B6279F4FA4C14B836E411658260E09D29A`.
+Text extraction and bundled-runtime `pypdf` verify an unencrypted three-page
+extended abstract containing method, experiment, and reference sections.
+
+The reviewed source describes a frozen CTDE MAPPO reference policy plus a
+GNN-parameterized graph-CBF additive safety correction. It uses pointwise CBF
+QP actions for supervised action matching, barrier validity/invariance losses,
+and modified MPE Simple Spread boundary/collision evaluation. This establishes a
+direct neural graph-CBF comparator, but the short text does not document packet
+delay/loss/staleness, delivered-packet prediction uncertainty, or dynamic
+obstacles. It therefore supports no first-combination, safety-guarantee, or
+method-superiority claim for this project.
+
+The document-generation commands were the gstack browser download of the
+official proceedings PDF and `pdftotext`; the bundled Python verification
+confirmed page count and the presence of method/experiments/references text.
+The system Poppler wrappers could not render PNGs because their target path was
+missing, and browser PDF navigation returned to a proceedings screenshot; this
+visual-layout limitation is retained in `docs/known_issues.md`. No code,
+experiment, CBF parameter, or actor/critic observation contract changed. Next:
+continue retrieving the remaining primary PDFs and inspect a longer Deng version
+if one becomes available before writing a stronger comparison.

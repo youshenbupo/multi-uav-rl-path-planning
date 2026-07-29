@@ -6,6 +6,19 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Neural Graph CBF is no longer metadata-only: the official AAMAS 2026
+  proceedings entry and three-page extended abstract PDF were reviewed on
+  2026-07-29 (SHA-256
+  `0AE5CA03242EDE2EB5E60822729EE6B6279F4FA4C14B836E411658260E09D29A`). It
+  uses a frozen MAPPO reference plus GNN graph-CBF additive correction trained
+  with pointwise QP supervision and barrier losses on modified MPE boundary /
+  collision constraints. It does not document the project mainline's packet
+  staleness/delay/loss, predicted-packet uncertainty, or dynamic obstacles.
+  Do not turn its abstract-level claims into a universal guarantee or a novelty
+  statement; seek a longer version for a stronger comparison. Local Poppler
+  rendering was unavailable, but the full text and page sections of the
+  extended abstract were verified.
+
 - Added `docs/aamas2027_analysis_plan.md` at revision `019065b`. It is the
   operational source of truth for eligible 3/5/8-UAV reporting inputs,
   invalid-root exclusions, five-seed aggregation, task/CBF separation,

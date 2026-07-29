@@ -458,3 +458,10 @@
   exclusions are mandatory for current descriptive outputs, but any p-value,
   confidence interval, superiority, safety, or causal statement requires a
   separately specified and reviewed procedure before manuscript use.
+- Deng et al.'s AAMAS 2026 official three-page extended abstract is now read,
+  but it is not a longer archival paper and its visual PDF rendering could not
+  be completed because the local Poppler wrappers point to a missing target
+  path. Text extraction and page/section checks support content review, but do
+  not use this source to infer omitted communication, uncertainty, or dynamic-
+  obstacle details, or to validate its claimed safety guarantees. Inspect a
+  longer version if one is located before a stronger comparison.
