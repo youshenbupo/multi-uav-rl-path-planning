@@ -1838,3 +1838,29 @@ nor a causal four-arm comparison. The final output has 11 task metrics and five
 CBF diagnostic metrics per scenario in distinct fields. Next: define a
 publication-facing analysis plan that keeps CBF diagnostics distinct and
 excludes every invalid root.
+
+## AAMAS 2027 - descriptive paired 5-UAV full/ablation summary retained (2026-07-29)
+
+At revision `cb82ef6`, the existing read-only paired-summary command
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts\\summarize_paired_checkpoint_evaluations.py --reference-root outputs\\core_5uav_evaluations --treatment-root outputs\\core_5uav_ablation_evaluations_rerun4 --output-json outputs\\paired_summaries\\5uav_full_vs_no_uncertainty_20260729.json`
+validated both roots and wrote the retained descriptive artifact. The reference
+is the uncertainty-aware predictive-graph five-UAV matrix; treatment is the
+independently trained predictive-no-uncertainty matrix under frozen config
+`configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml`
+(SHA-256 `6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`).
+Network evaluation used CUDA and OSQP remained CPU-side; no policy or CBF
+setting changed.
+
+The validator accepted six scenarios, five common trained seeds, and 20 indexed
+episodes per seed-scenario cell: 30 matched cells / 600 raw JSONL records per
+arm. Only `outputs/core_5uav_ablation_evaluations_rerun4/` is selected for the
+ablation. The retained invalid/excluded roots are
+`outputs/core_5uav_ablation_evaluations/`, `_rerun1/`, `_rerun2/`, and the
+interrupted 24-cell `_rerun3/`; none was read by this command. The separate
+all-source ablation CBF replay remains
+`outputs/cbf_diagnostics/predictive_no_uncertainty_5uav_5seed_replay_20260729.jsonl`
+with its companion summary and unchanged solver values. This new JSON summary
+is a seed-level descriptive paired artifact only, not a significance,
+performance, safety, fallback-rate, scalability, or causal ablation result.
+Next: retain this input provenance in the publication analysis plan and extend
+the same invalid-root discipline to every remaining scale/ablation comparison.

@@ -6,6 +6,18 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Generated the read-only 5-UAV full-method versus independently trained
+  no-uncertainty descriptive paired artifact
+  `outputs/paired_summaries/5uav_full_vs_no_uncertainty_20260729.json` at
+  revision `cb82ef6`. The strict paired validator accepted both 30-cell / 600
+  JSONL roots, six scenarios, five common training seeds, and 20 indexed
+  episodes/cell. It uses only the valid no-uncertainty rerun4 root and excludes
+  initial/rerun1/rerun2/interrupted-rerun3 roots. It is descriptive seed-level
+  provenance only, not a significance, method-effect, safety, fallback-rate,
+  scale, or causal claim; its CBF evidence stays separate in the existing
+  all-source replay. Next: consolidate input/exclusion rules into a
+  publication-facing analysis plan before interpreting any comparison values.
+
 - Added `scripts/summarize_multiarm_checkpoint_evaluations.py` and
   `tests/test_multiarm_checkpoint_summary.py` for read-only, four-arm 3-UAV
   descriptive reporting. It accepts a named root plus cell-directory prefix,

@@ -442,3 +442,9 @@
   CBF fields are explicitly diagnostic rather than task metrics; neither their
   values nor task fields may be converted to a cross-arm safety/fallback claim
   without a separately defined analysis and all retained replay context.
+- The 5-UAV full-versus-no-uncertainty descriptive summary selects only
+  `outputs/core_5uav_evaluations/` and the valid ablation rerun4 root. The
+  initial, rerun1, rerun2, and interrupted rerun3 ablation roots remain retained
+  and excluded. The seed-level paired JSON is not inferential and its CBF fields
+  must not replace or be merged with the separately retained all-source CBF
+  replay; no safety, fallback-rate, scale, or causal-ablation statement follows.
