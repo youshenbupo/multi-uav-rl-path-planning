@@ -6,6 +6,15 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Added `docs/aamas2027_analysis_plan.md` at revision `019065b`. It is the
+  operational source of truth for eligible 3/5/8-UAV reporting inputs,
+  invalid-root exclusions, five-seed aggregation, task/CBF separation,
+  regeneration commands, CBF replay provenance, and remaining manuscript gates.
+  It is retrospective and descriptive only, not a preregistration or a claim.
+  Use it to audit future manuscript tables/figures before interpretation; next
+  continue primary-source full-text retrieval without relaxing its evidence
+  boundaries.
+
 - Refined `scripts/summarize_paired_checkpoint_evaluations.py` so the retained
   5-UAV and 8-UAV paired outputs now split 11 `task_metrics` from five
   `cbf_diagnostic_metrics` per scenario. Their inputs, five trained seeds,

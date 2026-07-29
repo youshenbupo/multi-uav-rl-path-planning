@@ -453,3 +453,8 @@
   structure only: it does not make the CBF records an independent safety or
   fallback-rate analysis, and the raw JSONL plus all-source replay remain the
   evidence for any future diagnostic work.
+- `docs/aamas2027_analysis_plan.md` is an operational retrospective reporting
+  plan, not a preregistered inferential protocol. Its five-seed aggregation and
+  exclusions are mandatory for current descriptive outputs, but any p-value,
+  confidence interval, superiority, safety, or causal statement requires a
+  separately specified and reviewed procedure before manuscript use.

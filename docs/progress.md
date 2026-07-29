@@ -1892,3 +1892,19 @@ files observed vs 81 asserted) / 28 OSQP warnings. This proves reporting-field
 separation only, not performance, significance, safety, fallback rate, scale,
 or a causal effect. Next: write a publication analysis plan that names eligible
 artifacts, exclusions, and the no-claim boundary before any interpretation.
+
+## AAMAS 2027 - publication-facing analysis plan retained (2026-07-29)
+
+At revision `019065b`, added `docs/aamas2027_analysis_plan.md`. It fixes the
+operational reporting scope for the validated 3-UAV four-arm and 5/8-UAV paired
+artifacts: eligible roots, every known invalid-root exclusion, three exact
+regeneration commands, configuration hashes where applicable, five-seed
+independent unit, 20-episode within-cell aggregation, separate task/CBF fields,
+and raw CBF replay provenance. It also records the current 152 passed / one
+legacy-inventory failure / 28 OSQP warning verification state and the remaining
+literature, inference, safety-claim, and external-submission gates. It changes
+no experiment, policy, packet-observation contract, CBF setting, or result.
+The document is an operational retrospective plan rather than a
+preregistration; it establishes no statistical, safety, performance,
+scalability, novelty, or causal conclusion. Next: use it to audit any future
+manuscript table/figure and continue primary-source full-text retrieval.
