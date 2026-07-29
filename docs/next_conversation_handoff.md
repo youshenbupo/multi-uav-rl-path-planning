@@ -181,6 +181,18 @@ processes before relying on any status below.
   commit docs without staging `.gitignore`, then preflight/train raw-graph seed
   `20260722` serially before any evaluation.
 
+- **Active post-isolation raw GraphMAPPO seed `20260722` (2026-07-29; commit
+  `d827ff3`):** zero-process/new-root/CUDA preflight passed under the unchanged
+  dynamic-graph config SHA-256. The CUDA command uses raw graph mode `mappo`,
+  seed `20260722`, three UAVs, 100k requested steps, and process-level output
+  redirection into
+  `outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260722/`.
+  PID `23264` was alive at verification; stdout/stderr logs use the corresponding
+  `outputs/core_3uav_post_actor_isolation_raw_graph_mappo_seed_20260722.*.log`
+  paths. Do not read live telemetry or start another job. On natural exit,
+  audit the 100,032-transition/1,042-update final artifact and replay fallback
+  sources before documenting/starting seed `20260723`.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local
