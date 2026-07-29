@@ -306,6 +306,11 @@
   `outputs/core_8uav_ablation/`; this one seed cannot establish a fallback
   rate, safety, performance, scale, or ablation effect. Do not relax slack,
   iteration/time limits, tolerances, or any CBF setting in response.
+- The second 8-UAV principal no-uncertainty seed retains 191 training emergency
+  fallbacks in 12,528 decisions and 13 in its final 160-decision script
+  evaluation (zero in its initial 160). Preserve all 204 event contexts and
+  launcher logs under `outputs/core_8uav_ablation/`; this is not a multi-seed
+  rate or method conclusion and must not trigger CBF parameter relaxation.
 - The first retained 5-UAV principal no-uncertainty ablation seed has one
   `solve_time_limit` training CBF emergency fallback in 20,016 decisions,
   while its initial and final short evaluations each have zero in 160. Preserve
