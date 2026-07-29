@@ -6,6 +6,20 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- The first 8-UAV ablation evaluation preflight had a PowerShell interpolation
+  typo while rendering a test identity; it failed before launching an evaluator
+  or creating a result cell. The retained fresh root contains only its ignored
+  launcher at that point. A corrected preflight validated
+  `core_8uav_predictive_no_uncertainty_seed_20260719_nominal`, all five final
+  checkpoints, and zero training processes, then launched the valid serial
+  matrix at revision `408a115` under
+  `outputs/core_8uav_ablation_evaluations_20260729/`. It uses the frozen 8-UAV
+  no-uncertainty config, CUDA network inference, CPU OSQP, five seeds, six
+  canonical scenarios, and 20 episodes/cell. At first health check two cells
+  were complete, the third was active, and launcher stderr was zero. Do not
+  start concurrent work. Audit 30 expected cells / summaries / JSONL and 600
+  parseable records before replay; do not treat partial output as a result.
+
 - Final independent 8-UAV principal no-uncertainty seed `20260723` is complete
   and documented. It launched at revision `278129e` under frozen config
   SHA-256 `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`;
