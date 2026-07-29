@@ -53,6 +53,20 @@ processes before relying on any status below.
   then preflight/evaluate seed `20260723`; after its validation, conduct the
   all-source CBF fallback replay with unchanged safety parameters.
 
+- **All five valid post-isolation 3-UAV MLP matrices completed,
+  2026-07-29 (revision `f757da3`; documentation pending commit):** seed
+  `20260723` completed the final six canonical CUDA-actor/CPU-OSQP cells. A
+  direct audit across valid tags `20260719`, `20260720`,
+  `20260721_telemetryretry1` (numeric seed 20260721), `20260722`, and
+  `20260723` confirmed 30 expected cells, parseable summaries, fixed
+  seed/scenario identity, and exactly 20 raw JSONL records/cell: 600 retained
+  episodes. This proves matrix completeness/provenance only, not any outcome.
+  The aborted pre-retry root and all historical protocol-ineligible outputs are
+  excluded. Next: commit docs without staging `.gitignore`, inspect
+  `replay_cbf_fallbacks.py --help`, construct a no-overwrite all-source replay
+  input list from only these valid training/evaluation artifacts, and replay
+  under unchanged CBF parameters before GraphMAPPO work.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

@@ -566,3 +566,11 @@
   not infer any aggregate outcome or tune CBF based on these four checkpoint
   matrices; all legacy/ineligible outputs and the aborted pre-retry 20260721
   root remain excluded.
+- The planned 3-UAV post-isolation MLP evaluation grid is now complete (five
+  valid checkpoints × six canonical scenarios × 20 episodes = 600 raw JSONL
+  records) under `outputs/core_3uav_post_actor_isolation_evaluations/`. This
+  completeness does not by itself constitute a computed aggregate, uncertainty
+  interval, significance test, safety/fallback-rate result, or baseline
+  comparison. All source fallback contexts must still be replayed and retained
+  under unchanged CBF values; invalid pre-retry and historical protocol-leaking
+  artifacts remain excluded.

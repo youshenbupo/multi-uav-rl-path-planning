@@ -2251,3 +2251,25 @@ fourth matched matrix only. No performance, safety, fallback-rate,
 significance, baseline, or five-seed result is proven. Next: evaluate final
 seed `20260723` with the exact no-overwrite protocol, then retain a combined
 CBF source replay without changing any solver parameter.
+
+## AAMAS 2027 - five post-isolation MLP checkpoint matrices complete (2026-07-29)
+
+At revision `f757da3`, final checkpoint
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260723/checkpoints/mappo_final.pt`
+completed the final matched CUDA actor / CPU OSQP six-scenario evaluation under
+the unchanged frozen configuration SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`. Its
+six cells are
+`outputs/core_3uav_post_actor_isolation_evaluations/core_3uav_post_actor_isolation_mlp_mappo_seed_20260723_<scenario>`.
+
+Direct raw-artifact validation now covers valid tags `20260719`, `20260720`,
+`20260721_telemetryretry1` (numeric seed `20260721`), `20260722`, and
+`20260723`: all 30 expected cells have a parseable `summary.json` and a
+parseable 20-record per-seed JSONL with fixed seed/scenario identity. This is
+600 retained raw episodes (five checkpoints × six scenarios × 20 episodes).
+The interrupted pre-retry `20260721` root and every historical pre-actor-repair
+output remain excluded. The full matrix establishes evaluation completeness and
+provenance only; no performance, safety, fallback-rate, significance, or
+baseline result has yet been calculated or claimed. Next: replay every retained
+training and evaluation CBF fallback context under unchanged solver settings,
+retain source/replay JSONL, and explicitly record zero-event cells as such.
