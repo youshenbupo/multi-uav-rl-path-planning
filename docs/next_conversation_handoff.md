@@ -6,6 +6,46 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- **Actor-information protocol repair, 2026-07-29 (parent revision
+  `55abb87`; commit/push still required):** a static audit found three
+  violations of the mandatory actor boundary: (1) communication-disabled local
+  observations exposed neighbour truth, (2) current sender activity could hide
+  an already delivered packet, and (3) GraphMAPPO attention passed peer private
+  local observations/current activity into receiver actions. The TDD repairs
+  are in `multiuav/envs/communication.py`, `multi_uav_env.py`,
+  `observations.py`, `learning/conflict_graph.py`, `graph_networks.py`, and
+  `graph_runner.py`. Actor edges now contain only own truth plus delivered
+  packets; delivered information survives until staleness expiry; peer node
+  features/activity cannot change a receiver action; no-communication is
+  self-only. Neighbour-goal direction was removed from actor edges. Critic/CBF
+  interfaces and all CBF numerical parameters are unchanged; no training or
+  evaluation was launched and no raw artifact was deleted.
+
+  Red tests were observed for the no-channel leak, packet-erasure leak,
+  Graph Actor peer-feature leak, Graph Actor peer-activity leak, and
+  graph-edge peer-activity leak. Green verification:
+  `D:\anaconda3\envs\multiuav_rl\python.exe -m pytest -q
+  tests\test_predictive_conflict_graph.py tests\test_dynamic_graph_baselines.py
+  tests\test_multi_uav_environment.py tests\test_communication.py` -> 39
+  passed (three existing OSQP warnings); Ruff passed; explicit-package mypy
+  passed 103 sources. The completed full pytest run is 157 passed / 1 retained unrelated legacy-inventory
+  failure (83 observed MATLAB files versus 81 asserted) / 28 existing OSQP
+  warnings; do not alter that inventory/test without a separate audit.
+
+  This invalidates all pre-repair learned checkpoints and their downstream
+  results, regardless of apparent JSONL completeness: historical
+  `outputs/core_3uav_evaluations/`, `core_5uav_evaluations/`,
+  `core_5uav_ablation_evaluations_rerun4/`, `core_8uav_evaluations/`,
+  `core_8uav_ablation_evaluations_20260729/`, every paired/multi-arm summary,
+  and all historical CBF replay JSONL. Retain them but exclude them from every
+  analysis and paper claim, as documented in
+  `docs/aamas2027_analysis_plan.md` and `docs/known_issues.md`. Existing Graph
+  checkpoints are architecturally incompatible after the repair and must not
+  be force-loaded. Next: run full pytest, commit/push while excluding the
+  user-owned `.gitignore`, then start **new-root**, serial 3-UAV MLP five-seed
+  100k CUDA training; only after valid MLP reruns/evaluations begin the three
+  GraphMAPPO matching five-seed reruns.
+
 - Neural Graph CBF is no longer metadata-only: the official AAMAS 2026
   proceedings entry and three-page extended abstract PDF were reviewed on
   2026-07-29 (SHA-256

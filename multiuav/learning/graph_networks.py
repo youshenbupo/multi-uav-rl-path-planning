@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import math
 from typing import cast
 
 import torch
@@ -81,9 +80,6 @@ class _DenseGraphAttentionLayer(nn.Module):
         self.embedding_dim = embedding_dim
         self.num_heads = num_heads
         self.head_dim = embedding_dim // num_heads
-        self.query = nn.Linear(embedding_dim, embedding_dim, bias=False)
-        self.key = nn.Linear(embedding_dim, embedding_dim, bias=False)
-        self.value = nn.Linear(embedding_dim, embedding_dim, bias=False)
         self.edge_score = nn.Linear(edge_feature_dim, num_heads, bias=False)
         self.edge_value = nn.Linear(edge_feature_dim, embedding_dim, bias=False)
         self.output = nn.Linear(embedding_dim, embedding_dim)
@@ -99,11 +95,7 @@ class _DenseGraphAttentionLayer(nn.Module):
         self, hidden: Tensor, edge_features: Tensor, adjacency: Tensor, node_mask: Tensor
     ) -> Tensor:
         batch_size, node_count, _ = hidden.shape
-        queries = self.query(hidden).reshape(batch_size, node_count, self.num_heads, self.head_dim)
-        keys = self.key(hidden).reshape(batch_size, node_count, self.num_heads, self.head_dim)
-        values = self.value(hidden).reshape(batch_size, node_count, self.num_heads, self.head_dim)
-        scores = torch.einsum("bihd,bjhd->bijh", queries, keys) / math.sqrt(self.head_dim)
-        scores = scores + self.edge_score(edge_features)
+        scores = self.edge_score(edge_features)
         valid_edges = self._valid_edges(adjacency, node_mask)
         masked_scores = scores.masked_fill(~valid_edges.unsqueeze(dim=-1), -1e9)
         weights = torch.softmax(masked_scores, dim=2)
@@ -111,8 +103,7 @@ class _DenseGraphAttentionLayer(nn.Module):
         edge_values = self.edge_value(edge_features).reshape(
             batch_size, node_count, node_count, self.num_heads, self.head_dim
         )
-        messages = values[:, None, :, :, :] + edge_values
-        attended = torch.sum(weights.unsqueeze(dim=-1) * messages, dim=2).reshape(
+        attended = torch.sum(weights.unsqueeze(dim=-1) * edge_values, dim=2).reshape(
             batch_size, node_count, self.embedding_dim
         )
         mask = node_mask.unsqueeze(dim=-1).to(dtype=hidden.dtype)
@@ -123,11 +114,11 @@ class _DenseGraphAttentionLayer(nn.Module):
     def _valid_edges(adjacency: Tensor, node_mask: Tensor) -> Tensor:
         """Ensure every active node can attend to itself, even if graph edges are empty."""
         batch_size, node_count = node_mask.shape
-        active_pairs = node_mask[:, :, None] & node_mask[:, None, :]
+        receiver_active = node_mask[:, :, None]
         diagonal = torch.eye(node_count, dtype=torch.bool, device=adjacency.device).expand(
             batch_size, -1, -1
         )
-        return (adjacency & active_pairs) | (diagonal & active_pairs)
+        return (adjacency & receiver_active) | (diagonal & receiver_active)
 
 
 class GraphActor(nn.Module):

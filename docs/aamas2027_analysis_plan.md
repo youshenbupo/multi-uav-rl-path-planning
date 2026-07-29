@@ -1,8 +1,28 @@
 # AAMAS 2027 analysis plan and evidence boundary
 
-**Status:** operational reporting plan, recorded 2026-07-29 at revision
-`019065b`. This is a retrospective provenance and reporting plan, not a
-preregistration and not evidence of a method effect.
+**Status:** protocol-invalidation update recorded 2026-07-29 from parent
+revision `55abb87`. This is a retrospective provenance and reporting plan, not
+a preregistration and not evidence of a method effect.
+
+## Protocol invalidation (2026-07-29)
+
+Static audit and test-first repairs found that the pre-update environment could
+expose a neighbour through the no-communication fallback and its current
+activity state; GraphMAPPO could additionally expose another node's local
+self-observation through attention. These violate the actor boundary in the
+scope below. The repaired protocol now gives an actor only own truth and
+delivered packets, keeps a delivered packet until its configured staleness
+expiry, prevents peer self-node features and current peer activity from
+affecting an actor action, and uses an empty neighbour set when communication
+is disabled. The centralized critic/execution-side CBF boundary is unchanged.
+
+Consequently, every pre-update learned checkpoint, checkpoint evaluation,
+paired/multi-arm summary, and CBF replay under the historical roots below is
+retained for forensic provenance but **ineligible for every AAMAS result,
+descriptive table, CBF-rate aggregation, or comparison**. This is a protocol
+correction, not evidence about performance or safety. Do not delete, overwrite,
+or regenerate the old records in place. Restart with distinct post-isolation
+roots after the repaired code is committed.
 
 ## Scope
 
@@ -41,17 +61,19 @@ the exact raw event sources and solver protocol separately.
 
 | Scale / comparison | Eligible raw inputs | Descriptive artifact | Explicit exclusions |
 | --- | --- | --- | --- |
-| 3-UAV four arms | `outputs/core_3uav_evaluations/` selected by the four prefixes `core_3uav_mlp_mappo_`, `core_3uav_raw_graph_`, `core_3uav_predictive_graph_`, and `core_3uav_uncertainty_predictive_graph_` | `outputs/paired_summaries/3uav_four_arm_descriptive_20260729.json` | Empty MLP seed-20260719 nominal/OOD originals. Use only the documented valid `nominal_schemafix_rngfix_rerun2` and `ood_communication_obstacle_trajectoryfix_rerun1` replacements. |
-| 5-UAV full vs independent no-uncertainty | `outputs/core_5uav_evaluations/`; `outputs/core_5uav_ablation_evaluations_rerun4/` | `outputs/paired_summaries/5uav_full_vs_no_uncertainty_20260729.json` | `outputs/core_5uav_ablation_evaluations/`, `_rerun1/`, `_rerun2/`, and interrupted `_rerun3/`; none may enter aggregation. |
-| 8-UAV full vs independent no-uncertainty | `outputs/core_8uav_evaluations/`; `outputs/core_8uav_ablation_evaluations_20260729/` | `outputs/paired_summaries/8uav_full_vs_no_uncertainty_20260729.json` | No alternate root is eligible. The preflight identity-render typo launched no evaluator and contributes no cell. |
+| 3-UAV four arms | None until post-isolation retraining/evaluation. Historical `outputs/core_3uav_evaluations/` is retained only. | Historical `outputs/paired_summaries/3uav_four_arm_descriptive_20260729.json` is excluded. | All historical MLP and GraphMAPPO cells are protocol-ineligible; two empty MLP seed-20260719 originals remain separately invalid. |
+| 5-UAV full vs independent no-uncertainty | None until post-isolation retraining/evaluation. Historical `outputs/core_5uav_evaluations/` and `outputs/core_5uav_ablation_evaluations_rerun4/` are retained only. | Historical `outputs/paired_summaries/5uav_full_vs_no_uncertainty_20260729.json` is excluded. | Initial/rerun1/rerun2/interrupted-rerun3 roots remain invalid in addition to the protocol-wide exclusion. |
+| 8-UAV full vs independent no-uncertainty | None until post-isolation retraining/evaluation. Historical `outputs/core_8uav_evaluations/` and `outputs/core_8uav_ablation_evaluations_20260729/` are retained only. | Historical `outputs/paired_summaries/8uav_full_vs_no_uncertainty_20260729.json` is excluded. | The preflight identity-render typo remains a no-result attempt; all historical evaluated cells are additionally protocol-ineligible. |
 
-Each listed artifact currently has six canonical scenarios, five matched seed
-identities, and 20 indexed episodes per seed-scenario cell. This validates input
-eligibility and descriptive aggregation scope only.
+Each historical artifact has six canonical scenarios, five matched seed
+identities, and 20 indexed episodes per seed-scenario cell. That proves only
+historical completeness, not protocol eligibility or any result claim.
 
 ## Reproduction commands
 
-Use the repository Python environment and do not modify input roots:
+The commands below are historical regeneration provenance only. Do not run them
+to produce a reportable artifact; they aggregate protocol-ineligible inputs.
+Future post-isolation commands must use new roots and an updated plan.
 
 ```powershell
 D:\anaconda3\envs\multiuav_rl\python.exe scripts\summarize_multiarm_checkpoint_evaluations.py `
@@ -99,9 +121,10 @@ files include:
 - `outputs/cbf_diagnostics/uncertainty_predictive_graph_8uav_5seed_replay_20260727.jsonl`
 - `outputs/cbf_diagnostics/predictive_no_uncertainty_8uav_5seed_replay_20260729.jsonl`
 
-The known nonreplayable legacy records and the predictive-graph dynamic-obstacle
-telemetry gap remain explicit errors/exclusions as recorded in
-`docs/known_issues.md`; no value is imputed.
+The historical CBF files above are also protocol-ineligible for aggregate
+reporting after the actor-boundary correction. Preserve them, their existing
+nonreplayable records, and the predictive-graph dynamic-obstacle telemetry gap
+as explicit forensic exclusions; no value is imputed.
 
 ## Manuscript gates still open
 

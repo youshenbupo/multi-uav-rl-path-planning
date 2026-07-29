@@ -263,6 +263,21 @@ class EnvironmentTests(unittest.TestCase):
         self.assertAlmostEqual(float(observations["uav_0"][21]), 1.0 / 20.0)
         self.assertGreater(float(observations["uav_0"][22]), 0.0)
 
+    def test_disabled_communication_keeps_neighbor_out_of_local_observation(self) -> None:
+        env = MultiUAVParallelEnv(
+            _scenario(
+                (
+                    UAVMission(np.array([10.0, 10.0, 30.0]), np.array([90.0, 10.0, 30.0])),
+                    UAVMission(np.array([30.0, 10.0, 30.0]), np.array([90.0, 10.0, 30.0])),
+                )
+            ),
+            _config(max_neighbors=1, communication_enabled=False),
+        )
+
+        observations, _ = env.reset(seed=4)
+
+        self.assertTrue(np.allclose(observations["uav_0"][15:23], 0.0))
+
     def test_all_arrived_and_variable_uav_counts(self) -> None:
         for count in (1, 2, 4):
             missions = tuple(

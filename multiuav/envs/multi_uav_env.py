@@ -218,17 +218,20 @@ class MultiUAVParallelEnv(ParallelEnv):
         self.boundary_clipped = np.zeros(len(self.possible_agents), dtype=bool)
         self.step_count = 0
         self.dynamic_world = DynamicWorldState(self.scenario.dynamic_obstacles, self.config.dt)
-        self.communication_channel = CommunicationChannel(
-            self.config.communication_config(), self.np_random
-        )
-        self.communication_channel.reset(len(self.possible_agents))
-        self.communication_channel.broadcast(
-            positions=self.positions,
-            velocities=self.velocities,
-            active_mask=self.active_mask,
-            step=self.step_count,
-        )
-        self.communication_channel.deliver(step=self.step_count)
+        if self.config.communication_enabled:
+            self.communication_channel = CommunicationChannel(
+                self.config.communication_config(), self.np_random
+            )
+            self.communication_channel.reset(len(self.possible_agents))
+            self.communication_channel.broadcast(
+                positions=self.positions,
+                velocities=self.velocities,
+                active_mask=self.active_mask,
+                step=self.step_count,
+            )
+            self.communication_channel.deliver(step=self.step_count)
+        else:
+            self.communication_channel = None
         snapshot = self._snapshot()
         observations = self._observations(snapshot)
         return observations, self._infos(snapshot, "none", {}, {})
@@ -272,8 +275,11 @@ class MultiUAVParallelEnv(ParallelEnv):
         newly_arrived = old_active & (current_goal_distances <= self.config.goal_radius)
         self.active_mask = old_active & ~newly_arrived
         self.dynamic_world = self.dynamic_world.advance()
-        assert self.communication_channel is not None
-        if np.isfinite(self.positions).all() and np.isfinite(self.velocities).all():
+        if (
+            self.communication_channel is not None
+            and np.isfinite(self.positions).all()
+            and np.isfinite(self.velocities).all()
+        ):
             self.communication_channel.broadcast(
                 positions=self.positions,
                 velocities=self.velocities,

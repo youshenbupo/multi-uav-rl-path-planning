@@ -1937,3 +1937,44 @@ visual-layout limitation is retained in `docs/known_issues.md`. No code,
 experiment, CBF parameter, or actor/critic observation contract changed. Next:
 continue retrieving the remaining primary PDFs and inspect a longer Deng version
 if one becomes available before writing a stronger comparison.
+
+## AAMAS 2027 - actor-information isolation repair (2026-07-29)
+
+Starting from revision `55abb87`, a static audit found three actor-information
+violations: disabling communication still supplied neighbour truth through a
+channel fallback; current sender activity could erase an already delivered
+packet; and GraphMAPPO attention let a receiver action depend on another
+node's private local observation and current activity. The repair changes only
+the actor-information protocol: a disabled channel yields padded empty
+neighbour rows; received packets remain visible until their configured
+staleness expiry; graph edges use receiver-local self truth plus delivered
+knowledge; peer node features and peer activity cannot affect a receiver
+action. Neighbour-goal direction was removed from actor edge features because
+neighbour goals are not packet payloads. The critic/execution-side CBF
+interface and all CBF numerical values are unchanged; neural operations remain
+PyTorch/CUDA-compatible and OSQP remains CPU-side.
+
+The test-first red evidence was the new no-communication local-observation,
+delivered-packet persistence, and Graph Actor peer-feature/activity/edge tests.
+After repair, `D:\\anaconda3\\envs\\multiuav_rl\\python.exe -m pytest -q
+tests\\test_predictive_conflict_graph.py tests\\test_dynamic_graph_baselines.py
+tests\\test_multi_uav_environment.py tests\\test_communication.py` passed 39
+tests (three existing OSQP `PendingDeprecationWarning`s); Ruff passed and
+`mypy --explicit-package-bases multiuav scripts` passed 103 sources.
+
+The complete `D:\\anaconda3\\envs\\multiuav_rl\\python.exe -m pytest -q`
+run after the repair has 157 passed and one retained unrelated failure:
+`tests/test_legacy_audit.py::LegacyAuditDocumentTests::test_inventory_documents_the_observed_legacy_structure`
+still expects 81 restored MATLAB files while 83 are present. It also emits 28
+existing OSQP warnings. The legacy inventory/test was not edited because it is
+outside this protocol repair.
+
+This proves regression coverage for the stated information boundaries, not
+learning, task performance, safety, fallback rate, or scalability. All prior
+MLP and GraphMAPPO checkpoints, six-scenario JSONL, paired/multi-arm summaries,
+and CBF replays are retained but protocol-ineligible because they were produced
+before this repair; the explicit root-level exclusions are in
+`docs/aamas2027_analysis_plan.md`. No training/evaluation process was launched
+and no output was deleted or overwritten. Next: commit the isolation repair,
+run the full suite, then begin a new-root five-seed 3-UAV MLP rerun on CUDA
+before any GraphMAPPO rerun or reporting.

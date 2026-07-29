@@ -20,6 +20,7 @@ from multiuav.core.models import (
     TerrainMap,
     UAVMission,
 )
+from multiuav.envs.communication import AgentKnowledgeState
 from multiuav.envs.multi_uav_env import EnvironmentConfig, MultiUAVParallelEnv
 from multiuav.learning.bc_finetuning import BCFineTuneSchedule
 from multiuav.learning.conflict_graph import (
@@ -287,9 +288,13 @@ def build_graph_from_environments(
     knowledge_batches = []
     for environment in environments:
         if environment.communication_channel is None:
-            raise RuntimeError(
-                "Environment must be reset before building a communication-aware graph."
+            knowledge_batches.append(
+                tuple(
+                    _self_only_knowledge(environment, index)
+                    for index in range(len(environment.possible_agents))
+                )
             )
+            continue
         knowledge_batches.append(
             tuple(
                 environment.communication_channel.knowledge_for(index, step=environment.step_count)
@@ -367,6 +372,29 @@ def build_graph_from_environments(
         knowledge_ages=selected_ages,
         predicted_positions=selected_positions,
         knowledge_uncertainty=selected_uncertainty,
+    )
+
+
+def _self_only_knowledge(environment: MultiUAVParallelEnv, receiver: int) -> AgentKnowledgeState:
+    """Represent a no-communication actor as knowing only its own current state."""
+    count = len(environment.possible_agents)
+    positions = np.zeros((count, 3), dtype=float)
+    velocities = np.zeros((count, 3), dtype=float)
+    valid = np.zeros(count, dtype=bool)
+    ages = np.full(count, -1, dtype=np.int64)
+    uncertainty = np.zeros(count, dtype=float)
+    if environment.active_mask[receiver]:
+        positions[receiver] = environment.positions[receiver]
+        velocities[receiver] = environment.velocities[receiver]
+        valid[receiver] = True
+        ages[receiver] = 0
+    return AgentKnowledgeState(
+        positions=positions,
+        velocities=velocities,
+        valid=valid,
+        ages=ages,
+        predicted_positions=positions,
+        position_uncertainty=uncertainty,
     )
 
 

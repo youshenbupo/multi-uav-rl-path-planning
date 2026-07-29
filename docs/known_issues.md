@@ -465,3 +465,25 @@
   not use this source to infer omitted communication, uncertainty, or dynamic-
   obstacle details, or to validate its claimed safety guarantees. Inspect a
   longer version if one is located before a stronger comparison.
+- **Protocol-wide actor-information invalidation (2026-07-29):** a static audit
+  found that the pre-repair no-communication environment exposed neighbour
+  truth, current sender activity could alter delivered-neighbour visibility,
+  and GraphMAPPO attention could pass a peer's private local observation or
+  current activity into a receiver action. The repair has targeted tests, but
+  every learned checkpoint and downstream artifact generated before it is
+  protocol-ineligible: `outputs/core_3uav_evaluations/`,
+  `outputs/core_5uav_evaluations/`,
+  `outputs/core_5uav_ablation_evaluations_rerun4/`,
+  `outputs/core_8uav_evaluations/`,
+  `outputs/core_8uav_ablation_evaluations_20260729/`, all corresponding
+  historical paired/multi-arm JSON, and every historical CBF replay. Preserve
+  all of them unmodified as forensic evidence; exclude them from every task,
+  CBF-rate, safety, scale, ablation, or manuscript aggregation. Retrain and
+  evaluate into distinct post-isolation roots, beginning with five 3-UAV MLP
+  seeds, before any claim.
+- This protocol fix intentionally changes GraphMAPPO attention parameter
+  shapes and removes neighbour-goal direction from actor edge features.
+  Historical GraphMAPPO checkpoints must not be force-loaded or treated as
+  compatible. The repaired no-communication graph fallback is self-only, so
+  legacy smoke configurations with communication disabled remain executable
+  without manufacturing neighbour state; this validates plumbing only.

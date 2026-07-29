@@ -196,6 +196,42 @@ class PredictiveConflictGraphTests(unittest.TestCase):
 
         self.assertTrue(torch.equal(graph.adjacency[0], torch.eye(3, dtype=torch.bool)))
 
+    def test_graph_edges_ignore_current_peer_activity_not_in_delivered_knowledge(self) -> None:
+        builder = ConflictGraphBuilder(
+            GraphBuildConfig(
+                communication_radius=100.0,
+                risk_distance=20.0,
+                prediction_horizon=5.0,
+                top_k_neighbors=1,
+                current_distance_edges=True,
+                predicted_conflict_edges=True,
+                self_loops=True,
+            )
+        )
+        positions = torch.tensor([[[0.0, 0.0, 0.0], [10.0, 0.0, 0.0]]])
+        received_positions = torch.tensor(
+            [[[[0.0, 0.0, 0.0], [10.0, 0.0, 0.0]], [[0.0, 0.0, 0.0], [10.0, 0.0, 0.0]]]]
+        )
+        common = {
+            "positions": positions,
+            "received_positions": received_positions,
+            "received_velocities": torch.zeros_like(received_positions),
+            "goals": torch.zeros_like(positions),
+            "knowledge_valid": torch.ones(1, 2, 2, dtype=torch.bool),
+            "knowledge_ages": torch.zeros(1, 2, 2, dtype=torch.int64),
+        }
+
+        active_peer_graph = builder.build_from_knowledge(
+            active_mask=torch.tensor([[True, True]]), **common
+        )
+        stopped_peer_graph = builder.build_from_knowledge(
+            active_mask=torch.tensor([[True, False]]), **common
+        )
+
+        self.assertTrue(
+            torch.equal(active_peer_graph.adjacency[0, 0], stopped_peer_graph.adjacency[0, 0])
+        )
+
     def test_graph_attention_preserves_shapes_and_handles_empty_neighbourhoods(self) -> None:
         torch.manual_seed(4)
         encoder = DenseGraphAttentionEncoder(
@@ -216,6 +252,68 @@ class PredictiveConflictGraphTests(unittest.TestCase):
         self.assertTrue(torch.isfinite(embeddings).all())
         self.assertTrue(
             torch.equal(embeddings[~node_mask], torch.zeros_like(embeddings[~node_mask]))
+        )
+
+    def test_graph_actor_action_ignores_unreceived_peer_node_features(self) -> None:
+        torch.manual_seed(11)
+        actor = GraphActor(
+            node_feature_dim=5,
+            edge_feature_dim=16,
+            embedding_dim=8,
+            num_heads=2,
+            num_layers=1,
+            action_dim=3,
+        )
+        node_features = torch.tensor([[[1.0, 0.5, 0.0, 0.0, 1.0], [2.0, 0.0, 0.0, 0.0, 1.0]]])
+        changed_peer_features = node_features.clone()
+        changed_peer_features[0, 1] = torch.tensor([-9.0, 8.0, 7.0, -6.0, 5.0])
+        edge_features = torch.zeros(1, 2, 2, 16)
+        adjacency = torch.tensor([[[True, True], [False, True]]])
+        node_mask = torch.tensor([[True, True]])
+
+        original_actions, _, _ = actor.sample(
+            node_features, edge_features, adjacency, node_mask, deterministic=True
+        )
+        changed_actions, _, _ = actor.sample(
+            changed_peer_features, edge_features, adjacency, node_mask, deterministic=True
+        )
+
+        assert_allclose(
+            original_actions[0, 0].detach().numpy(), changed_actions[0, 0].detach().numpy()
+        )
+
+    def test_graph_actor_action_ignores_current_peer_activity(self) -> None:
+        torch.manual_seed(23)
+        actor = GraphActor(
+            node_feature_dim=5,
+            edge_feature_dim=16,
+            embedding_dim=8,
+            num_heads=2,
+            num_layers=1,
+            action_dim=3,
+        )
+        node_features = torch.tensor([[[1.0, 0.5, 0.0, 0.0, 1.0], [2.0, 0.0, 0.0, 0.0, 1.0]]])
+        edge_features = torch.zeros(1, 2, 2, 16)
+        edge_features[0, 0, 1, 0] = 1.0
+        adjacency = torch.tensor([[[True, True], [False, True]]])
+
+        active_actions, _, _ = actor.sample(
+            node_features,
+            edge_features,
+            adjacency,
+            torch.tensor([[True, True]]),
+            deterministic=True,
+        )
+        stopped_peer_actions, _, _ = actor.sample(
+            node_features,
+            edge_features,
+            adjacency,
+            torch.tensor([[True, False]]),
+            deterministic=True,
+        )
+
+        assert_allclose(
+            active_actions[0, 0].detach().numpy(), stopped_peer_actions[0, 0].detach().numpy()
         )
 
     def test_graph_attention_is_permutation_equivariant(self) -> None:

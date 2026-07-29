@@ -238,10 +238,7 @@ def _neighbour_features(
     snapshot: EnvironmentSnapshot, uav_index: int, max_neighbors: int, spans: FloatArray
 ) -> FloatArray:
     current = snapshot.positions[uav_index]
-    positions = snapshot.positions
-    velocities = snapshot.velocities
-    ages = np.zeros(len(positions), dtype=float)
-    uncertainty = np.zeros(len(positions), dtype=float)
+    candidates: list[int]
     if snapshot.knowledge_states:
         knowledge = snapshot.knowledge_states[uav_index]
         positions = knowledge.predicted_positions
@@ -251,14 +248,10 @@ def _neighbour_features(
         candidates = [
             index
             for index, known in enumerate(knowledge.valid)
-            if index != uav_index and known and snapshot.active_mask[index]
+            if index != uav_index and known
         ]
     else:
-        candidates = [
-            index
-            for index, active in enumerate(snapshot.active_mask)
-            if index != uav_index and active
-        ]
+        candidates = []
     candidates.sort(key=lambda index: float(np.linalg.norm(positions[index] - current)))
     values: list[FloatArray] = []
     for index in candidates[:max_neighbors]:

@@ -180,8 +180,9 @@ class ConflictGraphBuilder:
             prediction_horizon=self.config.prediction_horizon,
             epsilon=self.config.epsilon,
         )
-        pair_active = active_mask[:, :, None] & active_mask[:, None, :]
-        known_pair = pair_active & knowledge_valid
+        receiver_active = knowledge_valid[:, receiver_indices, receiver_indices]
+        actor_visible_pairs = receiver_active[:, :, None].expand_as(knowledge_valid)
+        known_pair = actor_visible_pairs & knowledge_valid
         normalized_uncertainty = knowledge_uncertainty.to(dtype=positions.dtype)
         normalized_uncertainty = normalized_uncertainty / self.config.uncertainty_scale
         normalized_uncertainty = torch.where(
@@ -193,9 +194,7 @@ class ConflictGraphBuilder:
         predicted_shortfall = (self.config.risk_distance - risk_adjusted_cpa_distance).clamp_min(
             0.0
         ) / self.config.risk_distance
-        relative_goal_direction = self._relative_goal_direction_from_knowledge(
-            positions, predicted_positions, goals
-        )
+        relative_goal_direction = torch.zeros_like(relative_positions)
         normalized_age = knowledge_ages.to(dtype=positions.dtype).clamp_min(0.0)
         normalized_age = normalized_age / self.config.prediction_horizon
         normalized_age = torch.where(known_pair, normalized_age, torch.zeros_like(normalized_age))
@@ -217,7 +216,7 @@ class ConflictGraphBuilder:
         adjacency = self._adjacency(
             current_distance=current_distance,
             distance_at_cpa=risk_adjusted_cpa_distance,
-            pair_active=pair_active,
+            pair_active=actor_visible_pairs,
             knowledge_available=known_pair,
         )
         return ConflictGraph(

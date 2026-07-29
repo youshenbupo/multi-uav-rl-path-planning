@@ -209,7 +209,7 @@ class CommunicationChannel:
             valid[receiver] = True
             ages[receiver] = 0
         for sender in range(self._count):
-            if sender == receiver or not self._current_active[sender]:
+            if sender == receiver:
                 continue
             source_step = int(self._received_steps[receiver, sender])
             age = step - source_step
