@@ -6,6 +6,24 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Added and verified the read-only paired-summary artifact
+  `scripts/summarize_paired_checkpoint_evaluations.py` with
+  `tests/test_paired_checkpoint_summary.py`. It validates 20 records/cell and
+  matched cell identities, aggregates episodes within each seed-scenario cell,
+  and uses only the five trained seeds as independent descriptive units. The
+  retained output
+  `outputs/paired_summaries/8uav_full_vs_no_uncertainty_20260729.json` covers
+  six scenarios × five seeds × 20 episodes and carries an explicit
+  no-significance/no-method-effect claim boundary. TDD red/green evidence is
+  retained: missing-module test failed first, then 2 tests passed. Full Ruff
+  and `mypy --explicit-package-bases multiuav scripts` pass (102 sources).
+  Full pytest has an unrelated retained legacy audit drift (83 observed `.m`
+  files vs expected 81): 148 passed, 1 failed, 28 OSQP warnings. Do not mask
+  it; a separate source inventory audit is needed before changing those legacy
+  documents/tests. Next: continue primary-source literature verification and
+  complete the remaining multi-arm reporting plan without turning descriptive
+  values into causal or submission claims.
+
 - Read-only audit confirms the matched 8-UAV full-method root
   `outputs/core_8uav_evaluations/` and valid ablation root
   `outputs/core_8uav_ablation_evaluations_20260729/` each have exact five-seed

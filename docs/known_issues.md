@@ -340,6 +340,14 @@
   statistical summary has yet been approved. Future aggregation must use the
   five independent trained seeds—not the 100 per-scenario episodes—as the
   inferential repetition unit, and must exclude all retained invalid roots.
+- The new 8-UAV paired-summary tool intentionally reports descriptive
+  seed-level values only; it does not justify significance, safety,
+  performance, scalability, or causal-ablation claims. The full pytest suite
+  currently has a retained unrelated legacy-audit failure: the restored source
+  tree contains 83 `.m` files while `legacy_inventory.md` and
+  `tests/test_legacy_audit.py` still assert 81. The paired-summary tests,
+  full Ruff, and explicit-package mypy pass; do not silently edit the legacy
+  inventory/test without a separate audit of the two additional files.
 - The first retained 5-UAV principal no-uncertainty ablation seed has one
   `solve_time_limit` training CBF emergency fallback in 20,016 decisions,
   while its initial and final short evaluations each have zero in 160. Preserve
