@@ -1807,7 +1807,10 @@ episode indices 0--19, requires exact arm-to-arm cell identity matching, then
 aggregates episodes within each seed-scenario cell and reports only seed-level
 means and sample standard deviations. It writes the explicit boundaries
 `independent_unit: trained_seed` and no significance, method-effect, safety, or
-causal claim; it neither trains/evaluates a policy nor changes CBF values.
+causal claim; it neither trains/evaluates a policy nor changes CBF values. Its
+per-scenario output separates task-level fields (`task_metrics`) from
+solver-shield fields (`cbf_diagnostic_metrics`) so CBF fallback/intervention
+diagnostics cannot be silently folded into a task-performance result.
 
 The retained command was
 `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts\\summarize_multiarm_checkpoint_evaluations.py --arm mlp_mappo=outputs\\core_3uav_evaluations --cell-prefix mlp_mappo=core_3uav_mlp_mappo_ --arm raw_graph_mappo=outputs\\core_3uav_evaluations --cell-prefix raw_graph_mappo=core_3uav_raw_graph_ --arm predictive_graph_no_uncertainty=outputs\\core_3uav_evaluations --cell-prefix predictive_graph_no_uncertainty=core_3uav_predictive_graph_ --arm uncertainty_predictive_graph=outputs\\core_3uav_evaluations --cell-prefix uncertainty_predictive_graph=core_3uav_uncertainty_predictive_graph_ --output-json outputs\\paired_summaries\\3uav_four_arm_descriptive_20260729.json`.
@@ -1831,5 +1834,7 @@ pytest remains an unrelated retained failure: 152 passed, 1 failed because the
 legacy audit asserts 81 restored MATLAB files while 83 are present, with 28
 existing OSQP warnings. This artifact is descriptive input provenance only;
 it proves neither performance, significance, safety, scale, a fallback rate,
-nor a causal four-arm comparison. Next: define a publication-facing analysis
-plan that keeps CBF diagnostics distinct and excludes every invalid root.
+nor a causal four-arm comparison. The final output has 11 task metrics and five
+CBF diagnostic metrics per scenario in distinct fields. Next: define a
+publication-facing analysis plan that keeps CBF diagnostics distinct and
+excludes every invalid root.

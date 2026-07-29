@@ -438,4 +438,7 @@
   inferential and must not be used for significance, method-effect, safety,
   fallback-rate, scalability, or causal claims. Full pytest still has the
   unrelated legacy MATLAB inventory failure (83 observed files vs 81 asserted);
-  do not alter that inventory/test without a separate source audit.
+  do not alter that inventory/test without a separate source audit. Its five
+  CBF fields are explicitly diagnostic rather than task metrics; neither their
+  values nor task fields may be converted to a cross-arm safety/fallback claim
+  without a separately defined analysis and all retained replay context.

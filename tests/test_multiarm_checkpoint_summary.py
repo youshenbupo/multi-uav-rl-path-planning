@@ -28,6 +28,7 @@ def _write_cell(
             "scenario": scenario,
             "episode": episode,
             "success": success,
+            "cbf_emergency_count": 0,
         }
         for episode in range(20)
     ]
@@ -61,8 +62,10 @@ def test_multiarm_summary_uses_trained_seed_cells_for_each_arm(tmp_path: Path) -
     scenario = summary["scenario_summaries"][0]
     assert scenario["seed_count"] == 2
     assert scenario["episodes_per_seed"] == 20
-    assert scenario["metrics"]["success"]["mlp"]["seed_mean"] == pytest.approx(0.5)
-    assert scenario["metrics"]["success"]["graph"]["seed_mean"] == pytest.approx(1.0)
+    assert scenario["task_metrics"]["success"]["mlp"]["seed_mean"] == pytest.approx(0.5)
+    assert scenario["task_metrics"]["success"]["graph"]["seed_mean"] == pytest.approx(1.0)
+    assert scenario["cbf_diagnostic_metrics"]["cbf_emergency_count"]["mlp"]["seed_mean"] == 0.0
+    assert "metrics" not in scenario
 
 
 def test_multiarm_summary_rejects_unmatched_cell_identities(tmp_path: Path) -> None:
@@ -91,7 +94,7 @@ def test_multiarm_summary_selects_each_arm_by_cell_prefix(tmp_path: Path) -> Non
         arm_prefixes={"mlp": "mlp_", "graph": "graph_"},
     )
 
-    metrics = summary["scenario_summaries"][0]["metrics"]["success"]
+    metrics = summary["scenario_summaries"][0]["task_metrics"]["success"]
     assert metrics["mlp"]["seed_mean"] == 0.0
     assert metrics["graph"]["seed_mean"] == 1.0
 

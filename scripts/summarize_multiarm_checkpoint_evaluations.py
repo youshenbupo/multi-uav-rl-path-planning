@@ -91,7 +91,8 @@ def summarize_multiarm_roots(
     scenario_summaries: list[dict[str, Any]] = []
     for scenario in sorted({scenario for _, scenario in reference_keys}):
         keys = sorted(key for key in reference_keys if key[1] == scenario)
-        metrics: dict[str, dict[str, dict[str, float]]] = {}
+        task_metrics: dict[str, dict[str, dict[str, float]]] = {}
+        cbf_diagnostic_metrics: dict[str, dict[str, dict[str, float]]] = {}
         for metric in METRIC_FIELDS:
             arm_metrics: dict[str, dict[str, float]] = {}
             try:
@@ -103,8 +104,11 @@ def summarize_multiarm_roots(
                     }
             except ValueError:
                 continue
-            metrics[metric] = arm_metrics
-        if not metrics:
+            if metric.startswith("cbf_"):
+                cbf_diagnostic_metrics[metric] = arm_metrics
+            else:
+                task_metrics[metric] = arm_metrics
+        if not task_metrics and not cbf_diagnostic_metrics:
             raise ValueError(f"No shared numeric metrics for scenario {scenario!r}")
         scenario_summaries.append(
             {
@@ -112,7 +116,8 @@ def summarize_multiarm_roots(
                 "seed_count": len(keys),
                 "episodes_per_seed": EPISODES_PER_CELL,
                 "seed_ids": [key[0] for key in keys],
-                "metrics": metrics,
+                "task_metrics": task_metrics,
+                "cbf_diagnostic_metrics": cbf_diagnostic_metrics,
             }
         )
 
