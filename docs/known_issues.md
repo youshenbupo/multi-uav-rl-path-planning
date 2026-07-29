@@ -418,3 +418,10 @@
   `outputs/cbf_diagnostics/historic_cbf_replay_20260722.jsonl`, not silently
   imputed. Future telemetry must retain the complete replay context from the
   first event without altering the frozen CBF solver protocol.
+- The official IJCAI proceedings page for Liu et al.'s DHCG paper is accessible
+  and its abstract has been recorded, but two browser downloads of its official
+  PDF timed out without producing a local file. The paper therefore remains
+  full-text-unreviewed: do not infer its timing assumptions, graph inputs,
+  uncertainty handling, dynamic-obstacle setting, or safety mechanism from the
+  abstract. Obtain the official PDF or an author-provided primary copy before
+  asserting a distinction or novelty gap.

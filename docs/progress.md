@@ -1757,3 +1757,28 @@ This establishes data eligibility, not a comparison result. Any later inferentia
 Added `scripts/summarize_paired_checkpoint_evaluations.py` and its test `tests/test_paired_checkpoint_summary.py`. The read-only tool validates one 20-episode JSONL per seed-scenario cell, rejects unmatched cell identities, summarizes each metric within a cell, and then reports only descriptive paired seed-level values (mean and sample standard deviation) across the five trained seeds. It explicitly writes `independent_unit: trained_seed`, a pseudo-replication guard, and a no-significance/no-method-effect claim boundary. It neither trains, evaluates, tunes, nor changes a controller/CBF setting.
 
 The verified command `D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts/summarize_paired_checkpoint_evaluations.py --reference-root outputs/core_8uav_evaluations --treatment-root outputs/core_8uav_ablation_evaluations_20260729 --output-json outputs/paired_summaries/8uav_full_vs_no_uncertainty_20260729.json` retained a six-scenario, five-seed, 20-episodes-per-seed descriptive artifact. It is input provenance and descriptive reporting only, not a statistical significance, safety, performance, scalability, or causal-ablation conclusion. TDD evidence: the new tests first failed because the module did not exist, then passed (2 passed). Full Ruff passed; `mypy --explicit-package-bases multiuav scripts` passed 102 source files. Full pytest retained one pre-existing unrelated failure (`tests/test_legacy_audit.py`: observed restored MATLAB `.m` count 83 while test/doc expect 81), with 148 tests passing and 28 existing OSQP warnings. Next: resolve or explicitly quarantine that legacy-inventory drift separately, and do not use the paired descriptive artifact as a submission claim until the complete multi-arm analysis plan and literature evidence are ready.
+
+## AAMAS 2027 - official IJCAI DHCG source retrieval retained (2026-07-29)
+
+At revision `7a065bd`, primary-source inspection followed DOI
+`10.24963/ijcai.2023/24` to the official IJCAI proceedings page and reviewed its
+metadata and abstract. The page identifies the paper, proceedings pages
+208--216, and official PDF `https://www.ijcai.org/proceedings/2023/0024.pdf`.
+The abstract supports only a high-level record: DHCG learns message-based
+directed acyclic communication topologies end-to-end, applies an acyclicity
+constraint/reward and a projection, and reports policy/value variants on listed
+cooperative MARL benchmarks. It does not by itself establish packet timing,
+predicted neighbour-state uncertainty features, dynamic-obstacle UAV settings,
+or CBF behavior.
+
+The browser's two official-PDF download attempts (one navigate-mode attempt
+and one ordinary download into ignored `tmp/pdfs/`) each timed out and produced
+no local file. The retained command record is
+`C:\\Users\\yun96\\.claude\\skills\\gstack\\browse\\dist\\browse.exe goto https://doi.org/10.24963/ijcai.2023/24`,
+followed by `download https://www.ijcai.org/proceedings/2023/0024.pdf` first
+with `--navigate` and then to `tmp/pdfs/liu_dhcg_ijcai2023.pdf`; no PDF parsing
+or full-text inference was performed. The failed retrieval is recorded in `docs/related_work_matrix.md` and
+`docs/known_issues.md`; no experimental output, policy, CBF configuration, or
+claim boundary changed. Next: obtain the official PDF or an author-provided
+primary copy and read it before making any DHCG method-difference or novelty
+statement.

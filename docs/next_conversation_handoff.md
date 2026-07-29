@@ -6,6 +6,15 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Primary-source verification followed Liu et al.'s DHCG DOI to the official
+  IJCAI proceedings page on 2026-07-29 and reviewed its metadata/abstract.
+  The page exposed the official PDF, but two browser download attempts timed
+  out and produced no local PDF. The ledger therefore remains
+  full-text-unreviewed; it records only the official abstract's high-level
+  description. Do not infer timing assumptions, graph inputs, uncertainty,
+  dynamic-obstacle, or CBF properties. Seek the official PDF or author copy
+  before making a DHCG difference or novelty statement.
+
 - Primary-source verification also attempted the Neural Graph CBF DOI on
   2026-07-29. It resolved to the official ACM page, but Cloudflare human
   verification prevented access to abstract/PDF and network-idle timed out.
