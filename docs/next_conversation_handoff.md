@@ -6,6 +6,17 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Read-only audit confirms the matched 8-UAV full-method root
+  `outputs/core_8uav_evaluations/` and valid ablation root
+  `outputs/core_8uav_ablation_evaluations_20260729/` each have exact five-seed
+  × six-scenario coverage: 30 directories, 30 summaries, 30 JSONL, and 600
+  parseable records, with no identity/count errors. Raw records have common
+  `seed`, `scenario`, and `episode` fields. This proves eligibility only.
+  Before any method comparison, make a read-only paired summary that aggregates
+  each 20-episode seed-scenario cell and uses the five independently trained
+  seeds—not 100 episode records—as inferential replicates; explicitly exclude
+  all invalid/interrupted roots and keep CBF diagnostic replay separate.
+
 - The valid 8-UAV principal no-uncertainty five-seed matrix and all-source CBF
   replay are complete. The fresh serial root
   `outputs/core_8uav_ablation_evaluations_20260729/` was launched at revision

@@ -335,6 +335,11 @@
   diagnostics nor one method arm alone establish a safety/fallback rate,
   performance, scale, or ablation effect; retain all raw JSONL and do not tune
   CBF in response.
+- The matched 8-UAV full-method and valid no-uncertainty matrices have
+  identical five-seed/six-scenario/20-episode cell coverage, but no paired
+  statistical summary has yet been approved. Future aggregation must use the
+  five independent trained seeds—not the 100 per-scenario episodes—as the
+  inferential repetition unit, and must exclude all retained invalid roots.
 - The first retained 5-UAV principal no-uncertainty ablation seed has one
   `solve_time_limit` training CBF emergency fallback in 20,016 decisions,
   while its initial and final short evaluations each have zero in 160. Preserve
