@@ -6,6 +6,21 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- A fresh, serial 5-UAV principal no-uncertainty evaluation matrix was launched
+  on 2026-07-29 at revision `10a9c8e`, after a zero-Python-process preflight.
+  The retained ignored launcher is
+  `outputs/core_5uav_ablation_evaluations_rerun4/launcher.ps1`; its fixed
+  command invokes the five final checkpoints through
+  `scripts/evaluate_core_checkpoint.py` with frozen
+  `configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml`, 20
+  episodes, CUDA network inference, and CPU OSQP for each of the six canonical
+  scenarios. The validated identity template is
+  `core_5uav_predictive_no_uncertainty_seed_${seed}_${scenario}`. Its stdout
+  and stderr logs remain in rerun4. A health check found one `multiuav_rl`
+  Python process, no cell artifact yet, and zero-byte stderr. Do not launch a
+  concurrent job. On completion, audit 30 directories, 30 summaries, 30 JSONL,
+  and 600 parseable records before treating the matrix as valid.
+
 - A third 5-UAV ablation evaluation launcher is invalid/excluded. Its inline
   PowerShell quoting stripped the intended experiment-name string assignment,
   causing evaluator argument validation to fail before any cell ran. Preserve
