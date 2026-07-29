@@ -2040,3 +2040,29 @@ performance, safety, a fallback rate, or a valid five-seed comparison. No
 JSONL checkpoint evaluation has started. Next: after confirming no process and
 an absent target path, launch seed `20260720` serially with the same frozen
 protocol.
+
+## AAMAS 2027 - post-isolation MLP seed 20260720 retained (2026-07-29)
+
+After a zero-process preflight, the sole serial seed `20260720` completed under
+the same frozen CUDA command/configuration as seed `20260719`, changing only
+`--seed 20260720` and output root
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260720`
+(training revision `a4e9d8d`; config SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`). It
+naturally reached 100,032 transitions / 1,042 updates on CUDA. Its final
+checkpoint, summary, TensorBoard, and raw telemetry are retained in that root;
+the unique launcher logs are
+`outputs/core_3uav_post_actor_isolation_seed_20260720.stdout.log` and
+`.stderr.log`.
+
+Training telemetry retains one `maximum iterations reached` emergency fallback
+in 33,344 decisions; initial/final script evaluations retain zero fallbacks in
+160/82 decisions. The append-safe replay
+`outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260720_replay_20260729.jsonl`
+and companion summary use unchanged 20,000-iteration, 0.1-second,
+penalty-100, uncertainty-gain-0.5/cap-5 values. It retains the one source event
+with zero replay errors; the replay also reaches `maximum iterations reached`
+and uses emergency fallback. Preserve it without numerical tuning. This is a
+second independent auditable training attempt, not a performance, safety,
+fallback-rate, or five-seed conclusion. Next: serial seed `20260721` under the
+same protocol; no checkpoint evaluation starts yet.

@@ -67,6 +67,21 @@ processes before relying on any status below.
   audit/checkpoint/document it, then serially launch seed `20260720`. This is
   an active attempt, not a performance/safety/fallback-rate result.
 
+- **Post-isolation MLP seed `20260720` completed:** it naturally reached
+  100,032 transitions / 1,042 CUDA updates at local revision `a4e9d8d` under
+  the unchanged frozen configuration SHA-256
+  `794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`.
+  Its artifact root is
+  `outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260720/`.
+  Training retains one `maximum iterations reached` fallback across 33,344
+  decisions; initial/final script evaluations retain zero fallbacks in 160/82
+  decisions. The new all-source-for-seed replay
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260720_replay_20260729.jsonl`
+  has one source event, zero replay errors, and the unchanged 20,000 / 0.1s /
+  100 / 0.5 / 5.0 protocol; its replay also uses fallback. This is diagnostic
+  only. Next: verify zero running jobs and absent target output, then serially
+  launch seed `20260721`; do not start evaluation or tune CBF.
+
 - **Post-isolation MLP seed `20260719` completed:** the above process naturally
   exited at 100,032 transitions / 1,042 updates. Its final checkpoint,
   summary, TensorBoard data and `live_training_telemetry.json` are retained

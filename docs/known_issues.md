@@ -497,3 +497,10 @@
   short in-script evaluations cannot establish any performance, safety, or
   fallback-rate statement; four matched post-isolation MLP seeds and their
   six-scenario JSONL evaluations remain required.
+- Post-isolation 3-UAV MLP seed `20260720` retains one training
+  `maximum iterations reached` emergency fallback in 33,344 decisions; its
+  source context and unchanged-protocol replay are retained at
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260720_replay_20260729.jsonl`
+  with zero replay errors. The replay also falls back. Do not change slack,
+  iteration, tolerance, or solve-time settings; this single seed supplies no
+  performance, safety, or fallback-rate evidence.
