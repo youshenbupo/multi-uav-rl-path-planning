@@ -6,6 +6,17 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Refined `scripts/summarize_paired_checkpoint_evaluations.py` so the retained
+  5-UAV and 8-UAV paired outputs now split 11 `task_metrics` from five
+  `cbf_diagnostic_metrics` per scenario. Their inputs, five trained seeds,
+  six scenarios, 20 episodes/cell, invalid-root exclusions, and separate
+  all-source CBF replays are unchanged. Target tests (6), Ruff, and mypy (103
+  sources) pass; full pytest remains 152 passed / 1 unrelated legacy MATLAB
+  inventory failure (83 vs 81) / 28 OSQP warnings. This is a reporting-boundary
+  change, not a performance, safety, fallback-rate, scale, significance, or
+  causal claim. Next: document a publication-facing analysis plan before
+  interpreting any descriptive values.
+
 - Generated the read-only 5-UAV full-method versus independently trained
   no-uncertainty descriptive paired artifact
   `outputs/paired_summaries/5uav_full_vs_no_uncertainty_20260729.json` at

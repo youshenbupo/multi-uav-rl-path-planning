@@ -28,6 +28,7 @@ def _write_cell(
             "episode": episode,
             "success": success,
             "energy_proxy": energy_proxy + episode,
+            "cbf_emergency_count": 0,
         }
         for episode in range(20)
     ]
@@ -69,13 +70,16 @@ def test_summarize_paired_roots_uses_seed_cells_not_episode_pseudoreplicates(
     assert scenario["scenario"] == "nominal"
     assert scenario["seed_count"] == 2
     assert scenario["episodes_per_seed"] == 20
-    success = scenario["metrics"]["success"]
+    success = scenario["task_metrics"]["success"]
     assert success["reference_seed_mean"] == pytest.approx(0.5)
     assert success["treatment_seed_mean"] == pytest.approx(1.0)
     assert success["paired_delta_treatment_minus_reference_mean"] == pytest.approx(0.5)
     assert success["paired_delta_sample_std"] == pytest.approx(0.5**0.5)
-    energy = scenario["metrics"]["energy_proxy"]
+    energy = scenario["task_metrics"]["energy_proxy"]
     assert energy["paired_delta_treatment_minus_reference_mean"] == pytest.approx(10.0)
+    cbf = scenario["cbf_diagnostic_metrics"]["cbf_emergency_count"]
+    assert cbf["paired_delta_treatment_minus_reference_mean"] == 0.0
+    assert "metrics" not in scenario
 
 
 def test_summarize_paired_roots_rejects_missing_seed_scenario_cell(tmp_path: Path) -> None:

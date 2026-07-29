@@ -448,3 +448,8 @@
   and excluded. The seed-level paired JSON is not inferential and its CBF fields
   must not replace or be merged with the separately retained all-source CBF
   replay; no safety, fallback-rate, scale, or causal-ablation statement follows.
+- The 5-UAV and 8-UAV paired JSON summaries now isolate CBF fields in
+  `cbf_diagnostic_metrics`, separate from `task_metrics`. This controls report
+  structure only: it does not make the CBF records an independent safety or
+  fallback-rate analysis, and the raw JSONL plus all-source replay remain the
+  evidence for any future diagnostic work.

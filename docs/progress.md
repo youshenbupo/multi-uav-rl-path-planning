@@ -1864,3 +1864,31 @@ is a seed-level descriptive paired artifact only, not a significance,
 performance, safety, fallback-rate, scalability, or causal ablation result.
 Next: retain this input provenance in the publication analysis plan and extend
 the same invalid-root discipline to every remaining scale/ablation comparison.
+
+## AAMAS 2027 - paired summaries separate task and CBF diagnostic fields (2026-07-29)
+
+At revision `292c2e7`, refined the existing read-only
+`scripts/summarize_paired_checkpoint_evaluations.py` and its test so every
+scenario has independent `task_metrics` and `cbf_diagnostic_metrics` objects.
+The tool still validates 20 records/cell and exact paired identities, aggregates
+only within seed-scenario cells, and uses trained seed as the independent unit.
+It still emits no significance or method-effect claim and does not train,
+evaluate, or change CBF parameters. This change prevents CBF fallback,
+intervention, correction, and solve-time fields from being silently presented
+as task-performance metrics.
+
+The retained regeneration commands were
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts\\summarize_paired_checkpoint_evaluations.py --reference-root outputs\\core_5uav_evaluations --treatment-root outputs\\core_5uav_ablation_evaluations_rerun4 --output-json outputs\\paired_summaries\\5uav_full_vs_no_uncertainty_20260729.json`
+and
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts\\summarize_paired_checkpoint_evaluations.py --reference-root outputs\\core_8uav_evaluations --treatment-root outputs\\core_8uav_ablation_evaluations_20260729 --output-json outputs\\paired_summaries\\8uav_full_vs_no_uncertainty_20260729.json`.
+Both outputs retain six scenarios, five common trained seeds, 20 episodes per
+seed-scenario cell, 11 task fields, and five CBF diagnostic fields. The prior
+five-UAV invalid-root exclusions and the 8-UAV valid-root selection remain
+unchanged; all original JSONL and separate all-source CBF replays remain raw
+evidence. Target paired/multi-arm tests passed (6), Ruff passed, and
+`mypy --explicit-package-bases multiuav scripts` passed 103 sources. Full
+pytest remains 152 passed / 1 unrelated legacy-inventory failure (83 MATLAB
+files observed vs 81 asserted) / 28 OSQP warnings. This proves reporting-field
+separation only, not performance, significance, safety, fallback rate, scale,
+or a causal effect. Next: write a publication analysis plan that names eligible
+artifacts, exclusions, and the no-claim boundary before any interpretation.

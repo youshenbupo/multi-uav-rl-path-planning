@@ -95,7 +95,8 @@ def summarize_paired_roots(reference_root: Path, treatment_root: Path) -> dict[s
     scenario_summaries: list[dict[str, Any]] = []
     for scenario in scenarios:
         keys = sorted(key for key in reference_cells if key[1] == scenario)
-        metrics: dict[str, dict[str, float]] = {}
+        task_metrics: dict[str, dict[str, float]] = {}
+        cbf_diagnostic_metrics: dict[str, dict[str, float]] = {}
         for metric in METRIC_FIELDS:
             try:
                 reference_values = [_cell_mean(reference_cells[key], metric) for key in keys]
@@ -106,7 +107,7 @@ def summarize_paired_roots(reference_root: Path, treatment_root: Path) -> dict[s
                 treatment - reference
                 for reference, treatment in zip(reference_values, treatment_values)
             ]
-            metrics[metric] = {
+            summary = {
                 "reference_seed_mean": statistics.fmean(reference_values),
                 "reference_seed_sample_std": _sample_std(reference_values),
                 "treatment_seed_mean": statistics.fmean(treatment_values),
@@ -114,7 +115,11 @@ def summarize_paired_roots(reference_root: Path, treatment_root: Path) -> dict[s
                 "paired_delta_treatment_minus_reference_mean": statistics.fmean(deltas),
                 "paired_delta_sample_std": _sample_std(deltas),
             }
-        if not metrics:
+            if metric.startswith("cbf_"):
+                cbf_diagnostic_metrics[metric] = summary
+            else:
+                task_metrics[metric] = summary
+        if not task_metrics and not cbf_diagnostic_metrics:
             raise ValueError(f"No shared numeric metrics for scenario {scenario!r}")
         scenario_summaries.append(
             {
@@ -122,7 +127,8 @@ def summarize_paired_roots(reference_root: Path, treatment_root: Path) -> dict[s
                 "seed_count": len(keys),
                 "episodes_per_seed": EPISODES_PER_CELL,
                 "seed_ids": [key[0] for key in keys],
-                "metrics": metrics,
+                "task_metrics": task_metrics,
+                "cbf_diagnostic_metrics": cbf_diagnostic_metrics,
             }
         )
 
