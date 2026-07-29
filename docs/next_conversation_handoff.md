@@ -141,6 +141,21 @@ processes before relying on any status below.
   then serially launch raw GraphMAPPO seed `20260720` with process-level stdio
   redirection before any Graph checkpoint evaluation.
 
+- **Valid post-isolation raw GraphMAPPO seed `20260720` completed,
+  2026-07-29 (revision `cf68ed3`; documentation pending commit):** serial CUDA
+  raw-graph (`mappo`) training naturally completed at 100,032 transitions /
+  1,042 updates under the unchanged dynamic-graph config SHA-256, with final
+  checkpoint, summary, TensorBoard, telemetry, and launcher logs retained.
+  Source telemetry has one `maximum iterations reached` fallback in 33,344
+  training decisions and zero initial/final in-script fallback events (160 each).
+  Its replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260720_replay_20260729.jsonl`
+  has one source, zero errors, and replays `solved` without fallback under
+  unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP parameters. This is provenance,
+  not an outcome claim. Next: commit docs without staging `.gitignore`, then
+  zero-process/new-root preflight and train raw-graph seed `20260721` before
+  any GraphMAPPO evaluation.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

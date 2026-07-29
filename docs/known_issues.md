@@ -599,3 +599,8 @@
   replay records and do not change CBF values. One valid raw-graph seed, its
   short in-script evaluations, or the replay outcome cannot support a
   performance, safety, fallback-rate, significance, or baseline statement.
+- Valid raw GraphMAPPO seed `20260720` retains one training `maximum iterations
+  reached` fallback in 33,344 decisions. Its unmodified-protocol replay is
+  retained with zero replay errors and a `solved` non-fallback decision. This
+  single diagnostic cannot justify safety-solver tuning or any outcome claim;
+  preserve it alongside the prior invalid root and valid 20260719 retry.

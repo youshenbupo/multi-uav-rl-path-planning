@@ -2352,3 +2352,25 @@ raw-graph training/replay artifact only, not a performance, safety,
 fallback-rate, significance, baseline, or five-seed conclusion. Next: after a
 zero-process/absent-path preflight, serially train raw-graph seed `20260720` in
 a new root before any raw-graph checkpoint evaluation.
+
+## AAMAS 2027 - post-isolation raw GraphMAPPO seed 20260720 retained (2026-07-29)
+
+At revision `cf68ed3`, the serial CUDA command for seed `20260720` reused the
+unchanged `dynamic_graph_baseline.yaml` SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`, three
+UAVs, raw graph mode `mappo`, and 100k requested steps in
+`outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260720/`.
+Process-level stdout/stderr redirection wrote separate preserved launcher logs.
+It naturally completed at the expected rollout-boundary 100,032 transitions /
+1,042 updates with final checkpoint, summary, TensorBoard, and raw telemetry.
+
+Training telemetry retains one `maximum iterations reached` CBF emergency
+fallback in 33,344 decisions; initial and final in-script evaluations each have
+zero fallbacks in 160 decisions. The unique per-seed replay at
+`outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260720_replay_20260729.jsonl`
+plus summary retains the source with zero replay errors under unchanged
+20,000/0.1s/100/0.5/5.0 CPU-OSQP values; the replay is `solved` without
+fallback. This is the second valid raw-graph training/replay artifact only, not
+a performance, safety, fallback-rate, significance, baseline, or five-seed
+conclusion. Next: new-root serial CUDA training for raw-graph seed `20260721`
+before evaluation.
