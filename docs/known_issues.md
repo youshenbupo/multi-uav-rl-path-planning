@@ -431,3 +431,11 @@
   its communication assumptions, dynamic-obstacle model, or safety mechanism.
   Obtain an authorized IEEE or author-provided primary copy rather than
   bypassing the access restriction.
+- The four-arm 3-UAV descriptive summary includes only JSONL cells selected by
+  explicit arm prefixes. Two original MLP seed-20260719 directories are empty
+  invalid attempts and remain excluded; their documented valid schema/RNG and
+  OOD-trajectory rerun cells are the selected identities. The summary is not
+  inferential and must not be used for significance, method-effect, safety,
+  fallback-rate, scalability, or causal claims. Full pytest still has the
+  unrelated legacy MATLAB inventory failure (83 observed files vs 81 asserted);
+  do not alter that inventory/test without a separate source audit.

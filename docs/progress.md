@@ -1795,3 +1795,41 @@ metadata-only and records the block in `docs/related_work_matrix.md` and
 `docs/known_issues.md`. Next: obtain an authorized IEEE or author-provided
 primary copy; do not infer communication, obstacle, or safety assumptions from
 the title or metadata.
+
+## AAMAS 2027 - descriptive four-arm 3-UAV summary artifact retained (2026-07-29)
+
+At revision `2c9b901`, added the read-only
+`scripts/summarize_multiarm_checkpoint_evaluations.py` and
+`tests/test_multiarm_checkpoint_summary.py`. The tool accepts named evaluation
+roots and an optional experiment-directory prefix per arm. It validates every
+selected JSONL cell has 20 nonblank records with one seed/scenario identity and
+episode indices 0--19, requires exact arm-to-arm cell identity matching, then
+aggregates episodes within each seed-scenario cell and reports only seed-level
+means and sample standard deviations. It writes the explicit boundaries
+`independent_unit: trained_seed` and no significance, method-effect, safety, or
+causal claim; it neither trains/evaluates a policy nor changes CBF values.
+
+The retained command was
+`D:\\anaconda3\\envs\\multiuav_rl\\python.exe scripts\\summarize_multiarm_checkpoint_evaluations.py --arm mlp_mappo=outputs\\core_3uav_evaluations --cell-prefix mlp_mappo=core_3uav_mlp_mappo_ --arm raw_graph_mappo=outputs\\core_3uav_evaluations --cell-prefix raw_graph_mappo=core_3uav_raw_graph_ --arm predictive_graph_no_uncertainty=outputs\\core_3uav_evaluations --cell-prefix predictive_graph_no_uncertainty=core_3uav_predictive_graph_ --arm uncertainty_predictive_graph=outputs\\core_3uav_evaluations --cell-prefix uncertainty_predictive_graph=core_3uav_uncertainty_predictive_graph_ --output-json outputs\\paired_summaries\\3uav_four_arm_descriptive_20260729.json`.
+Its output has four named arms, six scenarios, five matched trained seeds, and
+20 episodes per seed-scenario cell. For MLP, the two empty original directories
+`core_3uav_mlp_mappo_seed_20260719_nominal` and
+`..._ood_communication_obstacle` remain excluded; the existing valid
+`..._nominal_schemafix_rngfix_rerun2` and
+`..._ood_communication_obstacle_trajectoryfix_rerun1` JSONL cells supply those
+two identities. The three GraphMAPPO prefixes each select 30 valid cells / 600
+records. A first read-only PowerShell audit command had an empty-pipe parse
+error before it read/wrote an artifact; the corrected audit found the two empty
+MLP directories and no issue in the other three arms.
+
+TDD evidence: the initial missing-module test failed, the direct-CLI test then
+failed before the import-path repair, and the prefix-selection test failed
+before that behavior existed. After minimal implementation, paired and
+multi-arm target tests passed (6 passed), Ruff passed, and
+`mypy --explicit-package-bases multiuav scripts` passed 103 sources. Full
+pytest remains an unrelated retained failure: 152 passed, 1 failed because the
+legacy audit asserts 81 restored MATLAB files while 83 are present, with 28
+existing OSQP warnings. This artifact is descriptive input provenance only;
+it proves neither performance, significance, safety, scale, a fallback rate,
+nor a causal four-arm comparison. Next: define a publication-facing analysis
+plan that keeps CBF diagnostics distinct and excludes every invalid root.

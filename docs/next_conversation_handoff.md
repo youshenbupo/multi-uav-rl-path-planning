@@ -6,6 +6,23 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- Added `scripts/summarize_multiarm_checkpoint_evaluations.py` and
+  `tests/test_multiarm_checkpoint_summary.py` for read-only, four-arm 3-UAV
+  descriptive reporting. It accepts a named root plus cell-directory prefix,
+  validates 20 episodes/cell and exact identities, and uses five trained seeds
+  as the only independent unit. The retained artifact is
+  `outputs/paired_summaries/3uav_four_arm_descriptive_20260729.json`; it covers
+  MLP, raw graph, predictive graph without uncertainty, and uncertainty-aware
+  predictive graph over six scenarios, five seeds, and 20 episodes/cell.
+  MLP excludes the two empty seed-20260719 original directories and selects the
+  documented schema/RNG and OOD-trajectory reruns instead. This is descriptive
+  provenance, not a significance, method-effect, safety, fallback-rate, scale,
+  or causal result. TDD target tests (6), Ruff, and mypy (103 sources) pass.
+  Full pytest remains 152 passed / 1 unrelated legacy MATLAB inventory failure
+  (83 files observed vs 81 asserted) / 28 OSQP warnings. Next: prepare the
+  publication-facing multi-arm analysis plan with strict CBF-diagnostic and
+  invalid-root exclusions, then continue primary-source retrieval.
+
 - Primary-source verification followed the Thumiger--Deghat UAV MARL DOI to
   official IEEE Xplore on 2026-07-29. The page returned `Unusual Traffic
   Detected` (HTTP 418) before abstract/PDF access. The ledger remains
