@@ -2092,3 +2092,29 @@ existing OSQP warnings. This validates telemetry persistence under the mocked
 transient lock, not training performance or a solver property. Next: commit the
 repair/documentation, preserve the invalid root, and rerun seed `20260721`
 under a unique `telemetryretry1` root before seeds `20260722`/`20260723`.
+
+## AAMAS 2027 - post-isolation MLP seed 20260721 retry retained (2026-07-29)
+
+The fresh retry command used seed `20260721`, CUDA, unchanged frozen
+configuration SHA-256
+`794C8537F9A879467854AFB657C6D47E6C8A9F3793497C70D28CD1F35B2D8C46`, revision
+`0b7d402`, and unique root
+`outputs/core_3uav_post_actor_isolation/core_3uav_mlp_mappo_seed_20260721_telemetryretry1`.
+It naturally completed 100,032 transitions / 1,042 updates, with final
+checkpoint, summary, TensorBoard and raw telemetry retained. This is the only
+valid `20260721` post-isolation candidate; the earlier same-seed directory
+remains invalid and untouched.
+
+Training and final script evaluation retain zero CBF fallback events over
+33,344/103 decisions. The initial untrained-policy evaluation retains eight
+`solved inaccurate` fallback contexts over 160 decisions. The full-source
+replay at
+`outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260721_telemetryretry1_replay_20260729.jsonl`
+and companion summary preserves all eight sources with zero replay errors under
+unchanged 20,000-iteration, 0.1-second, penalty-100,
+uncertainty-gain-0.5/cap-5 values. Seven replays return `maximum iterations
+reached`, one remains `solved inaccurate`, and all eight use emergency fallback.
+These diagnostic outcomes must not trigger a numerical change. This establishes
+only a third completed independent post-isolation MLP training artifact; no
+performance, safety, fallback-rate, or five-seed conclusion exists. Next:
+serially train seed `20260722` under a new root; do not begin evaluations yet.

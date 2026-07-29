@@ -514,3 +514,12 @@
   from every training, evaluation, CBF, and manuscript aggregation. The
   bounded-retry telemetry repair must be used only with a fresh retry root;
   never overwrite this attempt or change CBF settings.
+- The valid post-isolation `20260721_telemetryretry1` MLP training artifact
+  retains eight initial-untrained-policy `solved inaccurate` fallback contexts
+  (0/33,344 training and 0/103 final-evaluation events). Its all-source replay
+  under unchanged values is
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260721_telemetryretry1_replay_20260729.jsonl`:
+  zero replay errors, seven `maximum iterations reached`, one `solved
+  inaccurate`, and eight replay emergency fallbacks. Preserve both source and
+  replay records; do not treat the short initial evaluation, a single seed, or
+  a replay status as a fallback-rate/safety result or tuning justification.

@@ -97,6 +97,19 @@ processes before relying on any status below.
   Next: confirm zero jobs and absent unique retry path, then rerun `20260721`
   serially at 100k CUDA; only after valid completion continue seeds 22/23.
 
+- **Valid post-isolation MLP seed `20260721` retry:** the new
+  `...seed_20260721_telemetryretry1/` root at revision `0b7d402` completed
+  100,032 CUDA transitions / 1,042 updates with final checkpoint/summary;
+  it is the only valid same-seed artifact. Training/final script evaluation
+  have 0/33,344 and 0/103 fallbacks. Initial untrained-policy evaluation retains
+  eight `solved inaccurate` contexts in 160 decisions. Its all-source replay
+  `outputs/cbf_diagnostics/post_actor_isolation_mlp_seed_20260721_telemetryretry1_replay_20260729.jsonl`
+  has 8 sources, zero replay errors, seven `maximum iterations reached`, one
+  `solved inaccurate`, and eight replay fallbacks under unchanged 20,000 / 0.1s
+  / 100 / 0.5 / 5.0. This is diagnostic only; never tune CBF from it. The
+  original `20260721` directory remains invalid. Next: zero-process/absent-path
+  preflight then serially train `20260722` at 100k CUDA; no evaluation yet.
+
 - **Post-isolation MLP seed `20260719` completed:** the above process naturally
   exited at 100,032 transitions / 1,042 updates. Its final checkpoint,
   summary, TensorBoard data and `live_training_telemetry.json` are retained
