@@ -6,6 +6,24 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- The valid 8-UAV principal no-uncertainty five-seed matrix and all-source CBF
+  replay are complete. The fresh serial root
+  `outputs/core_8uav_ablation_evaluations_20260729/` was launched at revision
+  `408a115` with frozen config SHA-256
+  `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`, CUDA
+  inference, CPU OSQP, five final checkpoints, six canonical scenarios, and
+  20 episodes/cell. It has exactly 30 expected directories/summaries/JSONL and
+  600 parseable records; launcher stderr is zero. The preceding identity-test
+  interpolation error failed before evaluator start and made no result cell.
+- `outputs/cbf_diagnostics/predictive_no_uncertainty_8uav_5seed_replay_20260729.jsonl`
+  plus `.summary.json` apply unchanged 20,000 iterations, 0.1 seconds, slack
+  penalty 100, and zero uncertainty margin gain/max margin over 65 sources.
+  They retain 808 source events and zero replay errors; all raw records remain.
+  These are not performance, safety, fallback-rate, scale, or ablation claims.
+  Next: read-only audit the matching full-method 8-UAV valid matrix and define
+  paired aggregation inputs/exclusions before any comparison; then continue
+  primary-source literature verification.
+
 - The first 8-UAV ablation evaluation preflight had a PowerShell interpolation
   typo while rendering a test identity; it failed before launching an evaluator
   or creating a result cell. The retained fresh root contains only its ignored

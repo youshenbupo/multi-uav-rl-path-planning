@@ -328,6 +328,13 @@
   `outputs/core_8uav_ablation/`; neither this seed nor all five unevaluated
   checkpoints establish a fallback rate, safety, performance, scale, or causal
   ablation effect. Do not alter CBF values.
+- The valid 8-UAV no-uncertainty five-seed matrix and its all-source replay are
+  complete, but the initial identity-render preflight failed before it ran any
+  evaluator and must remain distinguished from the valid 30-cell root. The
+  valid replay retains 808 events with zero replay errors. Neither these raw
+  diagnostics nor one method arm alone establish a safety/fallback rate,
+  performance, scale, or ablation effect; retain all raw JSONL and do not tune
+  CBF in response.
 - The first retained 5-UAV principal no-uncertainty ablation seed has one
   `solve_time_limit` training CBF emergency fallback in 20,016 decisions,
   while its initial and final short evaluations each have zero in 160. Preserve
