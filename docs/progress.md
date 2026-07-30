@@ -2500,3 +2500,24 @@ is deliberate zero-event provenance, not a result deletion or a safety,
 fallback-rate, performance, significance, or baseline claim. Next: preflight
 new raw-graph evaluation paths, then execute the five-checkpoint six-scenario
 matrix with 20 episodes per cell before an all-source raw-graph replay.
+
+## AAMAS 2027 - raw GraphMAPPO evaluation launcher interruption retained (2026-07-31)
+
+The first post-isolation raw-graph matrix launcher used the distinct root
+`outputs/core_3uav_post_actor_isolation_evaluations_20260731_raw_graph_mappo/`
+and the retained launcher/stdout/stderr paths named
+`core_3uav_post_actor_isolation_raw_graph_mappo_evaluation_launcher_20260731`.
+It serially began the five valid final checkpoints over the six canonical
+20-episode CUDA-actor/CPU-OSQP scenarios. The launcher exited during
+`core_3uav_post_actor_isolation_raw_graph_mappo_seed_20260720_ood_communication_obstacle`:
+11 cells are complete, while that cell has eight raw records and no
+`summary.json`; the remaining 18 cells do not exist. Its stderr is empty and
+stdout ends immediately after announcing the partial cell, so the causal
+mechanism is unknown.
+
+`ABORTED.json` in that root records the exact state and exclusion. The entire
+root—including its complete-looking JSONL files—remains raw forensic evidence
+and is excluded from aggregation, replay inputs, and paper claims. No CBF or
+evaluator parameter changed. Next: use a completely fresh root and launcher
+paths for the full 30-cell rerun, then parse only that complete root before
+all-source replay.

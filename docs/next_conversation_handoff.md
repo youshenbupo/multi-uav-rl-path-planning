@@ -47,6 +47,18 @@ processes before relying on any status below.
   scenarios. Retain every JSONL and do not begin `predictive_graph` until the
   complete raw matrix and all-source replay have been documented and pushed.
 
+- **Raw GraphMAPPO first evaluation batch invalid and retained, 2026-07-31
+  (documentation pending commit):** the distinct
+  `outputs/core_3uav_post_actor_isolation_evaluations_20260731_raw_graph_mappo/`
+  batch was interrupted during seed `20260720` OOD. It has 11 complete cells,
+  eight partial JSONL records with no summary in the twelfth cell, and no
+  remaining 18 cells. The launcher emitted no stderr and stdout ends after the
+  partial-cell launch; the cause is unknown. Its `ABORTED.json` makes the
+  entire root—including complete-looking cells—ineligible for aggregation,
+  replay and manuscript use. Preserve it; no CBF or evaluator setting changed.
+  Next: document/commit/push this invalid attempt, then zero-process/preflight
+  a new evaluation root and run all 30 cells serially before parsing results.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

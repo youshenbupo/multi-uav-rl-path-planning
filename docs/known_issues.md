@@ -648,3 +648,13 @@
   `replay_error_count=0` under the unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP
   protocol. An empty JSONL here is an intentional diagnostic record, not an
   omitted result, and cannot support a safety or fallback-rate conclusion.
+- The first post-isolation raw GraphMAPPO five-checkpoint evaluator batch is
+  invalid and retained at
+  `outputs/core_3uav_post_actor_isolation_evaluations_20260731_raw_graph_mappo/`.
+  It stopped during seed `20260720` OOD after 11 complete cells plus eight raw
+  records without a summary in the twelfth; 18 cells were never created.
+  `ABORTED.json`, the launcher, and stdout/stderr preserve the unknown-cause
+  interruption (stderr is empty). Exclude the whole root, including the 11
+  valid-looking cells, from all raw-graph aggregation, CBF replay inputs and
+  manuscript claims. A new-root full rerun is required; do not overwrite this
+  root or change CBF/evaluator parameters in response.
