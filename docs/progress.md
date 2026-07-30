@@ -2453,3 +2453,35 @@ Accordingly no files, experiment outputs, JSONL records, documentation,
 configuration, data, or source files were deleted. This is a documentation and
 maintenance outcome only; it adds no experimental evidence and preserves the
 user-requested research stop point.
+
+## AAMAS 2027 - post-isolation raw GraphMAPPO seed 20260723 retained (2026-07-31)
+
+At revision `6bc5d1a`, the resumed serial CUDA command used
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py`
+with `configs/rl/dynamic_graph_baseline.yaml` (SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`),
+`--device cuda --seed 20260723 --num-uavs 3 --graph-mode mappo --total-steps
+100000`, and the distinct output root
+`outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260723/`.
+`Start-Process` redirected native output to the separately retained
+`outputs/core_3uav_post_actor_isolation_raw_graph_mappo_seed_20260723.stdout.log`
+and `.stderr.log`, preventing ordinary CBF diagnostics from being promoted to
+a PowerShell failure.
+
+The job naturally completed with `total_transitions=100032` and
+`update_count=1042`. `summary.json`, `live_training_telemetry.json`,
+`checkpoints/graph_mappo_final.pt`, TensorBoard files, and both launcher logs
+are retained and parsed. The summary identifies `graph_mode=mappo`, the raw
+information model (no predicted knowledge or uncertainty features), three
+UAVs, and CUDA. Training telemetry records 33,344 CBF decisions and zero
+emergency events; initial and final in-script evaluation records also retain
+zero emergency events. These seed-local diagnostics and short in-script
+evaluations are provenance only, not performance, safety, fallback-rate,
+significance, or baseline evidence.
+
+The valid raw-graph training set is now five seeds: `20260719_launcherretry1`,
+`20260720`, `20260721`, `20260722`, and `20260723`. The earlier non-retry
+`20260719` root remains preserved through `ABORTED.json` and excluded. Next:
+create the retained zero-event replay diagnostic for seed `20260723`, then run
+the new-root, six-scenario, 20-episode CUDA-actor/CPU-OSQP checkpoint matrix
+for all five valid raw-graph checkpoints before beginning any predictive arm.

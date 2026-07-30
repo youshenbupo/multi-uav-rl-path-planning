@@ -631,3 +631,14 @@
   `docs/maintenance_cleanup_20260730.md`. Do not bypass this protection or
   delete `outputs/`, `data/`, `tmp/`, raw JSONL, aborted roots, or logs under
   the guise of cleanup.
+- Raw GraphMAPPO seed `20260723` now naturally completed in the unique
+  post-isolation root with 100,032 transitions and 1,042 updates on CUDA. Its
+  training telemetry has zero emergency events in 33,344 decisions, and its
+  short initial/final in-script evaluations also retain zero events. This is
+  seed-local diagnostic provenance, not a safety, fallback-rate, performance,
+  significance, or method-comparison result. Preserve its full telemetry,
+  checkpoint, TensorBoard and stdout/stderr logs; create and retain the
+  required zero-event replay record before its checkpoint evaluation. The
+  initial non-retry raw-graph seed `20260719` remains invalid/excluded, and no
+  raw-graph aggregate may be claimed until all five final checkpoints have the
+  complete six-scenario JSONL matrix and all-source replay.

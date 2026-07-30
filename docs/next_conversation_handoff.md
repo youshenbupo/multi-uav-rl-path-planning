@@ -6,6 +6,34 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Raw GraphMAPPO five-seed training is now complete, 2026-07-31 (revision
+  `6bc5d1a` at launch; documentation pending commit):** after a zero-process
+  and absent-path preflight, seed `20260723` ran serially with
+  `D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py
+  --config configs/rl/dynamic_graph_baseline.yaml --device cuda --seed
+  20260723 --num-uavs 3 --graph-mode mappo --total-steps 100000 --output-dir
+  outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260723`.
+  Native stdout/stderr were redirected to the distinct retained files
+  `outputs/core_3uav_post_actor_isolation_raw_graph_mappo_seed_20260723.stdout.log`
+  and `.stderr.log`. It naturally completed at 100,032 transitions / 1,042
+  updates on CUDA, with final checkpoint, summary, telemetry and TensorBoard
+  retained. Training telemetry has zero CBF emergency events in 33,344
+  decisions; short initial/final in-script diagnostics are also zero-event.
+  This is not a performance, safety, fallback-rate, significance or baseline
+  result. The valid raw roots are `20260719_launcherretry1`, `20260720`,
+  `20260721`, `20260722`, and `20260723`; the initial non-retry `20260719`
+  root remains preserved/excluded through `ABORTED.json`.
+
+  Before any predictive arm, first create the zero-event CBF replay record for
+  seed `20260723`; then preflight distinct evaluation paths and run every
+  valid raw-graph final checkpoint across `nominal`, `delay_only`, `loss_only`,
+  `dynamic_only`, `combined`, and `ood_communication_obstacle`, with 20
+  episodes each, CUDA network inference and CPU OSQP. Parse all 30 summaries
+  and JSONL files (600 records), run an unchanged-protocol all-source replay,
+  update the three documentation files, commit only those files, and push
+  `origin/codex/phase14-dynamic-world`. Do not start `predictive_graph` until
+  those gates are complete.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
