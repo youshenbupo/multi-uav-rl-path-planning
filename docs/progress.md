@@ -2568,3 +2568,39 @@ one remained `solved inaccurate` with emergency fallback. No solver value
 changed. This is one-seed provenance only, not performance, safety,
 fallback-rate, significance or comparison evidence. Next: serially train seed
 `20260720` in a new root under the identical protocol.
+
+## AAMAS 2027 - second post-isolation predictive GraphMAPPO seed retained (2026-07-31)
+
+At launch revision `474bdce`, seed `20260720` ran serially with
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py
+--config configs\rl\dynamic_graph_baseline.yaml --device cuda --seed 20260720
+--num-uavs 3 --graph-mode predictive_graph --total-steps 100000 --output-dir
+outputs\core_3uav_post_actor_isolation\core_3uav_predictive_graph_seed_20260720`.
+The frozen configuration SHA-256 is
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+`Start-Process` retained native output separately at
+`outputs/core_3uav_post_actor_isolation_predictive_graph_seed_20260720.stdout.log`
+and `.stderr.log`; the latter is empty.
+
+The job naturally completed at 100,032 transitions / 1,042 updates. Its
+`summary.json`, `live_training_telemetry.json`, TensorBoard output and final
+`checkpoints/graph_mappo_final.pt` remain under
+`outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260720/`.
+The parsed summary identifies three UAVs, `graph_mode=predictive_graph`,
+`uses_predicted_knowledge=true`, `uses_uncertainty=false`, and CUDA. Training
+telemetry retains zero CBF emergency events in 33,344 decisions; initial and
+final in-script evaluation telemetry retain zero events in 160 and 152
+decisions.
+
+The append-safe diagnostic replay
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260720_replay_20260731.jsonl`
+and companion summary consume only this seed's completed training telemetry.
+They use the unchanged CPU-OSQP protocol (20,000 maximum iterations,
+0.1-second solve limit, slack penalty 100, uncertainty-margin gain 0.5, and
+maximum margin 5.0) and record `event_count=0`,
+`replay_error_count=0`. The intentionally empty JSONL is retained zero-event
+provenance. These seed-local records and short evaluations prove neither
+performance, safety, fallback rate, significance, nor a method comparison.
+Next: commit and push this documentation without staging the user's
+`.gitignore`, then zero-process/absent-path preflight and serial CUDA training
+of predictive seed `20260721` under the identical protocol.

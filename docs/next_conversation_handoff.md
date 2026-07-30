@@ -92,6 +92,30 @@ processes before relying on any status below.
   confirm zero training processes and absent paths, then launch seed
   `20260720` serially with the same command pattern.
 
+- **Second post-isolation `predictive_graph` seed complete, 2026-07-31
+  (documentation pending commit):** seed `20260720` naturally reached 100,032
+  CUDA transitions / 1,042 updates under the same frozen dynamic-graph
+  configuration in
+  `outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260720/`.
+  Its final checkpoint, summary, live telemetry, TensorBoard output and
+  separately redirected stdout/stderr logs are retained. The summary confirms
+  three UAVs, delivered-packet prediction enabled, uncertainty features
+  disabled, and CUDA learned-network execution. Training records zero CBF
+  emergency events in 33,344 decisions; the initial and final short
+  evaluations also retain zero events in 160 and 152 decisions. Launcher
+  stderr is empty.
+
+  The required zero-event replay is retained at
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260720_replay_20260731.jsonl`
+  with its companion summary. It consumes this seed's training telemetry under
+  unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP values and records
+  `event_count=0`, `replay_error_count=0`. The empty JSONL is deliberate
+  diagnostic provenance, not a performance, safety, fallback-rate,
+  significance, or comparison result. Next: commit/push these documents
+  without staging `.gitignore`, confirm zero training processes and absent
+  paths, then launch predictive seed `20260721` serially under the identical
+  protocol.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

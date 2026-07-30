@@ -673,3 +673,15 @@
   fallback. Preserve the complete telemetry/logs and do not tune CBF based on
   this seed. Four matching predictive seeds plus their six-scenario matrix and
   all-source replay remain required before any outcome or cross-method claim.
+- Post-isolation `predictive_graph` seed `20260720` is valid at 100,032 CUDA
+  transitions / 1,042 updates. Its training telemetry has zero CBF emergency
+  events in 33,344 decisions, and its initial/final short evaluations also
+  retain zero events. The deliberate zero-event replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260720_replay_20260731.jsonl`
+  plus companion summary records `event_count=0` and
+  `replay_error_count=0` under unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP
+  values. This is seed-local diagnostic provenance only, not evidence of
+  performance, safety, fallback rate, significance, or a comparison. Three
+  further predictive seeds, their complete six-scenario matrix, and the
+  all-source replay remain required before the uncertainty-aware arm or any
+  cross-method use.
