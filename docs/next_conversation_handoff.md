@@ -79,6 +79,19 @@ processes before relying on any status below.
   all five predictive seeds serial; do not start
   `uncertainty_predictive_graph` until their matrix and replay are complete.
 
+- **First post-isolation `predictive_graph` seed complete, 2026-07-31
+  (documentation pending commit):** seed `20260719` naturally reached 100,032
+  CUDA transitions / 1,042 updates under the frozen dynamic-graph config in
+  `outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260719/`.
+  Final checkpoint, summary, telemetry, TensorBoard and launcher logs are
+  retained; prediction is enabled and uncertainty features are disabled.
+  Training has two CBF emergency events, while initial/final short evaluations
+  have zero. Its per-seed replay retains both events with zero errors and one
+  replay emergency fallback under unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP
+  values. This is not an outcome claim. Next: commit/push these documents,
+  confirm zero training processes and absent paths, then launch seed
+  `20260720` serially with the same command pattern.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

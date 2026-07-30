@@ -667,3 +667,9 @@
   fallback-rate, significance, or comparison claims. The invalid first matrix
   must remain excluded, and the two predictive GraphMAPPO arms still require
   independently trained matching five-seed matrices before cross-method use.
+- Post-isolation `predictive_graph` seed `20260719` is valid at 100,032 CUDA
+  transitions / 1,042 updates and retains two training CBF events. Its
+  unchanged replay has zero errors but one replay still uses emergency
+  fallback. Preserve the complete telemetry/logs and do not tune CBF based on
+  this seed. Four matching predictive seeds plus their six-scenario matrix and
+  all-source replay remain required before any outcome or cross-method claim.

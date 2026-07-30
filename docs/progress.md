@@ -2545,3 +2545,26 @@ emergency fallback. This completes raw-graph provenance only; it does not prove
 performance, safety, fallback rate, significance, or superiority. Next:
 zero-process/new-root preflight, then serial five-seed `predictive_graph`
 training under the same budget before any uncertainty-aware arm.
+
+## AAMAS 2027 - first post-isolation predictive GraphMAPPO seed retained (2026-07-31)
+
+At launch revision `3683c7b`, seed `20260719` used the frozen
+`configs/rl/dynamic_graph_baseline.yaml` SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`,
+three UAVs, `--graph-mode predictive_graph`, CUDA, 100k requested steps, and
+the unique root
+`outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260719/`.
+It naturally completed at 100,032 transitions / 1,042 updates with final
+checkpoint, summary, telemetry, TensorBoard and separate stdout/stderr logs.
+The summary confirms delivered-packet prediction is enabled and uncertainty
+features are disabled.
+
+Training retained two emergency events in 33,344 decisions (`solve_time_limit`
+and `solved inaccurate`); initial/final short evaluations retained zero events.
+The unchanged-protocol replay at
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260719_replay_20260731.jsonl`
+has two records and zero replay errors: one replay solved without fallback and
+one remained `solved inaccurate` with emergency fallback. No solver value
+changed. This is one-seed provenance only, not performance, safety,
+fallback-rate, significance or comparison evidence. Next: serially train seed
+`20260720` in a new root under the identical protocol.
