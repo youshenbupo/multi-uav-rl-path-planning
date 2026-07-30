@@ -6,6 +6,17 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-27, supersedes stale status below)
 
+- **SSH authentication and push restored, 2026-07-30 (documentation pending
+  commit):** after the user added the existing public key to GitHub,
+  `ssh -T git@github.com` authenticated as `youshenbupo`. The old command using
+  remote name `github.com` failed because no such Git remote exists; `origin`
+  is configured as `git@github.com:youshenbupo/multi-uav-rl-path-planning.git`.
+  `git push origin codex/phase14-dynamic-world` succeeded and advanced the
+  remote branch from `55abb87` to `014c006`. `.gitignore` was not staged. Push
+  this documentation follow-up to `origin` after commit. This restores Git
+  synchronization only; research remains paused by the user-requested stop
+  point and no external submission is authorized.
+
 - **Post-isolation MLP seed `20260719` evaluation matrix completed,
   2026-07-29 (revision `e625af5`; documentation pending commit; push remains
   blocked):** the final checkpoint was evaluated in distinct new-root cells

@@ -618,3 +618,8 @@
   proves only retained zero-event diagnostic provenance—not a safety or
   fallback-rate claim. Do not aggregate this incomplete arm or launch a new
   task without resuming the documented sequence.
+- SSH authentication and remote push were restored on 2026-07-30: use remote
+  name `origin`, not the historical nonexistent alias `github.com`. The remote
+  branch `codex/phase14-dynamic-world` was synchronized through `014c006`.
+  This resolves the prior push-access blocker but does not resolve the research
+  gates or authorize any external paper submission.

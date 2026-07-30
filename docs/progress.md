@@ -2422,3 +2422,17 @@ arms incomplete; no performance, safety, fallback-rate, significance, or
 baseline conclusion exists. The earlier non-retry seed-20260719 root remains
 invalid and excluded. Next when authorized: zero-process/new-root preflight,
 then raw-graph seed `20260723`; preserve every existing artifact.
+
+## AAMAS 2027 - authorized SSH push restored (2026-07-30)
+
+After the user added the existing public key to GitHub, `ssh -T git@github.com`
+authenticated as `youshenbupo`. The first push spelling from older notes,
+`git push github.com codex/phase14-dynamic-world`, correctly failed because
+`github.com` is not a configured Git remote. `git remote -v` verified the
+authorized remote name is `origin` and targets
+`git@github.com:youshenbupo/multi-uav-rl-path-planning.git`. The authorized
+command `git push origin codex/phase14-dynamic-world` then succeeded, advancing
+the remote branch from `55abb87` to `014c006`. `.gitignore` remained the sole
+unstaged user-owned worktree change and was not staged or committed. This
+establishes remote synchronization for the already committed history only; it
+does not alter any experimental claim or permit external paper submission.
