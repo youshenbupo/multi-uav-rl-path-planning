@@ -34,6 +34,19 @@ processes before relying on any status below.
   `origin/codex/phase14-dynamic-world`. Do not start `predictive_graph` until
   those gates are complete.
 
+- **Raw GraphMAPPO seed `20260723` zero-event replay retained, 2026-07-31
+  (documentation pending commit):**
+  `outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260723_replay_20260731.jsonl`
+  and its companion summary replay only this seed's completed training telemetry
+  with unchanged CPU-OSQP values (20,000 iterations, 0.1 seconds, penalty 100,
+  uncertainty gain 0.5, cap 5.0). The summary records `event_count=0` and
+  `replay_error_count=0`; the intentionally empty JSONL is retained diagnostic
+  provenance, not a safety, fallback-rate, performance, or comparison result.
+  Next: verify zero Python jobs and absent target cells, then sequentially run
+  the five final raw-graph checkpoints over the six canonical 20-episode
+  scenarios. Retain every JSONL and do not begin `predictive_graph` until the
+  complete raw matrix and all-source replay have been documented and pushed.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

@@ -642,3 +642,9 @@
   initial non-retry raw-graph seed `20260719` remains invalid/excluded, and no
   raw-graph aggregate may be claimed until all five final checkpoints have the
   complete six-scenario JSONL matrix and all-source replay.
+- The required seed-`20260723` zero-event training replay is retained at
+  `outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260723_replay_20260731.jsonl`
+  and companion summary. It records `event_count=0` and
+  `replay_error_count=0` under the unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP
+  protocol. An empty JSONL here is an intentional diagnostic record, not an
+  omitted result, and cannot support a safety or fallback-rate conclusion.

@@ -2485,3 +2485,18 @@ The valid raw-graph training set is now five seeds: `20260719_launcherretry1`,
 create the retained zero-event replay diagnostic for seed `20260723`, then run
 the new-root, six-scenario, 20-episode CUDA-actor/CPU-OSQP checkpoint matrix
 for all five valid raw-graph checkpoints before beginning any predictive arm.
+
+## AAMAS 2027 - raw GraphMAPPO seed 20260723 zero-event CBF replay retained (2026-07-31)
+
+The CPU OSQP replay command consumed only
+`outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260723/live_training_telemetry.json`
+and wrote the new, non-overwriting diagnostic
+`outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260723_replay_20260731.jsonl`
+with its companion `.summary.json`. It used the unchanged protocol: 20,000
+maximum iterations, 0.1-second solve limit, slack penalty 100,
+uncertainty-margin gain 0.5, and maximum uncertainty margin 5.0. The retained
+summary identifies `event_count=0` and `replay_error_count=0`; the empty JSONL
+is deliberate zero-event provenance, not a result deletion or a safety,
+fallback-rate, performance, significance, or baseline claim. Next: preflight
+new raw-graph evaluation paths, then execute the five-checkpoint six-scenario
+matrix with 20 episodes per cell before an all-source raw-graph replay.
