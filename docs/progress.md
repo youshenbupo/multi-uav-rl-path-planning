@@ -2521,3 +2521,27 @@ and is excluded from aggregation, replay inputs, and paper claims. No CBF or
 evaluator parameter changed. Next: use a completely fresh root and launcher
 paths for the full 30-cell rerun, then parse only that complete root before
 all-source replay.
+
+## AAMAS 2027 - post-isolation raw GraphMAPPO matrix and all-source replay complete (2026-07-31)
+
+The valid rerun root
+`outputs/core_3uav_post_actor_isolation_evaluations_20260731_raw_graph_mappo_rerun1/`
+used five independently trained final checkpoints, the six canonical
+scenarios, 20 episodes per cell, CUDA inference, and CPU OSQP. A per-cell
+`Start-Process -Wait` launcher retained independent stdout/stderr and exit
+codes. Direct parsing verified 30 directories, 30 parseable `summary.json`
+files, 30 parseable seed JSONL files, exactly 600 records, fixed seed/scenario
+identity, 30 zero exit codes, and no stderr output. The preceding non-rerun
+root remains wholly excluded through its `ABORTED.json`.
+
+The unchanged-protocol all-source replay is
+`outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_5seed_training_and_evaluation_replay_20260731.jsonl`
+plus companion summary. Its inputs are exactly five valid training telemetry
+files and 30 valid rerun evaluation telemetry files. Under frozen
+20,000-iteration, 0.1-second, penalty-100, uncertainty-gain-0.5/cap-5.0
+CPU-OSQP values, it retains four source events, zero replay errors, three
+solved/non-fallback replays, and one `solved inaccurate` replay that still uses
+emergency fallback. This completes raw-graph provenance only; it does not prove
+performance, safety, fallback rate, significance, or superiority. Next:
+zero-process/new-root preflight, then serial five-seed `predictive_graph`
+training under the same budget before any uncertainty-aware arm.

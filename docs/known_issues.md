@@ -658,3 +658,12 @@
   valid-looking cells, from all raw-graph aggregation, CBF replay inputs and
   manuscript claims. A new-root full rerun is required; do not overwrite this
   root or change CBF/evaluator parameters in response.
+- The valid raw GraphMAPPO rerun matrix is complete under
+  `outputs/core_3uav_post_actor_isolation_evaluations_20260731_raw_graph_mappo_rerun1/`
+  with 30 cells and 600 identity-checked JSONL records. Its all-source replay
+  retains four events and zero replay errors; one replay remains `solved
+  inaccurate` with emergency fallback. These within-arm artifacts are
+  diagnostic/provenance only and cannot support performance, safety,
+  fallback-rate, significance, or comparison claims. The invalid first matrix
+  must remain excluded, and the two predictive GraphMAPPO arms still require
+  independently trained matching five-seed matrices before cross-method use.

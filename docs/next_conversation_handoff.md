@@ -59,6 +59,26 @@ processes before relying on any status below.
   Next: document/commit/push this invalid attempt, then zero-process/preflight
   a new evaluation root and run all 30 cells serially before parsing results.
 
+- **Post-isolation raw GraphMAPPO arm is now evidence-complete, 2026-07-31
+  (documentation pending commit):** the eligible rerun root
+  `outputs/core_3uav_post_actor_isolation_evaluations_20260731_raw_graph_mappo_rerun1/`
+  has 30/30 directories, summaries and JSONL files, 600 parsed records with
+  fixed seed/scenario identities, 30 zero evaluator exit codes, and empty
+  per-cell stderr. The earlier non-rerun batch remains excluded by
+  `ABORTED.json`. The all-source replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_5seed_training_and_evaluation_replay_20260731.jsonl`
+  uses five training plus 30 eligible evaluation telemetry files and unchanged
+  20,000/0.1s/100/0.5/5.0 CPU-OSQP values. It retains four source events, zero
+  replay errors, and one replay emergency fallback. This is not an outcome or
+  safety claim.
+
+  Next: commit/push these documents without staging `.gitignore`, confirm no
+  `multiuav_rl` Python task and absent targets, then start the first independent
+  three-UAV `predictive_graph` seed (`20260719`) at 100k CUDA steps with the
+  frozen dynamic-graph configuration and a unique post-isolation root. Keep
+  all five predictive seeds serial; do not start
+  `uncertainty_predictive_graph` until their matrix and replay are complete.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
