@@ -2447,7 +2447,7 @@ provides a copyable continuation prompt. `docs/maintenance_cleanup_20260730.md`
 records a cache-only cleanup audit and the exact manual cleanup commands.
 
 The audit found only regenerable Python/tool caches (three top-level tool-cache
-directories plus 15 `__pycache__` directories, approximately 48 MB). The
+directories plus 12 `__pycache__` directories, approximately 48 MB). The
 execution environment rejected the explicit deletion request before it ran.
 Accordingly no files, experiment outputs, JSONL records, documentation,
 configuration, data, or source files were deleted. This is a documentation and
