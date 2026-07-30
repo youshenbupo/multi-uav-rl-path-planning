@@ -623,3 +623,11 @@
   branch `codex/phase14-dynamic-world` was synchronized through `014c006`.
   This resolves the prior push-access blocker but does not resolve the research
   gates or authorize any external paper submission.
+- A 2026-07-30 cache-only cleanup audit found only regenerable `.mypy_cache`,
+  `.pytest_cache`, `.ruff_cache`, and 15 Python `__pycache__` directories
+  (about 48 MB total). The environment rejected the explicit cache deletion
+  command before execution. No research or project file was removed; the
+  exact inventory and user-runnable cleanup command are retained in
+  `docs/maintenance_cleanup_20260730.md`. Do not bypass this protection or
+  delete `outputs/`, `data/`, `tmp/`, raw JSONL, aborted roots, or logs under
+  the guise of cleanup.

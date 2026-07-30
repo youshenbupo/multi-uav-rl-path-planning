@@ -2436,3 +2436,20 @@ the remote branch from `55abb87` to `014c006`. `.gitignore` remained the sole
 unstaged user-owned worktree change and was not staged or committed. This
 establishes remote synchronization for the already committed history only; it
 does not alter any experimental claim or permit external paper submission.
+
+## Project documentation and safe cleanup audit (2026-07-30)
+
+At the then-current worktree, the project guide was replaced with a
+mainline-faithful `README.md`; `docs/aamas2027_method_and_readiness.md` records
+the mathematical formulation, information boundary, worked examples, verified
+artifacts, and paper-preparation gates; and `docs/next_agent_prompt.md`
+provides a copyable continuation prompt. `docs/maintenance_cleanup_20260730.md`
+records a cache-only cleanup audit and the exact manual cleanup commands.
+
+The audit found only regenerable Python/tool caches (three top-level tool-cache
+directories plus 15 `__pycache__` directories, approximately 48 MB). The
+execution environment rejected the explicit deletion request before it ran.
+Accordingly no files, experiment outputs, JSONL records, documentation,
+configuration, data, or source files were deleted. This is a documentation and
+maintenance outcome only; it adds no experimental evidence and preserves the
+user-requested research stop point.

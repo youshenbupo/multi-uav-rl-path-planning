@@ -4,16 +4,28 @@
 point for the next Codex conversation.  Inspect the worktree and running
 processes before relying on any status below.
 
-## Latest continuation update (2026-07-27, supersedes stale status below)
+## Latest continuation update (2026-07-30, supersedes stale status below)
 
-- **SSH authentication and push restored, 2026-07-30 (documentation pending
-  commit):** after the user added the existing public key to GitHub,
+- **Documentation and safe-maintenance package, 2026-07-30:**
+  read `README.md` for environment, entry-point, train/evaluate/replay, and
+  reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
+  the detailed mathematical model and paper-readiness boundaries; and use the
+  copyable `docs/next_agent_prompt.md` to start a successor conversation. A
+  cache-only audit is retained in `docs/maintenance_cleanup_20260730.md`.
+  Explicit deletion was blocked by the execution environment before running,
+  so no file was removed. This is intentional preservation, not an incomplete
+  experiment. The research sequence remains paused at raw GraphMAPPO seed
+  `20260722`; on explicit resume, perform no new exploration and begin with
+  zero-process/new-root preflight then raw GraphMAPPO seed `20260723`.
+
+- **SSH authentication and push restored, 2026-07-30:** after the user added
+  the existing public key to GitHub,
   `ssh -T git@github.com` authenticated as `youshenbupo`. The old command using
   remote name `github.com` failed because no such Git remote exists; `origin`
   is configured as `git@github.com:youshenbupo/multi-uav-rl-path-planning.git`.
   `git push origin codex/phase14-dynamic-world` succeeded and advanced the
-  remote branch from `55abb87` to `014c006`. `.gitignore` was not staged. Push
-  this documentation follow-up to `origin` after commit. This restores Git
+  remote branch from `55abb87` to `014c006`. `.gitignore` was not staged. This
+  restores Git
   synchronization only; research remains paused by the user-requested stop
   point and no external submission is authorized.
 
