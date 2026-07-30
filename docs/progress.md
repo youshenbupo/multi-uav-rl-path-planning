@@ -2604,3 +2604,37 @@ performance, safety, fallback rate, significance, nor a method comparison.
 Next: commit and push this documentation without staging the user's
 `.gitignore`, then zero-process/absent-path preflight and serial CUDA training
 of predictive seed `20260721` under the identical protocol.
+
+## AAMAS 2027 - third post-isolation predictive GraphMAPPO seed retained (2026-07-31)
+
+At launch revision `b69fcf1`, seed `20260721` ran serially with
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py
+--config configs\rl\dynamic_graph_baseline.yaml --device cuda --seed 20260721
+--num-uavs 3 --graph-mode predictive_graph --total-steps 100000 --output-dir
+outputs\core_3uav_post_actor_isolation\core_3uav_predictive_graph_seed_20260721`.
+The frozen configuration SHA-256 remained
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+`Start-Process` retained its native stdout/stderr separately at
+`outputs/core_3uav_post_actor_isolation_predictive_graph_seed_20260721.stdout.log`
+and `.stderr.log`; stderr is empty.
+
+The process naturally completed at 100,032 transitions / 1,042 updates. Its
+`summary.json`, `live_training_telemetry.json`, TensorBoard data and final
+`checkpoints/graph_mappo_final.pt` remain under
+`outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260721/`.
+The parsed identity is three UAVs, `graph_mode=predictive_graph`,
+`uses_predicted_knowledge=true`, `uses_uncertainty=false`, and CUDA. Training
+retains zero CBF emergency events in 33,344 decisions; initial/final in-script
+evaluations retain zero events in 160/160 decisions.
+
+The no-overwrite replay
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260721_replay_20260731.jsonl`
+and companion summary consume only this seed's completed training telemetry.
+They use unchanged 20,000 maximum iterations, 0.1-second solve limit, slack
+penalty 100, uncertainty-margin gain 0.5, and maximum margin 5.0 on CPU OSQP,
+recording `event_count=0` and `replay_error_count=0`. The deliberately empty
+JSONL is retained zero-event provenance, not a safety, performance,
+fallback-rate, significance, or comparison result. Next: commit and push this
+documentation without staging `.gitignore`, then perform a
+zero-process/absent-path preflight and launch predictive seed `20260722`
+serially under the identical protocol.
