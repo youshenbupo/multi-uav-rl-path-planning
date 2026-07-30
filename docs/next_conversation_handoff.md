@@ -193,6 +193,24 @@ processes before relying on any status below.
   audit the 100,032-transition/1,042-update final artifact and replay fallback
   sources before documenting/starting seed `20260723`.
 
+- **Valid post-isolation raw GraphMAPPO seed `20260722` completed; stop point
+  requested by user (2026-07-30; training revision `d827ff3`; documentation
+  pending commit):** the serial CUDA raw-graph `mappo` job naturally reached
+  100,032 transitions / 1,042 updates under the unchanged dynamic-graph config
+  SHA-256. Its final checkpoint, summary, TensorBoard, raw telemetry, and
+  launcher logs were parsed. CBF fallbacks are 0/33,344 training, 0/160 initial,
+  and 0/131 final decisions. The retained zero-event replay is
+  `outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260722_replay_20260730.jsonl`
+  plus summary (`event_count=0`, `replay_error_count=0`) under unchanged
+  20,000/0.1s/100/0.5/5.0 CPU-OSQP values. The user explicitly requested
+  stopping after the current run: do not start seed `20260723`, evaluations,
+  other graph arms, scale-up, or literature work in this stop turn. This is a
+  pause, not completion: raw graph still needs seed 20260723 and evaluations;
+  predictive/no-uncertainty and uncertainty-predictive GraphMAPPO arms, 5/8 UAV,
+  ablations, literature verification, and the authorized push remain open.
+  On resume, first inspect process/worktree, then launch only raw-graph seed
+  `20260723` after zero-process/new-root preflight.
+
 - **Actor-information protocol repair, 2026-07-29 (commit `0e048cd`; push
   blocked):** a static audit found three
   violations of the mandatory actor boundary: (1) communication-disabled local

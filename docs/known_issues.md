@@ -609,3 +609,12 @@
   replay which is `solved` without fallback under unchanged safety values. This
   remains a seed-local diagnostic, not a reason to change CBF settings or make
   an outcome claim.
+- The raw-graph `mappo` sequence is intentionally paused by the user's
+  2026-07-30 stop request after valid seed `20260722`. It has only four valid
+  seeds (20260719 retry, 20260720, 20260721, 20260722), so seed `20260723` and
+  all checkpoint evaluations remain required. The zero-event seed-20260722
+  replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260722_replay_20260730.jsonl`
+  proves only retained zero-event diagnostic provenance—not a safety or
+  fallback-rate claim. Do not aggregate this incomplete arm or launch a new
+  task without resuming the documented sequence.

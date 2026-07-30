@@ -2393,3 +2393,32 @@ the unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP protocol. This is a third valid
 raw-graph artifact only, not a performance, safety, fallback-rate,
 significance, baseline, or five-seed conclusion. Next: new-root serial CUDA
 training for raw-graph seed `20260722` before evaluation.
+
+## AAMAS 2027 - post-isolation raw GraphMAPPO seed 20260722 retained; user-requested stop (2026-07-30)
+
+At revision `d827ff3`, the serial CUDA raw-graph `mappo` command for seed
+`20260722` used the unchanged three-UAV
+`configs/rl/dynamic_graph_baseline.yaml` SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`, requested
+100k steps, and process-level stdout/stderr redirection. The distinct root
+`outputs/core_3uav_post_actor_isolation/core_3uav_raw_graph_mappo_seed_20260722/`
+naturally completed at 100,032 transitions / 1,042 updates. Final checkpoint,
+summary, TensorBoard, raw telemetry, and both launcher logs are retained and
+parsed; the actor device is CUDA and graph mode is `mappo`.
+
+Training telemetry has zero CBF emergency fallbacks in 33,344 decisions;
+initial and final in-script evaluations have zero fallbacks in 160 and 131
+decisions, respectively. The unique zero-event replay at
+`outputs/cbf_diagnostics/post_actor_isolation_raw_graph_mappo_seed_20260722_replay_20260730.jsonl`
+and companion summary retain the source and confirm `event_count=0`,
+`replay_error_count=0` under unchanged 20,000-iteration, 0.1-second,
+penalty-100, uncertainty-gain-0.5/cap-5 CPU-OSQP settings.
+
+The user requested stopping after this current run. No seed `20260723`, no
+GraphMAPPO evaluation, no other GraphMAPPO arm, no 5/8-UAV experiment, and no
+new literature work was started. This leaves raw-graph seed 20260723 plus all
+matched five-seed predictive/no-uncertainty and uncertainty-predictive graph
+arms incomplete; no performance, safety, fallback-rate, significance, or
+baseline conclusion exists. The earlier non-retry seed-20260719 root remains
+invalid and excluded. Next when authorized: zero-process/new-root preflight,
+then raw-graph seed `20260723`; preserve every existing artifact.
