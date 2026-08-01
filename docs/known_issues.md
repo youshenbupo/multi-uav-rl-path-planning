@@ -906,3 +906,12 @@
   sole stderr notice and is recursively replayable; the unchanged replay solves
   without fallback but uses about 263.39 slack. Preserve the source/replay
   difference and do not use it for tuning or a safety/fallback-rate conclusion.
+- Post-isolation 5-UAV full seed `20260723` is eligible at 100,160 CUDA
+  transitions / 313 updates with zero events across training, all six retained
+  intervals, initial/final evaluations and stderr. Its required zero-event
+  replay is retained. The five eligible full-method seeds are now complete,
+  but no scale/performance/safety conclusion is available before their complete
+  30-cell matrix and all-source replay. Pre-fix eligible seeds 20260719/20 lack
+  the new full interval history, but their retained training-event counts
+  exactly equal their stderr notices (2/2 and 1/1) with zero events in the
+  retained evaluation fields; no hidden fallback discrepancy is observed.

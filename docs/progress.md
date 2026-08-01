@@ -3334,3 +3334,48 @@ documents without `.gitignore`, then zero-process/absent-path preflight and run
 final seed `20260723` serially under the same frozen protocol and wait-only
 discipline. Audit all interval/stderr contexts and replay before beginning the
 five-seed six-scenario matrix.
+
+## AAMAS 2027 - post-isolation 5-UAV full-method five-seed training complete (2026-08-01)
+
+At launch revision `d93e281`, final seed `20260723` ran under frozen
+`configs/rl/dynamic_graph_5uav.yaml` SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`
+in the unique
+`outputs/core_5uav_post_actor_isolation/core_5uav_uncertainty_predictive_graph_seed_20260723/`
+root. The CUDA neural/CPU-OSQP process was observed only through its wait
+handle and naturally exited 0 after about 316 seconds at 100,160 transitions /
+313 updates. Identity confirms five UAVs, prediction and uncertainty enabled,
+and CUDA. Final checkpoint SHA-256 is
+`F88ACA68DF279DFEEA63F8E6DDFB030C152D0F71149279BBC79A6BD62AD9BAD3`;
+telemetry SHA-256 is
+`ED93223A7AE0D0E9379DDED394BBAD7D13AE719ED58FA495B7692045DF621D24`.
+
+Training has zero events over 20,032 CBF decisions. All six retained interval
+evaluations are zero-event over 80 decisions each; initial/final are zero over
+160/160, and stderr has zero fallback notices. The required zero-event replay
+is
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_seed_20260723_replay_20260801.jsonl`
+plus companion summary, recording `event_count=0` and
+`replay_error_count=0` under unchanged 20,000/0.1s/100/0.5/5.0 values. Its
+empty JSONL SHA-256 is
+`E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`;
+summary SHA-256 is
+`E48D9BE26ADE532BC92C070E55C8B949B8C376E2A520C471FB1564D2273F53D3`.
+
+The five eligible full-method roots are `20260719`, `20260720`,
+`20260721_intervaltelemetryretry1`, `20260722`, and `20260723`. A retrospective
+audit of pre-fix seeds `20260719` and `20260720` found respectively 2 and 1
+retained training events and exactly 2 and 1 stderr notices, with zero
+initial/last-interval/final events; thus there is no evidence of an unretained
+fallback in those roots, although they predate the prospective full interval
+history. The non-retry seed-20260721 root remains excluded because it has four
+extra stderr notices without contexts.
+
+This completes five-seed training and per-seed replay provenance only, not a
+scale, safety, fallback-rate, performance or generalization result. Next:
+commit/push the three documents without `.gitignore`, then preflight a wholly
+new 5-UAV full-method evaluation root. Serially run all five eligible final
+checkpoints over the six canonical scenarios at 20 episodes/cell, CUDA
+inference and CPU OSQP, retain per-cell logs/JSONL, audit 30 cells/600 records,
+then run the unchanged 35-input all-source replay before the independent
+5-UAV no-uncertainty arm.

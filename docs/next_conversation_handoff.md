@@ -6,6 +6,30 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Post-isolation 5-UAV full five-seed training is complete, 2026-08-01
+  (final seed launch revision `d93e281`; documentation pending commit):**
+  seed `20260723` naturally completed at 100,160 transitions / 313 updates
+  under the frozen five-UAV CUDA/wait-only protocol. Checkpoint SHA is
+  `F88ACA68...9BAD3`; telemetry SHA is `ED93223A...21D24`. Training, six
+  retained interval evaluations, initial/final evaluations and stderr are all
+  zero-event. Its required zero-event replay has zero events/errors under
+  unchanged values.
+
+  Eligible roots are seeds `20260719`, `20260720`,
+  `20260721_intervaltelemetryretry1`, `20260722`, and `20260723`. The pre-fix
+  seed19/20 roots have 2/1 retained training events and exactly 2/1 stderr
+  notices, with zero retained evaluation events, so no missing fallback is
+  observed. The non-retry seed21 root remains excluded due four missing
+  contexts. This closes only training/per-seed replay provenance.
+
+  Next: commit/push these documents without `.gitignore`, then verify zero
+  Python/GPU work, all five eligible checkpoints, config hash and absent target
+  paths. Create a wholly new 5-UAV full evaluation root and serially run five
+  checkpoints by six canonical scenarios, 20 episodes/cell, CUDA inference and
+  CPU OSQP. Audit 30 summaries/JSONL and 600 records, then run the unchanged
+  35-input all-source replay before any independently trained 5-UAV
+  no-uncertainty work.
+
 - **Fourth eligible post-isolation 5-UAV full seed retained, 2026-08-01
   (launch revision `b16f055`; documentation pending commit):** seed
   `20260722` naturally completed under the frozen 5-UAV CUDA command and
