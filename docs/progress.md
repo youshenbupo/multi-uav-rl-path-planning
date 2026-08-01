@@ -2907,3 +2907,47 @@ inside the shared tool process tree. The single minimal next test is a fresh
 only wait on its existing execution cell. If that also returns `0xC000013A`,
 stop further retries and treat the launch architecture as blocked pending user
 direction; do not change model, training, or CBF settings.
+
+## AAMAS 2027 - first valid uncertainty-aware seed retained after monitored-launch diagnosis (2026-08-01)
+
+At revision `f21566e`, a zero-process/absent-path preflight verified both prior
+invalid roots remained preserved, then launched numeric seed `20260719` from
+scratch in the unique
+`outputs/core_3uav_post_actor_isolation/core_3uav_uncertainty_predictive_graph_seed_20260719_launcherretry2/`
+root. The exact frozen command differed from the two invalid attempts only by
+the output identity. During the active 1,152-second run, no parallel shell
+process was started; the existing execution cell was observed only through its
+wait operation. The process naturally exited 0 rather than returning the prior
+`STATUS_CONTROL_C_EXIT`.
+
+The completed summary and live telemetry verify 100,032 transitions / 1,042
+updates, three UAVs, `graph_mode=uncertainty_predictive_graph`, delivered-
+packet prediction enabled, uncertainty enabled, and CUDA. Final checkpoint,
+summary, live telemetry, TensorBoard and distinct retry2 stdout/stderr are
+retained; stderr is empty. Final checkpoint SHA-256 is
+`F0EDD4AADAC090E6FA0B740770EF4381D05F053756DB9BF4D898A2E957D9FC61` and live
+telemetry SHA-256 is
+`CE5F616B11B356B046FC63C0603324498D1E05FEFF1C1EBF91903E73E3CB1953`.
+
+Training telemetry retains zero emergency events over 33,344 CBF decisions;
+initial and final in-script evaluations retain zero over 160 and 96 decisions.
+The no-overwrite zero-event replay
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260719_launcherretry2_replay_20260801.jsonl`
+plus companion summary uses unchanged 20,000 iterations, 0.1 seconds, slack
+penalty 100, uncertainty gain 0.5 and cap 5.0 on CPU OSQP, recording
+`event_count=0` and `replay_error_count=0`. Its deliberately empty JSONL
+SHA-256 is the empty-file hash
+`E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`; summary
+SHA-256 is
+`F83AC9DAEEC599FF065A9B81A1A605931EA843DAE325A387009D2F0AB20BDA57`.
+
+Only `launcherretry2` is eligible for this numeric seed. The non-retry and
+retry1 roots remain invalid and excluded. The successful one-variable run
+supports an operational constraint—do not launch parallel shell commands while
+a long training cell is active, and perform artifact/process audits only after
+that cell exits—but does not prove the exact external control-event source.
+This is one-seed completion/provenance only, not performance, safety,
+fallback-rate, significance, robustness, or comparison evidence. Next:
+commit/push these documents without staging `.gitignore`, then preflight and
+launch uncertainty seed `20260720` serially in a new root under the same
+no-parallel-shell waiting discipline and frozen protocol.

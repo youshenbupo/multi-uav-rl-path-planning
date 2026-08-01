@@ -306,6 +306,32 @@ processes before relying on any status below.
   hypothesis test. If retry2 also returns `0xC000013A`, do not attempt retry3;
   stop and request user direction without changing training or CBF values.
 
+- **First valid post-isolation `uncertainty_predictive_graph` seed retained,
+  2026-08-01 (retry2 launch revision `f21566e`; documentation pending
+  commit):** the unique `seed_20260719_launcherretry2` root ran from scratch
+  under the identical frozen command. While active, only the original
+  execution-cell wait handle was used; no parallel shell process or artifact
+  inspection ran. It naturally exited 0 after about 1,152 seconds and completed
+  100,032 transitions / 1,042 updates. Summary identity is three UAVs,
+  `uncertainty_predictive_graph`, delivered-packet prediction true,
+  uncertainty true, and CUDA. Final checkpoint, summary, telemetry,
+  TensorBoard and retry2 logs are retained; stderr is empty.
+
+  Training, initial and final CBF records are respectively 0/33,344, 0/160 and
+  0/96. The zero-event replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260719_launcherretry2_replay_20260801.jsonl`
+  plus summary records `event_count=0`, `replay_error_count=0` under unchanged
+  20,000/0.1s/100/0.5/5.0 CPU-OSQP values. Only retry2 is eligible; retain and
+  exclude both earlier interrupted roots.
+
+  The success supports, but does not uniquely prove, the shared-process-tree
+  monitoring hypothesis. Mandatory operational rule for subsequent long jobs:
+  after preflight and launch, call only `wait` on the existing execution cell;
+  run no parallel shell health check until it exits, then perform one complete
+  audit. Next: commit/push the three documents without `.gitignore`, then use
+  that discipline for fresh uncertainty seed `20260720`. Four further seeds,
+  all 30 evaluation cells and all-source replay remain before this arm closes.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

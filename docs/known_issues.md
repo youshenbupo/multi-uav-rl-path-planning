@@ -784,3 +784,17 @@
   the retained probe artifacts. Test only one fresh `launcherretry2` while
   issuing no parallel shell command; if it repeats, stop retrying and request
   direction rather than tuning or changing the research protocol.
+- The fresh `uncertainty_predictive_graph` seed-`20260719_launcherretry2` run is
+  valid: it naturally completed 100,032 CUDA transitions / 1,042 updates when
+  the active execution cell was monitored only through `wait`, with no parallel
+  shell processes. It has zero emergency events over 33,344 training, 160
+  initial and 96 final CBF decisions, empty stderr, and a retained zero-event
+  replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260719_launcherretry2_replay_20260801.jsonl`.
+  This establishes a safe operational mitigation, not the exact source of the
+  earlier external `STATUS_CONTROL_C_EXIT` signals. For subsequent long
+  trainings, do not start any parallel shell health check while the launch cell
+  is active; use only its wait handle, then audit after exit. Preserve/exclude
+  the non-retry and retry1 roots. Four further valid uncertainty-aware seeds,
+  their complete six-scenario matrix and all-source replay are still required
+  before any outcome or cross-method claim.
