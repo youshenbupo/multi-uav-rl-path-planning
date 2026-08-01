@@ -6,6 +6,43 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Second valid post-isolation 8-UAV full-method seed retained, 2026-08-01
+  (launch revision `d0f1484`; documentation pending commit):** independent
+  seed `20260720` ran once in
+  `outputs/core_8uav_post_actor_isolation/core_8uav_uncertainty_predictive_graph_seed_20260720/`
+  under the same frozen configuration, real-child-exit and wait-only protocol.
+  It naturally exited 0 after about 335.9 seconds at 100,224 transitions / 261
+  updates. Identity is eight UAVs, uncertainty-aware predictive graph, CUDA
+  neural execution and CPU OSQP.
+
+  Final checkpoint SHA-256 is
+  `C0A52742DD3F80BF1DDB76E13EC84FBF861813E28A6832C0B80193E6201E7847`;
+  summary SHA-256 is
+  `B1B71629CAABF879121015E829CB7BC9A7FF334D6E77921A8CF2F13A96C415F2`;
+  telemetry SHA-256 is
+  `8882B7761396C836D16847F2D910A2C254F2D362E24D2D9F8E4044B6EDC37ACF`.
+  Training retains one `maximum iterations reached` event over 12,528
+  decisions. Of 32 append-only intervals, transition 92,160 retains one
+  `solved inaccurate` event; the other 31, initial and final evaluations are
+  zero-event. The two sources exactly match stderr.
+
+  Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_seed_20260720_replay_20260801.jsonl`
+  plus summary has two sources and zero errors under unchanged
+  20,000/0.1s/100/0.5/5.0 values. Maximum iterations remains a fallback; the
+  interval solved-inaccurate event replays `solved` without fallback with slack
+  about 503.416. JSONL SHA-256 is
+  `27ED2A4FFEDA74AC1D71AB136307060A6279A5A2196CD811EBCA4A5882519068`;
+  summary SHA-256 is
+  `3EE6B9F5FDB660FDD5FDB224510AF0D4DD66CB2AF7F19B3B1AB33BB43E5E16D8`.
+  No CBF value changed. Two seeds establish no scale, safety, fallback-rate,
+  performance or generalization result.
+
+  Next: commit/push these four documents without `.gitignore`, then preflight
+  and run seed `20260721` under the identical frozen 8-UAV command. Three more
+  valid full-method seeds, their matrix and all-source replay remain before the
+  independently trained 8-UAV no-uncertainty arm.
+
 - **First valid post-isolation 8-UAV full-method seed retained, 2026-08-01
   (launch revision `d44fbf8`; documentation pending commit):** after confirming
   all historical 8-UAV roots remain excluded and no post-isolation root existed,

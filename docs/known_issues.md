@@ -1001,3 +1001,12 @@
   seed establishes no scale, safety, fallback-rate, performance or
   generalization result; four further full-method seeds, their matrix/replay,
   and the independent no-uncertainty arm remain required.
+- Post-isolation 8-UAV full-method seed `20260720` is valid at 100,224 CUDA
+  transitions / 261 updates. Training retains one maximum-iterations event;
+  interval transition 92,160 retains one solved-inaccurate event. Initial,
+  final and the other 31 intervals are zero-event, and both sources match
+  stderr. Its unchanged replay has zero errors: maximum iterations remains a
+  fallback while solved-inaccurate solves without fallback. Preserve the
+  source/replay difference and do not tune. Two seeds establish no scale,
+  safety, fallback-rate, performance or generalization result; seeds 21--23,
+  the matrix/replay and independent no-uncertainty arm remain required.
