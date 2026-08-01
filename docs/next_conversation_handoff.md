@@ -6,6 +6,41 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **First valid post-isolation 5-UAV independent no-uncertainty seed retained,
+  2026-08-01 (launch revision `bedeb3a`; documentation pending commit):** seed
+  `20260719` ran from scratch in the unique root
+  `outputs/core_5uav_post_actor_isolation_ablation/core_5uav_predictive_no_uncertainty_seed_20260719/`
+  under frozen config SHA-256
+  `6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`.
+  The wait-only CUDA run naturally exited 0 after about 300 seconds at 100,080
+  transitions / 417 updates. Identity is five UAVs, `predictive_graph`,
+  delivered-packet prediction true, uncertainty false, and CUDA; OSQP remained
+  CPU-side. Final checkpoint SHA-256 is
+  `A196F0C8BF0A8C8E3A062C51333EB80F959CACE8D0AF1AA2DFEDBAF8E35B4755`
+  and telemetry SHA-256 is
+  `78BA3E51B75CA76C2F3952DBC19ED2D98E9C014D791F69DB0FD38637AA55848D`.
+
+  Training retains two `solved inaccurate` events and one `maximum iterations
+  reached` event over 20,016 CBF decisions. Initial/final evaluations are
+  zero-event over 160/160 decisions, and all six append-only interval
+  evaluations are zero-event over 80 decisions each. The three training events
+  exactly match the three stderr notices. The unique replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_seed_20260719_replay_20260801.jsonl`
+  plus summary uses unchanged 20,000/0.1s/100/0.0/0.0 values, has three sources
+  and zero errors, and returns one `solved inaccurate` fallback plus two
+  `solved` non-fallback decisions. Replay JSONL SHA-256 is
+  `FE08ACF17764EE3F30BFC4E94FACF64F441A5BB4B39BEA494FA073CD7FD1AE4A`;
+  summary SHA-256 is
+  `32EB0636F418F26018B6F4166559F776EE66C55BAA78EC1916FB444C7DB3B219`.
+  The zero uncertainty margins are the frozen causal ablation, not fallback
+  tuning. This is one-seed provenance only.
+
+  Next: commit/push these four documents without `.gitignore`, then confirm
+  zero Python work and absent seed-`20260720` root/log/replay paths. Launch seed
+  `20260720` serially under the identical frozen 5-UAV ablation command and
+  wait-only discipline. Complete all five seeds and their matrix/all-source
+  replay before starting post-isolation 8-UAV work.
+
 - **Post-isolation 5-UAV full-method evidence gate is complete, 2026-08-01
   (matrix launch revision `2c5ea51`; documentation pending commit):** the
   unique root

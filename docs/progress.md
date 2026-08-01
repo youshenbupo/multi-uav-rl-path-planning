@@ -3426,3 +3426,54 @@ without `.gitignore`, then preflight and start independent post-isolation
 `configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml`, CUDA,
 CPU OSQP, a fresh root and wait-only monitoring. Complete its five seeds,
 matrix and replay before any 8-UAV work.
+
+## AAMAS 2027 - first post-isolation 5-UAV no-uncertainty seed retained (2026-08-01)
+
+At launch revision `bedeb3a`, a zero-process/CUDA/config-hash and absent-path
+preflight launched independent seed `20260719` from scratch under frozen
+`configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml`
+SHA-256
+`6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`.
+The unique root is
+`outputs/core_5uav_post_actor_isolation_ablation/core_5uav_predictive_no_uncertainty_seed_20260719/`.
+The command used five UAVs, `--graph-mode predictive_graph`, 100k requested
+steps and CUDA neural execution; OSQP stayed CPU-side. The zero graph-risk and
+CBF uncertainty-margin gains/cap are the prespecified no-uncertainty causal
+ablation, while slack penalty 100, maximum 20,000 iterations and the 0.1-second
+replay limit remain frozen. Only the active execution-cell wait handle was used.
+The process naturally exited 0 after about 300 seconds at 100,080 transitions /
+417 updates.
+
+The final summary verifies `uses_predicted_knowledge=true`,
+`uses_uncertainty=false`, five UAVs and CUDA. Final checkpoint SHA-256 is
+`A196F0C8BF0A8C8E3A062C51333EB80F959CACE8D0AF1AA2DFEDBAF8E35B4755`;
+summary SHA-256 is
+`1EA5A4A21DBE98D07D37A0913B0A3237880C3A4DDD1651FF4CCC9EBA2E3976A8`;
+live telemetry SHA-256 is
+`78BA3E51B75CA76C2F3952DBC19ED2D98E9C014D791F69DB0FD38637AA55848D`.
+Training retains two `solved inaccurate` events and one `maximum iterations
+reached` event over 20,016 CBF decisions. Initial/final evaluations are
+zero-event over 160/160 decisions. Six append-only interval evaluations are
+retained at transitions 15,360 through 92,160; each has 80 CBF decisions and
+zero events. The three training events exactly match the three stderr notices,
+so no event-accounting discrepancy is observed.
+
+The append-safe CPU-OSQP replay is
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_seed_20260719_replay_20260801.jsonl`
+plus companion summary. Under unchanged 20,000 maximum iterations, 0.1-second
+solve limit, slack penalty 100, uncertainty-margin gain 0.0 and cap 0.0, it
+retains three source events and zero replay errors. Recorded statuses are two
+`solved inaccurate` and one `maximum iterations reached`; replay statuses are
+one `solved inaccurate` with emergency fallback and two `solved` without
+fallback. JSONL SHA-256 is
+`FE08ACF17764EE3F30BFC4E94FACF64F441A5BB4B39BEA494FA073CD7FD1AE4A`;
+summary SHA-256 is
+`32EB0636F418F26018B6F4166559F776EE66C55BAA78EC1916FB444C7DB3B219`.
+No CBF value changed.
+
+This is first-seed post-isolation ablation provenance only, not evidence of a
+scale, safety, fallback-rate, performance, generalization or causal method
+effect. Next: commit/push these four documents without `.gitignore`, then
+zero-process/absent-path preflight and run seed `20260720` serially under the
+same frozen command and wait-only discipline. Complete five valid seeds, their
+six-scenario matrix and all-source replay before post-isolation 8-UAV work.

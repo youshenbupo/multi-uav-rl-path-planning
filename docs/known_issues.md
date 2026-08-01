@@ -921,4 +921,15 @@
   contributes 12,000 decisions and zero events. These are eligible provenance,
   not a scale, safety, fallback-rate, performance or method-effect result. The
   independently trained post-isolation 5-UAV no-uncertainty arm is still
-  missing, so no 5-UAV ablation comparison or paired statistic is available.
+  incomplete, so no 5-UAV ablation comparison or paired statistic is available.
+- The first independently trained post-isolation 5-UAV no-uncertainty seed is
+  now valid at 100,080 CUDA transitions / 417 updates. Seed `20260719` retains
+  two `solved inaccurate` and one `maximum iterations reached` training events
+  over 20,016 decisions; initial/final evaluations and all six append-only
+  interval evaluations are zero-event. The three source events exactly match
+  stderr. Its unchanged 20,000/0.1s/100/0.0/0.0 replay has zero errors: one
+  event remains `solved inaccurate` with fallback and two solve without
+  fallback. Preserve the source/replay variability and do not tune it away.
+  This one seed does not establish an ablation, scale, safety, fallback-rate,
+  performance or generalization result; four further independently trained
+  seeds, the 30-cell matrix and all-source replay remain required.
