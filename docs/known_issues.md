@@ -815,3 +815,12 @@
   has one source, zero errors, and replays `solved` without fallback. This
   diagnostic variability is not permission to tune CBF and is not an outcome
   claim. Two further seeds plus the complete evaluation/replay gate remain.
+- Post-isolation `uncertainty_predictive_graph` seed `20260722` is valid at
+  100,032 CUDA transitions / 1,042 updates. Training retains one `solved
+  inaccurate` fallback in 33,344 decisions; initial/final are 0/160 and 0/147.
+  Its replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260722_replay_20260801.jsonl`
+  has one source, zero errors, and remains `solved inaccurate` with emergency
+  fallback under unchanged values. Preserve this raw/replay evidence; do not
+  tune the CBF. Final seed `20260723`, the 30-cell evaluation matrix and
+  all-source replay remain required.

@@ -364,6 +364,20 @@ processes before relying on any status below.
   seed `20260722` serially using the same wait-only discipline. Seeds 22/23,
   all 30 evaluation cells and all-source replay remain.
 
+- **Fourth valid post-isolation `uncertainty_predictive_graph` seed retained,
+  2026-08-01 (launch revision `67407cc`; documentation pending commit):** seed
+  `20260722` completed 100,032 transitions / 1,042 updates in its unique root,
+  with wait-only monitoring and correct prediction/uncertainty/3-UAV/CUDA
+  identity. Training records one `solved inaccurate` fallback in 33,344
+  decisions; initial/final are 0/160 and 0/147. Its one-event replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260722_replay_20260801.jsonl`
+  has zero errors and remains `solved inaccurate` with fallback under frozen
+  values. Do not tune it away.
+
+  Next: commit/push documents without `.gitignore`, then preflight and run final
+  seed `20260723` using the same wait-only discipline. Only after its audit and
+  replay may the complete five-checkpoint six-scenario evaluation begin.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

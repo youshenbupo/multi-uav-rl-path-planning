@@ -3007,3 +3007,28 @@ fallback; this does not authorize solver tuning or any safety/performance
 claim. This is third-seed provenance only. Next: commit/push without staging
 `.gitignore`, then preflight and launch seed `20260722` serially with the same
 wait-only active-run discipline.
+
+## AAMAS 2027 - fourth valid post-isolation uncertainty-aware seed retained (2026-08-01)
+
+At revision `67407cc`, independent seed `20260722` ran in the fresh root
+`outputs/core_3uav_post_actor_isolation/core_3uav_uncertainty_predictive_graph_seed_20260722/`
+under the frozen three-UAV CUDA uncertainty-aware command and wait-only active
+monitoring. It naturally exited 0 after about 1,401 seconds and completed
+100,032 transitions / 1,042 updates. Identity confirms
+`uncertainty_predictive_graph`, delivered-packet prediction true, uncertainty
+true, three UAVs and CUDA. Final checkpoint, summary, telemetry, TensorBoard and
+separate logs are retained.
+
+Training retains one `solved inaccurate` emergency fallback over 33,344 CBF
+decisions; initial/final evaluations are zero-event over 160/147. Stderr is the
+matching one-line warning. Final checkpoint SHA-256 is
+`CCEDE56C3F88B4CF6AAB1E4BC00E6162FE6E8E36A43CB6C329097469585CC00C`; telemetry
+SHA-256 is
+`6FF5F852845B25DD70C6D457AC5D076B9EBB4268E9005390B6A80A418BB954B1`.
+The append-safe replay
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260722_replay_20260801.jsonl`
+plus summary retains the source with zero errors under unchanged values; replay
+remains `solved inaccurate` with emergency fallback. Preserve this failure mode
+without tuning. This is fourth-seed provenance only. Next: commit/push without
+`.gitignore`, then run final seed `20260723` serially with the same protocol and
+wait-only discipline before any evaluation.
