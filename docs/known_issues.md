@@ -770,3 +770,17 @@
   resume, or delete it. Retry the numeric seed only in a unique
   `launcherretry1` root under identical training and CBF settings before
   continuing the remaining uncertainty-aware seeds.
+- The first `uncertainty_predictive_graph` seed-`20260719` retry is also
+  invalid and retained in the distinct `launcherretry1` root. It exited with
+  the same Windows `STATUS_CONTROL_C_EXIT` (`0xC000013A`) at 13,344
+  transitions, with last complete checkpoint 12,288, empty stdout/stderr, and
+  no final checkpoint/summary. Its partial zero-event telemetry is excluded by
+  its own `ABORTED.json` and cannot enter replay or any result. Local Windows
+  headers confirm the exit-code name; event logs show no Python/CUDA/NVIDIA or
+  application error, and repository code has no self-signal path. Generic
+  90-second PowerShell and 240-second Conda+CUDA lifetime probes both survived
+  multiple parallel shell checks and exited 0, so the exact external control
+  event source remains unresolved. Preserve both invalid training roots and
+  the retained probe artifacts. Test only one fresh `launcherretry2` while
+  issuing no parallel shell command; if it repeats, stop retrying and request
+  direction rather than tuning or changing the research protocol.

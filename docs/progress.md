@@ -2861,3 +2861,49 @@ aggregation, statistics, and manuscript claims. No experiment or CBF setting
 changed. Next: commit/push these documents without staging `.gitignore`, then
 retry numeric seed `20260719` only in a distinct `launcherretry1` root after a
 zero-process/absent-path preflight; preserve this interrupted root forever.
+
+## AAMAS 2027 - uncertainty seed retry1 interrupted; control-event diagnosis retained (2026-08-01)
+
+After the invalid first attempt was documented and pushed, a zero-process and
+absent-path preflight at revision `c3b59fa` launched numeric seed `20260719`
+from scratch under identical config/training/CBF values in the distinct root
+`outputs/core_3uav_post_actor_isolation/core_3uav_uncertainty_predictive_graph_seed_20260719_launcherretry1/`.
+It again received signed exit code `-1073741510` (`0xC000013A`), this time at
+13,344 transitions. The last complete checkpoint is step 12,288; no final
+checkpoint or summary exists, and stdout/stderr are empty. Live telemetry
+SHA-256
+`A70594390834830E0D3DA7ABD38CEA66B172728A85A2340644486113E054C384`
+retains zero emergency events over 4,448 training, 160 initial-evaluation and
+80 last-interval CBF decisions. These incomplete zero-event counts are not
+replayed or used as results.
+
+The parseable retry1 `ABORTED.json` SHA-256 is
+`03A80527E4B3B7E82F7202DA668218B6097559BAF3239B77E21AEA7288CC6D8D`; it
+excludes the entire retry1 root from training eligibility, evaluation, replay,
+aggregation, statistics, and manuscript claims. Both invalid roots remain
+preserved, and neither will be overwritten, resumed, or deleted.
+
+Systematic root-cause investigation found the following. The installed Windows
+SDK identifies `0xC000013A` as `STATUS_CONTROL_C_EXIT`; repository Python has no
+`SIGINT`, control-C, `KeyboardInterrupt`, or self-signal path; and Application/
+System event-log inspection found no Python, CUDA, NVIDIA, application-error,
+or driver warning in the failure window. A 90-second PowerShell child process
+survived two parallel read-only shell calls and exited 0. A stronger retained
+probe using the same Conda Python, CUDA initialization on the RTX 5060,
+`Start-Process -Wait`, separate logs, and a 240-second lifetime also survived
+three parallel read-only shell calls and naturally exited 0 after 246 seconds,
+with empty stderr. The probe artifacts are
+`outputs/diagnostics/cuda_process_lifetime_probe_20260801.py` and matching
+stdout/stderr; script SHA-256 is
+`CAB32F367DC4C74D44799C14F20CDB380C8D72AF7B13E57D4E2D3120BE083A1E`.
+
+These checks rule out a deterministic training-script self-exit, generic
+`Start-Process`, Python/CUDA initialization, arbitrary parallel shell access,
+and a simple 180-second lifetime cap. They do not identify the external sender
+of the control event. The remaining narrow environmental hypothesis is an
+interaction between sustained real training load and parallel shell monitoring
+inside the shared tool process tree. The single minimal next test is a fresh
+`launcherretry2` full run with no parallel shell commands while it is active:
+only wait on its existing execution cell. If that also returns `0xC000013A`,
+stop further retries and treat the launch architecture as blocked pending user
+direction; do not change model, training, or CBF settings.

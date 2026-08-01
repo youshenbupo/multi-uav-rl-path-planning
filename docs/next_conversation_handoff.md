@@ -279,6 +279,33 @@ processes before relying on any status below.
   with unchanged configuration and CBF values. Only a naturally completed
   retry may enter the matched five-seed arm.
 
+- **Uncertainty seed-20260719 retry1 is also invalid; systematic diagnosis is
+  retained, 2026-08-01 (launch revision `c3b59fa`; documentation pending
+  commit):** the distinct
+  `core_3uav_uncertainty_predictive_graph_seed_20260719_launcherretry1` root
+  stopped at 13,344 transitions with the same signed `-1073741510` /
+  `0xC000013A` exit. Its last complete checkpoint is 12,288; final checkpoint
+  and summary are absent; stdout/stderr are empty. `ABORTED.json` excludes the
+  entire retry. Partial telemetry has zero events over 4,448 training, 160
+  initial and 80 last-interval CBF decisions, but is not a replay/result input.
+
+  Local Windows SDK headers name the code `STATUS_CONTROL_C_EXIT`. No relevant
+  Windows Application/System error, Python signal code, CUDA/NVIDIA error, or
+  stderr explanation was found. A 90-second PowerShell child and a retained
+  240-second Conda+CUDA RTX-5060 probe both survived multiple parallel
+  read-only shell checks and exited 0; thus generic `Start-Process`, Python,
+  CUDA initialization, arbitrary concurrent shell access, and a simple
+  180-second cap are ruled out. The external control-event sender remains
+  unknown. The narrow remaining hypothesis is sustained real-training load
+  interacting with parallel shell monitoring in the shared tool process tree.
+
+  Next: commit/push these documents without `.gitignore`, preflight an absent
+  `launcherretry2` root/logs and zero Python processes, then launch exactly one
+  full identical retry from scratch. While it runs, call only `wait` on that
+  execution cell: no parallel shell health checks. This is the one-variable
+  hypothesis test. If retry2 also returns `0xC000013A`, do not attempt retry3;
+  stop and request user direction without changing training or CBF values.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
