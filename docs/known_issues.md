@@ -1109,3 +1109,17 @@
   scale, safety, fallback-rate, performance or generalization result. A fresh
   30-cell/600-record evaluation matrix and 35-input all-source replay remain
   mandatory before any paired or descriptive analysis.
+- The post-isolation 8-UAV independent no-uncertainty arm now has a valid
+  30-cell/600-record evaluation root at
+  `outputs/core_8uav_post_actor_isolation_evaluations_20260801_predictive_graph/`.
+  All cell identities, episode indices, eligible checkpoints, completed step,
+  eight-UAV/CUDA/actor-boundary/CPU-OSQP fields, 30 zero exits and empty stderr
+  files pass audit. Evaluation contains 11,337 actual CBF decisions and zero
+  emergency events. Its frozen 35-input all-source replay retains 1,790
+  training sources, zero errors and 1,330 replay fallbacks. Separate per-seed
+  replays sum to 1,285 fallbacks, so the 45-event difference is retained as
+  diagnostic OSQP timing/order sensitivity; neither result may be selected or
+  tuned away. This closes within-arm provenance only, not a causal, scale,
+  safety, fallback-rate, performance or generalization claim. A fresh
+  prespecified paired/descriptive analysis remains absent, and every historical
+  paired summary remains excluded.

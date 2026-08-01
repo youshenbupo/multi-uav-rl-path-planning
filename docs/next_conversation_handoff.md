@@ -6,6 +6,41 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Post-isolation 8-UAV independent no-uncertainty evidence gate complete,
+  2026-08-01 (matrix launch revision `c47aaf7`; documentation pending
+  commit):** retained launcher
+  `outputs/core_8uav_post_actor_isolation_predictive_graph_evaluation_launcher_20260801.ps1`
+  (SHA-256
+  `3E27C3EA6434AC8925BBC396C0BB1C81B871A0268CDF35B7B3EEF47333E419E9`)
+  naturally exited 0 after 403.7 seconds. Its unique matrix root is
+  `outputs/core_8uav_post_actor_isolation_evaluations_20260801_predictive_graph/`.
+  It serially evaluated eligible seeds `20260719`--`20260723` across all six
+  canonical scenarios with 20 episodes per cell; seed `20260722` uses only its
+  eligible `retry2` checkpoint.
+
+  Independent audit verifies 30 cells, 30 summaries/raw JSONL/runtime
+  telemetry/environment files and 600 records. Seed/scenario/episode indices,
+  checkpoint, step 100,224, eight-UAV/CUDA/actor-boundary/CPU-OSQP identities,
+  30 zero exits and empty cell/launcher stderr all pass. Evaluation has 11,337
+  CBF decisions and zero events. Launcher stdout SHA-256 is
+  `98B46602F539489FA3333A1B3AE1A315899741DC8A4915768795E74830D17F68`;
+  stderr is the empty-file hash.
+
+  The 35-input all-source replay is
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_5seed_training_and_evaluation_replay_20260801.jsonl`
+  plus summary. It retains 1,790 unique composite sources, zero errors and
+  1,330 fallbacks under unchanged 20,000/0.1s/100/0.0/0.0. Replay statuses are
+  460 solved, 1,326 time-limit, two solved-inaccurate and two
+  maximum-iterations. JSONL/summary SHA-256 values are
+  `EF08BBE377BDF8B49D74DD07F70CE23CFD8932D613CBE09C06B45864924A9B3F`
+  and
+  `EE40FE1550535C79B799DA8C29C640ACF8FDF2B0E5EA3A63DDDFF36370620894`.
+  Separate per-seed replays sum to 1,285 fallbacks; preserve the 45-event
+  timing/order difference without selection or tuning. This closes within-arm
+  provenance only. Next: commit/push four documents without `.gitignore`, then
+  prespecify and run fresh post-isolation paired/descriptive analysis using
+  independent seed as the unit; historical summaries remain excluded.
+
 - **Fifth valid post-isolation 8-UAV independent no-uncertainty seed retained;
   training gate complete, 2026-08-01 (launch revision `34f9303`;
   documentation pending commit):** zero-process/CUDA/config-hash/absent-path
