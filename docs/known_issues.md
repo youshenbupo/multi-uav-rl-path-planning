@@ -1026,3 +1026,11 @@
   Preserve the diagnostic difference without tuning. Four seeds establish no
   scale, safety, fallback-rate, performance or generalization result; final
   seed 23, the matrix/replay and independent no-uncertainty arm remain.
+- Post-isolation 8-UAV full-method seed `20260723` is valid at 100,224 CUDA
+  transitions / 261 updates. Training retains one solved-inaccurate event;
+  initial/final and all intervals are zero-event, and the source matches stderr.
+  Its unchanged one-source replay has zero errors and remains a
+  solved-inaccurate fallback. Five eligible full-method trainings now exist,
+  but this establishes no scale, safety, fallback-rate, performance or
+  generalization result. The 30-cell matrix/all-source replay and independently
+  trained no-uncertainty arm remain required.

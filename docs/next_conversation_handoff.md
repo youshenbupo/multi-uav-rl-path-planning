@@ -6,6 +6,40 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Post-isolation 8-UAV full-method five-seed training is complete,
+  2026-08-01 (final seed launch revision `40a1dbb`; documentation pending
+  commit):** seed `20260723` ran once in
+  `outputs/core_8uav_post_actor_isolation/core_8uav_uncertainty_predictive_graph_seed_20260723/`
+  and naturally exited 0 after about 331.2 seconds at 100,224 transitions / 261
+  updates. Identity is eight UAVs, uncertainty-aware predictive graph, CUDA
+  neural execution and CPU OSQP. Final checkpoint SHA-256 is
+  `5895CE4CD953D2044A04C16790D0B313476A4432D2BA34068D63A5325559D9D7`;
+  summary SHA-256 is
+  `FC6B9575AE5FB44E993F920888207759F08DBFA5417D2ED6FF9FA9AB08C74BCA`;
+  telemetry SHA-256 is
+  `BDCA1A381ADF1F563E52A9C4D7EAC427C1010E478561346E82B9F0EEE60726E5`.
+
+  Training retains one `solved inaccurate` event over 12,528 decisions;
+  initial/final and all 32 retained intervals are zero-event. The source exactly
+  matches stderr. Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_seed_20260723_replay_20260801.jsonl`
+  plus summary has one source and zero errors under unchanged
+  20,000/0.1s/100/0.5/5.0 values; it remains `solved inaccurate` with emergency
+  fallback. JSONL SHA-256 is
+  `8E6B6128054F2C7B4F784E13CD779A314C56A3039E6F1B1773729DED8CAAB16D`;
+  summary SHA-256 is
+  `DA631FACCE63BCEE0AFC4CE3D3AE90DD9131BC3335F4E286E6B82A33C9FB46A5`.
+  No CBF value changed.
+
+  Eligible full-method roots now cover independent seeds `20260719`--`20260723`.
+  This closes training/per-seed replay provenance only, not a scale, safety,
+  fallback-rate, performance or generalization result. Next: commit/push these
+  four documents without `.gitignore`, then verify all five checkpoint
+  identities, zero Python work and absent fresh matrix/replay targets. Run the
+  8-UAV 5-by-6 canonical evaluation matrix at 20 episodes/cell, audit all 600
+  records, then replay all five training plus 30 evaluation telemetry inputs
+  before independent 8-UAV no-uncertainty work.
+
 - **Fourth valid post-isolation 8-UAV full-method seed retained, 2026-08-01
   (launch revision `aa1d691`; documentation pending commit):** seed `20260722`
   ran once in
