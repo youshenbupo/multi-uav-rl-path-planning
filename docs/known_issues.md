@@ -964,3 +964,17 @@
   valid seeds still establish no ablation, scale, safety, fallback-rate,
   performance or generalization result; seed 23, the matrix and all-source
   replay remain required.
+- Post-isolation 5-UAV no-uncertainty seed `20260723` is valid at 100,080 CUDA
+  transitions / 417 updates despite the execution wrapper reporting code 1.
+  This is a PowerShell 5 stderr-redirection artifact: the log's CBF warnings
+  are wrapped as `NativeCommandError`, and a Python `sys.exit(0)` probe
+  reproduced host code 1 whenever native stderr was redirected. Complete
+  parseable stdout, final summary/checkpoint/telemetry, absent `ABORTED.json`,
+  identities and counts independently prove normal completion. Training has
+  one `solved inaccurate` and one `maximum iterations reached` event; all
+  evaluation streams are zero-event. Its two-source replay has zero errors:
+  solved-inaccurate becomes solved/non-fallback, while maximum-iterations
+  remains fallback. Preserve the wrapper evidence and do not relaunch or tune.
+  Five eligible no-uncertainty trainings now exist, but no method, scale,
+  safety, fallback-rate, performance or generalization claim is allowed before
+  the 30-cell matrix and 35-input replay are complete.

@@ -6,6 +6,51 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Post-isolation 5-UAV independent no-uncertainty five-seed training is
+  complete, 2026-08-01 (final seed launch revision `a304367`; documentation
+  pending commit):** seed `20260723` ran once in the unique
+  `outputs/core_5uav_post_actor_isolation_ablation/core_5uav_predictive_no_uncertainty_seed_20260723/`
+  root. The wait-only execution cell reported code 1 after about 722.2 seconds
+  because PowerShell 5 converts redirected native stderr into a
+  `NativeCommandError`; a no-state probe using Python `sys.exit(0)` reproduced
+  the same host-code behavior. The training itself completed normally: stdout
+  is a complete parseable final summary, and telemetry, summary and final
+  checkpoint were atomically present at 100,080 transitions / 417 updates with
+  no `ABORTED.json`. Treat the host code as a documented launcher-envelope
+  artifact, not a failed or duplicate seed attempt.
+
+  Identity is five UAVs, `predictive_graph`, prediction true, uncertainty false
+  and CUDA; OSQP remained CPU-side. Final checkpoint SHA-256 is
+  `FE76A928143EE956176B3A627C4EBB632CDC5FC8BED5142DB93B365B3FD14C22`;
+  summary SHA-256 is
+  `18279BBC231CAF4EA75CF20DD6A4047C474359BD92381E1CD3CE5D6EF62C9D9C`;
+  telemetry SHA-256 is
+  `F8CCA2EEED98AD89EC3FE8E13C4A08798147697CD0B422AD8DDAE59B4838151F`.
+  Training retains one `solved inaccurate` and one `maximum iterations reached`
+  event over 20,016 decisions. Initial/final and all six interval evaluations
+  are zero-event over 160/160 and 80 decisions per interval. The two messages
+  are both preserved in stderr; the first is inside PowerShell's error envelope
+  and the second is plain stderr.
+
+  Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_seed_20260723_replay_20260801.jsonl`
+  plus summary has two sources and zero errors under unchanged
+  20,000/0.1s/100/0.0/0.0 values. The solved-inaccurate source replays `solved`
+  without fallback (slack about 10.056), while maximum-iterations remains a
+  fallback. Replay JSONL SHA-256 is
+  `AE2CCC96255F03864D1C2A9F1D673CD506610C5BD11D54EF8B9E65C29A2FEFEF`;
+  summary SHA-256 is
+  `517E5A90BD6809ADE5D25D7857879F0E19230955AB9608784010DEBF28E8A6C6`.
+
+  Eligible no-uncertainty roots are seeds `20260719`--`20260723`; the separate
+  seed-20260720 zero-artifact prelaunch-timeout sidecar remains excluded. This
+  closes training/per-seed replay provenance only. Next: commit/push these four
+  documents without `.gitignore`, then verify all five checkpoint identities,
+  zero Python work and absent fresh matrix/replay targets. Run the 5-by-6
+  canonical evaluation matrix at 20 episodes/cell, audit all 600 records, then
+  replay all five training plus 30 evaluation telemetry inputs before any
+  post-isolation 8-UAV work.
+
 - **Fourth valid post-isolation 5-UAV independent no-uncertainty seed retained,
   2026-08-01 (launch revision `7f1cc72`; documentation pending commit):** seed
   `20260722` ran in the unique

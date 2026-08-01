@@ -3614,3 +3614,58 @@ Next: commit/push these four documents without `.gitignore`, then preflight and
 run final seed `20260723` serially under the same frozen command and wait-only
 discipline. The six-scenario matrix and 35-input all-source replay remain before
 post-isolation 8-UAV work.
+
+## AAMAS 2027 - post-isolation 5-UAV no-uncertainty five-seed training complete (2026-08-01)
+
+At launch revision `a304367`, zero-process/CUDA/config-hash and absent-path
+preflight launched independent seed `20260723` once in the unique
+`outputs/core_5uav_post_actor_isolation_ablation/core_5uav_predictive_no_uncertainty_seed_20260723/`
+root. It used frozen config SHA-256
+`6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`,
+five UAVs, `predictive_graph`, 100k requested steps, CUDA neural execution and
+CPU OSQP. Only the active execution-cell handle was awaited.
+
+The cell reported code 1 after about 722.2 seconds even though training
+completed normally. PowerShell 5 had converted redirected native stderr into a
+`NativeCommandError`; a no-state Python probe explicitly calling `sys.exit(0)`
+reproduced host code 1 when stderr was redirected. Independent file audit found
+a complete parseable stdout JSON, summary, telemetry, final checkpoint, all six
+interval checkpoints, 100,080 transitions / 417 updates and no `ABORTED.json`.
+Thus this is a launcher-envelope false failure, not an interrupted attempt and
+not grounds for a rerun.
+
+Summary identity verifies predicted delivered-packet knowledge enabled,
+uncertainty disabled, five UAVs and CUDA. Final checkpoint SHA-256 is
+`FE76A928143EE956176B3A627C4EBB632CDC5FC8BED5142DB93B365B3FD14C22`;
+summary SHA-256 is
+`18279BBC231CAF4EA75CF20DD6A4047C474359BD92381E1CD3CE5D6EF62C9D9C`;
+telemetry SHA-256 is
+`F8CCA2EEED98AD89EC3FE8E13C4A08798147697CD0B422AD8DDAE59B4838151F`.
+Training retains one `solved inaccurate` and one `maximum iterations reached`
+event over 20,016 decisions. Initial/final evaluations are zero-event over
+160/160 decisions; all six append-only interval evaluations at transitions
+15,360 through 92,160 retain 80 decisions and zero events each. Both source
+messages remain in stderr, with the first embedded in the PowerShell envelope
+and the second emitted as a plain warning.
+
+The append-safe replay is
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_seed_20260723_replay_20260801.jsonl`
+plus companion summary. Under unchanged 20,000 maximum iterations, 0.1-second
+solve limit, slack penalty 100, uncertainty-margin gain 0.0 and cap 0.0, it has
+two sources and zero errors. The recorded solved-inaccurate source replays
+`solved` without fallback with slack about 10.056; the recorded
+maximum-iterations source remains maximum iterations with fallback. JSONL
+SHA-256 is
+`AE2CCC96255F03864D1C2A9F1D673CD506610C5BD11D54EF8B9E65C29A2FEFEF`;
+summary SHA-256 is
+`517E5A90BD6809ADE5D25D7857879F0E19230955AB9608784010DEBF28E8A6C6`.
+No CBF value changed.
+
+Eligible roots now cover independent seeds `20260719`--`20260723`; the
+seed-20260720 zero-artifact prelaunch-timeout sidecar remains excluded. This
+closes five-seed training/per-seed replay provenance only, not a scale, safety,
+fallback-rate, performance, generalization or causal method effect. Next:
+commit/push these four documents without `.gitignore`, then preflight and run a
+fresh 30-cell/600-record six-scenario final-checkpoint evaluation. After its
+identity audit, run the unchanged 35-input all-source replay before any
+post-isolation 8-UAV work.
