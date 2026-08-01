@@ -696,3 +696,14 @@
   performance, safety, fallback-rate, significance, or comparison claim. Two
   matching predictive seeds, the complete six-scenario matrix, and all-source
   replay remain required before the uncertainty-aware arm or cross-method use.
+- The first post-isolation `predictive_graph` seed-`20260722` attempt is
+  invalid and permanently retained at
+  `outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260722/`.
+  It stopped at 84,672 transitions after the 82,944 checkpoint and has no
+  final checkpoint or summary. Both launcher logs are empty, so the cause is
+  unknown; a neighboring monitor invocation returned Windows code
+  `1073807364` (`0x40010004`) but does not prove causality. Its partial
+  telemetry and checkpoints remain under `ABORTED.json` exclusion and must not
+  enter CBF replay, evaluation, aggregation, statistics, or manuscript claims.
+  Retry the same numeric seed only in a distinct `launcherretry1` root with
+  unchanged training and CBF settings.

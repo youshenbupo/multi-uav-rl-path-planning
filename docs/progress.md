@@ -2638,3 +2638,38 @@ fallback-rate, significance, or comparison result. Next: commit and push this
 documentation without staging `.gitignore`, then perform a
 zero-process/absent-path preflight and launch predictive seed `20260722`
 serially under the identical protocol.
+
+## AAMAS 2027 - first predictive GraphMAPPO seed 20260722 attempt interrupted and excluded (2026-08-01)
+
+At revision `5d53757`, the first post-isolation seed-`20260722` attempt used
+the frozen configuration SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D` and
+the exact serial CUDA command
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py
+--config configs\rl\dynamic_graph_baseline.yaml --device cuda --seed 20260722
+--num-uavs 3 --graph-mode predictive_graph --total-steps 100000 --output-dir
+outputs\core_3uav_post_actor_isolation\core_3uav_predictive_graph_seed_20260722`.
+The distinct launcher logs are
+`outputs/core_3uav_post_actor_isolation_predictive_graph_seed_20260722.stdout.log`
+and `.stderr.log`.
+
+The process exited before the requested budget at 84,672 transitions. The
+last complete interval checkpoint is `checkpoints/graph_mappo_step_82944.pt`;
+live telemetry, earlier checkpoints and TensorBoard files remain, but
+`summary.json` and `checkpoints/graph_mappo_final.pt` do not exist. Both
+launcher logs are empty. The causal mechanism is unknown: the immediately
+preceding process-only monitor returned Windows exit code `1073807364`
+(`0x40010004`), but this temporal adjacency is not treated as causal proof.
+The retained telemetry SHA-256 is
+`E21022A507B66F03F20AAEA0DEAC76EFA6DE042C2F50933C5778916286AB4E08`; it
+contains zero emergency events over 28,224 training, 160 initial-evaluation,
+and 77 latest-interval CBF decisions.
+
+`ABORTED.json` now marks the entire root invalid. Its partial checkpoints,
+telemetry, logs and TensorBoard data are preserved but excluded from training
+eligibility, evaluation, CBF replay, aggregation, statistics and manuscript
+claims. No training, CBF or safety parameter changed. Next: commit and push
+this documentation without staging `.gitignore`, then use a zero-process and
+absent-path preflight before retrying the same numeric seed in the unique
+`core_3uav_predictive_graph_seed_20260722_launcherretry1` root with distinct
+retry logs.

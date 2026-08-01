@@ -138,6 +138,27 @@ processes before relying on any status below.
   paths, then launch predictive seed `20260722` serially under the identical
   protocol.
 
+- **First post-isolation `predictive_graph` seed-`20260722` attempt is invalid
+  and retained, detected 2026-08-01 (documentation pending commit):** the
+  unique root
+  `outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260722/`
+  stopped at 84,672 transitions, with its last complete interval checkpoint at
+  82,944. It has live telemetry, partial checkpoints and TensorBoard data, but
+  no `summary.json` or final checkpoint; separately redirected stdout/stderr
+  are both empty. The causal mechanism is unknown. The immediately preceding
+  process-only monitoring command returned Windows exit code `1073807364`
+  (`0x40010004`), retained only as adjacent observability evidence rather than
+  asserted as the cause. `ABORTED.json` records the exact command, revision,
+  configuration hash, telemetry hash and exclusion. The partial telemetry has
+  zero events in 28,224 training, 160 initial-evaluation and 77 latest-interval
+  CBF decisions, but the whole root is ineligible for replay or any result.
+
+  Next: commit/push this invalid-attempt documentation without staging
+  `.gitignore`, then confirm zero training processes and absent retry paths.
+  Rerun the same numeric seed with unchanged settings only in the unique
+  `core_3uav_predictive_graph_seed_20260722_launcherretry1` root and distinct
+  retry logs. Never overwrite or delete the invalid root.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
