@@ -421,6 +421,25 @@ processes before relying on any status below.
   identify exact missing valid cells/seeds first, preserve exclusions, and use
   new roots for any required work before statistics and literature claims.
 
+- **Post-isolation 5/8-UAV gap audit complete, 2026-08-01 (documentation
+  pending commit):** all current `core_5uav*` and `core_8uav*` training,
+  evaluation, ablation, paired-summary and CBF-replay artifacts predate actor
+  information isolation. They remain preserved forensic evidence but are
+  ineligible for every result/scale/ablation/manuscript aggregation. No
+  top-level post-isolation 5/8-UAV root exists. Full-method and independently
+  trained no-uncertainty config hashes still match the four frozen values.
+
+  `docs/aamas2027_analysis_plan.md` now lists the four eligible post-isolation
+  3-UAV raw evaluation roots; no fresh multi-arm summary has yet been created.
+  The 5/8 rows remain empty by design. Next: commit/push the four documentation
+  files without `.gitignore`, then preflight and run 5-UAV full-method seed
+  `20260719` under `configs/rl/dynamic_graph_5uav.yaml`, 100k CUDA steps,
+  `--graph-mode uncertainty_predictive_graph`, CPU OSQP, and a fresh
+  `outputs/core_5uav_post_actor_isolation/core_5uav_uncertainty_predictive_graph_seed_20260719`
+  root. Use only the launch-cell wait handle while active. Complete five valid
+  full-method seeds and their matrix/replay before starting the independently
+  trained 5-UAV no-uncertainty arm, then repeat both matched arms at 8 UAV.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

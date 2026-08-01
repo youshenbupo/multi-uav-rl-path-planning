@@ -845,3 +845,13 @@
   Before new scale/ablation work, audit existing 5/8-UAV artifacts against the
   post-isolation actor-information boundary and independent-training rule;
   never reuse stale or mismatched evidence merely because directories exist.
+- Read-only post-3-UAV audit confirms every existing 5/8-UAV full-method,
+  no-uncertainty ablation, evaluation, paired summary and CBF replay artifact
+  predates actor-information isolation and remains protocol-ineligible. No
+  post-isolation 5/8-UAV output root currently exists. Frozen full and ablation
+  config hashes still match their documented values, so the missing evidence
+  must be regenerated from scratch in distinct roots; it cannot be repaired by
+  re-aggregation. Required order is 5-UAV full five seeds/evaluation/replay,
+  independently trained 5-UAV no-uncertainty five seeds/evaluation/replay, then
+  the matching two 8-UAV arms. Preserve all historical roots and invalid
+  attempts, and apply wait-only monitoring to long active jobs.

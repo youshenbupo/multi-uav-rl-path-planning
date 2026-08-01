@@ -3110,3 +3110,40 @@ read-only audit the existing post-isolation 5/8-UAV and independently trained
 ablation artifacts/protocol before launching anything new; fill only genuinely
 missing matched evidence in fresh roots, then proceed to statistical and
 primary-literature gates.
+
+## AAMAS 2027 - post-isolation 5/8-UAV scale and ablation gap audited (2026-08-01)
+
+After closing the post-isolation three-UAV four-arm artifact matrix, a read-only
+inventory checked the current scale/full-method and independent no-uncertainty
+ablation roots against the actor-information repair boundary. Existing roots
+`outputs/core_5uav/`, `outputs/core_5uav_evaluations/`,
+`outputs/core_5uav_ablation/`, the retained 5-UAV ablation evaluation attempts,
+`outputs/core_8uav/`, `outputs/core_8uav_evaluations/`,
+`outputs/core_8uav_ablation/`, and
+`outputs/core_8uav_ablation_evaluations_20260729/` all predate the repair. Per
+the protocol-wide invalidation already recorded in `known_issues.md`, they and
+their paired summaries/replays remain forensic-only and cannot enter task,
+safety, scale, ablation, or manuscript aggregation.
+
+No top-level 5/8-UAV post-actor-isolation root exists. Therefore the matched
+scale/ablation evidence is genuinely missing rather than partially reusable.
+The frozen full-method configs still match their documented hashes:
+`configs/rl/dynamic_graph_5uav.yaml` =
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32` and
+`configs/rl/dynamic_graph_8uav.yaml` =
+`9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`.
+The independently trained no-uncertainty configs also match:
+5-UAV `6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`
+and 8-UAV `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`.
+
+`docs/aamas2027_analysis_plan.md` now identifies the four completed
+post-isolation 3-UAV evaluation roots as eligible raw inputs but intentionally
+leaves the descriptive/inferential artifact empty until a separately
+prespecified independent-seed analysis is run. Its 5/8-UAV rows correctly
+remain `None` pending new data. Next: commit/push this audit without staging
+`.gitignore`, then begin the 5-UAV full uncertainty-aware arm with seed
+`20260719`, 100k CUDA transitions, frozen 5-UAV config, a fresh
+`outputs/core_5uav_post_actor_isolation/` seed root, CPU OSQP, retained CBF
+telemetry, and wait-only active-run monitoring. Complete its five-seed matrix
+and replay before independently trained no-uncertainty 5-UAV ablations, then
+repeat the matched protocol at 8 UAV.
