@@ -6,6 +6,45 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Fourth valid post-isolation 8-UAV independent no-uncertainty seed retained
+  after two preserved launcher failures, 2026-08-01 (launch revision
+  `0d61b16`; documentation pending commit):** preflight confirmed remote/HEAD
+  equality, no Python process, CUDA, frozen config SHA-256
+  `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`
+  and absent initial targets. The first `Start-Process` call failed before
+  child creation on case-colliding inherited `Path`/`PATH`, leaving two
+  zero-byte logs and launcher `ABORTED` sidecar but no root. A fresh `retry1`
+  entered Python but was interrupted when its PowerShell wrapper promoted an
+  expected CBF stderr notice to terminating `NativeCommandError`; its partial
+  TensorBoard-only root, zero-byte logs and `ABORTED.json` remain preserved.
+  Both attempts are excluded and must never be overwritten or counted.
+
+  The unchanged command then ran through a transparent stderr wrapper in the
+  eligible unique root
+  `outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260722_retry2/`.
+  It naturally exited 0 after 802.7 seconds at 100,224 transitions / 261
+  updates. Identity is eight UAVs, `predictive_graph`, delivered-packet
+  prediction true, uncertainty false, CUDA neural execution and CPU OSQP.
+  Checkpoint/summary/telemetry SHA-256 values are
+  `7D96BFD79D4406F7C9D4FF8746240524FC72489B1B40C0194423F34E9B014391`,
+  `A5F3184E9927057BCCD2F2B4D98C5272D2F313127503B2F00A91644489435A0A`
+  and
+  `647A9C67C987A036B141EF92DAB823EE6DD9EDAB06B58B40AEBF343332D9FDF3`.
+
+  Its 429 canonical time-limit sources comprise 306 training, 14 initial, 93
+  append-only interval and 16 final events, exactly matching stderr. Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260722_replay_20260801.jsonl`
+  plus summary retains 429 unique pointers, zero errors, 124 solved and 305
+  time-limit fallback results under unchanged 20,000/0.1s/100/0.0/0.0 values.
+  JSONL/summary SHA-256 values are
+  `790DC7B083CEB18E18C31C3A5D14B686E07BA85A8891EA1F0803B32F10C11BAA`
+  and
+  `1F55F1444D5449BC06B57E72CDB29B4614755F7B13E60757CBDAEE29F7CE284C`.
+  No safety value changed. Four eligible seeds now exist; this is diagnostic
+  provenance only. Next: commit/push the four documents without `.gitignore`,
+  then preflight and train seed `20260723` serially. Only afterward run the
+  fresh 30-cell matrix and 35-input replay.
+
 - **Third valid post-isolation 8-UAV independent no-uncertainty seed retained
   and replay alias duplication fixed, 2026-08-01 (launch revision `9a3ec69`;
   documentation/code pending commit):** a zero-process/config-hash/absent-path

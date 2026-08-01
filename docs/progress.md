@@ -4151,3 +4151,75 @@ safety, fallback-rate, performance or generalization evidence. Next:
 commit/push the script, test and four documents without `.gitignore`, then
 preflight and run seed `20260722` serially. Seeds 22/23, the six-scenario matrix
 and 35-input all-source replay remain before paired/descriptive analysis.
+
+## AAMAS 2027 - fourth post-isolation 8-UAV no-uncertainty seed retained (2026-08-01)
+
+At launch revision `0d61b16`, the preflight confirmed branch/remote equality,
+no Python process, CUDA on the RTX 5060, frozen
+`configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml`
+SHA-256
+`F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`,
+and absent seed-20260722 training/log/replay targets. The first launcher call
+failed before child creation because PowerShell `Start-Process` rejected
+case-colliding inherited `Path`/`PATH` keys. It produced no root and only the
+two zero-byte original logs. These are preserved with
+`outputs/core_8uav_post_actor_isolation_ablation_seed_20260722_launcher.ABORTED.json`
+(SHA-256
+`E2586A9CB1E58FAD389BEE189A6F795EFB5BCAC9A2544BAFE65DF1AA3317AD98`)
+and are excluded.
+
+The next unique `retry1` attempt entered Python, but the direct PowerShell
+wrapper used terminating native-error handling. Its first expected CBF stderr
+notice was promoted to `NativeCommandError`, interrupting the job before any
+checkpoint or summary. No Python process remained. The partial root, its
+TensorBoard directory, zero-byte logs and
+`outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260722_retry1/ABORTED.json`
+(SHA-256
+`EC8B97CC8F4B05092E8221CA3112B3B655584735DC6A2DC5B31B9D9E9177F110`)
+remain preserved and excluded. Neither launcher failure is counted as a valid
+seed or overwritten.
+
+The transparent `cmd.exe` stderr-redirection replacement then launched the
+unchanged Python command into the fresh eligible
+`outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260722_retry2/`
+root. It naturally exited 0 after 802.7 seconds at 100,224 transitions / 261
+updates. Identity verifies eight UAVs, `predictive_graph`, delivered-packet
+prediction enabled, uncertainty disabled and CUDA neural execution; OSQP
+remained CPU-side. Final checkpoint, summary and live telemetry SHA-256 values
+are respectively
+`7D96BFD79D4406F7C9D4FF8746240524FC72489B1B40C0194423F34E9B014391`,
+`A5F3184E9927057BCCD2F2B4D98C5272D2F313127503B2F00A91644489435A0A`
+and
+`647A9C67C987A036B141EF92DAB823EE6DD9EDAB06B58B40AEBF343332D9FDF3`.
+The unique stdout/stderr SHA-256 values are
+`5C8C8A9CF8460A90809FE7B506B114021C3721D377E05CF6D19642B3E4C078B5`
+and
+`FB0EA4A4DD6CCE3AA8ADD2C8D3B0F42A4B8C869871467C22FFB782E70587DD25`.
+There are 33 checkpoint files and no training `ABORTED.json`.
+
+Training retains 306 `solve_time_limit` events over 12,528 decisions;
+initial/final evaluations retain 14/16 more over 160/160 decisions. All 32
+append-only intervals are present; 15 contain 93 time-limit events. The 429
+canonical sources exactly match stderr's 429 notices. The equal
+`last_interval_evaluation_cbf` compatibility alias is not double counted by
+the repaired event walker.
+
+Replay
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260722_replay_20260801.jsonl`
+plus summary uses the unchanged 20,000 maximum iterations, 0.1-second solve
+limit, slack penalty 100, uncertainty-margin gain 0.0 and cap 0.0. It retains
+429 records, 429 unique canonical pointers and zero errors; source groups are
+306 training, 14 initial, 93 interval and 16 final. Replay statuses are 124
+`solved` and 305 `solve_time_limit`; all 305 time-limit results use emergency
+fallback. JSONL SHA-256 is
+`790DC7B083CEB18E18C31C3A5D14B686E07BA85A8891EA1F0803B32F10C11BAA`;
+summary SHA-256 is
+`1F55F1444D5449BC06B57E72CDB29B4614755F7B13E60757CBDAEE29F7CE284C`.
+
+No configuration, observation contract, CBF value or controller changed. This
+is seed-local diagnostic provenance, not causal, scale, safety, fallback-rate,
+performance or generalization evidence. Four valid 8-UAV no-uncertainty seeds
+now exist. Next: commit/push these four documents without `.gitignore`, then
+run a zero-process/config-hash/absent-path preflight and train seed `20260723`
+serially under the identical frozen protocol. The six-scenario matrix and
+35-input all-source replay remain after that final seed.

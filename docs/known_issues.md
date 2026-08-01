@@ -1080,3 +1080,21 @@
   numerical cluster prove no causal, scale, safety, fallback-rate, performance
   or generalization result. Seeds `20260722`/`20260723`, the valid matrix and
   35-input replay remain required.
+- Post-isolation 8-UAV no-uncertainty seed `20260722` has one eligible
+  independent training, the `retry2` root, at 100,224 CUDA transitions / 261
+  updates. Two earlier launcher attempts remain preserved and excluded. The
+  first `Start-Process` call failed before Python child creation because the
+  inherited Windows environment exposed case-colliding `Path`/`PATH` keys; it
+  left two zero-byte logs and an explicit launcher `ABORTED` sidecar but no
+  training root. The subsequent `retry1` direct-PowerShell wrapper was
+  interrupted after an expected CBF stderr notice was promoted to terminating
+  `NativeCommandError`; its partial root, zero-byte logs and `ABORTED.json`
+  remain in place and are ineligible. The valid `retry2` used a transparent
+  `cmd.exe` redirection wrapper without changing the Python command or protocol.
+  It retains 429 time-limit sources: 306 training, 14 initial, 93 append-only
+  interval and 16 final, exactly matching stderr. Its frozen
+  20,000/0.1s/100/0.0/0.0 replay has 429 unique pointers, zero errors, 124
+  solved records and 305 time-limit fallbacks. Preserve all three attempts and
+  do not tune or select away the numerical cluster. Four valid seeds establish
+  no causal, scale, safety, fallback-rate, performance or generalization
+  result; seed `20260723`, the valid matrix and 35-input replay remain required.
