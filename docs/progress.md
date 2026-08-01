@@ -2771,3 +2771,56 @@ training/evaluation replay is retained. Next: commit/push these documents
 without staging `.gitignore`, then preflight an entirely new predictive
 evaluation root and run the 30 cells serially before starting
 `uncertainty_predictive_graph`.
+
+## AAMAS 2027 - post-isolation predictive GraphMAPPO evidence matrix retained (2026-08-01)
+
+At revision `49e45f2`, a zero-process/new-root preflight verified all five
+eligible predictive final checkpoints and the unchanged dynamic-graph config
+SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`.
+The retained launcher
+`outputs/core_3uav_post_actor_isolation_predictive_graph_evaluation_launcher_20260801.ps1`
+(SHA-256
+`EAE8D16400E410CFEA593B3855E4C1419E32CCEE8589BE3EDA01B67F73E943C5`)
+normalized duplicate-case PATH entries only inside its transient process, then
+used per-cell `Start-Process -Wait` execution. It evaluated the five eligible
+final checkpoints (`20260719`, `20260720`, `20260721`,
+`20260722_launcherretry2`, and `20260723`) across `nominal`, `delay_only`,
+`loss_only`, `dynamic_only`, `combined`, and
+`ood_communication_obstacle`, with 20 episodes per cell, CUDA network
+inference, and CPU OSQP. The distinct, non-overwriting root is
+`outputs/core_3uav_post_actor_isolation_evaluations_20260801_predictive_graph/`;
+launcher stdout/stderr and every cell's stdout/stderr are retained.
+
+The launcher naturally exited 0. Direct content parsing verified exactly 30
+directories, 30 parseable summaries, 30 parseable JSONL files and 600 episode
+records. All records have the expected numeric seed, scenario, eligible
+checkpoint, `graph_mappo_checkpoint` controller and completed checkpoint step
+100,032. All 30 environment records identify three UAVs, CUDA,
+`own_truth_and_delivered_packets_only`, and `cpu_osqp_when_enabled`. There are
+30 zero exit-code lines, 30 empty cell stderr files, and empty launcher stderr.
+Across the 600 episodes, runtime telemetry retains 11,223 CBF decisions and
+zero emergency fallback events.
+
+The append-safe all-source replay is
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_5seed_training_and_evaluation_replay_20260801.jsonl`
+plus companion summary. Its inputs are exactly five eligible training
+telemetry files and the 30 valid evaluation runtime telemetry files. Under the
+unchanged 20,000-iteration, 0.1-second, penalty-100, uncertainty-gain-0.5 and
+cap-5.0 CPU-OSQP protocol, it retains three source events and zero replay
+errors. Recorded statuses are one each of `solve_time_limit`, `solved
+inaccurate`, and `maximum iterations reached`; replay statuses are two
+`solved` and one `solved inaccurate`, with the latter retaining emergency
+fallback. JSONL SHA-256 is
+`58832392FAA584823FFE588727501A49FC7CD01020B036AD78A634D1A691F816` and summary
+SHA-256 is
+`F0B0F8D61B6CDA4C254AB54185CC39D7B87496FBC5366545CA497E2BFC64DEF7`.
+
+This closes the post-isolation three-UAV predictive-without-uncertainty arm's
+training, evaluation, and CBF-provenance gate. It does not itself establish
+performance, safety, fallback rate, significance, robustness, or superiority.
+Next: commit/push the three documents without staging `.gitignore`, then
+perform a zero-process/new-root preflight and begin matched five-seed
+`uncertainty_predictive_graph` training serially, starting with seed
+`20260719`; no 5/8-UAV or cross-method claim precedes that arm's complete
+matrix and replay.

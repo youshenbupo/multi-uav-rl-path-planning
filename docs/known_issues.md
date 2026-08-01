@@ -742,3 +742,18 @@
   all-source replay remain required. The invalid original seed-20260722 root
   and retry1 prelaunch attempt remain permanently excluded; do not start the
   uncertainty-aware arm before the predictive evaluation/replay gate closes.
+- The post-isolation `predictive_graph` arm now has five eligible trainings and
+  a complete valid evaluation root at
+  `outputs/core_3uav_post_actor_isolation_evaluations_20260801_predictive_graph/`:
+  30 identity-checked cells and 600 raw JSONL records, with 11,223 evaluation
+  CBF decisions and zero recorded evaluation fallbacks. Its 35-input all-source
+  replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_5seed_training_and_evaluation_replay_20260801.jsonl`
+  retains three training source events, zero replay errors, and one
+  `solved inaccurate` replay that still uses emergency fallback. These are
+  within-arm provenance facts, not performance, safety, fallback-rate,
+  significance, robustness, or comparison claims. Preserve all invalid
+  seed-20260722 attempts outside the eligible input set. The matched
+  `uncertainty_predictive_graph` five-seed training/evaluation/replay arm is
+  still required before any cross-method use, followed by prescribed 5/8-UAV
+  and independently trained ablation evidence.

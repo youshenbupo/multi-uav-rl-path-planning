@@ -225,6 +225,38 @@ processes before relying on any status below.
   OSQP. Audit 30 summaries/JSONL and 600 records, then run the unchanged
   all-source replay. Do not begin `uncertainty_predictive_graph` first.
 
+- **Post-isolation `predictive_graph` training/evaluation/replay gate is now
+  complete, 2026-08-01 (matrix launch revision `49e45f2`; documentation
+  pending commit):** the unique root
+  `outputs/core_3uav_post_actor_isolation_evaluations_20260801_predictive_graph/`
+  serially evaluated the five eligible final checkpoints over all six
+  canonical scenarios at 20 episodes/cell, CUDA inference and CPU OSQP. The
+  transient launcher-only PATH normalization was the only environment repair;
+  no repository, evaluator, or CBF setting changed. The launcher exited 0 with
+  empty stderr. Content audit found 30/30 directories, summaries and JSONL,
+  exactly 600 records, correct seed/scenario/checkpoint/controller/100,032-step
+  identity, 30 zero cell exits, and no cell stderr. Environment metadata in all
+  cells confirms three UAVs, CUDA, actor own truth plus delivered packets only,
+  and CPU OSQP. Evaluation telemetry records 11,223 CBF decisions and zero
+  emergency events.
+
+  The 35-input all-source replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_5seed_training_and_evaluation_replay_20260801.jsonl`
+  plus summary uses the five eligible training telemetry files and all 30 valid
+  evaluation telemetry files under unchanged 20,000/0.1s/100/0.5/5.0 values.
+  It retains three source events and zero replay errors: recorded statuses are
+  one `solve_time_limit`, one `solved inaccurate`, and one `maximum iterations
+  reached`; replay gives two `solved` and one `solved inaccurate`, with one
+  replay fallback. This closes only the predictive-without-uncertainty
+  provenance gate, not any outcome or safety claim.
+
+  Next: commit and push these documents without staging `.gitignore`; verify
+  zero dedicated Python/GPU work and absent unique targets; then start matched
+  three-UAV `uncertainty_predictive_graph` seed `20260719` at 100k CUDA steps
+  with the frozen dynamic-graph configuration. Keep all five seeds serial,
+  retain every fallback and invalid attempt, and do not begin its evaluation
+  until all five valid trainings finish.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
