@@ -6,6 +6,28 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Fourth eligible post-isolation 5-UAV full seed retained, 2026-08-01
+  (launch revision `b16f055`; documentation pending commit):** seed
+  `20260722` naturally completed under the frozen 5-UAV CUDA command and
+  wait-only monitoring at 100,160 transitions / 313 updates. Checkpoint SHA is
+  `EF754642...3EC5B`; telemetry SHA is `6873C3C7...A5508`. Training,
+  initial and final streams are zero-event over 20,032/160/160 decisions. All
+  six interval evaluations are retained; transition 61,440 contains one
+  `solved inaccurate` event, the other five contain zero, and the source count
+  exactly matches the sole stderr warning.
+
+  The unique replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_seed_20260722_replay_20260801.jsonl`
+  finds `$.interval_evaluations[3].cbf.emergency_events[0]`, has one source and
+  zero errors, and replays solved/non-fallback with about 263.39 slack under
+  unchanged values. This is diagnostic provenance and real-event validation of
+  the interval-history fix, not a result or tuning justification.
+
+  Next: commit/push the three documents without `.gitignore`, then preflight
+  and run final 5-UAV full seed `20260723` in a unique root with the same
+  frozen config and wait-only discipline. Audit interval/stderr accounting and
+  replay all source events before any 30-cell evaluation.
+
 - **Valid 5-UAV full seed `20260721` telemetry retry retained, 2026-08-01
   (launch revision `a645024`; documentation pending commit):** after the
   append-only telemetry repair was committed/pushed, numeric seed `20260721`

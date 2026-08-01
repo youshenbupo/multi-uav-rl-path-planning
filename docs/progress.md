@@ -3291,3 +3291,46 @@ documents without `.gitignore`, then zero-process/absent-path preflight and run
 5-UAV full seed `20260722` serially under the same frozen protocol and
 wait-only discipline. Its telemetry must preserve all interval histories before
 replay or eligibility.
+
+## AAMAS 2027 - valid post-isolation 5-UAV full seed 20260722 retained (2026-08-01)
+
+At launch revision `b16f055`, a zero-process/CUDA/config-hash and absent-path
+preflight launched seed `20260722` in the unique
+`outputs/core_5uav_post_actor_isolation/core_5uav_uncertainty_predictive_graph_seed_20260722/`
+root. It used frozen `configs/rl/dynamic_graph_5uav.yaml` SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`,
+five UAVs, `uncertainty_predictive_graph`, CUDA neural execution and CPU OSQP.
+Only the active execution-cell wait handle was used. The process naturally
+exited 0 after about 308 seconds at 100,160 transitions / 313 updates, with
+correct prediction/uncertainty/five-UAV/CUDA identity.
+
+Final checkpoint SHA-256 is
+`EF75464219A872CE1BBE6534CA55444FD35D86B94E6DC072435D26DADD33EC5B` and
+live telemetry SHA-256 is
+`6873C3C7C007793FFA7D61054356F1B75325A7A82DF66C73E03E13F8797A5508`.
+Training, initial and final records are zero-event over 20,032/160/160 CBF
+decisions. All six append-only interval evaluations are retained. The interval
+at 61,440 transitions contains one `solved inaccurate` fallback over its 80
+decisions; the other five intervals are zero-event. That one source exactly
+matches the sole stderr fallback notice, providing a real long-run validation
+that the telemetry repair preserves an earlier interval context after later
+interval writes.
+
+The unique replay
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_seed_20260722_replay_20260801.jsonl`
+plus summary recursively locates the event at
+`$.interval_evaluations[3].cbf.emergency_events[0]`. Under unchanged
+20,000/0.1s/100/0.5/5.0 CPU-OSQP values, it has one source, zero replay errors
+and replays `solved` without fallback, with retained slack about 263.39. JSONL
+SHA-256 is
+`C2C29FE2DF6B3BD564DA280718234D5D10F28ED64899C13C746DA002EF29718C` and
+summary SHA-256 is
+`97E9B5374BD9F70823D0808103A3EBF56A2D541292C786B7A3D027FB170AB3FE`.
+No CBF value changed; replay variability is diagnostic only.
+
+This is a fourth eligible five-UAV full-method seed, not performance, safety,
+fallback-rate, scale or generalization evidence. Next: commit/push the three
+documents without `.gitignore`, then zero-process/absent-path preflight and run
+final seed `20260723` serially under the same frozen protocol and wait-only
+discipline. Audit all interval/stderr contexts and replay before beginning the
+five-seed six-scenario matrix.

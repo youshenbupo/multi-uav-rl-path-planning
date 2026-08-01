@@ -899,3 +899,10 @@
   scale-level fallback rate or safety result and does not permit solver tuning.
   The non-retry naturally completed root remains permanently excluded because
   four of its contexts were lost.
+- Post-isolation 5-UAV full seed `20260722` is eligible at 100,160 CUDA
+  transitions / 313 updates. Its training, initial and final CBF streams are
+  zero-event, while the append-only interval history retains one `solved
+  inaccurate` fallback at transition 61,440. This source exactly matches the
+  sole stderr notice and is recursively replayable; the unchanged replay solves
+  without fallback but uses about 263.39 slack. Preserve the source/replay
+  difference and do not use it for tuning or a safety/fallback-rate conclusion.
