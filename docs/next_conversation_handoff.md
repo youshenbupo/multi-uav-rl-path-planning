@@ -6,6 +6,37 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Fourth valid post-isolation 8-UAV full-method seed retained, 2026-08-01
+  (launch revision `aa1d691`; documentation pending commit):** seed `20260722`
+  ran once in
+  `outputs/core_8uav_post_actor_isolation/core_8uav_uncertainty_predictive_graph_seed_20260722/`
+  and naturally exited 0 after about 326.1 seconds at 100,224 transitions / 261
+  updates. Identity is eight UAVs, uncertainty-aware predictive graph, CUDA
+  neural execution and CPU OSQP. Final checkpoint SHA-256 is
+  `6FEDFF756141676241DF75E2630588D72C321873FD69144B6A7F2177AD8E85A0`;
+  summary SHA-256 is
+  `F495994B39E0B432159FDC2A4CB242A52F6F71999CAFED3F036DE74187AA18FC`;
+  telemetry SHA-256 is
+  `F14093318F94C186772E6386B7E33B2A126E6C845DC3A4D146C23F62BF1D5CEA`.
+
+  Training, all 32 retained intervals and final evaluation are zero-event;
+  initial evaluation retains one `solve_time_limit` over 160 decisions, exactly
+  matching the sole stderr warning. Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_seed_20260722_replay_20260801.jsonl`
+  plus summary has one source and zero errors under unchanged
+  20,000/0.1s/100/0.5/5.0 values; it replays `solved` without fallback with
+  slack about 430.832. JSONL SHA-256 is
+  `AA24B00493DF20A5680A05805A5D7D37C477F2FC1EA4466DA1180D472C4613BC`;
+  summary SHA-256 is
+  `C8673ABFCFB40A266A8602AB4FBDD1105AF0432D0B3FA64F7B08B5A809EEF61D`.
+  No CBF value changed. Four seeds establish no scale, safety, fallback-rate,
+  performance or generalization result.
+
+  Next: commit/push these four documents without `.gitignore`, then preflight
+  and run final seed `20260723` under the identical frozen command. The 30-cell
+  matrix and all-source replay remain before independent 8-UAV no-uncertainty
+  work.
+
 - **Third valid post-isolation 8-UAV full-method seed retained, 2026-08-01
   (launch revision `ec21477`; documentation pending commit):** seed `20260721`
   ran once in

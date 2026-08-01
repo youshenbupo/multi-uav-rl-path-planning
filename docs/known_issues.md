@@ -1019,3 +1019,10 @@
   this cluster without tuning. Three seeds establish no scale, safety,
   fallback-rate, performance or generalization result; seeds 22/23, the
   matrix/replay and independent no-uncertainty arm remain required.
+- Post-isolation 8-UAV full-method seed `20260722` is valid at 100,224 CUDA
+  transitions / 261 updates. Training, all intervals and final evaluation are
+  zero-event; initial evaluation retains one time-limit event matching stderr.
+  Its unchanged one-source replay has zero errors and solves without fallback.
+  Preserve the diagnostic difference without tuning. Four seeds establish no
+  scale, safety, fallback-rate, performance or generalization result; final
+  seed 23, the matrix/replay and independent no-uncertainty arm remain.

@@ -3851,3 +3851,40 @@ performance or generalization result. Next: commit/push these four documents
 without `.gitignore`, then preflight and run seed `20260722` serially. Seeds
 22/23, the six-scenario matrix and all-source replay remain before independent
 8-UAV no-uncertainty work.
+
+## AAMAS 2027 - fourth post-isolation 8-UAV full-method seed retained (2026-08-01)
+
+At launch revision `aa1d691`, zero-process/config-hash/absent-path preflight
+launched seed `20260722` once in the unique
+`outputs/core_8uav_post_actor_isolation/core_8uav_uncertainty_predictive_graph_seed_20260722/`
+root under the same frozen CUDA/CPU-OSQP, real-child-exit and wait-only
+protocol. It naturally exited 0 after about 326.1 seconds at 100,224
+transitions / 261 updates.
+
+Identity verifies eight UAVs, `uncertainty_predictive_graph`, prediction and
+uncertainty enabled, and CUDA. Final checkpoint SHA-256 is
+`6FEDFF756141676241DF75E2630588D72C321873FD69144B6A7F2177AD8E85A0`;
+summary SHA-256 is
+`F495994B39E0B432159FDC2A4CB242A52F6F71999CAFED3F036DE74187AA18FC`;
+telemetry SHA-256 is
+`F14093318F94C186772E6386B7E33B2A126E6C845DC3A4D146C23F62BF1D5CEA`.
+Training is zero-event over 12,528 decisions; all 32 retained intervals are
+zero-event over 80 decisions each; final evaluation is zero-event over 160.
+Initial evaluation retains one `solve_time_limit` over 160 decisions, exactly
+matching the sole stderr warning.
+
+Replay
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_seed_20260722_replay_20260801.jsonl`
+plus summary has one source and zero errors under unchanged
+20,000/0.1s/100/0.5/5.0 values. The time-limit source replays `solved` without
+fallback with slack about 430.832. JSONL SHA-256 is
+`AA24B00493DF20A5680A05805A5D7D37C477F2FC1EA4466DA1180D472C4613BC`;
+summary SHA-256 is
+`C8673ABFCFB40A266A8602AB4FBDD1105AF0432D0B3FA64F7B08B5A809EEF61D`.
+No CBF value changed.
+
+This is fourth-seed provenance only, not a scale, safety, fallback-rate,
+performance or generalization result. Next: commit/push these four documents
+without `.gitignore`, then preflight and run final seed `20260723` serially.
+The six-scenario matrix and all-source replay remain before independent 8-UAV
+no-uncertainty work.
