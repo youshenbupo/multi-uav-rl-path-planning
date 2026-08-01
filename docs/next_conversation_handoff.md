@@ -190,6 +190,41 @@ processes before relying on any status below.
   staging `.gitignore`, then zero-process/absent-path preflight and serial
   predictive seed `20260723`.
 
+- **Post-isolation `predictive_graph` five-seed training is complete,
+  2026-08-01 (seed-20260723 launch revision `249ffd5`; documentation pending
+  commit):** after a zero-process/absent-path preflight, seed `20260723` used
+  the frozen config SHA-256
+  `1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`, three
+  UAVs, CUDA, `--graph-mode predictive_graph`, 100k requested steps, and the
+  unique root
+  `outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260723/`.
+  It naturally completed at 100,032 transitions / 1,042 updates. Summary,
+  final checkpoint, live telemetry, TensorBoard and distinct launcher logs are
+  retained; identity confirms delivered-packet prediction enabled and
+  uncertainty disabled. The checkpoint hash is
+  `666898D014CADA85ECF118116CD9E7E6634B5820AEC3452626A06CC37467D0A7`, and
+  telemetry hash is
+  `BC79C49915BED01AA5517E40E7EBEC1F84033BC748797296D95CF7752ABF9100`.
+
+  Training retains one `maximum iterations reached` CBF fallback in 33,344
+  decisions; initial/final short evaluations retain zero in 160/103. The
+  per-seed replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260723_replay_20260801.jsonl`
+  plus summary retains one event and zero errors under unchanged
+  20,000/0.1s/100/0.5/5.0 CPU-OSQP settings; it replays `solved` without
+  fallback. This is diagnostic provenance only. Eligible predictive roots are
+  `20260719`, `20260720`, `20260721`, `20260722_launcherretry2`, and
+  `20260723`; preserve/exclude the original seed-20260722 root and retry1
+  prelaunch attempt.
+
+  Next: update/commit/push the three documents without staging `.gitignore`,
+  then confirm zero Python jobs and absent targets, create a wholly new
+  predictive evaluation root, and serially evaluate all five final checkpoints
+  across `nominal`, `delay_only`, `loss_only`, `dynamic_only`, `combined`, and
+  `ood_communication_obstacle`, 20 episodes per cell, CUDA inference and CPU
+  OSQP. Audit 30 summaries/JSONL and 600 records, then run the unchanged
+  all-source replay. Do not begin `uncertainty_predictive_graph` first.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

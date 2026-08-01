@@ -728,3 +728,17 @@
   settings. Preserve/exclude the original root and retry1 prelaunch attempt;
   this valid seed remains provenance only. Final predictive seed `20260723`,
   the six-scenario matrix and all-source replay remain required.
+- Post-isolation `predictive_graph` seed `20260723` is valid at 100,032 CUDA
+  transitions / 1,042 updates. Its training telemetry retains one `maximum
+  iterations reached` fallback in 33,344 decisions, while initial/final short
+  evaluations retain zero in 160/103 decisions. The unchanged-protocol replay
+  at
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260723_replay_20260801.jsonl`
+  plus companion summary records one source event, zero replay errors, and a
+  `solved` replay without fallback. This status change under identical numeric
+  settings is diagnostic variability, not permission to tune the CBF and not a
+  safety or fallback-rate conclusion. The predictive five-seed training set is
+  complete, but all six scenarios for all five final checkpoints and their
+  all-source replay remain required. The invalid original seed-20260722 root
+  and retry1 prelaunch attempt remain permanently excluded; do not start the
+  uncertainty-aware arm before the predictive evaluation/replay gate closes.

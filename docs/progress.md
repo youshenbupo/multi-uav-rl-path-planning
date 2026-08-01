@@ -2724,3 +2724,50 @@ This is completion and diagnostic provenance only, not performance, safety,
 fallback-rate, significance, or comparison evidence. Next: commit/push these
 documents without staging `.gitignore`, then serially train final predictive
 seed `20260723` after zero-process/absent-path preflight.
+
+## AAMAS 2027 - fifth post-isolation predictive GraphMAPPO seed retained (2026-08-01)
+
+At launch revision `249ffd5`, a zero-process and absent-path preflight preceded
+the final serial three-UAV `predictive_graph` seed. The frozen configuration
+SHA-256 remained
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`, and the
+exact CUDA command was
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py
+--config configs\rl\dynamic_graph_baseline.yaml --device cuda --seed 20260723
+--num-uavs 3 --graph-mode predictive_graph --total-steps 100000 --output-dir
+outputs\core_3uav_post_actor_isolation\core_3uav_predictive_graph_seed_20260723`.
+Only the transient launcher process normalized the duplicate-case PATH entries;
+no persistent environment, repository, training, evaluation, or CBF setting
+changed. Distinct stdout/stderr logs use the matching top-level seed-20260723
+paths.
+
+The process naturally completed at 100,032 transitions / 1,042 updates. Its
+summary confirms three UAVs, `predictive_graph`, delivered-packet prediction
+enabled, uncertainty disabled, and CUDA. Final checkpoint, summary, live
+telemetry, TensorBoard data, and launcher logs are retained under
+`outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260723/`.
+The final checkpoint SHA-256 is
+`666898D014CADA85ECF118116CD9E7E6634B5820AEC3452626A06CC37467D0A7`; live
+telemetry SHA-256 is
+`BC79C49915BED01AA5517E40E7EBEC1F84033BC748797296D95CF7752ABF9100`.
+
+Training retained one `maximum iterations reached` emergency fallback in
+33,344 CBF decisions; initial/final short evaluations retained zero in 160/103
+decisions. The sole stderr line is the matching fallback warning. The
+append-safe CPU-OSQP replay at
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260723_replay_20260801.jsonl`
+plus companion summary retains the one source event with zero replay errors
+under unchanged 20,000 iterations, 0.1 seconds, slack penalty 100, uncertainty
+gain 0.5, and cap 5.0. The replay status is `solved` without emergency fallback;
+this diagnostic variability does not authorize solver tuning or a safety,
+performance, fallback-rate, significance, or comparison claim.
+
+The eligible predictive roots are now seeds `20260719`, `20260720`, `20260721`,
+`20260722_launcherretry2`, and `20260723`; the first seed-20260722 root and its
+retry1 prelaunch attempt remain excluded. Five-seed training provenance is
+complete, but the arm is not evidence-complete until all five final checkpoints
+finish the six canonical scenarios at 20 episodes per cell and an all-source
+training/evaluation replay is retained. Next: commit/push these documents
+without staging `.gitignore`, then preflight an entirely new predictive
+evaluation root and run the 30 cells serially before starting
+`uncertainty_predictive_graph`.
