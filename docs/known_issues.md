@@ -933,3 +933,14 @@
   This one seed does not establish an ablation, scale, safety, fallback-rate,
   performance or generalization result; four further independently trained
   seeds, the 30-cell matrix and all-source replay remain required.
+- Post-isolation 5-UAV no-uncertainty seed `20260720` is valid at 100,080 CUDA
+  transitions / 417 updates with zero CBF emergency events across training,
+  initial/final evaluations, all six retained interval evaluations and stderr.
+  Its required zero-event replay has zero events/errors under frozen
+  20,000/0.1s/100/0.0/0.0 values. An earlier orchestration call timed out after
+  one second before Python child creation and produced no root/log; its distinct
+  sidecar `...seed_20260720_prelaunch_timeout_20260801.ABORTED.json` is retained
+  and excluded. Do not count that prelaunch failure as a training seed or hide
+  it. Two valid seeds still establish no ablation, scale, safety, fallback-rate,
+  performance or generalization result; seeds 21--23, the matrix and all-source
+  replay remain required.

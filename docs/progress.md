@@ -3477,3 +3477,52 @@ effect. Next: commit/push these four documents without `.gitignore`, then
 zero-process/absent-path preflight and run seed `20260720` serially under the
 same frozen command and wait-only discipline. Complete five valid seeds, their
 six-scenario matrix and all-source replay before post-isolation 8-UAV work.
+
+## AAMAS 2027 - second post-isolation 5-UAV no-uncertainty seed retained (2026-08-01)
+
+At launch revision `a0fbafd`, the preflight verified no Python process, the
+frozen config SHA-256
+`6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`, and
+absent seed-`20260720` root, stdout, stderr and replay paths. The first
+orchestration call was mistakenly given a one-second shell timeout and returned
+124 before Python child creation. Immediate process/path audit found zero Python
+processes and no root or log. The retained excluded sidecar is
+`outputs/core_5uav_post_actor_isolation_ablation_seed_20260720_prelaunch_timeout_20260801.ABORTED.json`
+(SHA-256
+`CC4BA555F79151EF1F3BB22876D970414DB9887FE0D726293F6749F444C74AB1`).
+It records a no-result prelaunch failure and is not a seed attempt for any
+training, replay, aggregation, statistics or manuscript use.
+
+Because all canonical paths remained absent, the actual independent seed then
+launched once with the same frozen five-UAV `predictive_graph` command in
+`outputs/core_5uav_post_actor_isolation_ablation/core_5uav_predictive_no_uncertainty_seed_20260720/`.
+Only its execution-cell wait handle was used while active. It naturally exited
+0 after about 718.5 seconds at 100,080 transitions / 417 updates. Summary
+identity verifies predicted delivered-packet knowledge enabled, uncertainty
+disabled, five UAVs and CUDA; OSQP remained CPU-side. Final checkpoint SHA-256
+is `577324344D9150020A6100D56C68D3AE7E4E52A0BB34013B2CAC6C555175E043`;
+summary SHA-256 is
+`A9EBA6C7A9A569323FB0E051CCDF2592699A9610FBAA6B0458EC60F6748B8D40`;
+telemetry SHA-256 is
+`00D731D151147F16CCCA488F3FFDF0607445329792009CFE797E3A85DB91975C`.
+
+Training, initial and final records have zero emergency events over
+20,016/160/160 CBF decisions. All six append-only interval evaluations at
+15,360 through 92,160 transitions retain 80 decisions and zero events each;
+stderr is empty. The append-safe zero-event replay is
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_seed_20260720_replay_20260801.jsonl`
+plus companion summary. Under unchanged 20,000 maximum iterations, 0.1-second
+solve limit, slack penalty 100, uncertainty-margin gain 0.0 and cap 0.0, it
+records `event_count=0` and `replay_error_count=0`. The deliberately empty JSONL
+SHA-256 is
+`E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`;
+summary SHA-256 is
+`18652CA0835CC0F05BC285279D286BCA049BFF95AB7ED271D619E8371E0108C2`.
+No CBF value changed.
+
+This is second-seed post-isolation ablation provenance only, not a scale,
+safety, fallback-rate, performance, generalization or causal method effect.
+Next: commit/push these four documents without `.gitignore`, then
+zero-process/absent-path preflight and run seed `20260721` serially under the
+same frozen command and wait-only discipline. Seeds 21--23, the six-scenario
+matrix and all-source replay remain before post-isolation 8-UAV work.

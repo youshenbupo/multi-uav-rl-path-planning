@@ -6,6 +6,41 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Second valid post-isolation 5-UAV independent no-uncertainty seed retained,
+  2026-08-01 (launch revision `a0fbafd`; documentation pending commit):** a
+  zero-process/config-hash/absent-path preflight preceded seed `20260720` in
+  `outputs/core_5uav_post_actor_isolation_ablation/core_5uav_predictive_no_uncertainty_seed_20260720/`.
+  The first orchestration call used an erroneous one-second shell timeout and
+  exited 124 before Python child creation; no root or logs were created. Its
+  separate excluded record is
+  `outputs/core_5uav_post_actor_isolation_ablation_seed_20260720_prelaunch_timeout_20260801.ABORTED.json`.
+  The canonical paths remained absent, so the actual frozen CUDA command then
+  launched once and was observed only through its execution-cell wait handle.
+  It naturally exited 0 after about 718.5 seconds at 100,080 transitions / 417
+  updates.
+
+  Identity is five UAVs, `predictive_graph`, delivered-packet prediction true,
+  uncertainty false and CUDA; OSQP remained CPU-side. Training, initial/final
+  and all six retained interval evaluations are zero-event over respectively
+  20,016, 160/160 and 80 decisions per interval; stderr is empty. Final
+  checkpoint SHA-256 is
+  `577324344D9150020A6100D56C68D3AE7E4E52A0BB34013B2CAC6C555175E043`;
+  telemetry SHA-256 is
+  `00D731D151147F16CCCA488F3FFDF0607445329792009CFE797E3A85DB91975C`.
+  The zero-event replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_seed_20260720_replay_20260801.jsonl`
+  plus summary uses unchanged 20,000/0.1s/100/0.0/0.0 values and records zero
+  events/errors. Empty JSONL SHA-256 is
+  `E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`;
+  summary SHA-256 is
+  `18652CA0835CC0F05BC285279D286BCA049BFF95AB7ED271D619E8371E0108C2`.
+  This is second-seed provenance only.
+
+  Next: commit/push these four documents without `.gitignore`, then preflight
+  and run seed `20260721` serially under the identical frozen 5-UAV ablation
+  command and wait-only discipline. Seeds 21--23, the 30-cell matrix and
+  all-source replay remain before any post-isolation 8-UAV work.
+
 - **First valid post-isolation 5-UAV independent no-uncertainty seed retained,
   2026-08-01 (launch revision `bedeb3a`; documentation pending commit):** seed
   `20260719` ran from scratch in the unique root
