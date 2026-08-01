@@ -4223,3 +4223,58 @@ now exist. Next: commit/push these four documents without `.gitignore`, then
 run a zero-process/config-hash/absent-path preflight and train seed `20260723`
 serially under the identical frozen protocol. The six-scenario matrix and
 35-input all-source replay remain after that final seed.
+
+## AAMAS 2027 - fifth post-isolation 8-UAV no-uncertainty seed retained (2026-08-01)
+
+At launch revision `34f9303`, a zero-process/CUDA/config-hash/absent-path
+preflight launched independent seed `20260723` once in the unique
+`outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260723/`
+root. The command used frozen
+`configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml`
+SHA-256
+`F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`,
+eight UAVs, `predictive_graph`, CUDA neural execution and CPU OSQP. The
+transparent stderr wrapper returned the real child code. Training naturally
+exited 0 after 822.9 seconds at 100,224 transitions / 261 updates.
+
+Identity verifies delivered-packet prediction enabled, uncertainty disabled,
+eight UAVs and CUDA. The 33 checkpoint files include the final checkpoint with
+SHA-256
+`27EC107FF41B2C3248EBE4737D6A118064F90C821F5BF4F2C8B5294B1A74C35D`.
+Summary and live telemetry SHA-256 values are
+`61CE5AFB8F02B81F8FBF75917EE23C3A8B7E62A5119E387384460B125E2C3AAE`
+and
+`296DDD53EB412A3AAD09C5C79ADA822E10DCF52E923B8039ED32372DA0B26FB7`;
+stdout/stderr SHA-256 values are
+`BCC80D828AF3EF0EA72FC5C6711D3C80DF6ECCA43D2FF3BFCF91DF869A1F843F`
+and
+`8850D5AA4AFA7EA0E182B4425CEF9BF841A18E1B626A9C9714FD496319F5A5D8`.
+No training `ABORTED.json` exists.
+
+Training retains 301 emergency events over 12,528 decisions; initial/final
+evaluations retain 13/6 over 160/160. All 32 append-only intervals are present;
+23 contain 137 events. Across all 457 canonical sources, 456 are
+`solve_time_limit` and one is `maximum iterations reached`; stderr has exactly
+the same 456/1 notices. The equal last-interval compatibility alias is not
+double counted.
+
+Replay
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260723_replay_20260801.jsonl`
+plus summary uses unchanged 20,000 maximum iterations, 0.1-second limit, slack
+penalty 100, uncertainty-margin gain 0.0 and cap 0.0. It contains 457 records,
+457 unique pointers and zero errors, grouped as 301 training, 13 initial, 137
+interval and six final. Replay statuses are 129 `solved`, 326
+`solve_time_limit`, one `solved inaccurate` and one `maximum iterations
+reached`; 328 use emergency fallback. JSONL/summary SHA-256 values are
+`EC7C2D0717D1486A2145CBC7D5CD5A44BE545B099093276996D8969D4E584500`
+and
+`988D31FB83C5FDEE0706168456B3728778956CABFFD09473828E3EAB2C368A92`.
+
+No CBF value, observation contract or controller changed. Five eligible
+post-isolation 8-UAV no-uncertainty trainings now exist, but this closes only
+training/per-seed replay provenance. It establishes no causal, scale, safety,
+fallback-rate, performance or generalization result. Next: commit/push these
+four documents without `.gitignore`, then verify all five checkpoint identities,
+no Python process and absent fresh matrix/replay targets. Run a new 5-by-6
+canonical evaluation matrix at 20 episodes per cell, audit all 600 records, and
+then replay the five training plus 30 evaluation telemetry inputs.

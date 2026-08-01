@@ -1098,3 +1098,14 @@
   do not tune or select away the numerical cluster. Four valid seeds establish
   no causal, scale, safety, fallback-rate, performance or generalization
   result; seed `20260723`, the valid matrix and 35-input replay remain required.
+- Post-isolation 8-UAV no-uncertainty seed `20260723` is valid at 100,224 CUDA
+  transitions / 261 updates. Its 457 fully retained sources comprise 301
+  training, 13 initial, 137 append-only interval and six final events; 456 are
+  `solve_time_limit` and one is `maximum iterations reached`, exactly matching
+  stderr. Its unchanged 20,000/0.1s/100/0.0/0.0 replay has 457 unique pointers
+  and zero errors. Replay statuses are 129 solved, 326 time-limit, one
+  solved-inaccurate and one maximum-iterations; 328 use emergency fallback.
+  This finishes five eligible independent trainings but proves no causal,
+  scale, safety, fallback-rate, performance or generalization result. A fresh
+  30-cell/600-record evaluation matrix and 35-input all-source replay remain
+  mandatory before any paired or descriptive analysis.

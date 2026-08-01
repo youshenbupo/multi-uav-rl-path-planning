@@ -6,6 +6,35 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Fifth valid post-isolation 8-UAV independent no-uncertainty seed retained;
+  training gate complete, 2026-08-01 (launch revision `34f9303`;
+  documentation pending commit):** zero-process/CUDA/config-hash/absent-path
+  preflight launched seed `20260723` once in
+  `outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260723/`.
+  It naturally exited 0 after 822.9 seconds at 100,224 transitions / 261
+  updates. Identity is eight UAVs, `predictive_graph`, delivered-packet
+  prediction true, uncertainty false, CUDA neural execution and CPU OSQP.
+  Checkpoint/summary/telemetry SHA-256 values are
+  `27EC107FF41B2C3248EBE4737D6A118064F90C821F5BF4F2C8B5294B1A74C35D`,
+  `61CE5AFB8F02B81F8FBF75917EE23C3A8B7E62A5119E387384460B125E2C3AAE`
+  and
+  `296DDD53EB412A3AAD09C5C79ADA822E10DCF52E923B8039ED32372DA0B26FB7`.
+
+  The 457 canonical sources are 301 training, 13 initial, 137 append-only
+  interval and six final events; source statuses are 456 time-limit and one
+  maximum-iterations, exactly matching stderr. Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260723_replay_20260801.jsonl`
+  plus summary retains 457 unique pointers, zero errors, 129 solved, 326
+  time-limit, one solved-inaccurate and one maximum-iterations result; 328 use
+  fallback under unchanged 20,000/0.1s/100/0.0/0.0. JSONL/summary SHA-256 are
+  `EC7C2D0717D1486A2145CBC7D5CD5A44BE545B099093276996D8969D4E584500`
+  and
+  `988D31FB83C5FDEE0706168456B3728778956CABFFD09473828E3EAB2C368A92`.
+  Five eligible independent training roots now exist. This is provenance only,
+  not a result claim. Next: commit/push four documents without `.gitignore`,
+  then run and audit a fresh 30-cell/600-record six-scenario matrix followed by
+  the 35-input all-source replay before any paired/descriptive analysis.
+
 - **Fourth valid post-isolation 8-UAV independent no-uncertainty seed retained
   after two preserved launcher failures, 2026-08-01 (launch revision
   `0d61b16`; documentation pending commit):** preflight confirmed remote/HEAD
