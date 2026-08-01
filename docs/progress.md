@@ -4022,3 +4022,60 @@ scale, safety, fallback-rate, performance or generalization result. Next:
 commit/push these four documents without `.gitignore`, then preflight and run
 seed `20260720` serially. Four further seeds, the six-scenario matrix and
 all-source replay remain before any paired/descriptive analysis.
+
+## AAMAS 2027 - second post-isolation 8-UAV no-uncertainty seed retained (2026-08-01)
+
+At launch revision `999cedf`, a zero-process/CUDA/config-hash and absent-path
+preflight launched independent seed `20260720` once in the unique
+`outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260720/`
+root. It used frozen
+`configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml`
+SHA-256
+`F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`,
+eight UAVs, `predictive_graph`, 100k requested steps, CUDA neural execution and
+CPU OSQP. The transient launcher normalized duplicate-case PATH entries and
+retained the real child exit code; only the execution-cell wait handle was used
+while active. It naturally exited 0 after about 807.2 seconds at 100,224
+transitions / 261 updates.
+
+Summary identity verifies delivered-packet prediction enabled, uncertainty
+disabled, eight UAVs and CUDA. Final checkpoint SHA-256 is
+`B49EED820696E1487CA9EC98992F9750C3AD012875A04951E8DCCA3C27F02FE3`;
+summary SHA-256 is
+`F80509CED072F1BC98AD33BA6F0ED77CAB02650555A7C4CA1E8F6019A145F9B5`;
+telemetry SHA-256 is
+`3D9D38CAAA4267AA10AC16C1D81654774C24FCB69D531B61741D133BA28B4695`;
+stdout/stderr SHA-256 values are respectively
+`D63C538944DCAC998C3A7A536C0BCBB01BF754B185234A4C708CF2AC5F212AA3`
+and
+`A184D64488D900C69471FE3A5CB8AA6114789571C0A58A652CBACCB22CFDE440`.
+
+Training retains 275 emergency events over 12,528 CBF decisions: 273
+`solve_time_limit`, one `solved inaccurate` and one `maximum iterations
+reached`. Initial/final evaluations retain 11/14 time-limit events over 160/160
+decisions. All 32 append-only interval evaluations are retained; 24 intervals
+contain 157 time-limit events and eight are zero-event. These 457 complete
+sources exactly match stderr's 455 time-limit, one solved-inaccurate and one
+maximum-iterations notices. No event-accounting discrepancy or `ABORTED.json`
+exists. No slack, iteration cap, solve-time limit, tolerance, uncertainty
+margin, observation contract or controller changed.
+
+The append-safe replay is
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260720_replay_20260801.jsonl`
+plus companion summary. Under unchanged 20,000 maximum iterations, 0.1-second
+solve limit, slack penalty 100, uncertainty-margin gain 0.0 and cap 0.0, it
+retains all 457 unique source pointers and zero errors. Replay statuses are 118
+`solved`, 337 `solve_time_limit`, one `solved inaccurate` and one `maximum
+iterations reached`; 339 replays use emergency fallback. JSONL SHA-256 is
+`D0D9186F7FB8DDD9EB85A09FF0FE783108137FC0E95BCE54765067E171BBE58E`;
+summary SHA-256 is
+`E363E2278D58D76072528AD207276DF566EBAB9B19F4D07910D2A3229B48CB8D`.
+
+This large seed-local numerical cluster is diagnostic provenance only. It does
+not establish a causal, scale, safety, fallback-rate, performance or
+generalization result and does not justify changing any CBF value. Two valid
+8-UAV no-uncertainty seeds now exist. Next: commit/push these four documents
+without `.gitignore`, then zero-process/absent-path preflight and run seed
+`20260721` serially under the identical frozen command and wait-only discipline.
+Seeds 21--23, the six-scenario matrix and 35-input all-source replay remain
+before any paired/descriptive analysis.

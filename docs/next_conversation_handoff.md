@@ -6,6 +6,51 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Second valid post-isolation 8-UAV independent no-uncertainty seed retained,
+  2026-08-01 (launch revision `999cedf`; documentation pending commit):** a
+  zero-process/CUDA/config-hash/absent-path preflight launched independent seed
+  `20260720` once in
+  `outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260720/`.
+  It used frozen
+  `configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml`
+  SHA-256
+  `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`,
+  eight UAVs, `predictive_graph`, CUDA neural execution, CPU OSQP, a
+  real-child-exit wrapper and wait-only monitoring. It naturally exited 0
+  after about 807.2 seconds at 100,224 transitions / 261 updates. Identity
+  verifies predicted delivered-packet knowledge enabled and uncertainty
+  disabled.
+
+  Final checkpoint SHA-256 is
+  `B49EED820696E1487CA9EC98992F9750C3AD012875A04951E8DCCA3C27F02FE3`;
+  summary SHA-256 is
+  `F80509CED072F1BC98AD33BA6F0ED77CAB02650555A7C4CA1E8F6019A145F9B5`;
+  telemetry SHA-256 is
+  `3D9D38CAAA4267AA10AC16C1D81654774C24FCB69D531B61741D133BA28B4695`.
+  Training retains 275 events over 12,528 decisions (273
+  `solve_time_limit`, one `solved inaccurate`, one `maximum iterations
+  reached`). Initial/final evaluations retain 11/14 time-limit events over
+  160/160 decisions. All 32 append-only intervals are retained; 24 intervals
+  contribute 157 time-limit events and eight are zero-event. The complete 457
+  sources exactly match stderr's 455 time-limit, one solved-inaccurate and one
+  maximum-iterations notices. No event-accounting gap or `ABORTED.json`
+  exists.
+
+  Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260720_replay_20260801.jsonl`
+  plus summary retains all 457 unique source pointers with zero errors under
+  unchanged 20,000/0.1s/100/0.0/0.0 values. Replay statuses are 118 `solved`,
+  337 `solve_time_limit`, one `solved inaccurate` and one `maximum iterations
+  reached`; 339 replays use emergency fallback. JSONL SHA-256 is
+  `D0D9186F7FB8DDD9EB85A09FF0FE783108137FC0E95BCE54765067E171BBE58E`;
+  summary SHA-256 is
+  `E363E2278D58D76072528AD207276DF566EBAB9B19F4D07910D2A3229B48CB8D`.
+  No CBF value changed. This numerical cluster is retained diagnostic
+  provenance, not a causal, scale, safety, fallback-rate, performance or
+  generalization result. Next: commit/push these four documents without
+  `.gitignore`, then preflight and run seed `20260721` serially under the same
+  frozen protocol. Seeds 21--23, the 30-cell matrix and 35-input replay remain.
+
 - **First valid post-isolation 8-UAV independent no-uncertainty seed retained,
   2026-08-01 (launch revision `a8485d6`; documentation pending commit):** after
   the full-method gate closed, frozen config

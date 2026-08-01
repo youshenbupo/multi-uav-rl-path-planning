@@ -1054,3 +1054,15 @@
   seed-local provenance only, not a causal, scale, safety, fallback-rate,
   performance or generalization result. Four further seeds, the matrix and
   all-source replay remain required.
+- Post-isolation 8-UAV no-uncertainty seed `20260720` is valid at 100,224 CUDA
+  transitions / 261 updates, but retains a large seed-local CBF numerical
+  cluster. Training has 275 events over 12,528 decisions (273 time-limit, one
+  solved-inaccurate and one maximum-iterations), initial/final evaluations have
+  11/14 time-limit events, and 24 of 32 append-only interval evaluations retain
+  another 157 time-limit events. All 457 contexts exactly match stderr and are
+  replayed with zero errors under unchanged 20,000/0.1s/100/0.0/0.0 values;
+  339 replays still use emergency fallback. Preserve every raw source and
+  replay status without tuning, selective reporting or interpreting this one
+  seed as a causal, scale, safety, fallback-rate, performance or generalization
+  result. Seeds `20260721`--`20260723`, the valid 30-cell matrix and 35-input
+  replay remain required.
