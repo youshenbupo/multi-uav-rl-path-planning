@@ -3245,3 +3245,49 @@ preflight and rerun numeric seed `20260721` from scratch in the unique
 root. Use only the active execution-cell wait handle. Eligibility requires
 natural completion and a one-to-one audit between all retained interval/training
 events and stderr notices before replay.
+
+## AAMAS 2027 - valid post-isolation 5-UAV full seed 20260721 telemetry retry retained (2026-08-01)
+
+After commit `a645024` was pushed, a zero-process/CUDA/config-hash and
+absent-path preflight launched numeric seed `20260721` from scratch in the
+unique root
+`outputs/core_5uav_post_actor_isolation/core_5uav_uncertainty_predictive_graph_seed_20260721_intervaltelemetryretry1/`.
+The command retained frozen `configs/rl/dynamic_graph_5uav.yaml` SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`,
+five UAVs, `uncertainty_predictive_graph`, 100k requested steps, CUDA neural
+execution and CPU OSQP. While active, only the original execution-cell wait
+handle was used. The process naturally exited 0 after about 316 seconds at
+100,160 transitions / 313 updates.
+
+Final checkpoint, summary, telemetry, TensorBoard and distinct logs are
+retained. Summary identity confirms predicted delivered-packet knowledge and
+uncertainty enabled, five UAVs and CUDA. Checkpoint SHA-256 is
+`7658AAD2E4FF2A5CC0034E0AACBD916866179827261D41867317796815108A8B` and
+live telemetry SHA-256 is
+`361B38F493BD1A220D2B2E24B936BB8A69B51068A99A1F7B06795F3F6C519159`.
+The telemetry has six append-only interval records at transitions 15,360,
+30,720, 46,080, 61,440, 76,800 and 92,160. Each interval retains its CBF
+`emergency_events` array; all six are zero-event over 80 decisions each.
+Initial/final evaluations are zero-event over 160/160 decisions. Training has
+one `maximum iterations reached` event over 20,032 decisions, exactly matching
+the sole stderr fallback notice. This closes the earlier event-accounting gap
+for the retry; the non-retry root remains invalid through `ABORTED.json`.
+
+The no-overwrite replay is
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_seed_20260721_intervaltelemetryretry1_replay_20260801.jsonl`
+plus companion summary. Under unchanged 20,000 iterations, 0.1 seconds, slack
+penalty 100, uncertainty gain 0.5 and cap 5.0 on CPU OSQP, it retains one source
+event, zero replay errors, and remains `maximum iterations reached` with
+emergency fallback. JSONL SHA-256 is
+`6EC8D55348D6F44D0351C5EC4B0C85998F655734B248A2AB2B74D72E7108CD9D`;
+summary SHA-256 is
+`6627159DAAA487F7E7CB360D8A55536A5DE2BE7A6DC67A346163A45B930B386A`.
+No CBF value changed.
+
+Only `intervaltelemetryretry1` is eligible for numeric seed `20260721`.
+This is seed-local scale and audit provenance, not performance, safety,
+fallback-rate, generalization or method evidence. Next: commit/push the three
+documents without `.gitignore`, then zero-process/absent-path preflight and run
+5-UAV full seed `20260722` serially under the same frozen protocol and
+wait-only discipline. Its telemetry must preserve all interval histories before
+replay or eligibility.

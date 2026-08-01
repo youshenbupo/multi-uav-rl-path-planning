@@ -888,3 +888,14 @@
   83-versus-81 description for the present workspace state. Do not change the
   legacy inventory/test as part of the AAMAS telemetry repair; audit that rename
   separately.
+- Only the post-isolation 5-UAV full-method
+  `seed_20260721_intervaltelemetryretry1` root is eligible for numeric seed
+  `20260721`. It completed at 100,160 CUDA transitions / 313 updates after the
+  prospective fix and retains all six interval evaluations. Training has one
+  `maximum iterations reached` event in 20,032 decisions; all interval,
+  initial and final evaluations are zero-event, and the one retained source
+  exactly matches the sole stderr warning. Its unchanged-protocol replay has
+  zero errors and remains an emergency fallback. This does not establish a
+  scale-level fallback rate or safety result and does not permit solver tuning.
+  The non-retry naturally completed root remains permanently excluded because
+  four of its contexts were lost.

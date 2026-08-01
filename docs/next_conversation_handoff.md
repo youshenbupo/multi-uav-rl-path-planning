@@ -6,6 +6,32 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Valid 5-UAV full seed `20260721` telemetry retry retained, 2026-08-01
+  (launch revision `a645024`; documentation pending commit):** after the
+  append-only telemetry repair was committed/pushed, numeric seed `20260721`
+  ran from scratch in the unique `intervaltelemetryretry1` root with frozen
+  5-UAV config, CUDA network execution, CPU OSQP and wait-only monitoring. It
+  naturally exited 0 after about 316 seconds at 100,160 transitions / 313
+  updates. The checkpoint hash is `7658AAD2...08A8B`; telemetry hash is
+  `361B38F4...19159`.
+
+  The repaired telemetry retains six interval-evaluation records at 15,360
+  through 92,160 transitions, each with a CBF event array. All intervals are
+  zero-event over 80 decisions each; initial/final are 0/160 and 0/160.
+  Training retains one `maximum iterations reached` event in 20,032 decisions,
+  exactly matching the sole stderr notice. Its unique unchanged-protocol replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_seed_20260721_intervaltelemetryretry1_replay_20260801.jsonl`
+  has one source, zero errors and remains maximum-iterations fallback. Only the
+  retry is eligible; the naturally completed non-retry root remains excluded
+  via `ABORTED.json` because four interval contexts were lost. No CBF value
+  changed and no outcome claim follows.
+
+  Next: commit/push these documents without `.gitignore`, then confirm zero
+  Python/GPU training work and absent new paths. Launch 5-UAV full seed
+  `20260722` in a unique root under the same frozen command and wait-only
+  discipline. After natural exit, require complete interval-history/stderr
+  accounting, then replay all events before seed `20260723`.
+
 - **5-UAV full seed `20260721` completed but is audit-invalid; prospective
   interval telemetry repair verified, 2026-08-01 (launch revision `3836319`;
   repair documentation pending commit):** the frozen seed naturally exited 0
