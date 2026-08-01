@@ -2951,3 +2951,33 @@ fallback-rate, significance, robustness, or comparison evidence. Next:
 commit/push these documents without staging `.gitignore`, then preflight and
 launch uncertainty seed `20260720` serially in a new root under the same
 no-parallel-shell waiting discipline and frozen protocol.
+
+## AAMAS 2027 - second valid post-isolation uncertainty-aware seed retained (2026-08-01)
+
+At revision `9f6c5f1`, a zero-process/absent-path preflight launched independent
+seed `20260720` under the same frozen three-UAV CUDA command, changing only the
+numeric seed and the unique root
+`outputs/core_3uav_post_actor_isolation/core_3uav_uncertainty_predictive_graph_seed_20260720/`.
+The active run was observed only through its existing execution-cell wait
+handle; no parallel shell command ran. It naturally exited 0 after about 595
+seconds and reached 100,032 transitions / 1,042 updates.
+
+The summary verifies `uncertainty_predictive_graph`, delivered-packet
+prediction and uncertainty both enabled, three UAVs, and CUDA. Final checkpoint,
+summary, live telemetry, TensorBoard and distinct stdout/stderr are retained;
+stderr is empty. Final checkpoint SHA-256 is
+`F07979DDA3540A399D80ABD0604A30DE512EFFC934E510643EBF1C5FD7899D2E` and live
+telemetry SHA-256 is
+`CDCAD0AC73962BF9B94E3C3BC5F24E1E052CA61A51C2E0FF95F6DF3AB4F1C432`.
+Training, initial and final evaluations retain zero CBF emergency events over
+33,344, 160 and 131 decisions respectively.
+
+The append-safe replay
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260720_replay_20260801.jsonl`
+plus companion summary uses unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP values
+and records `event_count=0`, `replay_error_count=0`; the empty JSONL is
+deliberate zero-event provenance. This is the second valid seed artifact only,
+not a performance, safety, fallback-rate, significance, robustness, or
+comparison result. Next: commit/push these documents without `.gitignore`,
+then preflight and serially launch seed `20260721` with the same frozen command
+and wait-only active-run discipline.

@@ -798,3 +798,12 @@
   the non-retry and retry1 roots. Four further valid uncertainty-aware seeds,
   their complete six-scenario matrix and all-source replay are still required
   before any outcome or cross-method claim.
+- Post-isolation `uncertainty_predictive_graph` seed `20260720` is valid at
+  100,032 CUDA transitions / 1,042 updates. Training, initial and final CBF
+  records are zero-event over 33,344, 160 and 131 decisions; stderr is empty.
+  Its retained zero-event replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260720_replay_20260801.jsonl`
+  plus summary records `event_count=0`, `replay_error_count=0` under unchanged
+  values. It completed under the wait-only active-run discipline, which must
+  remain in force. This is seed-local provenance only. Three further valid
+  seeds, the full six-scenario matrix and all-source replay remain required.

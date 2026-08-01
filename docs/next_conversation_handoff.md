@@ -332,6 +332,23 @@ processes before relying on any status below.
   that discipline for fresh uncertainty seed `20260720`. Four further seeds,
   all 30 evaluation cells and all-source replay remain before this arm closes.
 
+- **Second valid post-isolation `uncertainty_predictive_graph` seed retained,
+  2026-08-01 (launch revision `9f6c5f1`; documentation pending commit):** seed
+  `20260720` ran in the unique matching root under the frozen three-UAV CUDA
+  command. Only the existing execution-cell wait handle was used while active;
+  it naturally exited 0 after about 595 seconds and completed 100,032
+  transitions / 1,042 updates. Summary identity confirms delivered-packet
+  prediction and uncertainty enabled. Final checkpoint, summary, telemetry,
+  TensorBoard and logs are retained; stderr is empty. CBF records are 0/33,344
+  training, 0/160 initial and 0/131 final. Its zero-event replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260720_replay_20260801.jsonl`
+  plus summary records zero events/errors under frozen values.
+
+  Next: commit/push these documents without `.gitignore`; then zero-process/
+  absent-path preflight and launch seed `20260721` serially, again using no
+  parallel shell while the run is active. Seeds `20260721`--`20260723`, the
+  30-cell evaluation matrix, and all-source replay remain.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
