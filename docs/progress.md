@@ -3176,3 +3176,23 @@ without fallback. This is first-seed scale provenance only, not performance,
 safety, fallback-rate or generalization evidence. Next: commit/push documents
 without `.gitignore`, then preflight and run seed `20260720` serially under the
 same 5-UAV full-method and wait-only protocol.
+
+## AAMAS 2027 - second post-isolation 5-UAV full-method seed retained (2026-08-01)
+
+At revision `4fc64aa`, independent seed `20260720` used the unchanged frozen
+5-UAV full-method command and fresh
+`outputs/core_5uav_post_actor_isolation/core_5uav_uncertainty_predictive_graph_seed_20260720/`
+root. With wait-only monitoring it naturally exited 0 after about 599 seconds
+at 100,160 transitions / 313 updates. Identity verifies prediction and
+uncertainty enabled, five UAVs and CUDA. Final checkpoint SHA-256 is
+`82366DBB9B4B866646791A4D0B026223FA253708EB387F03AF8D00B52AE5859C`; telemetry
+SHA-256 is
+`1E78610C498A69A501F29A46E30CD10B5EEBF3F0C1C00DC72AB7D4E316EF31B2`.
+
+Training records one `solved inaccurate` fallback in 20,032 CBF decisions;
+initial/final are zero over 160/160. Its unique replay
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_seed_20260720_replay_20260801.jsonl`
+has one source, zero errors and remains `solved inaccurate` with emergency
+fallback under unchanged values. This is seed-local provenance only. Next:
+commit/push without `.gitignore`, then preflight and run 5-UAV full seed
+`20260721` serially under the same protocol.

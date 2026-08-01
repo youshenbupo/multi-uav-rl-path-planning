@@ -863,3 +863,8 @@
   has two sources, zero errors, one replay fallback and one solved replay under
   frozen values. Do not infer a scale or safety result. Four further full seeds,
   their matrix/replay, and the independently trained no-uncertainty arm remain.
+- Post-isolation 5-UAV full seed `20260720` is valid at 100,160 CUDA
+  transitions / 313 updates. It has one `solved inaccurate` training fallback
+  in 20,032 decisions, zero initial/final events, and a one-event replay that
+  remains fallback with zero replay errors under frozen values. This is not a
+  scale/safety claim. Three further full seeds and all downstream gates remain.

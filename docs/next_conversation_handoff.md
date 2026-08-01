@@ -455,6 +455,14 @@ processes before relying on any status below.
   5-UAV full seed `20260720` with the identical frozen command and wait-only
   discipline. Four full seeds remain before evaluation or ablation training.
 
+- **Second valid post-isolation 5-UAV full seed retained, 2026-08-01 (launch
+  revision `4fc64aa`; documentation pending commit):** seed `20260720`
+  completed 100,160 transitions / 313 updates with correct full-method identity
+  and wait-only monitoring. Training has one `solved inaccurate` fallback in
+  20,032 decisions; initial/final are 0/160 and 0/160. Its one-event replay
+  remains `solved inaccurate` with fallback and zero errors under frozen values.
+  Next: commit/push without `.gitignore`, then run seed `20260721` identically.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
