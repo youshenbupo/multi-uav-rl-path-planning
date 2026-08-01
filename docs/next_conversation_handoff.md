@@ -257,6 +257,28 @@ processes before relying on any status below.
   retain every fallback and invalid attempt, and do not begin its evaluation
   until all five valid trainings finish.
 
+- **First post-isolation `uncertainty_predictive_graph` seed-`20260719`
+  attempt is invalid and retained, 2026-08-01 (launch revision `6d6ba24`;
+  documentation pending commit):** the frozen three-UAV CUDA command used the
+  unique non-retry root
+  `outputs/core_3uav_post_actor_isolation/core_3uav_uncertainty_predictive_graph_seed_20260719/`.
+  It exited at 78,624 transitions with signed code `-1073741510` (Windows
+  `0xC000013A`); the last complete checkpoint is step 76,800 and no final
+  checkpoint or summary exists. Stdout/stderr are empty, so the cause remains
+  unknown. The exit code does not identify the source of the interruption, and
+  no causal claim is made about read-only monitoring.
+
+  `ABORTED.json` preserves the command, revision, hashes and exclusions. The
+  partial telemetry records zero events in 26,208 training, 160 initial and 71
+  last-interval CBF decisions, but the entire root is ineligible for replay,
+  evaluation, aggregation, statistics, or manuscript use. Do not overwrite,
+  resume, delete, or reinterpret it. Next: commit/push the three documents
+  without staging `.gitignore`; confirm zero dedicated Python work and absent
+  retry targets; then rerun numeric seed `20260719` serially in the distinct
+  `core_3uav_uncertainty_predictive_graph_seed_20260719_launcherretry1` root
+  with unchanged configuration and CBF values. Only a naturally completed
+  retry may enter the matched five-seed arm.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

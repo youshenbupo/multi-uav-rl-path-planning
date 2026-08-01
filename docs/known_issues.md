@@ -757,3 +757,16 @@
   `uncertainty_predictive_graph` five-seed training/evaluation/replay arm is
   still required before any cross-method use, followed by prescribed 5/8-UAV
   and independently trained ablation evidence.
+- The first post-isolation `uncertainty_predictive_graph` seed-`20260719`
+  attempt is invalid and permanently retained at
+  `outputs/core_3uav_post_actor_isolation/core_3uav_uncertainty_predictive_graph_seed_20260719/`.
+  Its process exited with Windows code `0xC000013A` at 78,624 transitions,
+  after the last complete 76,800-step checkpoint, with empty stdout/stderr and
+  no final checkpoint or summary. The issuing cause is unknown; do not infer
+  one from the interrupt-style code or adjacent read-only monitoring. Partial
+  telemetry has zero events over 26,208 training, 160 initial, and 71 latest
+  interval CBF decisions, but `ABORTED.json` excludes the entire root from
+  replay, evaluation, aggregation, statistics, and claims. Do not overwrite,
+  resume, or delete it. Retry the numeric seed only in a unique
+  `launcherretry1` root under identical training and CBF settings before
+  continuing the remaining uncertainty-aware seeds.

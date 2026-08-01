@@ -2824,3 +2824,40 @@ perform a zero-process/new-root preflight and begin matched five-seed
 `uncertainty_predictive_graph` training serially, starting with seed
 `20260719`; no 5/8-UAV or cross-method claim precedes that arm's complete
 matrix and replay.
+
+## AAMAS 2027 - first uncertainty-aware seed attempt interrupted and excluded (2026-08-01)
+
+After the predictive-arm gate and documentation push, a zero-process and
+absent-path preflight at revision `6d6ba24` launched the first matched
+three-UAV `uncertainty_predictive_graph` attempt with frozen config SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`:
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py
+--config configs\rl\dynamic_graph_baseline.yaml --device cuda --seed 20260719
+--num-uavs 3 --graph-mode uncertainty_predictive_graph --total-steps 100000
+--output-dir
+outputs\core_3uav_post_actor_isolation\core_3uav_uncertainty_predictive_graph_seed_20260719`.
+The transient launcher-only PATH normalization was unchanged. Separate
+top-level stdout/stderr logs were created and retained.
+
+The process did not complete naturally: it exited with signed code
+`-1073741510` (Windows `0xC000013A`) at 78,624 transitions. The last complete
+checkpoint is `checkpoints/graph_mappo_step_76800.pt`; no final checkpoint or
+`summary.json` exists. Both launcher logs are empty, so the causal mechanism is
+unknown. The interrupt-style exit code is retained as evidence but does not
+identify what issued the interruption. Read-only monitoring during the run is
+not asserted as causal.
+
+The preserved live telemetry SHA-256 is
+`89CD48936C924B6AE17F15E33227B7F6A28EC7B34C68C1963A018C8A32B95B76`.
+It contains zero emergency events over 26,208 training CBF decisions, 160
+initial-evaluation decisions, and 71 last-interval decisions. These partial
+zero-event observations are ineligible and are not replayed or interpreted as
+a safety/fallback result. The retained parseable
+`outputs/core_3uav_post_actor_isolation/core_3uav_uncertainty_predictive_graph_seed_20260719/ABORTED.json`
+(SHA-256
+`585A2CB501693A19CBA0589FB548D0D6EFAFA2212824A7152E747FB50341B71E`)
+excludes the whole root from training eligibility, evaluation, CBF replay,
+aggregation, statistics, and manuscript claims. No experiment or CBF setting
+changed. Next: commit/push these documents without staging `.gitignore`, then
+retry numeric seed `20260719` only in a distinct `launcherretry1` root after a
+zero-process/absent-path preflight; preserve this interrupted root forever.
