@@ -807,3 +807,11 @@
   values. It completed under the wait-only active-run discipline, which must
   remain in force. This is seed-local provenance only. Three further valid
   seeds, the full six-scenario matrix and all-source replay remain required.
+- Post-isolation `uncertainty_predictive_graph` seed `20260721` is valid at
+  100,032 CUDA transitions / 1,042 updates. Training retains one `maximum
+  iterations reached` fallback in 33,344 decisions; initial/final records are
+  0/160 and 0/160. Its unchanged-protocol replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260721_replay_20260801.jsonl`
+  has one source, zero errors, and replays `solved` without fallback. This
+  diagnostic variability is not permission to tune CBF and is not an outcome
+  claim. Two further seeds plus the complete evaluation/replay gate remain.

@@ -2981,3 +2981,29 @@ not a performance, safety, fallback-rate, significance, robustness, or
 comparison result. Next: commit/push these documents without `.gitignore`,
 then preflight and serially launch seed `20260721` with the same frozen command
 and wait-only active-run discipline.
+
+## AAMAS 2027 - third valid post-isolation uncertainty-aware seed retained (2026-08-01)
+
+At revision `30e164d`, seed `20260721` used the frozen three-UAV CUDA
+`uncertainty_predictive_graph` command in the unique root
+`outputs/core_3uav_post_actor_isolation/core_3uav_uncertainty_predictive_graph_seed_20260721/`.
+Only the active execution-cell wait handle was used during the run. It naturally
+exited 0 after about 1,422 seconds and completed 100,032 transitions / 1,042
+updates. Summary identity confirms delivered-packet prediction and uncertainty
+enabled, three UAVs and CUDA. Final checkpoint, summary, live telemetry,
+TensorBoard and separate stdout/stderr are retained.
+
+Training records one `maximum iterations reached` emergency fallback over
+33,344 CBF decisions; initial/final evaluations record zero over 160/160.
+Stderr contains only the matching fallback warning. Final checkpoint SHA-256 is
+`092AC439646CFBBC12270FA5A12D97C85A92E5BD43AFC4BF07BD16DAD23BE909` and live
+telemetry SHA-256 is
+`F62A2229D171775FF531618EA874B9DC4E4694B34CAECB86EABE101389B601B0`.
+The unique replay
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260721_replay_20260801.jsonl`
+plus summary retains the one source event with zero replay errors under
+unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP values. It replays `solved` without
+fallback; this does not authorize solver tuning or any safety/performance
+claim. This is third-seed provenance only. Next: commit/push without staging
+`.gitignore`, then preflight and launch seed `20260722` serially with the same
+wait-only active-run discipline.

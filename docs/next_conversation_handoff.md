@@ -349,6 +349,21 @@ processes before relying on any status below.
   parallel shell while the run is active. Seeds `20260721`--`20260723`, the
   30-cell evaluation matrix, and all-source replay remain.
 
+- **Third valid post-isolation `uncertainty_predictive_graph` seed retained,
+  2026-08-01 (launch revision `30e164d`; documentation pending commit):** seed
+  `20260721` ran under the frozen command in its unique root, with only wait
+  calls while active. It naturally exited 0 after about 1,422 seconds and
+  completed 100,032 transitions / 1,042 updates. Identity confirms prediction
+  and uncertainty enabled, three UAVs, and CUDA. Training has one `maximum
+  iterations reached` fallback in 33,344 decisions; initial/final are 0/160 and
+  0/160. The matching one-event replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260721_replay_20260801.jsonl`
+  has zero errors and replays `solved` without fallback under frozen values.
+
+  Next: commit/push the documents without `.gitignore`, then preflight and run
+  seed `20260722` serially using the same wait-only discipline. Seeds 22/23,
+  all 30 evaluation cells and all-source replay remain.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
