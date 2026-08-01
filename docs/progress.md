@@ -3810,3 +3810,44 @@ performance or generalization result. Next: commit/push these four documents
 without `.gitignore`, then preflight and run seed `20260721` serially under the
 same frozen command. Three further full-method seeds, the six-scenario matrix
 and all-source replay remain before independent 8-UAV no-uncertainty work.
+
+## AAMAS 2027 - third post-isolation 8-UAV full-method seed retained (2026-08-01)
+
+At launch revision `ec21477`, zero-process/config-hash/absent-path preflight
+launched seed `20260721` once in the unique
+`outputs/core_8uav_post_actor_isolation/core_8uav_uncertainty_predictive_graph_seed_20260721/`
+root. The frozen 8-UAV CUDA/CPU-OSQP command used the real-child-exit wrapper
+and wait-only monitoring. It naturally exited 0 after about 358.3 seconds at
+100,224 transitions / 261 updates.
+
+Identity verifies eight UAVs, `uncertainty_predictive_graph`, delivered-packet
+prediction and uncertainty enabled, and CUDA. Final checkpoint SHA-256 is
+`FA68BD69DF940CCCEE704876EB4C210B4315A8FFF30E896553B9975CE1E5ABFA`;
+summary SHA-256 is
+`EDC55CA4895645E1B3EE38FBB400A4BC1313CB7F01C9F30026862984E0DAC4A6`;
+telemetry SHA-256 is
+`4C0BF2066F53DC075895B923072BAEDA9F4D811C58BF3918A27C02DE9B7AD882`.
+Training retains one `solved inaccurate` event over 12,528 decisions. Initial
+evaluation retains one `solve_time_limit` over 160 decisions; final evaluation
+is zero-event over 160. All 32 interval evaluations are retained: transition
+6,144 contains one `solved inaccurate`, transition 9,216 contains four
+`maximum iterations reached`, and the other 30 contain zero events over 80
+decisions each. The seven sources exactly match seven stderr warnings.
+
+The append-safe replay is
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_seed_20260721_replay_20260801.jsonl`
+plus summary. Under unchanged 20,000 maximum iterations, 0.1-second solve limit,
+slack penalty 100, uncertainty-margin gain 0.5 and cap 5.0, it has seven sources
+and zero errors. Training solved-inaccurate, initial time-limit and interval
+solved-inaccurate replay `solved` without fallback; the four interval
+maximum-iterations sources remain fallbacks. JSONL SHA-256 is
+`E8B59625E3A7D2E1699BB21817594598B0ED42FE21E8C6C3E554B0B149212B29`;
+summary SHA-256 is
+`6F26DBECF5DE5476F39D56A817495C3514C6FA23A057A3CE43584E5941EA69C7`.
+No CBF value changed.
+
+This is third-seed provenance only, not a scale, safety, fallback-rate,
+performance or generalization result. Next: commit/push these four documents
+without `.gitignore`, then preflight and run seed `20260722` serially. Seeds
+22/23, the six-scenario matrix and all-source replay remain before independent
+8-UAV no-uncertainty work.

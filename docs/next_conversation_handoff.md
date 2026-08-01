@@ -6,6 +6,43 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Third valid post-isolation 8-UAV full-method seed retained, 2026-08-01
+  (launch revision `ec21477`; documentation pending commit):** seed `20260721`
+  ran once in
+  `outputs/core_8uav_post_actor_isolation/core_8uav_uncertainty_predictive_graph_seed_20260721/`
+  and naturally exited 0 after about 358.3 seconds at 100,224 transitions / 261
+  updates. Identity is eight UAVs, uncertainty-aware predictive graph, CUDA
+  neural execution and CPU OSQP.
+
+  Final checkpoint SHA-256 is
+  `FA68BD69DF940CCCEE704876EB4C210B4315A8FFF30E896553B9975CE1E5ABFA`;
+  summary SHA-256 is
+  `EDC55CA4895645E1B3EE38FBB400A4BC1313CB7F01C9F30026862984E0DAC4A6`;
+  telemetry SHA-256 is
+  `4C0BF2066F53DC075895B923072BAEDA9F4D811C58BF3918A27C02DE9B7AD882`.
+  Training retains one `solved inaccurate` event; initial evaluation retains
+  one `solve_time_limit`; interval transition 6,144 retains one `solved
+  inaccurate`, and transition 9,216 retains four `maximum iterations reached`
+  events. The other 30 intervals and final evaluation are zero-event. All seven
+  sources exactly match stderr.
+
+  Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_seed_20260721_replay_20260801.jsonl`
+  plus summary has seven sources and zero errors under unchanged
+  20,000/0.1s/100/0.5/5.0 values. The first three sources replay `solved`
+  without fallback; all four maximum-iterations sources remain fallbacks.
+  JSONL SHA-256 is
+  `E8B59625E3A7D2E1699BB21817594598B0ED42FE21E8C6C3E554B0B149212B29`;
+  summary SHA-256 is
+  `6F26DBECF5DE5476F39D56A817495C3514C6FA23A057A3CE43584E5941EA69C7`.
+  No CBF value changed. Three seeds establish no scale, safety, fallback-rate,
+  performance or generalization result.
+
+  Next: commit/push these four documents without `.gitignore`, then preflight
+  and run seed `20260722` under the identical frozen command. Seeds 22/23, the
+  30-cell matrix and all-source replay remain before independent 8-UAV
+  no-uncertainty work.
+
 - **Second valid post-isolation 8-UAV full-method seed retained, 2026-08-01
   (launch revision `d0f1484`; documentation pending commit):** independent
   seed `20260720` ran once in
