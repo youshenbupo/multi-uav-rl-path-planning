@@ -944,3 +944,12 @@
   it. Two valid seeds still establish no ablation, scale, safety, fallback-rate,
   performance or generalization result; seeds 21--23, the matrix and all-source
   replay remain required.
+- Post-isolation 5-UAV no-uncertainty seed `20260721` is valid at 100,080 CUDA
+  transitions / 417 updates. Training retains one `solve_time_limit` and one
+  `maximum iterations reached` event over 20,016 decisions; initial/final and
+  all six interval evaluations are zero-event, and the two sources exactly
+  match stderr. Its unchanged replay has zero errors: the time-limit event
+  solves without fallback, while maximum-iterations remains fallback. Preserve
+  this variability without tuning. Three valid seeds still do not establish an
+  ablation, scale, safety, fallback-rate, performance or generalization result;
+  seeds 22/23, the matrix and all-source replay remain required.

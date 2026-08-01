@@ -3526,3 +3526,47 @@ Next: commit/push these four documents without `.gitignore`, then
 zero-process/absent-path preflight and run seed `20260721` serially under the
 same frozen command and wait-only discipline. Seeds 21--23, the six-scenario
 matrix and all-source replay remain before post-isolation 8-UAV work.
+
+## AAMAS 2027 - third post-isolation 5-UAV no-uncertainty seed retained (2026-08-01)
+
+At launch revision `91d7b42`, a zero-process/config-hash/absent-path preflight
+launched independent seed `20260721` in the unique
+`outputs/core_5uav_post_actor_isolation_ablation/core_5uav_predictive_no_uncertainty_seed_20260721/`
+root. It used frozen config SHA-256
+`6C42C3D5F957E3C8C21F496DCCA6D09F312AE95E816825EB9C301F539E22FA8B`,
+five UAVs, `predictive_graph`, 100k requested steps, CUDA neural execution and
+CPU OSQP. Only its execution-cell wait handle was used while active. It
+naturally exited 0 after about 719.7 seconds at 100,080 transitions / 417
+updates.
+
+Summary identity verifies delivered-packet prediction enabled, uncertainty
+disabled, five UAVs and CUDA. Final checkpoint SHA-256 is
+`1703BCC62F16CEAB1EC527532DE21D18440CE7113174B4EA2C565AC5B7AFB7B0`;
+summary SHA-256 is
+`28A92FD8D817054A89E35C0F08A77DADAE4E6E916A0D923FDDA86EF17C8C5851`;
+telemetry SHA-256 is
+`8315F8C6052BA80575695DF7EA3302385F4E08AE8AA94DB18EBA1481B04D290F`.
+Training retains one `solve_time_limit` and one `maximum iterations reached`
+event over 20,016 decisions. Initial/final evaluations are zero-event over
+160/160 decisions. All six append-only intervals at transitions 15,360 through
+92,160 retain 80 decisions and zero events each. The two source events exactly
+match the two stderr notices.
+
+The append-safe replay is
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_seed_20260721_replay_20260801.jsonl`
+plus companion summary. Under unchanged 20,000 maximum iterations, 0.1-second
+solve limit, slack penalty 100, uncertainty-margin gain 0.0 and cap 0.0, it has
+two sources and zero errors. The recorded time-limit event replays `solved`
+without fallback; the recorded maximum-iterations event remains maximum
+iterations with fallback. JSONL SHA-256 is
+`BF8981935C820794D61682CC0FBE2DAB2BEAA4AF024359C87FAE861822BCCAB7`;
+summary SHA-256 is
+`2DBA62589172951A8EF2266BA5E318FAF1D64E78091C3F9D8ADE7CF0CBC3455B`.
+No CBF value changed.
+
+This is third-seed post-isolation ablation provenance only, not a scale,
+safety, fallback-rate, performance, generalization or causal method effect.
+Next: commit/push these four documents without `.gitignore`, then preflight and
+run seed `20260722` serially under the same frozen command and wait-only
+discipline. Seeds 22/23, the six-scenario matrix and all-source replay remain
+before post-isolation 8-UAV work.

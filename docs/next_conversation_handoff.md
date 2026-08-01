@@ -6,6 +6,36 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Third valid post-isolation 5-UAV independent no-uncertainty seed retained,
+  2026-08-01 (launch revision `91d7b42`; documentation pending commit):** seed
+  `20260721` ran in the unique
+  `outputs/core_5uav_post_actor_isolation_ablation/core_5uav_predictive_no_uncertainty_seed_20260721/`
+  root under the frozen config and wait-only discipline. It naturally exited 0
+  after about 719.7 seconds at 100,080 transitions / 417 updates. Identity is
+  five UAVs, `predictive_graph`, prediction true, uncertainty false and CUDA;
+  OSQP stayed CPU-side. Final checkpoint SHA-256 is
+  `1703BCC62F16CEAB1EC527532DE21D18440CE7113174B4EA2C565AC5B7AFB7B0`;
+  telemetry SHA-256 is
+  `8315F8C6052BA80575695DF7EA3302385F4E08AE8AA94DB18EBA1481B04D290F`.
+
+  Training retains one `solve_time_limit` and one `maximum iterations reached`
+  event over 20,016 decisions; initial/final and all six retained interval
+  evaluations are zero-event. The two sources exactly match stderr. The replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_seed_20260721_replay_20260801.jsonl`
+  plus summary has two sources and zero errors under unchanged
+  20,000/0.1s/100/0.0/0.0 values: the time-limit source replays `solved`
+  without fallback, while the maximum-iterations source remains fallback.
+  Replay JSONL SHA-256 is
+  `BF8981935C820794D61682CC0FBE2DAB2BEAA4AF024359C87FAE861822BCCAB7`;
+  summary SHA-256 is
+  `2DBA62589172951A8EF2266BA5E318FAF1D64E78091C3F9D8ADE7CF0CBC3455B`.
+  This is third-seed provenance only.
+
+  Next: commit/push these four documents without `.gitignore`, then preflight
+  and run seed `20260722` serially under the identical frozen command and
+  wait-only discipline. Seeds 22/23, the 30-cell matrix and all-source replay
+  remain before post-isolation 8-UAV work.
+
 - **Second valid post-isolation 5-UAV independent no-uncertainty seed retained,
   2026-08-01 (launch revision `a0fbafd`; documentation pending commit):** a
   zero-process/config-hash/absent-path preflight preceded seed `20260720` in
