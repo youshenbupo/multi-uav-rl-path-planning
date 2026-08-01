@@ -6,6 +6,55 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Post-isolation 8-UAV full-method evidence gate is complete, 2026-08-01
+  (matrix launch revision `81913bf`; documentation pending commit):** retained
+  launcher
+  `outputs/core_8uav_post_actor_isolation_uncertainty_predictive_graph_evaluation_launcher_20260801.ps1`
+  (SHA-256
+  `062271DBCF034D3D9BE47062B15FF8DEC2C54C408ED7C10FEA605729343E8FFB`)
+  naturally exited 0 after about 460.6 seconds. The unique root is
+  `outputs/core_8uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/`.
+  It serially evaluates eligible seeds `20260719`--`20260723` across all six
+  canonical scenarios with 20 episodes per cell.
+
+  Independent content audit verified 30 directories, 30 summaries, 30 raw
+  JSONL files, 30 runtime telemetry files, 30 environment files and exactly 600
+  records. Seed, scenario, episode indices, eligible checkpoint,
+  `graph_mappo_checkpoint` controller and completed step 100,224 all match.
+  Every environment record confirms eight UAVs, CUDA,
+  `own_truth_and_delivered_packets_only` and `cpu_osqp_when_enabled`. All 30
+  cell exits are zero; all cell and launcher stderr files are empty. Evaluation
+  telemetry contains 12,000 CBF decisions and zero emergency events. Launcher
+  stdout SHA-256 is
+  `F8B3F5F46914AF09EA2F64CACDB841C3D525F4368204E4F6CA2438C5D0B2A208`;
+  empty stderr SHA-256 is
+  `E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`.
+
+  The append-safe 35-input replay is
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_5seed_training_and_evaluation_replay_20260801.jsonl`
+  plus companion summary. It uses exactly five eligible training and 30 valid
+  evaluation telemetry files under unchanged 20,000/0.1s/100/0.5/5.0 values.
+  It retains 16 training source events, zero replay errors and ten replay
+  fallbacks. Recorded statuses are seven `maximum iterations reached`, three
+  `solve_time_limit` and six `solved inaccurate`; replay statuses are three
+  maximum-iterations fallbacks, six time-limit fallbacks, one
+  solved-inaccurate fallback and six solved non-fallback decisions. This
+  run-order result differs from the sum of separate per-seed replays and is
+  retained as solver timing/order diagnostic provenance, never as permission to
+  tune. JSONL SHA-256 is
+  `205B1A2E4EA56A862E4E195E3119AA922E39CC5741628A78B2671D814174BAF2`;
+  summary SHA-256 is
+  `A5D8B27BB5CDC89174E4E168A8D02BF53068DDF03ACD60F69F2E520D419FD2B3`.
+
+  This closes the post-isolation 8-UAV full-method training, evaluation and CBF
+  provenance gate only; it establishes no scale, safety, fallback-rate,
+  performance or generalization result. Next: commit/push these four documents
+  without `.gitignore`, then audit frozen
+  `configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml`,
+  historical exclusions and new target absence. Start independently trained
+  post-isolation 8-UAV no-uncertainty seed `20260719` from scratch, then finish
+  its five seeds, matrix and replay before any paired/descriptive analysis.
+
 - **Post-isolation 8-UAV full-method five-seed training is complete,
   2026-08-01 (final seed launch revision `40a1dbb`; documentation pending
   commit):** seed `20260723` ran once in

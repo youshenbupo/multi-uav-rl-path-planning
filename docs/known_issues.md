@@ -1034,3 +1034,15 @@
   but this establishes no scale, safety, fallback-rate, performance or
   generalization result. The 30-cell matrix/all-source replay and independently
   trained no-uncertainty arm remain required.
+- The post-isolation 8-UAV full-method arm now has a valid 30-cell/600-record
+  evaluation root at
+  `outputs/core_8uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/`.
+  All identities, 30 zero exits and empty stderr files pass audit; evaluation
+  contains 12,000 CBF decisions and zero events. Its 35-input all-source replay
+  has 16 training sources, zero errors and ten fallbacks under frozen values.
+  The all-source replay status mix differs from separate per-seed replays,
+  demonstrating timing/order sensitivity of diagnostic OSQP reruns; preserve
+  both sets and do not tune or select between them. This completes within-arm
+  provenance only, not a scale, safety, fallback-rate, performance or
+  generalization result. The independently trained post-isolation 8-UAV
+  no-uncertainty arm remains entirely missing.

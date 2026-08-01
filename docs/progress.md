@@ -3927,3 +3927,55 @@ generalization result. Next: commit/push these four documents without
 `.gitignore`, then preflight and run a fresh 30-cell/600-record six-scenario
 evaluation. After its identity audit, run the unchanged 35-input all-source
 replay before independent 8-UAV no-uncertainty work.
+
+## AAMAS 2027 - post-isolation 8-UAV full-method evidence gate complete (2026-08-01)
+
+At matrix launch revision `81913bf`, five-checkpoint/config-hash/zero-process
+and absent-path preflight retained
+`outputs/core_8uav_post_actor_isolation_uncertainty_predictive_graph_evaluation_launcher_20260801.ps1`.
+Its SHA-256 is
+`062271DBCF034D3D9BE47062B15FF8DEC2C54C408ED7C10FEA605729343E8FFB`.
+The serial launcher naturally exited 0 after about 460.6 seconds and created
+the unique
+`outputs/core_8uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/`
+root. It evaluated eligible seeds `20260719`--`20260723` across `nominal`,
+`delay_only`, `loss_only`, `dynamic_only`, `combined` and
+`ood_communication_obstacle`, with 20 episodes per cell, CUDA inference and CPU
+OSQP.
+
+Independent recursive audit verified exactly 30 cell directories, 30 summaries,
+30 raw JSONL files, 30 runtime telemetry files, 30 environment files and 600
+records. Seed, scenario, episode indices 0--19, eligible checkpoint,
+`graph_mappo_checkpoint` and checkpoint completed step 100,224 all match.
+Environment records uniformly retain eight UAVs, CUDA,
+`own_truth_and_delivered_packets_only` and `cpu_osqp_when_enabled`. All 30 cell
+exit codes are zero and all cell/launcher stderr files are empty. Evaluation
+telemetry totals 12,000 CBF decisions and zero emergency events. Launcher stdout
+SHA-256 is
+`F8B3F5F46914AF09EA2F64CACDB841C3D525F4368204E4F6CA2438C5D0B2A208`;
+empty stderr SHA-256 is
+`E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`.
+
+The append-safe all-source replay is
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_5seed_training_and_evaluation_replay_20260801.jsonl`
+plus summary. Its exact 35 inputs are five eligible training telemetry files and
+30 valid evaluation runtime telemetry files. Under unchanged 20,000 maximum
+iterations, 0.1-second solve limit, slack penalty 100, uncertainty-margin gain
+0.5 and cap 5.0, it retains 16 training sources, zero errors and ten replay
+fallbacks. Recorded statuses are seven `maximum iterations reached`, three
+`solve_time_limit` and six `solved inaccurate`; replay statuses are three
+maximum-iterations fallbacks, six time-limit fallbacks, one solved-inaccurate
+fallback and six solved non-fallback decisions. This all-source run differs
+from the combined separate per-seed replay outcomes because diagnostic solver
+timing/order is variable. Both are retained; no CBF value is changed and no
+result is selected for tuning. JSONL SHA-256 is
+`205B1A2E4EA56A862E4E195E3119AA922E39CC5741628A78B2671D814174BAF2`;
+summary SHA-256 is
+`A5D8B27BB5CDC89174E4E168A8D02BF53068DDF03ACD60F69F2E520D419FD2B3`.
+
+This closes post-isolation 8-UAV full-method training, evaluation and CBF
+provenance only, not a scale, safety, fallback-rate, performance or
+generalization result. Next: commit/push these four documents without
+`.gitignore`, then audit the frozen 8-UAV no-uncertainty config and launch
+independent seed `20260719` from scratch. Complete its five seeds, matrix and
+replay before any paired/descriptive analysis.
