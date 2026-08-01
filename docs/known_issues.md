@@ -833,3 +833,15 @@
   trainings now exist (`20260719_launcherretry2`, `20260720`--`20260723`), but
   the arm still lacks its 30-cell evaluation matrix and all-source replay.
   Preserve both invalid seed-20260719 attempts and keep all claims gated.
+- The post-isolation three-UAV uncertainty-aware arm now has a valid 30-cell,
+  600-record evaluation root at
+  `outputs/core_3uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/`.
+  Its evaluation telemetry has 10,855 decisions and zero emergency events. The
+  35-input all-source replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5seed_training_and_evaluation_replay_20260801.jsonl`
+  retains three training events, zero replay errors and one replay fallback.
+  This closes within-arm provenance, not an outcome, safety, fallback-rate or
+  superiority claim. Both interrupted seed-20260719 roots remain excluded.
+  Before new scale/ablation work, audit existing 5/8-UAV artifacts against the
+  post-isolation actor-information boundary and independent-training rule;
+  never reuse stale or mismatched evidence merely because directories exist.

@@ -3063,3 +3063,50 @@ retained. No performance, safety, fallback-rate, significance, robustness or
 comparison claim follows yet. Next: commit/push documents without `.gitignore`,
 then preflight a wholly new evaluation root and run all 30 cells serially with
 CUDA inference, CPU OSQP and per-cell logs before all-source replay.
+
+## AAMAS 2027 - post-isolation uncertainty-aware evidence matrix retained (2026-08-01)
+
+At revision `c9bff6e`, a zero-process/new-root preflight verified the five
+eligible final checkpoints and unchanged dynamic-graph configuration. The
+retained launcher
+`outputs/core_3uav_post_actor_isolation_uncertainty_predictive_graph_evaluation_launcher_20260801.ps1`
+(SHA-256
+`2941E7A898C7B4F877C09E5716F25642CFDC16B38AD79C2975FB93B49EA8DD0C`)
+used the transient single-PATH normalization, per-cell `Start-Process -Wait`,
+and no parallel shell monitoring. It evaluated the eligible checkpoints
+`20260719_launcherretry2`, `20260720`, `20260721`, `20260722`, and `20260723`
+over `nominal`, `delay_only`, `loss_only`, `dynamic_only`, `combined`, and
+`ood_communication_obstacle`, with 20 episodes per cell, CUDA network
+inference and CPU OSQP. The unique root is
+`outputs/core_3uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/`.
+
+The launcher naturally exited 0 after about 333 seconds. Direct content audit
+found zero errors: exactly 30 directories, 30 parseable summaries, 30 parseable
+JSONL files, and 600 episode records with correct numeric seed, scenario,
+eligible checkpoint, controller and 100,032-step identity. All environment
+records identify three UAVs, CUDA, actor own truth plus delivered packets only,
+and CPU OSQP. All 30 cell exit codes are zero; 30 cell stderr files and launcher
+stderr are empty. Evaluation telemetry retains 10,855 CBF decisions and zero
+emergency events.
+
+The append-safe 35-input replay is
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5seed_training_and_evaluation_replay_20260801.jsonl`
+plus summary, using exactly five eligible training and 30 valid evaluation
+telemetry files. Under unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP values it
+retains three source events and zero replay errors. Recorded statuses are one
+`maximum iterations reached` and two `solved inaccurate`; replay statuses are
+two `solved` and one `solved inaccurate`, with one replay emergency fallback.
+JSONL SHA-256 is
+`3371F6BCF08237C0E1BE75F241EDC66092E178D209DA493C69A2200890DE5084`; summary
+SHA-256 is
+`8BE10BCD9EEAC4EE0FCCF694D40CDC63559CAAA8A34624CFCD0D1E2770FC0090`.
+
+This closes the post-isolation three-UAV uncertainty-aware training,
+evaluation, and CBF-provenance gate and therefore completes the prescribed
+three-UAV four-arm artifact matrix. It does not by itself establish
+performance, safety, fallback rate, significance, robustness, generalization,
+or superiority. Next: commit/push these documents without `.gitignore`, then
+read-only audit the existing post-isolation 5/8-UAV and independently trained
+ablation artifacts/protocol before launching anything new; fill only genuinely
+missing matched evidence in fresh roots, then proceed to statistical and
+primary-literature gates.

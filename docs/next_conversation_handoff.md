@@ -396,6 +396,31 @@ processes before relying on any status below.
   cell, CUDA inference and CPU OSQP. Audit 30 summaries/JSONL and 600 records,
   then run the unchanged 35-input all-source replay.
 
+- **Post-isolation three-UAV uncertainty-aware evidence gate is complete,
+  2026-08-01 (matrix launch revision `c9bff6e`; documentation pending
+  commit):** the unique
+  `outputs/core_3uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/`
+  root has 30/30 valid cells and 600 identity-checked episode JSONL records for
+  five eligible checkpoints by six canonical scenarios. CUDA inference, CPU
+  OSQP, actor own-truth-plus-delivered-packets metadata, 30 zero exits, and
+  empty cell/launcher stderr were verified. Evaluation telemetry contains
+  10,855 CBF decisions and zero emergency events.
+
+  The 35-input all-source replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5seed_training_and_evaluation_replay_20260801.jsonl`
+  plus summary has three source events and zero errors under frozen values.
+  Sources are one `maximum iterations reached` and two `solved inaccurate`;
+  replay gives two `solved`, one `solved inaccurate`, and one replay fallback.
+  The two invalid seed-20260719 roots remain excluded. This closes the 3-UAV
+  four-arm artifact matrix only, not any numerical or safety claim.
+
+  Next: commit/push these documents without `.gitignore`, then perform a
+  read-only inventory/audit of current post-isolation 5-UAV, 8-UAV and
+  independently trained ablation artifacts against the current information
+  boundary and matched protocol. Do not blindly rerun or accept older roots;
+  identify exact missing valid cells/seeds first, preserve exclusions, and use
+  new roots for any required work before statistics and literature claims.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
