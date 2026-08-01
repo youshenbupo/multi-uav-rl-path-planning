@@ -953,3 +953,14 @@
   this variability without tuning. Three valid seeds still do not establish an
   ablation, scale, safety, fallback-rate, performance or generalization result;
   seeds 22/23, the matrix and all-source replay remain required.
+- Post-isolation 5-UAV no-uncertainty seed `20260722` is valid at 100,080 CUDA
+  transitions / 417 updates. Training, final evaluation and all six retained
+  interval evaluations are zero-event; initial evaluation retains eight
+  `solve_time_limit` events over 160 decisions, exactly matching the eight
+  stderr notices. The unchanged-protocol replay has eight sources and zero
+  errors: four replay `solved` without fallback and four remain
+  `solve_time_limit` fallbacks. This nondeterministic replay split is retained
+  as diagnostic provenance and is not permission to change CBF values. Four
+  valid seeds still establish no ablation, scale, safety, fallback-rate,
+  performance or generalization result; seed 23, the matrix and all-source
+  replay remain required.

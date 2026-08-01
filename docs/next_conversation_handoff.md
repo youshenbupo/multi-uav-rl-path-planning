@@ -6,6 +6,39 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Fourth valid post-isolation 5-UAV independent no-uncertainty seed retained,
+  2026-08-01 (launch revision `7f1cc72`; documentation pending commit):** seed
+  `20260722` ran in the unique
+  `outputs/core_5uav_post_actor_isolation_ablation/core_5uav_predictive_no_uncertainty_seed_20260722/`
+  root under the frozen configuration and wait-only discipline. It naturally
+  exited 0 after about 737.8 seconds at 100,080 transitions / 417 updates.
+  Identity is five UAVs, `predictive_graph`, prediction true, uncertainty false
+  and CUDA; OSQP remained CPU-side. Final checkpoint SHA-256 is
+  `0A10275FC2663816FFC61121154D3358540C741C4789AC16E8770A2613A71D51`;
+  summary SHA-256 is
+  `9DE6F575CD014E0FAC9C1E17B0AB54A447972EBDFC90953439D2AB921FBEE6B8`;
+  telemetry SHA-256 is
+  `DF89E4A41B15B23A038AA1B44F0DEB17878E7DDB54E63AAB6710611A38CEF70F`.
+
+  Training and final evaluation are zero-event over 20,016 and 160 CBF
+  decisions. Initial evaluation retains eight `solve_time_limit` events over
+  160 decisions; all six interval evaluations are zero-event over 80 decisions
+  each. The eight sources exactly match the eight stderr notices. The replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_seed_20260722_replay_20260801.jsonl`
+  plus summary has eight sources and zero errors under unchanged
+  20,000/0.1s/100/0.0/0.0 values. Four sources replay `solved` without fallback
+  and four remain `solve_time_limit` fallbacks. Replay JSONL SHA-256 is
+  `0E710F7DC071C8EF0344A8A52111C0443A6AFD4D4D99B260F204B4B36A3AD08E`;
+  summary SHA-256 is
+  `E11E626CC4D414938F4C897F4C135027E54E7D3F5D0B89935C1F75C1E9648E4A`.
+  This is fourth-seed provenance only and does not establish a method, scale,
+  safety, fallback-rate, performance or generalization result.
+
+  Next: commit/push these four documents without `.gitignore`, then preflight
+  and run final seed `20260723` serially under the identical frozen command and
+  wait-only discipline. The 30-cell matrix and 35-input all-source replay must
+  follow before any post-isolation 8-UAV work.
+
 - **Third valid post-isolation 5-UAV independent no-uncertainty seed retained,
   2026-08-01 (launch revision `91d7b42`; documentation pending commit):** seed
   `20260721` ran in the unique
