@@ -43,7 +43,17 @@ def _event_mappings(value: Any, pointer: str = "$") -> list[tuple[str, dict[str,
             for index, event in enumerate(events):
                 if isinstance(event, dict):
                     found.append((f"{pointer}.emergency_events[{index}]", event))
+        interval_history = value.get("interval_evaluations")
+        last_interval_alias = value.get("last_interval_evaluation_cbf")
+        alias_is_in_history = (
+            isinstance(interval_history, list)
+            and bool(interval_history)
+            and isinstance(interval_history[-1], dict)
+            and interval_history[-1].get("cbf") == last_interval_alias
+        )
         for key, nested in value.items():
+            if key == "last_interval_evaluation_cbf" and alias_is_in_history:
+                continue
             if key != "emergency_events":
                 found.extend(_event_mappings(nested, f"{pointer}.{key}"))
     elif isinstance(value, list):

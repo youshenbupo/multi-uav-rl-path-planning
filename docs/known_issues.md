@@ -1066,3 +1066,17 @@
   seed as a causal, scale, safety, fallback-rate, performance or generalization
   result. Seeds `20260721`--`20260723`, the valid 30-cell matrix and 35-input
   replay remain required.
+- Post-isolation 8-UAV no-uncertainty seed `20260721` is valid at 100,224 CUDA
+  transitions / 261 updates. Its 446 fully retained `solve_time_limit` sources
+  comprise 271 training, 11 initial, 156 append-only interval and eight final
+  events, exactly matching stderr. The first replay is invalid/excluded because
+  recursive discovery counted the four final-interval mappings again through
+  the equal `last_interval_evaluation_cbf` compatibility alias, yielding 450
+  records. Its JSONL/summary and explicit `ABORTED.json` sidecar remain
+  preserved. A test-first replay-tool fix skips only an exactly matching alias;
+  the fresh `aliasdedup_rerun1` replay retains 446 unique pointers, zero errors
+  and 313 replay fallbacks under unchanged 20,000/0.1s/100/0.0/0.0 values.
+  Preserve both attempts and use only the corrected replay. This seed and its
+  numerical cluster prove no causal, scale, safety, fallback-rate, performance
+  or generalization result. Seeds `20260722`/`20260723`, the valid matrix and
+  35-input replay remain required.

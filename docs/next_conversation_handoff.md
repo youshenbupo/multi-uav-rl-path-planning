@@ -6,6 +6,55 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Third valid post-isolation 8-UAV independent no-uncertainty seed retained
+  and replay alias duplication fixed, 2026-08-01 (launch revision `9a3ec69`;
+  documentation/code pending commit):** a zero-process/config-hash/absent-path
+  preflight launched independent seed `20260721` once in
+  `outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260721/`.
+  Frozen config SHA-256 remains
+  `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`.
+  The CUDA neural/CPU-OSQP process used the real-child-exit wrapper and
+  wait-only monitoring, naturally exiting 0 after about 805.5 seconds at
+  100,224 transitions / 261 updates. Identity is eight UAVs,
+  `predictive_graph`, prediction true and uncertainty false.
+
+  Final checkpoint SHA-256 is
+  `16408CCAE3DF1BD06CA24593FB51B2A1BD48A5A1911824FE63872725867985FC`;
+  summary SHA-256 is
+  `221A9DECAB1AB3872A3074027398C5EE5F89D69A2EECB937601E3E1171938185`;
+  telemetry SHA-256 is
+  `0D67E4655A76B829332E7FA9E5A34E6F0327346B3687E0F8226085359B2BF148`.
+  Training retains 271 time-limit events over 12,528 decisions; initial/final
+  retain 11/8 over 160/160; 26 of 32 append-only intervals retain 156 more.
+  All 446 sources are `solve_time_limit` and exactly match 446 stderr notices.
+  No event-accounting gap or `ABORTED.json` exists.
+
+  The first replay attempt wrote 450 records because the recursive event
+  walker counted four final-interval events both in canonical
+  `interval_evaluations[31].cbf` and the equal compatibility alias
+  `last_interval_evaluation_cbf`. It remains preserved/excluded with sidecar
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260721_replay_20260801.ABORTED.json`
+  (SHA-256
+  `3F9DB96DE88BF33FAEF0F7C2E8F6019AECE882814845D299A389B8865C9B622B`).
+  Test-first repair in `scripts/replay_cbf_fallbacks.py` skips only an exactly
+  matching compatibility alias when append-only history exists. The corrected
+  no-overwrite replay is
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260721_replay_aliasdedup_rerun1_20260801.jsonl`
+  plus summary: 446 unique pointers, zero errors, 133 `solved`, 313
+  `solve_time_limit`, and 313 emergency fallbacks under unchanged
+  20,000/0.1s/100/0.0/0.0 values. JSONL SHA-256 is
+  `4872E77BDEA291E4532115DE8BE673D8B283321B3F63BCDAA89F5A5DEECC7920`;
+  summary SHA-256 is
+  `FC8DB6766D714F9D3436434651875017D6197BEA15E9C7D06ADE5530D9D20E83`.
+
+  TDD red reproduced the duplicate pointer and green passed. Full pytest is
+  160 passed with the one existing unrelated legacy-path audit failure and 190
+  existing OSQP warnings; targeted Ruff and explicit-package mypy pass. No CBF
+  value changed. This is diagnostic provenance only. Next: commit/push the
+  script, test and four documents without `.gitignore`, then preflight and run
+  seed `20260722` serially. Seeds 22/23, the 30-cell matrix and 35-input replay
+  remain before paired/descriptive analysis.
+
 - **Second valid post-isolation 8-UAV independent no-uncertainty seed retained,
   2026-08-01 (launch revision `999cedf`; documentation pending commit):** a
   zero-process/CUDA/config-hash/absent-path preflight launched independent seed

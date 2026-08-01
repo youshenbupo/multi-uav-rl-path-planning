@@ -4079,3 +4079,75 @@ without `.gitignore`, then zero-process/absent-path preflight and run seed
 `20260721` serially under the identical frozen command and wait-only discipline.
 Seeds 21--23, the six-scenario matrix and 35-input all-source replay remain
 before any paired/descriptive analysis.
+
+## AAMAS 2027 - third post-isolation 8-UAV no-uncertainty seed and replay alias fix retained (2026-08-01)
+
+At launch revision `9a3ec69`, a zero-process/CUDA/config-hash and absent-path
+preflight launched independent seed `20260721` once in the unique
+`outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260721/`
+root. It used frozen
+`configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml`
+SHA-256
+`F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`,
+eight UAVs, `predictive_graph`, CUDA neural execution and CPU OSQP. The
+real-child-exit wrapper and wait-only monitoring were retained. It naturally
+exited 0 after about 805.5 seconds at 100,224 transitions / 261 updates.
+
+Identity verifies delivered-packet prediction enabled, uncertainty disabled,
+eight UAVs and CUDA. Final checkpoint SHA-256 is
+`16408CCAE3DF1BD06CA24593FB51B2A1BD48A5A1911824FE63872725867985FC`;
+summary SHA-256 is
+`221A9DECAB1AB3872A3074027398C5EE5F89D69A2EECB937601E3E1171938185`;
+telemetry SHA-256 is
+`0D67E4655A76B829332E7FA9E5A34E6F0327346B3687E0F8226085359B2BF148`;
+stdout/stderr SHA-256 values are respectively
+`338995C9C7E46AF7C19F9C3FACAF98E904254CC6718EA5D8749FF3CABD803A36`
+and
+`BA2E50BC5C52F8C9E049A2489D07D2DF75F357F8CEDC06AE964A397D49424CE3`.
+
+Training retains 271 `solve_time_limit` events over 12,528 decisions;
+initial/final evaluations retain 11/8 more over 160/160 decisions. All 32
+append-only interval evaluations are retained; 26 intervals contain 156
+time-limit events and six are zero-event. All 446 complete sources are
+time-limit events and exactly match stderr's 446 notices. No event-accounting
+gap or training `ABORTED.json` exists. No CBF value, observation contract or
+controller changed.
+
+The initial replay attempt at
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260721_replay_20260801.jsonl`
+incorrectly wrote 450 records. Root-cause tracing showed that the last interval
+at transition 98,304 retains four events in canonical
+`interval_evaluations[31].cbf`, while backward-compatible
+`last_interval_evaluation_cbf` contains the exact same four mappings. The
+generic recursive walker replayed both paths. The invalid JSONL/summary remain
+untouched and are explicitly excluded by sidecar
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260721_replay_20260801.ABORTED.json`
+(SHA-256
+`3F9DB96DE88BF33FAEF0F7C2E8F6019AECE882814845D299A389B8865C9B622B`).
+
+A test-first minimal repair in `scripts/replay_cbf_fallbacks.py` skips
+`last_interval_evaluation_cbf` only when append-only history exists and its
+last `cbf` mapping is exactly equal to the alias. The regression test first
+failed with the duplicate pointer, then passed. The corrected append-safe
+output is
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260721_replay_aliasdedup_rerun1_20260801.jsonl`
+plus summary. Under unchanged 20,000 maximum iterations, 0.1-second solve
+limit, slack penalty 100, uncertainty-margin gain 0.0 and cap 0.0, it retains
+446 records, 446 unique canonical pointers and zero errors. Replay statuses are
+133 `solved` and 313 `solve_time_limit`; the latter 313 use emergency fallback.
+JSONL SHA-256 is
+`4872E77BDEA291E4532115DE8BE673D8B283321B3F63BCDAA89F5A5DEECC7920`;
+summary SHA-256 is
+`FC8DB6766D714F9D3436434651875017D6197BEA15E9C7D06ADE5530D9D20E83`.
+
+Verification: the focused regression test passed; full pytest recorded 160
+passed, one existing unrelated `tests/test_legacy_audit.py` failure because its
+obsolete restored-source path contains zero `.m` files while it expects 81,
+and 190 existing OSQP warnings. Ruff passed, and mypy with explicit package
+bases passed for the two changed/test files. This fix changes event discovery
+only, not training, CBF or results. Three valid 8-UAV no-uncertainty seeds now
+exist, but this remains diagnostic provenance rather than causal, scale,
+safety, fallback-rate, performance or generalization evidence. Next:
+commit/push the script, test and four documents without `.gitignore`, then
+preflight and run seed `20260722` serially. Seeds 22/23, the six-scenario matrix
+and 35-input all-source replay remain before paired/descriptive analysis.
