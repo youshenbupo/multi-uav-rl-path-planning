@@ -707,3 +707,24 @@
   enter CBF replay, evaluation, aggregation, statistics, or manuscript claims.
   Retry the same numeric seed only in a distinct `launcherretry1` root with
   unchanged training and CBF settings.
+- The intended `predictive_graph` seed-`20260722_launcherretry1` launch is a
+  separate invalid prelaunch attempt: `Start-Process` encountered duplicate
+  case-distinct `Path`/`PATH` keys in the launcher process environment before
+  creating Python. Its zero-byte stdout/stderr and sidecar
+  `outputs/core_3uav_post_actor_isolation_predictive_graph_seed_20260722_launcherretry1.ABORTED.json`
+  are preserved and excluded. `-UseNewEnvironment` reproduced the same error.
+  A process-local, nonpersistent merge to one de-duplicated `Path` was verified
+  first with `cmd.exe` exit 0 and then with the dedicated Conda environment:
+  PyTorch `2.13.0+cu130`, CUDA true, RTX 5060, empty stderr. This is a launcher
+  environment repair only and did not change repository, experiment, or CBF
+  configuration.
+- Only post-isolation `predictive_graph` seed-`20260722_launcherretry2` is
+  valid. It naturally reached 100,032 CUDA transitions / 1,042 updates, with
+  zero CBF emergency events over 33,344 training, 160 initial-evaluation and
+  126 final-evaluation decisions. Its zero-event replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260722_launcherretry2_replay_20260801.jsonl`
+  plus companion summary records `event_count=0`,
+  `replay_error_count=0` under unchanged 20,000/0.1s/100/0.5/5.0 CPU-OSQP
+  settings. Preserve/exclude the original root and retry1 prelaunch attempt;
+  this valid seed remains provenance only. Final predictive seed `20260723`,
+  the six-scenario matrix and all-source replay remain required.

@@ -2673,3 +2673,54 @@ this documentation without staging `.gitignore`, then use a zero-process and
 absent-path preflight before retrying the same numeric seed in the unique
 `core_3uav_predictive_graph_seed_20260722_launcherretry1` root with distinct
 retry logs.
+
+## AAMAS 2027 - predictive GraphMAPPO seed 20260722 valid retry retained (2026-08-01)
+
+The first intended retry identity, `launcherretry1`, failed before child
+creation because the active PowerShell launcher environment exposed both
+case-distinct `Path` and `PATH` keys. `Start-Process` raised
+`ArgumentException: Item has already been added. Key in dictionary: 'Path';
+Key being added: 'PATH'`. No Python process or training root was created, but
+its two zero-byte redirected logs and sidecar
+`outputs/core_3uav_post_actor_isolation_predictive_graph_seed_20260722_launcherretry1.ABORTED.json`
+are retained and excluded. `Get-ChildItem Env:` reproduced the duplicate-key
+failure, and `-UseNewEnvironment` did not bypass it.
+
+Root-cause testing then operated only inside the short-lived launcher process:
+it captured both PATH values, merged their components with case-insensitive
+de-duplication, removed both keys, and set one `Path`. Under that single change,
+`Start-Process cmd.exe` exited 0. The same launcher-local normalization ran
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\check_environment.py`
+with exit 0 and empty stderr, verifying Python 3.11.15, PyTorch
+`2.13.0+cu130`, CUDA available, and the NVIDIA GeForce RTX 5060 Laptop GPU.
+The retained probe logs are
+`outputs/post_actor_isolation_start_process_env_probe_20260801.stdout.log` and
+`.stderr.log`. No persistent system/user environment, repository file,
+training protocol, or CBF parameter changed.
+
+After a zero-process and absent-path preflight, the valid second retry launched
+at revision `084f776` with the same frozen config SHA-256
+`1BA2CCE7E7699B97989AF4FFBFB3F26636398428113DCFEE3F798B58A681727D`:
+`D:\anaconda3\envs\multiuav_rl\python.exe scripts\train_graph_mappo.py
+--config configs\rl\dynamic_graph_baseline.yaml --device cuda --seed 20260722
+--num-uavs 3 --graph-mode predictive_graph --total-steps 100000 --output-dir
+outputs\core_3uav_post_actor_isolation\core_3uav_predictive_graph_seed_20260722_launcherretry2`.
+Its distinct stdout/stderr use the matching top-level `launcherretry2` paths.
+
+The process naturally completed at 100,032 transitions / 1,042 updates. Final
+checkpoint, summary, live telemetry and TensorBoard are retained in the retry2
+root; summary identity is three UAVs, `predictive_graph`, predicted delivered
+knowledge enabled, uncertainty disabled, and CUDA. Training telemetry has zero
+emergency events in 33,344 CBF decisions; initial/final short evaluations have
+zero in 160/126. Retry2 stderr is empty. The append-safe zero-event replay
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260722_launcherretry2_replay_20260801.jsonl`
+and companion summary use unchanged 20,000 iterations, 0.1 seconds, penalty
+100, uncertainty gain 0.5 and cap 5.0 on CPU OSQP, recording
+`event_count=0`, `replay_error_count=0`.
+
+Only `launcherretry2` is eligible for the matched predictive arm. The original
+84,672-transition root and retry1 prelaunch attempt remain preserved/excluded.
+This is completion and diagnostic provenance only, not performance, safety,
+fallback-rate, significance, or comparison evidence. Next: commit/push these
+documents without staging `.gitignore`, then serially train final predictive
+seed `20260723` after zero-process/absent-path preflight.

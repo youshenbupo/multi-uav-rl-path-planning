@@ -159,6 +159,37 @@ processes before relying on any status below.
   `core_3uav_predictive_graph_seed_20260722_launcherretry1` root and distinct
   retry logs. Never overwrite or delete the invalid root.
 
+- **Valid post-isolation `predictive_graph` seed-`20260722` retry completed,
+  2026-08-01 (documentation pending commit):** the planned `launcherretry1`
+  process never started because the current launcher environment contained
+  both `Path` and `PATH`; PowerShell `Start-Process` failed before child
+  creation with a duplicate-key `ArgumentException`. Its two zero-byte logs
+  and the sidecar
+  `outputs/core_3uav_post_actor_isolation_predictive_graph_seed_20260722_launcherretry1.ABORTED.json`
+  are retained/excluded. Root-cause reproduction also made `Get-ChildItem
+  Env:` fail. `-UseNewEnvironment` did not avoid the duplicate-key path. A
+  launcher-process-only normalization captured and de-duplicated both values,
+  removed both keys, and set one `Path`; `cmd.exe` then exited 0 and
+  `scripts/check_environment.py` verified Python 3.11.15, PyTorch
+  `2.13.0+cu130`, CUDA available on the RTX 5060, and empty stderr. No system,
+  user, repository, training, or CBF configuration was changed.
+
+  With zero Python processes and absent retry2 paths, seed `20260722` then ran
+  serially under the unchanged frozen command in
+  `outputs/core_3uav_post_actor_isolation/core_3uav_predictive_graph_seed_20260722_launcherretry2/`.
+  It naturally completed at 100,032 transitions / 1,042 updates with final
+  checkpoint, summary, telemetry, TensorBoard and distinct retry2 logs. The
+  summary confirms three UAVs, `predictive_graph`, predicted knowledge enabled,
+  uncertainty disabled, and CUDA. Training has zero CBF emergency events in
+  33,344 decisions; initial/final short evaluations have zero in 160/126.
+  Retry2 stderr is empty. Its zero-event replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_graph_seed_20260722_launcherretry2_replay_20260801.jsonl`
+  plus summary records `event_count=0`, `replay_error_count=0` under unchanged
+  20,000/0.1s/100/0.5/5.0 CPU-OSQP values. Only retry2 is eligible. This is
+  provenance, not an outcome claim. Next: commit/push these documents without
+  staging `.gitignore`, then zero-process/absent-path preflight and serial
+  predictive seed `20260723`.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for
