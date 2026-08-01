@@ -824,3 +824,12 @@
   fallback under unchanged values. Preserve this raw/replay evidence; do not
   tune the CBF. Final seed `20260723`, the 30-cell evaluation matrix and
   all-source replay remain required.
+- Post-isolation `uncertainty_predictive_graph` seed `20260723` is valid at
+  100,032 CUDA transitions / 1,042 updates. Training retains one `solved
+  inaccurate` fallback in 33,344 decisions; initial/final are 0/160 and 0/160.
+  Its unchanged replay at
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260723_replay_20260801.jsonl`
+  has one source, zero errors and replays `solved` without fallback. Five valid
+  trainings now exist (`20260719_launcherretry2`, `20260720`--`20260723`), but
+  the arm still lacks its 30-cell evaluation matrix and all-source replay.
+  Preserve both invalid seed-20260719 attempts and keep all claims gated.

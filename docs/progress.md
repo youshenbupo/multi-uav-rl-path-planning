@@ -3032,3 +3032,34 @@ remains `solved inaccurate` with emergency fallback. Preserve this failure mode
 without tuning. This is fourth-seed provenance only. Next: commit/push without
 `.gitignore`, then run final seed `20260723` serially with the same protocol and
 wait-only discipline before any evaluation.
+
+## AAMAS 2027 - post-isolation uncertainty-aware five-seed training complete (2026-08-01)
+
+At revision `0f5a971`, final independent seed `20260723` ran in the fresh root
+`outputs/core_3uav_post_actor_isolation/core_3uav_uncertainty_predictive_graph_seed_20260723/`
+under the frozen three-UAV CUDA command and wait-only active-run discipline. It
+naturally exited 0 after about 1,335 seconds and completed 100,032 transitions /
+1,042 updates. Summary identity confirms prediction and uncertainty enabled,
+three UAVs and CUDA. Final checkpoint, summary, telemetry, TensorBoard and
+separate logs are retained.
+
+Training records one `solved inaccurate` emergency fallback over 33,344 CBF
+decisions; initial/final evaluations are zero over 160/160. Stderr is only the
+matching warning. Final checkpoint SHA-256 is
+`BE80BFAC6F621D46455C01985A1024035351CB6674E7794DDAD582BB031E3550`; telemetry
+SHA-256 is
+`2494F404B5D7C4E96C138BE39D1FAD2D80A7A2ED8909BCCA9C2A2E05FAEBA267`.
+The unique replay
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_seed_20260723_replay_20260801.jsonl`
+plus summary retains the event with zero errors under unchanged values and
+replays `solved` without fallback.
+
+The eligible uncertainty-aware roots are now `20260719_launcherretry2`,
+`20260720`, `20260721`, `20260722`, and `20260723`; the non-retry and retry1
+seed-20260719 roots remain preserved/excluded. Five-seed training provenance is
+complete, but the arm is not evidence-complete until all five final checkpoints
+finish the six canonical 20-episode scenarios and the all-source replay is
+retained. No performance, safety, fallback-rate, significance, robustness or
+comparison claim follows yet. Next: commit/push documents without `.gitignore`,
+then preflight a wholly new evaluation root and run all 30 cells serially with
+CUDA inference, CPU OSQP and per-cell logs before all-source replay.
