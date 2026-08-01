@@ -6,6 +6,43 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **First valid post-isolation 8-UAV independent no-uncertainty seed retained,
+  2026-08-01 (launch revision `a8485d6`; documentation pending commit):** after
+  the full-method gate closed, frozen config
+  `configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml`
+  SHA-256
+  `F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`
+  was re-audited. Historical ablation roots remain excluded and no
+  post-isolation target existed. Independent seed `20260719` then ran once in
+  `outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260719/`
+  and naturally exited 0 after about 334.9 seconds at 100,224 transitions / 261
+  updates. Identity is eight UAVs, `predictive_graph`, prediction true,
+  uncertainty false and CUDA; OSQP remained CPU-side.
+
+  Final checkpoint SHA-256 is
+  `E97C95BF620677D0E2D12DBA8017C1C595134F12A8BA1E710EE5616B1928BF43`;
+  summary SHA-256 is
+  `C28DDA23052C96572A2FA059C9DEFFBFC55D1C997677AAA533D8DCF7F6827853`;
+  telemetry SHA-256 is
+  `26AE0CFDA3F99A2D0AC1229FFB8E4FC12BB07B9834ABFBF23CDC7B6B085454B8`.
+  Training retains one `solved inaccurate` event over 12,528 decisions;
+  initial/final and all 32 retained intervals are zero-event. The sole source
+  exactly matches stderr. Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260719_replay_20260801.jsonl`
+  plus summary has one source and zero errors under unchanged
+  20,000/0.1s/100/0.0/0.0 values; it replays `solved` without fallback with
+  slack about 0.107. JSONL SHA-256 is
+  `CBC79913C06BEF6C04008FCF8DEC0A2138E557493016E97710D796D62E346779`;
+  summary SHA-256 is
+  `42A181E6A882A311B1BFB9F2C60CE4A0EE3AF1FF6AA5F0DD24B9305149E3DF86`.
+  No CBF value changed.
+
+  This is first-seed ablation provenance only, not a causal, scale, safety,
+  fallback-rate, performance or generalization result. Next: commit/push these
+  four documents without `.gitignore`, then preflight and run seed `20260720`
+  under the identical frozen command. Four further seeds, the 30-cell matrix
+  and all-source replay remain before paired/descriptive analysis.
+
 - **Post-isolation 8-UAV full-method evidence gate is complete, 2026-08-01
   (matrix launch revision `81913bf`; documentation pending commit):** retained
   launcher

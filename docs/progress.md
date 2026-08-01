@@ -3979,3 +3979,46 @@ generalization result. Next: commit/push these four documents without
 `.gitignore`, then audit the frozen 8-UAV no-uncertainty config and launch
 independent seed `20260719` from scratch. Complete its five seeds, matrix and
 replay before any paired/descriptive analysis.
+
+## AAMAS 2027 - first post-isolation 8-UAV no-uncertainty seed retained (2026-08-01)
+
+At launch revision `a8485d6`, the preflight confirmed no Python process, CUDA,
+frozen
+`configs/rl/dynamic_graph_8uav_predictive_no_uncertainty_ablation.yaml` SHA-256
+`F41E83D24EF472F7DAE981AC4D4228CD3B70C49AA18484CA1E0917BCEC105E73`,
+and absent post-isolation seed/log/replay paths. Historical ablation training
+and evaluation roots remain preserved but protocol-ineligible. Independent
+seed `20260719` launched once in the unique
+`outputs/core_8uav_post_actor_isolation_ablation/core_8uav_predictive_no_uncertainty_seed_20260719/`
+root. The real-child-exit wrapper and wait-only monitoring were used. It
+naturally exited 0 after about 334.9 seconds at 100,224 transitions / 261
+updates.
+
+Identity verifies eight UAVs, `predictive_graph`, prediction enabled,
+uncertainty disabled and CUDA; OSQP remained CPU-side. Final checkpoint SHA-256
+is `E97C95BF620677D0E2D12DBA8017C1C595134F12A8BA1E710EE5616B1928BF43`;
+summary SHA-256 is
+`C28DDA23052C96572A2FA059C9DEFFBFC55D1C997677AAA533D8DCF7F6827853`;
+telemetry SHA-256 is
+`26AE0CFDA3F99A2D0AC1229FFB8E4FC12BB07B9834ABFBF23CDC7B6B085454B8`.
+Training retains one `solved inaccurate` event over 12,528 decisions;
+initial/final evaluations are zero-event over 160/160 and all 32 retained
+intervals are zero-event over 80 decisions each. The source exactly matches the
+sole stderr warning.
+
+Replay
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_8uav_seed_20260719_replay_20260801.jsonl`
+plus summary has one source and zero errors under unchanged 20,000 maximum
+iterations, 0.1-second solve limit, slack penalty 100, uncertainty-margin gain
+0.0 and cap 0.0. It replays `solved` without fallback with slack about 0.107.
+JSONL SHA-256 is
+`CBC79913C06BEF6C04008FCF8DEC0A2138E557493016E97710D796D62E346779`;
+summary SHA-256 is
+`42A181E6A882A311B1BFB9F2C60CE4A0EE3AF1FF6AA5F0DD24B9305149E3DF86`.
+No CBF value changed.
+
+This is first-seed post-isolation ablation provenance only, not a causal,
+scale, safety, fallback-rate, performance or generalization result. Next:
+commit/push these four documents without `.gitignore`, then preflight and run
+seed `20260720` serially. Four further seeds, the six-scenario matrix and
+all-source replay remain before any paired/descriptive analysis.

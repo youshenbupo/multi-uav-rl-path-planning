@@ -1046,3 +1046,11 @@
   provenance only, not a scale, safety, fallback-rate, performance or
   generalization result. The independently trained post-isolation 8-UAV
   no-uncertainty arm remains entirely missing.
+- The first independently trained post-isolation 8-UAV no-uncertainty seed,
+  `20260719`, is valid at 100,224 CUDA transitions / 261 updates. Training
+  retains one solved-inaccurate event; initial/final and all 32 intervals are
+  zero-event, and the source matches stderr. Its unchanged 0.0/0.0-margin
+  replay has one source, zero errors and solves without fallback. This is
+  seed-local provenance only, not a causal, scale, safety, fallback-rate,
+  performance or generalization result. Four further seeds, the matrix and
+  all-source replay remain required.
