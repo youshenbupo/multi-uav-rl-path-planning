@@ -868,3 +868,23 @@
   in 20,032 decisions, zero initial/final events, and a one-event replay that
   remains fallback with zero replay errors under frozen values. This is not a
   scale/safety claim. Three further full seeds and all downstream gates remain.
+- The naturally completed post-isolation 5-UAV full seed `20260721` root is
+  nevertheless invalid for audit and manuscript use. Its stderr contains five
+  fallback notices (one `maximum iterations reached`, four
+  `solve_time_limit`), while pre-fix telemetry retains only the one training
+  event and the final zero-event interval evaluation. Repeated writes had
+  overwritten four earlier interval-evaluation contexts. `ABORTED.json`
+  excludes the root, checkpoint and all derived uses; do not replay the one
+  retained event as a complete source set. The prospective append-only
+  `interval_evaluations` repair has test-first coverage and does not recover
+  lost contexts or change any CBF value. Rerun the numeric seed only from
+  scratch in a new `intervaltelemetryretry1` root, then require stderr/event
+  accounting agreement before eligibility.
+- The current full pytest result after the interval-telemetry repair is 159
+  passed and one unrelated legacy audit failure. The test still searches the
+  absent `legacy_hgalo/HGALO_恢复源码` directory and therefore observes zero
+  MATLAB files, whereas the current workspace directory is
+  `legacy_hgalo/HGALO_code`; it expects 81. This supersedes the older observed
+  83-versus-81 description for the present workspace state. Do not change the
+  legacy inventory/test as part of the AAMAS telemetry repair; audit that rename
+  separately.

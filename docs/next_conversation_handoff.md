@@ -6,6 +6,38 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **5-UAV full seed `20260721` completed but is audit-invalid; prospective
+  interval telemetry repair verified, 2026-08-01 (launch revision `3836319`;
+  repair documentation pending commit):** the frozen seed naturally exited 0
+  at 100,160 transitions / 313 updates and retained its final checkpoint,
+  summary and telemetry. However, stderr has five CBF fallback notices (one
+  `maximum iterations reached`, four `solve_time_limit`), while the pre-fix
+  telemetry retains only the one training context and the final zero-event
+  interval evaluation. The graph runner overwrote
+  `last_interval_evaluation_cbf`, permanently losing the four earlier interval
+  contexts. The root now has `ABORTED.json`; preserve it and exclude its final
+  checkpoint from evaluation, replay, aggregation, statistics and manuscript
+  use. Do not generate an incomplete replay that appears exhaustive.
+
+  TDD observed the new GraphMAPPO test fail with missing
+  `interval_evaluations`, then pass after the minimal repair: the telemetry
+  writer can append named list entries and the graph runner stores every
+  `{total_transitions, evaluation, cbf}` interval record while retaining both
+  old `last_*` fields. Relevant tests pass 27, Ruff passes, and mypy passes 103
+  sources. Full pytest is 159 passed / one unrelated legacy-path failure / 190
+  OSQP warnings; the current legacy tree is `legacy_hgalo/HGALO_code` while the
+  old test targets `HGALO_恢复源码`, producing 0 versus expected 81. Do not fix
+  that unrelated audit here.
+
+  Next: commit/push code, test and these three documents without `.gitignore`.
+  Then verify zero Python/GPU training work and absent retry paths, and rerun
+  numeric seed `20260721` from scratch only in
+  `outputs/core_5uav_post_actor_isolation/core_5uav_uncertainty_predictive_graph_seed_20260721_intervaltelemetryretry1/`
+  with distinct logs, unchanged config/CBF values and wait-only monitoring.
+  After natural exit, count all nested interval/training telemetry events and
+  compare them with stderr before replay or eligibility. Continue seeds 22/23
+  only after a valid retry.
+
 - **Raw GraphMAPPO five-seed training is now complete, 2026-07-31 (revision
   `6bc5d1a` at launch; documentation pending commit):** after a zero-process
   and absent-path preflight, seed `20260723` ran serially with

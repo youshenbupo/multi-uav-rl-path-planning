@@ -19,6 +19,7 @@ def write_live_training_telemetry(
     total_transitions: int,
     cbf: SafetyFilterTelemetry,
     extra: dict[str, Any] | None = None,
+    append: dict[str, Any] | None = None,
 ) -> None:
     """Atomically retain CBF failures after every update so interrupted jobs stay diagnosable."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -29,6 +30,12 @@ def write_live_training_telemetry(
             existing = loaded
     if extra is not None:
         existing.update(extra)
+    if append is not None:
+        for key, value in append.items():
+            history = existing.setdefault(key, [])
+            if not isinstance(history, list):
+                raise TypeError(f"Telemetry append target {key!r} is not a list")
+            history.append(value)
     existing.update({"total_transitions": total_transitions, "cbf": cbf.as_dict()})
     temporary = path.with_suffix(f"{path.suffix}.tmp")
     temporary.write_text(

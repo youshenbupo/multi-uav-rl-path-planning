@@ -87,3 +87,32 @@ def test_training_persists_cbf_telemetry_after_each_update(
     assert telemetry["cbf"]["decision_count"] == 1
     assert "emergency_events" in telemetry["cbf"]
     assert telemetry["initial_evaluation_cbf"]["emergency_fallback_count"] == 7
+
+
+def test_graph_training_appends_every_interval_evaluation_telemetry(tmp_path: Path) -> None:
+    """Earlier interval CBF contexts must survive later interval evaluations."""
+    from multiuav.learning.graph_runner import (
+        GraphMAPPOExperiment,
+        load_graph_experiment_config,
+    )
+
+    root = Path(__file__).parents[1]
+    telemetry_path = tmp_path / "graph_interval_history.json"
+    config = replace(
+        load_graph_experiment_config(
+            root / "configs" / "experiments" / "dynamic_graph_smoke.yaml"
+        ),
+        rollout_length=1,
+        total_steps=6,
+        evaluation_interval=3,
+    )
+    experiment = GraphMAPPOExperiment(config, device=torch.device("cpu"))
+
+    experiment.train(telemetry_path=telemetry_path)
+    experiment.close()
+
+    telemetry = json.loads(telemetry_path.read_text(encoding="utf-8"))
+    history = telemetry["interval_evaluations"]
+    assert [entry["total_transitions"] for entry in history] == [3, 6]
+    assert all("emergency_events" in entry["cbf"] for entry in history)
+    assert history[-1]["cbf"] == telemetry["last_interval_evaluation_cbf"]

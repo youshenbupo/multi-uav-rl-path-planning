@@ -596,15 +596,21 @@ class GraphMAPPOExperiment:
                 evaluation = self.evaluate(episodes=4)
                 self._log({f"evaluation/{name}": value for name, value in evaluation.items()})
                 if telemetry_path is not None:
+                    evaluation_cbf = self.last_evaluation_cbf_telemetry.as_dict()
                     write_live_training_telemetry(
                         telemetry_path,
                         total_transitions=self.total_transitions,
                         cbf=self.cbf_telemetry,
                         extra={
                             "last_interval_evaluation": evaluation,
-                            "last_interval_evaluation_cbf": (
-                                self.last_evaluation_cbf_telemetry.as_dict()
-                            ),
+                            "last_interval_evaluation_cbf": evaluation_cbf,
+                        },
+                        append={
+                            "interval_evaluations": {
+                                "total_transitions": self.total_transitions,
+                                "evaluation": evaluation,
+                                "cbf": evaluation_cbf,
+                            }
                         },
                     )
         return records

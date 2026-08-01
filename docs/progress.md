@@ -3196,3 +3196,52 @@ has one source, zero errors and remains `solved inaccurate` with emergency
 fallback under unchanged values. This is seed-local provenance only. Next:
 commit/push without `.gitignore`, then preflight and run 5-UAV full seed
 `20260721` serially under the same protocol.
+
+## AAMAS 2027 - interval-evaluation telemetry audit repair and invalid 5-UAV seed 20260721 (2026-08-01)
+
+The post-isolation 5-UAV full-method seed `20260721` process launched from
+revision `3836319` and naturally exited 0 at 100,160 transitions / 313 updates
+under frozen `configs/rl/dynamic_graph_5uav.yaml` SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`.
+Its final checkpoint, summary, live telemetry, TensorBoard data and distinct
+stdout/stderr remain in
+`outputs/core_5uav_post_actor_isolation/core_5uav_uncertainty_predictive_graph_seed_20260721/`
+and the matching top-level log paths. The checkpoint SHA-256 is
+`7658AAD2E4FF2A5CC0034E0AACBD916866179827261D41867317796815108A8B` and
+telemetry SHA-256 is
+`2E8800E091EF030FC9F388F845C379C61D7B97DEFDB8F0D0624D64047F49428D`.
+
+Despite natural completion, this root is not audit-eligible. Its stderr retains
+five CBF fallback notices: one `maximum iterations reached` and four
+`solve_time_limit`. Final telemetry retains the one training event in 20,032
+training decisions, zero events in the 160-decision initial evaluation, and
+only the final zero-event interval evaluation (80 decisions); the four earlier
+interval-evaluation fallback contexts were overwritten by later assignments to
+`last_interval_evaluation_cbf`. They therefore cannot be reconstructed or
+replayed. `ABORTED.json` marks the entire root, including its final checkpoint,
+ineligible for evaluation, replay, aggregation, statistics and manuscript use.
+No CBF setting changed, and no incomplete one-event replay was created.
+
+The defect was reproduced test-first: the new real GraphMAPPO smoke test failed
+with `KeyError: 'interval_evaluations'`. The minimal backward-compatible repair
+adds an explicit append operation to `write_live_training_telemetry` and makes
+the graph runner retain every interval record as
+`interval_evaluations[{total_transitions, evaluation, cbf}]`, while preserving
+the existing `last_interval_evaluation` and `last_interval_evaluation_cbf`
+fields. The exact test then passed. Broader graph/telemetry/checkpoint tests
+passed 27; Ruff passed; and explicit-package mypy passed 103 source files.
+The full suite recorded 159 passed and one unrelated legacy-audit failure: the
+test expects 81 MATLAB files beneath the no-longer-present
+`legacy_hgalo/HGALO_恢复源码` path, while the current workspace contains
+`legacy_hgalo/HGALO_code`, so the tested path yields zero. That legacy issue was
+not modified. The suite emitted 190 existing OSQP deprecation warnings.
+
+This repair establishes prospective audit fidelity only; it recovers none of
+the four missing seed-20260721 contexts and proves no performance, safety,
+fallback-rate, scale or method result. Next: commit/push the code, test and
+three documents without staging `.gitignore`; then zero-process/absent-path
+preflight and rerun numeric seed `20260721` from scratch in the unique
+`core_5uav_uncertainty_predictive_graph_seed_20260721_intervaltelemetryretry1`
+root. Use only the active execution-cell wait handle. Eligibility requires
+natural completion and a one-to-one audit between all retained interval/training
+events and stderr notices before replay.
