@@ -3669,3 +3669,56 @@ commit/push these four documents without `.gitignore`, then preflight and run a
 fresh 30-cell/600-record six-scenario final-checkpoint evaluation. After its
 identity audit, run the unchanged 35-input all-source replay before any
 post-isolation 8-UAV work.
+
+## AAMAS 2027 - post-isolation 5-UAV no-uncertainty evidence gate complete (2026-08-01)
+
+At launch revision `77b602d`, a zero-process/five-checkpoint/config-hash and
+absent-path preflight retained the serial launcher
+`outputs/core_5uav_post_actor_isolation_predictive_graph_evaluation_launcher_20260801.ps1`.
+Its SHA-256 is
+`505E353E04F25FFE610FA01731F470ECA772A196FE26AC0998BED1358750C9BF`.
+The launcher naturally exited 0 after about 387.4 seconds and created the unique
+`outputs/core_5uav_post_actor_isolation_evaluations_20260801_predictive_graph/`
+root. Each eligible independent final checkpoint for seeds `20260719` through
+`20260723` was evaluated serially under frozen
+`configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml` across
+`nominal`, `delay_only`, `loss_only`, `dynamic_only`, `combined` and
+`ood_communication_obstacle`, with 20 episodes per cell, CUDA inference and CPU
+OSQP.
+
+Independent recursive audit verified exactly 30 cell directories, 30 summaries,
+30 raw JSONL files, 30 runtime telemetry files, 30 environment files and 600
+records. Every seed, scenario, episode index 0--19, eligible checkpoint,
+`graph_mappo_checkpoint` controller and checkpoint completed step 100,080
+matches. Environment records uniformly retain five UAVs, CUDA,
+`own_truth_and_delivered_packets_only` and `cpu_osqp_when_enabled`. All 30 cell
+exit codes are zero, all 30 cell stderr files are empty, and launcher stderr is
+empty. Evaluation telemetry totals 11,680 CBF decisions and zero emergency
+events. Launcher stdout SHA-256 is
+`7225C125BBFFCF9513BC7A2AD5D16740FDBB0A0CA3151761FB0D79E64E844806`;
+empty launcher stderr SHA-256 is
+`E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855`.
+
+The append-safe all-source replay is
+`outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_5seed_training_and_evaluation_replay_20260801.jsonl`
+plus companion summary. Its exact 35 inputs are the five eligible training
+telemetry files and the 30 valid evaluation runtime telemetry files. Under
+unchanged 20,000 maximum iterations, 0.1-second solve limit, slack penalty 100,
+uncertainty-margin gain 0.0 and cap 0.0, it retains 15 source events, zero replay
+errors and three replay fallbacks. Recorded statuses are three `solved
+inaccurate`, three `maximum iterations reached` and nine `solve_time_limit`;
+replay statuses are 12 `solved` without fallback, one `solved inaccurate` with
+fallback and two `maximum iterations reached` with fallback. JSONL SHA-256 is
+`E15440B4142BF3E95B42B91CE62564DB391E8EA350AF7FD5FC4114238EEA8C6B`;
+summary SHA-256 is
+`9D5EE189C3F32A3F1A88A64F7AF6F87EEFBF7073726B30308A459E65A6A97062`.
+No CBF value changed.
+
+This closes post-isolation 5-UAV independent no-uncertainty training,
+evaluation and CBF provenance only. It does not establish a scale, safety,
+fallback-rate, performance, generalization or causal method effect. No fresh
+paired/descriptive analysis is yet specified. Next: commit/push these four
+documents without `.gitignore`, then audit frozen 8-UAV inputs/exclusions and
+start post-isolation 8-UAV full uncertainty-aware training from scratch. Its
+five seeds, matrix and replay precede the independently trained 8-UAV
+no-uncertainty arm.

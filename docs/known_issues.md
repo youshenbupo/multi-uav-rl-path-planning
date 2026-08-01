@@ -978,3 +978,15 @@
   Five eligible no-uncertainty trainings now exist, but no method, scale,
   safety, fallback-rate, performance or generalization claim is allowed before
   the 30-cell matrix and 35-input replay are complete.
+- The post-isolation 5-UAV independent no-uncertainty arm now has a valid
+  30-cell/600-record evaluation root at
+  `outputs/core_5uav_post_actor_isolation_evaluations_20260801_predictive_graph/`.
+  All identities, episode indices, five-UAV/CUDA/actor-boundary/CPU-OSQP fields,
+  30 zero exits and empty stderr files pass audit. Evaluation contains 11,680
+  CBF decisions and zero emergency events. Its 35-input all-source replay has
+  15 training sources, zero errors and three replay fallbacks under frozen
+  values. This completes within-arm provenance only; it is not a causal,
+  scale, safety, fallback-rate, performance or generalization result. A fresh
+  prespecified paired/descriptive analysis is still absent, and historical
+  paired summaries remain excluded. Post-isolation 8-UAV full and independent
+  no-uncertainty arms remain to be regenerated from scratch.

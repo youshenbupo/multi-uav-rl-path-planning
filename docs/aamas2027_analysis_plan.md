@@ -70,7 +70,7 @@ the exact raw event sources and solver protocol separately.
 | Scale / comparison | Eligible raw inputs | Descriptive artifact | Explicit exclusions |
 | --- | --- | --- | --- |
 | 3-UAV four arms | Post-isolation roots: MLP `outputs/core_3uav_post_actor_isolation_evaluations/`; raw graph `outputs/core_3uav_post_actor_isolation_evaluations_20260731_raw_graph_mappo_rerun1/`; predictive no-uncertainty `outputs/core_3uav_post_actor_isolation_evaluations_20260801_predictive_graph/`; uncertainty-aware `outputs/core_3uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/`. Each has five eligible checkpoints by six scenarios by 20 episodes. | None yet; a fresh prespecified aggregation using the independent seed as the inferential unit is still required. | Historical `outputs/core_3uav_evaluations/` and its paired summary remain protocol-ineligible. Preserve/exclude all documented interrupted/prelaunch roots, including MLP telemetry retry, raw/predictive failed roots, and the two uncertainty seed-20260719 interruptions. |
-| 5-UAV full vs independent no-uncertainty | Full method: `outputs/core_5uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/` (five eligible checkpoints by six scenarios by 20 episodes). The independent post-isolation no-uncertainty arm has five valid training roots, seeds `20260719`--`20260723`, but no eligible checkpoint-evaluation input yet; its complete 30-cell matrix and 35-input replay remain required. | None until the independent post-isolation no-uncertainty arm is fully evaluated and a fresh procedure is specified. Historical paired JSON remains excluded. | Historical `outputs/core_5uav_evaluations/`, `outputs/core_5uav_ablation_evaluations_rerun4/`, initial/rerun1/rerun2/interrupted-rerun3 roots, the post-isolation non-retry full-method seed-20260721 root/checkpoint, and the zero-artifact seed-20260720 one-second prelaunch-timeout sidecar remain excluded. Seed-20260723's PowerShell stderr-redirection host code is a reproduced launcher-envelope artifact, not a failed training root. |
+| 5-UAV full vs independent no-uncertainty | Full method: `outputs/core_5uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/`; independent no-uncertainty: `outputs/core_5uav_post_actor_isolation_evaluations_20260801_predictive_graph/`. Each has five eligible independently trained checkpoints by six scenarios by 20 episodes, complete identity-audited raw JSONL and all-source replay provenance. | None; specify a fresh procedure using independent seed as the inferential unit before producing any paired/descriptive result. Historical paired JSON remains excluded. | Historical `outputs/core_5uav_evaluations/`, `outputs/core_5uav_ablation_evaluations_rerun4/`, initial/rerun1/rerun2/interrupted-rerun3 roots, the post-isolation non-retry full-method seed-20260721 root/checkpoint, and the zero-artifact seed-20260720 one-second prelaunch-timeout sidecar remain excluded. Seed-20260723's PowerShell stderr-redirection host code is a reproduced launcher-envelope artifact, not a failed training root. |
 | 8-UAV full vs independent no-uncertainty | None until post-isolation retraining/evaluation. Historical `outputs/core_8uav_evaluations/` and `outputs/core_8uav_ablation_evaluations_20260729/` are retained only. | Historical `outputs/paired_summaries/8uav_full_vs_no_uncertainty_20260729.json` is excluded. | The preflight identity-render typo remains a no-result attempt; all historical evaluated cells are additionally protocol-ineligible. |
 
 Each historical artifact has six canonical scenarios, five matched seed
@@ -129,13 +129,14 @@ files include:
 - `outputs/cbf_diagnostics/uncertainty_predictive_graph_8uav_5seed_replay_20260727.jsonl`
 - `outputs/cbf_diagnostics/predictive_no_uncertainty_8uav_5seed_replay_20260729.jsonl`
 - `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_5seed_training_and_evaluation_replay_20260801.jsonl`
+- `outputs/cbf_diagnostics/post_actor_isolation_predictive_no_uncertainty_5uav_5seed_training_and_evaluation_replay_20260801.jsonl`
 
-The final 5-UAV file above is eligible post-isolation diagnostic provenance;
-it is not a safety or fallback-rate result. All preceding historical CBF files
-in the list remain protocol-ineligible for aggregate reporting after the
-actor-boundary correction. Preserve them, their existing nonreplayable records,
-and the predictive-graph dynamic-obstacle telemetry gap as explicit forensic
-exclusions; no value is imputed.
+The final two 5-UAV files above are eligible post-isolation diagnostic
+provenance; neither is a safety or fallback-rate result. All preceding
+historical CBF files in the list remain protocol-ineligible for aggregate
+reporting after the actor-boundary correction. Preserve them, their existing
+nonreplayable records, and the predictive-graph dynamic-obstacle telemetry gap
+as explicit forensic exclusions; no value is imputed.
 
 ## Manuscript gates still open
 
