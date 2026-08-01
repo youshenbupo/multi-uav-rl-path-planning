@@ -3147,3 +3147,32 @@ remain `None` pending new data. Next: commit/push this audit without staging
 telemetry, and wait-only active-run monitoring. Complete its five-seed matrix
 and replay before independently trained no-uncertainty 5-UAV ablations, then
 repeat the matched protocol at 8 UAV.
+
+## AAMAS 2027 - first post-isolation 5-UAV full-method seed retained (2026-08-01)
+
+At revision `4944c4d`, a zero-process/absent-path preflight launched independent
+seed `20260719` with frozen config `configs/rl/dynamic_graph_5uav.yaml` SHA-256
+`28DCB568D23FF993E5514D7E748DB249D4E68ED8A3523F3CDACA8AC223D27C32`, five
+UAVs, CUDA, `uncertainty_predictive_graph`, and 100k requested steps in the new
+root
+`outputs/core_5uav_post_actor_isolation/core_5uav_uncertainty_predictive_graph_seed_20260719/`.
+Only the execution-cell wait handle was used while active. It naturally exited
+0 after about 328 seconds and reached the expected rollout boundary 100,160
+transitions / 313 updates. Summary identity confirms prediction and uncertainty
+enabled, five UAVs and CUDA. Final checkpoint, summary, telemetry, TensorBoard
+and separate logs are retained.
+
+Training records two `solved inaccurate` emergency fallbacks over 20,032 CBF
+decisions; initial/final evaluations are zero over 160/160. Final checkpoint
+SHA-256 is
+`82C623A9EF653CDB5D425D61E883C2DA9EDDFA7BB75FE41A842D6AFA6C4E2CAC`; telemetry
+SHA-256 is
+`1676AC77F08C7A8AB5E60E76574A1512A6A19609C11034007A980D69EA28F1DB`.
+The unique replay
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_seed_20260719_replay_20260801.jsonl`
+plus summary retains both sources with zero errors under unchanged values; one
+replay remains `solved inaccurate` with emergency fallback and one is `solved`
+without fallback. This is first-seed scale provenance only, not performance,
+safety, fallback-rate or generalization evidence. Next: commit/push documents
+without `.gitignore`, then preflight and run seed `20260720` serially under the
+same 5-UAV full-method and wait-only protocol.

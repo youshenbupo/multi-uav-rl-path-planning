@@ -440,6 +440,21 @@ processes before relying on any status below.
   full-method seeds and their matrix/replay before starting the independently
   trained 5-UAV no-uncertainty arm, then repeat both matched arms at 8 UAV.
 
+- **First valid post-isolation 5-UAV full-method seed retained, 2026-08-01
+  (launch revision `4944c4d`; documentation pending commit):** seed `20260719`
+  used frozen `dynamic_graph_5uav.yaml`, five UAVs, CUDA and
+  `uncertainty_predictive_graph` in the new
+  `outputs/core_5uav_post_actor_isolation/` root. With wait-only monitoring it
+  naturally exited 0 after about 328 seconds at 100,160 transitions / 313
+  updates. Training has two `solved inaccurate` fallbacks in 20,032 decisions;
+  initial/final are 0/160 and 0/160. Its two-event replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_seed_20260719_replay_20260801.jsonl`
+  has zero errors; one replay remains fallback and one solves.
+
+  Next: commit/push documents without `.gitignore`, then preflight and run
+  5-UAV full seed `20260720` with the identical frozen command and wait-only
+  discipline. Four full seeds remain before evaluation or ablation training.
+
 - **Documentation and safe-maintenance package, 2026-07-30:**
   read `README.md` for environment, entry-point, train/evaluate/replay, and
   reproducibility guidance; read `docs/aamas2027_method_and_readiness.md` for

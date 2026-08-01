@@ -855,3 +855,11 @@
   independently trained 5-UAV no-uncertainty five seeds/evaluation/replay, then
   the matching two 8-UAV arms. Preserve all historical roots and invalid
   attempts, and apply wait-only monitoring to long active jobs.
+- The first valid post-isolation 5-UAV full-method seed is `20260719` under
+  `outputs/core_5uav_post_actor_isolation/`, complete at 100,160 CUDA
+  transitions / 313 updates. Training retains two `solved inaccurate`
+  fallbacks in 20,032 decisions; initial/final are 0/160 and 0/160. Its replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_seed_20260719_replay_20260801.jsonl`
+  has two sources, zero errors, one replay fallback and one solved replay under
+  frozen values. Do not infer a scale or safety result. Four further full seeds,
+  their matrix/replay, and the independently trained no-uncertainty arm remain.
