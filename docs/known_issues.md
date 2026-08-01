@@ -915,3 +915,10 @@
   the new full interval history, but their retained training-event counts
   exactly equal their stderr notices (2/2 and 1/1) with zero events in the
   retained evaluation fields; no hidden fallback discrepancy is observed.
+- The post-isolation 5-UAV full-method arm now has a valid 30-cell/600-record
+  evaluation root and a 35-input all-source replay with five source events,
+  zero replay errors and three replay fallbacks under frozen values. Evaluation
+  contributes 12,000 decisions and zero events. These are eligible provenance,
+  not a scale, safety, fallback-rate, performance or method-effect result. The
+  independently trained post-isolation 5-UAV no-uncertainty arm is still
+  missing, so no 5-UAV ablation comparison or paired statistic is available.

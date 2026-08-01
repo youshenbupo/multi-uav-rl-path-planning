@@ -6,6 +6,32 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Post-isolation 5-UAV full-method evidence gate is complete, 2026-08-01
+  (matrix launch revision `2c5ea51`; documentation pending commit):** the
+  unique root
+  `outputs/core_5uav_post_actor_isolation_evaluations_20260801_uncertainty_predictive_graph/`
+  contains 30 valid five-seed-by-six-scenario cells and 600 identity-checked
+  records. CUDA, actor own-truth-plus-delivered-packets, CPU OSQP, checkpoint
+  step 100,160, 30 zero exits and empty cell/launcher stderr were verified.
+  Evaluation telemetry has 12,000 CBF decisions and zero events. Launcher SHA
+  is `9741AF56...B04279`.
+
+  The 35-input all-source replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_5uav_5seed_training_and_evaluation_replay_20260801.jsonl`
+  has five source events, zero errors and three replay fallbacks under unchanged
+  values. Recorded statuses are four solved-inaccurate and one
+  maximum-iterations; replay statuses are two solved-inaccurate, two solved and
+  one maximum-iterations. The invalid non-retry seed21 root/checkpoint remains
+  excluded. This closes provenance only, not any scale/safety/result claim.
+
+  Next: commit/push the four documents without `.gitignore`, then preflight a
+  fresh post-isolation 5-UAV no-uncertainty root. Independently train seed
+  `20260719` from scratch using frozen
+  `configs/rl/dynamic_graph_5uav_predictive_no_uncertainty_ablation.yaml`,
+  `--graph-mode predictive_graph`, CUDA neural execution, CPU OSQP and
+  wait-only monitoring. Complete five seeds and their matrix/replay before
+  beginning matched 8-UAV work.
+
 - **Post-isolation 5-UAV full five-seed training is complete, 2026-08-01
   (final seed launch revision `d93e281`; documentation pending commit):**
   seed `20260723` naturally completed at 100,160 transitions / 313 updates
