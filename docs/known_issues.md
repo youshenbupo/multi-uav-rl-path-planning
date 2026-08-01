@@ -990,3 +990,14 @@
   prespecified paired/descriptive analysis is still absent, and historical
   paired summaries remain excluded. Post-isolation 8-UAV full and independent
   no-uncertainty arms remain to be regenerated from scratch.
+- The first post-isolation 8-UAV full-method seed, `20260719`, is valid at
+  100,224 CUDA transitions / 261 updates. Training retains two
+  maximum-iterations and two solved-inaccurate events; append-only interval
+  telemetry retains one additional time-limit event at transition 55,296.
+  Initial/final and the other 31 intervals are zero-event, and all five sources
+  exactly match stderr. Its unchanged-protocol replay has five sources, zero
+  errors and two remaining maximum-iterations fallbacks; the other three solve
+  without fallback. Preserve this diagnostic variability without tuning. One
+  seed establishes no scale, safety, fallback-rate, performance or
+  generalization result; four further full-method seeds, their matrix/replay,
+  and the independent no-uncertainty arm remain required.

@@ -3722,3 +3722,50 @@ documents without `.gitignore`, then audit frozen 8-UAV inputs/exclusions and
 start post-isolation 8-UAV full uncertainty-aware training from scratch. Its
 five seeds, matrix and replay precede the independently trained 8-UAV
 no-uncertainty arm.
+
+## AAMAS 2027 - first post-isolation 8-UAV full-method seed retained (2026-08-01)
+
+At launch revision `d44fbf8`, the preflight confirmed no Python process, CUDA,
+frozen `configs/rl/dynamic_graph_8uav.yaml` SHA-256
+`9AACA64DFBEE765777652E2F22E771E566F0DA9045B9CBB05BA921789A6BC93C`,
+and absent post-isolation seed/log/replay paths. Historical full, evaluation,
+ablation and ablation-evaluation roots remain preserved but protocol-ineligible.
+Independent seed `20260719` launched once in the unique
+`outputs/core_8uav_post_actor_isolation/core_8uav_uncertainty_predictive_graph_seed_20260719/`
+root. A `Start-Process` wrapper retained the actual child exit code while only
+the execution-cell handle was awaited. It naturally exited 0 after about 337.4
+seconds at 100,224 transitions / 261 updates.
+
+Summary identity verifies eight UAVs, `uncertainty_predictive_graph`, predicted
+delivered-packet knowledge and uncertainty enabled, and CUDA; OSQP remained
+CPU-side. Final checkpoint SHA-256 is
+`5037D298FE85832EC94A3BA4F400D614B623DE9E27E59F91BDA3EADDBCB1E334`;
+summary SHA-256 is
+`F65A7F8666237001BE24A441C3C04C838C23A663BF3989F271359359F1737B18`;
+telemetry SHA-256 is
+`204E143E3D75B3F6E8631C9A1AEBBC0728D2E5952C11E4A7EF8D01D854544898`.
+Training retains two `maximum iterations reached` and two `solved inaccurate`
+events over 12,528 decisions. Initial/final evaluations are zero-event over
+160/160 decisions. All 32 append-only interval evaluations at transitions
+3,072 through 98,304 are retained; transition 55,296 has one
+`solve_time_limit` event and the other 31 have zero events over 80 decisions
+each. The five source events exactly match the five stderr warnings.
+
+The append-safe replay is
+`outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_seed_20260719_replay_20260801.jsonl`
+plus companion summary. Under unchanged 20,000 maximum iterations, 0.1-second
+solve limit, slack penalty 100, uncertainty-margin gain 0.5 and cap 5.0, it has
+five sources and zero errors. Both maximum-iterations events remain emergency
+fallbacks; both solved-inaccurate events and the interval time-limit event
+replay `solved` without fallback. JSONL SHA-256 is
+`23D491F1D5C0A4495E857A88786D64FE942BBB350E6A14738897CDB4029BE12D`;
+summary SHA-256 is
+`656407B82BD09AF3BBF71CBAB4F4D8A386C00E064A13B835CE0103EBD7E08253`.
+No CBF value changed.
+
+This is first-seed post-isolation 8-UAV provenance only, not a scale, safety,
+fallback-rate, performance or generalization result. Next: commit/push these
+four documents without `.gitignore`, then preflight and run seed `20260720`
+serially under the identical frozen command. Four more valid full-method seeds,
+their six-scenario matrix and all-source replay remain before independent
+8-UAV no-uncertainty training.

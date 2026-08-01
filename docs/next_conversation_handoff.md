@@ -6,6 +6,47 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **First valid post-isolation 8-UAV full-method seed retained, 2026-08-01
+  (launch revision `d44fbf8`; documentation pending commit):** after confirming
+  all historical 8-UAV roots remain excluded and no post-isolation root existed,
+  independent seed `20260719` ran once in
+  `outputs/core_8uav_post_actor_isolation/core_8uav_uncertainty_predictive_graph_seed_20260719/`.
+  `Start-Process` retained the real child exit code; the wait-only CUDA run
+  naturally exited 0 after about 337.4 seconds at 100,224 transitions / 261
+  updates. Identity is eight UAVs, `uncertainty_predictive_graph`, prediction
+  and uncertainty enabled, and CUDA; OSQP remained CPU-side.
+
+  Final checkpoint SHA-256 is
+  `5037D298FE85832EC94A3BA4F400D614B623DE9E27E59F91BDA3EADDBCB1E334`;
+  summary SHA-256 is
+  `F65A7F8666237001BE24A441C3C04C838C23A663BF3989F271359359F1737B18`;
+  telemetry SHA-256 is
+  `204E143E3D75B3F6E8631C9A1AEBBC0728D2E5952C11E4A7EF8D01D854544898`.
+  Training retains two `maximum iterations reached` and two `solved inaccurate`
+  events over 12,528 decisions. Initial/final evaluations are zero-event over
+  160/160 decisions. All 32 interval evaluations are append-only; transition
+  55,296 retains one `solve_time_limit` event and the other 31 are zero-event
+  over 80 decisions each. The five retained sources exactly match five raw
+  stderr warnings.
+
+  Replay
+  `outputs/cbf_diagnostics/post_actor_isolation_uncertainty_predictive_graph_8uav_seed_20260719_replay_20260801.jsonl`
+  plus summary has five sources and zero errors under unchanged
+  20,000/0.1s/100/0.5/5.0 values. Both maximum-iterations sources remain
+  fallbacks; the two solved-inaccurate sources and interval time-limit source
+  replay `solved` without fallback. Replay JSONL SHA-256 is
+  `23D491F1D5C0A4495E857A88786D64FE942BBB350E6A14738897CDB4029BE12D`;
+  summary SHA-256 is
+  `656407B82BD09AF3BBF71CBAB4F4D8A386C00E064A13B835CE0103EBD7E08253`.
+  No CBF value changed. This is first-seed provenance only, not a scale,
+  safety, fallback-rate, performance or generalization result.
+
+  Next: commit/push these four documents without `.gitignore`, then perform a
+  zero-process/config-hash/absent-path preflight and run seed `20260720` under
+  the identical frozen 8-UAV full-method command and wait-only discipline.
+  Four more valid seeds, the 30-cell matrix and all-source replay remain before
+  independently trained 8-UAV no-uncertainty work.
+
 - **Post-isolation 5-UAV independent no-uncertainty evidence gate is complete,
   2026-08-01 (matrix launch revision `77b602d`; documentation pending
   commit):** the retained launcher
