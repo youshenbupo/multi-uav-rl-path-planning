@@ -1166,7 +1166,7 @@
   ablation and cannot assign a difference to either component separately.
   Independently trained graph-only and CBF-only arms are still required for a
   component-level causal claim.
-- The current full pytest audit has 160 passes and one unrelated legacy failure
+- The current full pytest audit has 162 passes and one unrelated legacy failure
   with 190 OSQP dependency warnings. The failing test expects 81 MATLAB files
   under the external sibling path
   `D:\yolo\multiuav\legacy_hgalo\HGALO_恢复源码`; that path is absent on the
@@ -1178,3 +1178,18 @@
   raw-root/hash sidecar ledger, literature coverage remains non-exhaustive, and
   the mixed five-seed descriptive values do not support superiority, safety,
   robust generalization, or external submission.
+- The canonical descriptive-report generator and sidecar are reproducible, but
+  no portable HTML report is eligible. Nine roots are preserved with
+  `ABORTED.json`: the initial root, `retry1`--`retry6`,
+  `retry7_diagnostic`, and `retry8`. The final enhanced
+  reader renders both charts, but the official Chromium verifier rejects
+  desktop horizontal overflow caused by the packaged runtime's vertically
+  scrolling `100vw` sticky header. Do not patch generated HTML, delete failed
+  screenshots, or distribute the diagnostic HTML. Wait for an upstream runtime
+  fix or use another surface only after it passes equivalent validation.
+- The current statistical decision is deliberately non-inferential. Values
+  were already inspected before any endpoint/hypothesis/multiplicity plan, and
+  five trained seeds give only 32 paired sign assignments. Do not add post-hoc
+  p-values, confidence intervals, one-sided tests, mid-p conventions, rankings
+  or superiority labels to the existing cohort. A later confirmatory cohort
+  must be frozen separately before its seed results are viewed.

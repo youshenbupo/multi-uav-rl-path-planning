@@ -175,21 +175,23 @@ Completed:
 - complete six-scenario evaluation matrices and raw JSONL;
 - all-source CBF fallback replay with retained source/context records;
 - independently validated descriptive aggregation;
+- an explicit decision to keep the already viewed five-seed package
+  descriptive and add no retrospective hypothesis tests;
 - full primary-source review of DACOM and DHCG and a source-tiered comparison
   with graph-CBF and decentralized-UAV prior work.
 
 Open before external submission readiness:
 
-1. Specify and review any inferential procedure before computing inferential
-   output; five trained seeds remain the only independent unit.
-2. Train graph-only and CBF-only uncertainty ablations if the manuscript seeks
+1. Train graph-only and CBF-only uncertainty ablations if the manuscript seeks
    component-level causal claims.
-3. Obtain and fully read the closed IEEE UAV paper before making paper-specific
+2. Obtain and fully read the closed IEEE UAV paper before making paper-specific
    communication or safety comparisons, and broaden systematic literature
    coverage before any novelty or "first" language.
-4. Build every manuscript table and figure directly from eligible raw roots,
+3. Build every manuscript table and figure directly from eligible raw roots,
    keeping all six scenarios and unfavorable cells visible.
-5. Resolve or explicitly waive the unrelated legacy MATLAB inventory drift
+4. Resolve or explicitly waive the unrelated legacy MATLAB inventory drift
    after a separate ownership audit.
+5. Resolve the portable-report runtime layout blocker or use another fully
+   validated delivery surface; never distribute the failed HTML attempts.
 6. Perform a final manuscript-to-artifact audit. External submission requires
    explicit user authorization and is outside the current task.

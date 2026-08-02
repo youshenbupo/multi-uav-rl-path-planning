@@ -4478,3 +4478,54 @@ decision, graph-only/CBF-only ablations if component causality is desired,
 traceable all-scenario tables/figures, broader/full-text literature evidence,
 and a final manuscript-to-artifact audit. External submission remains
 prohibited without explicit user authorization.
+
+## AAMAS 2027 - descriptive report generator retained; HTML runtime blocker audited (2026-08-02)
+
+At parent revision `2e29747`, a test-first standard-library generator was added
+as `scripts/build_aamas_descriptive_report.py`. It validates all six scenarios,
+five trained seeds, 20 episodes per seed-scenario cell, four 3-UAV arms, all 11
+task metrics and all five CBF diagnostic metrics before emitting a bounded
+canonical report artifact and provenance sidecar. Two focused tests cover full
+row retention, source SQL, renderer-facing chart identities, claim boundaries,
+and rejection of an incomplete scenario matrix. Ruff, mypy and both tests pass.
+
+The report design followed the data-visualization and technical-report
+contracts: neutral chart titles; all scenarios retained; no ranking; task and
+CBF data separated; full-minus-no-uncertainty direction fixed; charts adjacent
+to explanatory text; and every native chart/table backed by a bounded snapshot
+source with artifact-snapshot SQL. The final canonical attempt is
+`outputs/aamas2027_descriptive_report_20260802_retry8/artifact.json` (SHA-256
+`492BFA4E615258DB36DF7856E63E19BF2CC2CCB9A1426718C1FE8126C8AD0521`)
+plus `provenance.json` (SHA-256
+`41188D92131A5F5041D10BEBBFDCB21823D76C47C3F9F8DA796D42A84E2967C1`).
+
+No HTML is eligible. Eight unique attempts plus one separated diagnostic root
+are preserved with `ABORTED.json`. Early attempts exposed schema/source errors;
+later attempts exposed horizontal-bar overflow, signed-bar reader fallback and
+finally a portable-runtime desktop layout defect. In retry8, both native charts
+rendered in the enhanced reader, but the official Chromium verifier rejected
+page-level horizontal overflow. The generated runtime uses a sticky
+`width:100vw` header with viewport-relative negative margins on a vertically
+scrolling long report. Its failure screenshot SHA-256 is
+`64C00A935D75751D38C78A6A36D843B561F713F566AA6993189835D4E26A0DC8`.
+Generated HTML was never patched, no failed file is presented as valid, and
+the upstream runtime must be fixed or a different fully validated surface used.
+
+`docs/aamas2027_statistical_decision.md` also closes the current inferential
+gate: the already viewed five-seed cohort remains descriptive. No retrospective
+p-values, intervals, significance labels or superiority claims will be added.
+With five paired seed differences, a conventional exact two-sided sign-flip
+test has minimum attainable p-value `2/32 = 0.0625`; more importantly, no
+endpoint/hypothesis/multiplicity plan preceded value inspection. Any future
+confirmatory cohort needs a committed plan before new seed results are viewed.
+
+Final verification passes Ruff, mypy over 104 source files, and three focused
+report/core-protocol tests. Full pytest is 162 passed with one unrelated legacy
+audit failure and 190 OSQP dependency warnings. The failure is unchanged: the
+external sibling MATLAB source path is absent, so the test observes zero files
+while asserting 81.
+
+Next: commit/push the generator, tests and synchronized documentation without
+`.gitignore`. The remaining paper gates are the portable surface blocker,
+component-only ablations if causal component claims are retained, broader
+full-text literature coverage, and a final manuscript-to-artifact audit.

@@ -6,6 +6,35 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-08-02, supersedes stale status below)
 
+- **Canonical descriptive-report generator complete but portable HTML blocked;
+  current cohort fixed as descriptive, 2026-08-02 (parent revision `2e29747`;
+  code/docs pending commit):** `scripts/build_aamas_descriptive_report.py` and
+  `tests/test_aamas_descriptive_report.py` validate and retain the complete
+  six-scenario/five-seed/16-metric matrices in a bounded artifact with exact
+  sources and provenance. Ruff, mypy and two focused tests pass. Final retry8
+  artifact/provenance SHA-256 values are `492BFA4E...0521` and
+  `41188D92...67C1`.
+
+  No HTML is eligible. Eight unique attempts and the `retry7_diagnostic` root
+  are preserved with explicit `ABORTED.json`; never overwrite, delete or report
+  them as valid. The official builder ultimately rendered both charts in the
+  enhanced reader, but its Chromium verifier rejected page-level desktop
+  horizontal overflow. Evidence points to the packaged long-report runtime's
+  sticky `width:100vw` header plus viewport-relative negative margins when a
+  vertical scrollbar exists. Do not patch generated HTML. Resolve upstream or
+  choose another surface only if it passes equivalent validation.
+
+  `docs/aamas2027_statistical_decision.md` fixes the already viewed five-seed
+  cohort as descriptive only. Do not add retrospective p-values, confidence
+  intervals, one-sided/mid-p tests, significance or superiority language. Any
+  new confirmatory cohort needs a committed endpoint, effect threshold,
+  independent-unit, multiplicity, stopping and failure plan before new seeds
+  are viewed. Remaining gates: portable surface, component-only ablations only
+  if component causal claims are retained, wider full-text literature coverage,
+  and final manuscript-to-artifact audit. Final checks pass Ruff, mypy over 104
+  source files and three focused report/protocol tests; full pytest is 162 passed plus the one
+  unchanged external-MATLAB-path failure and 190 OSQP dependency warnings.
+
 - **Method/reproducibility/manuscript package repaired, 2026-08-02 (parent
   revision `9ac4032`; documentation/code pending commit):** the clean current
   entry points are `README.md`, `docs/aamas2027_method_and_readiness.md`,

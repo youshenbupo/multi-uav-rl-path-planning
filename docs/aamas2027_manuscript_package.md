@@ -148,11 +148,14 @@ clearly labels five trained seeds and descriptive uncertainty.
 
 ## Remaining manuscript gates
 
-1. Freeze any inferential plan before generating inferential output.
+1. Keep the current five-seed cohort descriptive as fixed in
+   `docs/aamas2027_statistical_decision.md`; freeze a new plan before viewing
+   any separately collected confirmatory cohort.
 2. Decide whether to train graph-only and CBF-only independent ablations or
    keep claims explicitly at the integrated-pathway level.
 3. Expand primary-source literature coverage and obtain the closed IEEE full
    text before stronger comparisons.
-4. Generate tables/figures with traceability sidecars and audit every value.
+4. Resolve the portable-report runtime blocker or use another fully validated
+   surface, then audit every table/figure value and sidecar.
 5. Complete a final consistency, reproducibility, and limitations review.
 6. Obtain explicit user authorization before any external submission action.

@@ -107,8 +107,9 @@ not additional replication. Do not run episode-level inference.
 The current validated descriptive artifacts and hashes are listed in
 `docs/post_actor_isolation_descriptive_validation.md`. That report also lists
 all eligible input roots and explicit exclusions. Any future inferential
-analysis requires a separately specified and reviewed plan before its output is
-generated.
+cohort requires a separately specified and reviewed plan before its output is
+generated. `docs/aamas2027_statistical_decision.md` prohibits retrospective
+inference on the current already viewed five-seed cohort.
 
 ## Traceability checklist
 

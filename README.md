@@ -52,6 +52,8 @@ only a graph-uncertainty comparison.
 - Reproducibility and audit contract: `docs/reproducibility.md`
 - Descriptive-result validation:
   `docs/post_actor_isolation_descriptive_validation.md`
+- Statistical decision for the current five-seed evidence:
+  `docs/aamas2027_statistical_decision.md`
 - Primary-source literature ledger: `docs/related_work_matrix.md`
 - Manuscript assembly package: `docs/aamas2027_manuscript_package.md`
 - Current status and handoff: `docs/progress.md` and

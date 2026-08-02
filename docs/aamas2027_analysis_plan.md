@@ -194,9 +194,11 @@ exclusions; no value is imputed.
 
 ## Manuscript gates still open
 
-1. Do not convert the retained descriptive JSON into inferential or superiority
-   language without a separately specified, reviewed statistical procedure and
-   a check that it respects the five-seed independent unit.
+1. The current five-seed cohort is now explicitly descriptive under
+   `docs/aamas2027_statistical_decision.md`. Do not add retrospective p-values,
+   confidence intervals, significance decisions or superiority language. Any
+   separately collected confirmatory cohort needs a committed plan before its
+   seed results are viewed.
 2. Do not make a safety guarantee, CBF fallback-rate, real-time, or robust
    generalization claim from the current diagnostics.
 3. Do not make a novelty/first-combination claim. DACOM and DHCG have now been
