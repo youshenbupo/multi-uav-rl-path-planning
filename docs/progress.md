@@ -4396,3 +4396,39 @@ eligible inputs, artifact hashes, methodology and the explicit 13-artifact
 with caveats** internally, not submission-ready evidence by itself. Next:
 commit/push the five documents without `.gitignore`, then continue the
 primary-paper full-text evidence and manuscript/reproducibility gates.
+
+## AAMAS 2027 - primary-paper evidence gate advanced (2026-08-02)
+
+At parent revision `f302b71`, the required gstack browser was used for all web
+access. The AAAI and IJCAI official proceedings pages yielded the official
+nine-page DACOM and DHCG PDFs. Both files passed `%PDF-` magic checks, were
+text-extracted, rendered page by page, and fully reviewed. Their retained paths
+and SHA-256 values are:
+
+- `outputs/literature_primary_sources_20260802/Yuan_et_al_2023_DACOM_AAAI_official.pdf`:
+  `E186B67D9558F117F6C83BBC75A38D6616825BA257DE6739A685E962DAA11EC9`;
+- `outputs/literature_primary_sources_20260802/Liu_et_al_2023_DHCG_IJCAI_official.pdf`:
+  `310BAA7F8446EEF14A69D9516046627DBE8ED2EF3A564A5E1CE70BDFF6FCD652`.
+
+The AAMAS 2026 official graph-CBF extended abstract was downloaded again to
+`outputs/literature_primary_sources_20260802/Deng_et_al_2026_neural_graph_CBF_AAMAS_extended_abstract_official.pdf`.
+Its SHA-256
+`0AE5CA03242EDE2EB5E60822729EE6B6279F4FA4C14B836E411658260E09D29A`
+matches the earlier review record. OpenAlex exposes no longer repository
+version, so its evidence tier remains extended abstract.
+
+The IEEE UAV paper remains full-text blocked. IEEE Xplore returned HTTP 418;
+the Crossref publisher PDF link and IEEE stamp PDF path also produced no file.
+OpenAlex marks it closed access and reports no repository full text. Crossref,
+ORCID and OpenAlex metadata/abstract were reviewed, but no method-difference
+claim is permitted for communication assumptions, obstacle dynamics,
+uncertainty or safety mechanism.
+
+`docs/related_work_matrix.md` now records section-level DACOM/DHCG evidence,
+source tiers, exact hashes, the failed IEEE paths, and a non-exhaustive claim
+boundary. The review supports narrow paper-specific distinctions only; it does
+not support a “first”, exhaustive novelty, formal safety, superiority or robust
+generalization claim. Next: commit/push the literature ledger and synchronized
+records without `.gitignore`, then repair the stale/corrupted method-readiness
+document and expand the reproducibility/manuscript package against the current
+post-isolation evidence.

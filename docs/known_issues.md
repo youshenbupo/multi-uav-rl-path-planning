@@ -1140,3 +1140,13 @@
   change sign across scenarios. Zero collision deltas at both scales are a
   possible floor effect, not a safety benefit. The complete JSONs and
   `docs/post_actor_isolation_descriptive_validation.md` must accompany any use.
+- Primary-paper coverage is still non-exhaustive. DACOM and DHCG have now been
+  fully reviewed from official nine-page PDFs and may support only the narrow
+  paper-specific distinctions recorded in `docs/related_work_matrix.md`. The
+  AAMAS neural graph-CBF evidence remains a three-page extended abstract, and
+  no longer indexed version was found. The IEEE decentralized UAV paper remains
+  full-text blocked after IEEE HTTP 418, a failed Crossref publisher-PDF path,
+  and a failed IEEE stamp-PDF path; OpenAlex reports closed access and no
+  repository full text. Do not infer absent communication, uncertainty,
+  dynamic-obstacle or safety details from those short/metadata sources, and do
+  not make “first” or exhaustive novelty claims.

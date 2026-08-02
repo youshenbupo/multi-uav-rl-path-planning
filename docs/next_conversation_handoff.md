@@ -6,6 +6,28 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Primary-paper evidence gate advanced, 2026-08-02 (parent revision
+  `f302b71`; documentation pending commit):** the official nine-page DACOM
+  (AAAI 2023) and DHCG (IJCAI 2023) PDFs were downloaded, magic/hash checked,
+  rendered page by page and fully reviewed. Retained SHA-256 values are
+  `E186B67D9558F117F6C83BBC75A38D6616825BA257DE6739A685E962DAA11EC9`
+  and
+  `310BAA7F8446EEF14A69D9516046627DBE8ED2EF3A564A5E1CE70BDFF6FCD652`.
+  The AAMAS 2026 official three-page graph-CBF extended abstract was retained
+  with its previously recorded hash
+  `0AE5CA03242EDE2EB5E60822729EE6B6279F4FA4C14B836E411658260E09D29A`;
+  no longer indexed version was found.
+
+  IEEE Xplore still returns HTTP 418 for the decentralized UAV paper. A
+  Crossref publisher PDF and IEEE stamp PDF also produced no file, while
+  OpenAlex reports closed access and no repository full text. The updated
+  related-work matrix therefore permits narrow DACOM/DHCG paper-specific
+  distinctions, retains the AAMAS abstract and IEEE metadata source limits,
+  and still forbids “first”, exhaustive novelty, formal-safety, superiority or
+  robust-generalization claims. Next: commit/push these four documents without
+  `.gitignore`, then repair `docs/aamas2027_method_and_readiness.md` and expand
+  the manuscript/reproducibility package from current post-isolation evidence.
+
 - **Post-isolation descriptive aggregation generated and independently
   validated, 2026-08-02 (plan revision `030b50d`; documentation pending
   commit):** after the prospective plan was pushed, all nine targeted
