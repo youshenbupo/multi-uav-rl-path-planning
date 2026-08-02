@@ -4361,3 +4361,38 @@ Next: commit/push this prospective plan and the three synchronized documents
 without `.gitignore`. Only after that commit may the three new descriptive
 artifacts be generated with the existing validated summary tools, independently
 audited against eligible roots, documented and pushed as provenance records.
+
+## AAMAS 2027 - post-isolation descriptive aggregation generated and independently validated (2026-08-02)
+
+The plan was committed and pushed first at revision `030b50d`. A first targeted
+pytest call produced one pass and eight setup errors because the sandbox denied
+pytest temporary/cache directories; it generated no analysis output and did
+not reach the affected test bodies. The identical rerun with filesystem access
+passed all nine targeted summary/evaluator tests with four existing OSQP
+deprecation warnings.
+
+The unchanged summary tools then generated three unique artifacts and matching
+stdout/stderr logs. The 3-UAV four-arm JSON SHA-256 is
+`B3CB5F017A241DAF29C366DA9592624076A2FE44519F51809D5AE50251CF2F3E`;
+the 5-UAV full-minus-no-uncertainty JSON is
+`6661DBDDF678039581ED7FEC0D84595A641C25B87C6877DCEA95C3ADD5359120`;
+the 8-UAV counterpart is
+`E487CD7C16EAA285025917848AD51268BDC11228174ED17EFB395DC740144C61`.
+Each stdout has the same hash as its JSON and each stderr is empty.
+
+An independent validator that did not import the summary modules re-read all
+4,800 eligible raw episode records. It verified 30 cells/600 records per root,
+unique complete seed--scenario--episode identities, numeric/range validity,
+matching cross-arm cell sets, all six scenarios, all 16 metrics and the absence
+of inferential/ranking fields. It recomputed every seed-cell mean, sample
+standard deviation and 5/8-UAV full-minus-no-uncertainty paired delta; every
+number matched within `1e-12`. Stdout and JSON were identical.
+
+The validated values are mixed rather than uniformly favorable. This blocks a
+superiority narrative and reinforces the frozen claim boundary. Full details,
+eligible inputs, artifact hashes, methodology and the explicit 13-artifact
+`ABORTED` registry are in
+`docs/post_actor_isolation_descriptive_validation.md`. The rating is **Share
+with caveats** internally, not submission-ready evidence by itself. Next:
+commit/push the five documents without `.gitignore`, then continue the
+primary-paper full-text evidence and manuscript/reproducibility gates.

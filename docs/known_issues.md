@@ -1131,3 +1131,12 @@
   significance decisions and cannot support superiority, causality, safety or
   robust-generalization claims. All six scenarios and all supported metrics
   must be retained without post-hoc selection.
+- The three frozen post-isolation descriptive artifacts are complete and
+  independently recomputed from 4,800 raw episode records, but the validation
+  rating is only **Share with caveats**. Five independent trained seeds remain
+  too weak for a superiority or significance conclusion, and the paired values
+  are mixed: full-minus-no-uncertainty success is negative in 5/8-UAV
+  delay-only and 8-UAV loss-only, while return and minimum-separation deltas
+  change sign across scenarios. Zero collision deltas at both scales are a
+  possible floor effect, not a safety benefit. The complete JSONs and
+  `docs/post_actor_isolation_descriptive_validation.md` must accompany any use.

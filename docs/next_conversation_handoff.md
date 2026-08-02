@@ -6,6 +6,33 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Post-isolation descriptive aggregation generated and independently
+  validated, 2026-08-02 (plan revision `030b50d`; documentation pending
+  commit):** after the prospective plan was pushed, all nine targeted
+  summary/evaluator tests passed with four existing OSQP warnings. An earlier
+  sandboxed call had one pass/eight fixture setup permission errors and wrote no
+  summary output.
+
+  Three new JSON artifacts under `outputs/paired_summaries/` are the 3-UAV
+  four-arm, 5-UAV full-minus-no-uncertainty and 8-UAV full-minus-no-uncertainty
+  descriptive summaries. Their SHA-256 values are respectively
+  `B3CB5F017A241DAF29C366DA9592624076A2FE44519F51809D5AE50251CF2F3E`,
+  `6661DBDDF678039581ED7FEC0D84595A641C25B87C6877DCEA95C3ADD5359120`
+  and
+  `E487CD7C16EAA285025917848AD51268BDC11228174ED17EFB395DC740144C61`;
+  stdout matches each JSON and stderr is empty.
+
+  Independent validation re-read 4,800 raw episodes without importing the
+  summary tools and reproduced every cell mean, sample standard deviation and
+  paired delta within `1e-12`. Grain, completeness, uniqueness, ranges, six
+  scenarios, all 16 metrics, direction and absence of inferential/ranking
+  fields pass. The values are mixed, so the rating is **Share with caveats**
+  internally and no superiority/significance/causal/safety/generalization claim
+  is allowed. Full validation and the 13-path `ABORTED` exclusion registry are
+  in `docs/post_actor_isolation_descriptive_validation.md`. Next: commit/push
+  the five documents without `.gitignore`, then continue primary-paper
+  full-text review and manuscript/reproducibility audit.
+
 - **Post-isolation descriptive aggregation frozen before output generation,
   2026-08-01 (parent revision `67b40e0`; documentation pending commit):** all
   eight eligible evaluation roots were rechecked at 30 cells / 30 JSONL / 600
