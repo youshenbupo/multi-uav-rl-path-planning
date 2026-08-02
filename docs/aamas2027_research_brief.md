@@ -23,9 +23,11 @@ For receiver `i` and sender `j`, a delivered packet contains immutable
 
 `gamma_sigma` is an explicit robustness-model parameter, not a calibrated physical sensor
 standard deviation. Invalid packets create no actor graph edge and have zero padded features.
-The centralized critic may use environment truth under CTDE. The simulated joint CBF uses
-true geometry only to build constraints, while `sigma_ij` may increase its pairwise clearance
-margin; this is not a decentralized-CBF guarantee.
+The MLP critic uses complete environment state under CTDE; the current graph critic instead
+receives the same communication-limited node/edge representation as the graph actor. Neither
+critic is an actor input. The simulated joint CBF uses true geometry to build constraints,
+while `sigma_ij` may increase its pairwise clearance margin; this is not a decentralized-CBF
+guarantee.
 
 For CPA separation `d_CPA`, graph risk uses
 
@@ -38,11 +40,13 @@ For a CBF pairwise safety distance `d_safe`, the filter uses
 ## Method claim to test
 
 The full method uses predicted delivered state, age, uncertainty, risk-adjusted CPA graph
-features, and uncertainty-tightened CBF. The principal controlled comparison is a predictive
-graph using the same delivered packets but with `gamma_sigma = 0` and
-`kappa_sigma = kappa_CBF = 0`.
+features, and uncertainty-tightened CBF. At 3 UAV, the predictive-graph arm removes
+uncertainty from graph risk while retaining the shared uncertainty-adaptive CBF. At 5 and 8
+UAV, the independently trained comparison disables both graph uncertainty risk and the CBF
+uncertainty margin. The latter is a joint pathway ablation, not separate causal isolation of
+the graph and CBF components.
 
-## Proposed contributions, pending evidence
+## Implemented contributions under evaluation
 
 1. A delivery-aware interaction representation that predicts neighbour state from packet age
    and exposes a deterministic uncertainty bound without actor truth leakage.
@@ -51,9 +55,10 @@ graph using the same delivered packets but with `gamma_sigma = 0` and
 3. A risk-adaptive execution-side CBF margin and a reproducible evaluation protocol for
    delayed/lossy communication plus dynamic obstacles.
 
-These are implemented method contributions, not accepted novelty claims. A systematic
-first-party literature search must establish distinction from delayed-communication MARL,
-uncertainty-aware graph coordination, and CBF-shielded MARL before manuscript drafting.
+These are implemented method contributions, not accepted novelty claims. Full primary-source
+review of DACOM and DHCG now supports narrow paper-specific distinctions, while graph-CBF and
+practical decentralized-UAV sources remain limited by short-version or full-text access.
+Broader systematic coverage is still required before novelty or "first" language.
 
 ## Required evidence before paper claims
 
@@ -63,8 +68,9 @@ uncertainty-aware graph coordination, and CBF-shielded MARL before manuscript dr
   out-of-distribution scenarios.
 - Paired raw episode records with success, collision, minimum separation, temporal conflict,
   energy proxy, decision latency, CBF intervention, emergency fallback, and QP time.
-- Ablations trained independently for age, uncertainty, CPA prediction, graph, CBF, and any
-  retained hierarchy/BC component.
+- Independently trained graph-only and CBF-only uncertainty ablations if the paper seeks
+  component-level causal claims. The completed 5/8-UAV ablation only identifies the joint
+  uncertainty pathway.
 
 ## Claims that are prohibited until evidence exists
 
@@ -74,12 +80,13 @@ uncertainty-aware graph coordination, and CBF-shielded MARL before manuscript dr
   source/rollout artifacts.
 - No substituted controller or checkpoint may stand in for an unavailable baseline.
 
-## Literature-search protocol
+## Literature evidence protocol
 
-Search primary venues and publisher pages for: `delayed communication multi-agent
+Continue searching primary venues and publisher pages for: `delayed communication multi-agent
 reinforcement learning`, `lossy communication graph MARL`, `uncertainty-aware interaction
 graph multi-agent`, `multi-UAV conflict resolution MARL`, and `control barrier function
 multi-agent reinforcement learning`. Record venue, year, task assumptions, whether packet
-age/uncertainty changes graph topology, whether CBF is decentralized, and the exact gap this
-project can still claim. Do not cite an item until its title, authors, venue, and source page
-are independently verified.
+age/uncertainty changes graph topology, whether CBF is decentralized, source tier, and the
+exact paper-specific distinction. Do not make a method-difference claim without full text;
+do not cite an item until its bibliographic identity and authoritative source are verified.
+The live evidence ledger is `docs/related_work_matrix.md`.

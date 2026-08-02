@@ -19,4 +19,10 @@ def test_core_protocol_requires_five_seeds_four_independent_arms_and_shared_cbf(
         "predictive_graph_mappo",
         "uncertainty_predictive_graph_mappo",
     )
+    assert tuple(method.graph_mode for method in protocol.methods) == (
+        None,
+        "mappo",
+        "predictive_graph",
+        "uncertainty_predictive_graph",
+    )
     assert len({method.artifact_prefix for method in protocol.methods}) == 4

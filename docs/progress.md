@@ -4432,3 +4432,49 @@ generalization claim. Next: commit/push the literature ledger and synchronized
 records without `.gitignore`, then repair the stale/corrupted method-readiness
 document and expand the reproducibility/manuscript package against the current
 post-isolation evidence.
+
+## AAMAS 2027 - method, reproducibility, and manuscript package repaired (2026-08-02)
+
+At parent revision `9ac4032`, the stale/garbled landing and protocol documents
+were replaced with a clean evidence-bounded package: `README.md`,
+`docs/aamas2027_method_and_readiness.md`, `docs/reproducibility.md`,
+`docs/training.md`, and `docs/evaluation.md`. The research brief and analysis
+plan were synchronized, and `docs/aamas2027_manuscript_package.md` was added
+with a restrained title/abstract draft, section jobs, result-language gate,
+figure/table provenance contract, limitations, and remaining submission gates.
+
+Targeted implementation review established a method distinction that the old
+documents blurred. The MLP actor is communication-limited but its critic uses
+complete centralized environment state. The GraphMAPPO actor and graph critic
+both receive the communication-limited graph tensors; peer private node
+features/current truth are not injected. The execution-side CBF separately
+uses centralized simulator geometry. The new method document also states that
+the historical raw-graph label is actually `graph_mode=mappo`, a self-loop-only
+graph, and distinguishes the 3-UAV graph-uncertainty comparison from the joint
+graph+CBF no-uncertainty ablation at 5/8 UAV.
+
+The checked-in protocol manifest incorrectly named the raw arm
+`distance_graph`, even though all eligible post-isolation training used
+`mappo`. It now records `mappo` and the actual artifact prefixes. A test-first
+minimal loader repair accepts the already supported CLI mode and then locks the
+four expected graph-mode identities. No model, checkpoint, output, CBF value,
+or completed experiment was changed.
+
+Fresh verification passed Ruff, mypy with `--explicit-package-bases` over 103
+source files, `git diff --check`, and 28 focused protocol/communication/
+predictive-graph/replay tests. Full pytest finished with 160 passes and one
+unrelated legacy audit failure plus 190 OSQP dependency warnings. On this host,
+the failure expects 81 MATLAB files in
+`D:\yolo\multiuav\legacy_hgalo\HGALO_恢复源码`, but that external sibling path is
+absent and zero files are observed; an earlier environment snapshot had
+observed 83. The RL package does not create or modify that external source.
+
+Final process audit found no Python process. `nvidia-smi` showed desktop,
+Unity/player, system, and application processes but no Python training process.
+`.gitignore` remains the only user-owned unrelated edit and must stay unstaged.
+The resulting research package is internally auditable descriptive evidence,
+not yet external-submission-ready. Next gates are a prospective inferential
+decision, graph-only/CBF-only ablations if component causality is desired,
+traceable all-scenario tables/figures, broader/full-text literature evidence,
+and a final manuscript-to-artifact audit. External submission remains
+prohibited without explicit user authorization.

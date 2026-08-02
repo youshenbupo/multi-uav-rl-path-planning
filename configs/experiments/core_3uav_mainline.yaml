@@ -20,8 +20,10 @@ methods:
   - name: raw_graph_mappo
     family: graph_mappo
     config: configs/rl/dynamic_graph_baseline.yaml
-    graph_mode: distance_graph
-    artifact_prefix: core_3uav_raw_graph
+    # Historical label retained for comparability; implementation is a
+    # self-loop-only graph with no neighbour edges after actor isolation.
+    graph_mode: mappo
+    artifact_prefix: core_3uav_raw_graph_mappo
     use_cbf: true
   - name: predictive_graph_mappo
     family: graph_mappo
@@ -33,5 +35,5 @@ methods:
     family: graph_mappo
     config: configs/rl/dynamic_graph_baseline.yaml
     graph_mode: uncertainty_predictive_graph
-    artifact_prefix: core_3uav_uncertainty_graph
+    artifact_prefix: core_3uav_uncertainty_predictive_graph
     use_cbf: true

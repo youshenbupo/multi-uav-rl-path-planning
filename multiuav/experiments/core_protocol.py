@@ -65,6 +65,13 @@ def load_core_protocol(path: Path) -> CoreProtocol:
         "uncertainty_predictive_graph_mappo",
     ):
         raise ValueError("Core protocol must declare the four required learned comparison arms.")
+    if tuple(method.graph_mode for method in methods) != (
+        None,
+        "mappo",
+        "predictive_graph",
+        "uncertainty_predictive_graph",
+    ):
+        raise ValueError("Core protocol graph modes must match the audited comparison arms.")
     if len(set(prefixes)) != len(prefixes):
         raise ValueError("Every core arm must have its own artifact prefix.")
     initial_num_uavs = payload.get("initial_num_uavs")
@@ -110,6 +117,7 @@ def _method(value: object, root: Path) -> CoreMethod:
     if family == "mappo" and graph_mode is not None:
         raise ValueError("MLP-MAPPO must not declare a graph mode.")
     if family == "graph_mappo" and graph_mode not in {
+        "mappo",
         "distance_graph",
         "predictive_graph",
         "uncertainty_predictive_graph",

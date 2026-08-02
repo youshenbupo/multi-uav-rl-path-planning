@@ -40,10 +40,13 @@ Every included analysis must follow the single manuscript mainline:
 > uncertainty -> uncertainty-aware predictive interaction graph and coordinated
 > action -> uncertainty-adaptive CBF safety margin -> dynamic-obstacle execution.
 
-The actor may use only its own truth and delivered packets. Centralized critic
-state is not an actor input. Neural-network training/inference uses CUDA; OSQP
-CBF solving remains CPU-side. This plan does not authorize a controller change,
-CBF tuning, a new imitation/hierarchical track, or external submission.
+The actor may use only its own truth and delivered packets. Critic state is not
+an actor input. The MLP runner uses complete centralized state for value
+learning, whereas the current GraphMAPPO runner passes the same
+communication-limited node/edge tensors to its graph critic and does not inject
+current peer truth. Neural-network training/inference uses CUDA; OSQP CBF
+solving remains CPU-side. This plan does not authorize a controller change, CBF
+tuning, a new imitation/hierarchical track, or external submission.
 
 ## Independent unit and aggregation rule
 
@@ -95,7 +98,7 @@ Generate exactly these new artifacts from only the eligible roots in the table
 below:
 
 - `outputs/paired_summaries/post_actor_isolation_3uav_four_arm_descriptive_20260801.json`
-  with arm order MLP MAPPO, raw graph MAPPO, predictive graph without
+  with arm order MLP MAPPO, self-loop GraphMAPPO (historical raw-graph label), predictive graph without
   uncertainty, then uncertainty-aware predictive graph.
 - `outputs/paired_summaries/post_actor_isolation_5uav_full_vs_no_uncertainty_descriptive_20260801.json`
   with reference = predictive without uncertainty and treatment = full
@@ -196,12 +199,15 @@ exclusions; no value is imputed.
    a check that it respects the five-seed independent unit.
 2. Do not make a safety guarantee, CBF fallback-rate, real-time, or robust
    generalization claim from the current diagnostics.
-3. Do not make a novelty/first-combination claim until the primary full texts
-   recorded as unreviewed in `docs/related_work_matrix.md` are obtained and
-   compared directly.
-4. Complete a separate audit before editing the legacy MATLAB inventory/test;
-   current full pytest is 152 passed, 1 legacy audit failure (83 observed `.m`
-   files vs 81 asserted), and 28 OSQP deprecation warnings.
+3. Do not make a novelty/first-combination claim. DACOM and DHCG have now been
+   fully reviewed and support only narrow paper-specific distinctions; the
+   graph-CBF source is a three-page extended abstract and the IEEE UAV full text
+   remains unavailable. Broader systematic coverage is still required.
+4. Complete a separate audit before editing the legacy MATLAB inventory/test.
+   The current host lacks the sibling source path and therefore observes zero
+   `.m` files while the old assertion expects 81; an earlier host snapshot
+   observed 83. Do not fold that external ownership decision into the RL paper
+   work.
 5. Before submission readiness, audit every manuscript figure/table against
    this file, raw JSONL provenance, CBF replay provenance, and documented
    invalid-root exclusions. External submission remains prohibited without

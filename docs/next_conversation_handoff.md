@@ -1,10 +1,53 @@
 # AAMAS 2027 continuation handoff
 
-**Snapshot date:** 2026-07-22.  This document is the authoritative starting
+**Snapshot date:** 2026-08-02.  This document is the authoritative starting
 point for the next Codex conversation.  Inspect the worktree and running
 processes before relying on any status below.
 
-## Latest continuation update (2026-07-30, supersedes stale status below)
+## Latest continuation update (2026-08-02, supersedes stale status below)
+
+- **Method/reproducibility/manuscript package repaired, 2026-08-02 (parent
+  revision `9ac4032`; documentation/code pending commit):** the clean current
+  entry points are `README.md`, `docs/aamas2027_method_and_readiness.md`,
+  `docs/reproducibility.md`, `docs/training.md`, `docs/evaluation.md`, and the
+  new `docs/aamas2027_manuscript_package.md`. The research brief and analysis
+  plan were synchronized. These documents now preserve the single
+  communication-to-uncertainty-to-graph-to-CBF-to-execution chain and prohibit
+  unsupported superiority, safety, calibrated-uncertainty, real-time,
+  robust-generalization, novelty, and submission claims.
+
+  Implementation audit establishes three distinct information boundaries: the
+  MLP actor is communication-limited while its critic uses complete centralized
+  environment state; the GraphMAPPO actor and graph critic both receive the
+  communication-limited graph tensors; the online CPU OSQP CBF uses centralized
+  simulator geometry only at execution. The 3-UAV predictive arm removes graph
+  uncertainty but retains the shared adaptive CBF. The independently trained
+  5/8-UAV ablation jointly removes uncertainty from graph risk and the CBF
+  margin, so it cannot isolate either component causally.
+
+  A stale protocol-manifest mismatch was repaired without changing experiments
+  or safety settings. The historical raw-graph arm now correctly records
+  `graph_mode=mappo` and its actual prefixes; the loader accepts that existing
+  CLI mode and tests lock all four mode identities. `mappo` is self-loop-only,
+  not a raw neighbour graph and not `distance_graph`.
+
+  Fresh checks: Ruff passes; mypy with `--explicit-package-bases` passes 103
+  source files; 28 focused protocol/communication/predictive-graph/replay tests
+  pass; full pytest is 160 passed plus one unrelated legacy audit failure and
+  190 OSQP dependency warnings. The legacy test expects 81 MATLAB files under
+  `D:\yolo\multiuav\legacy_hgalo\HGALO_恢复源码`, but that external path is absent
+  on this host and yields zero (an older snapshot recorded 83). Do not repair
+  that unrelated ownership issue inside the RL package. Final process audit
+  found no Python/GPU training process; `.gitignore` remains user-owned and
+  unstaged.
+
+  Immediate next gates after committing/pushing this phase are: decide and
+  freeze any inferential plan before output; train graph-only/CBF-only
+  uncertainty ablations only if component causal claims are required; generate
+  all-scenario manuscript tables/figures with raw-root/hash sidecar ledgers;
+  expand primary literature/full-text coverage; and perform a final
+  manuscript-to-artifact audit. Never submit externally without explicit user
+  authorization.
 
 - **Primary-paper evidence gate advanced, 2026-08-02 (parent revision
   `f302b71`; documentation pending commit):** the official nine-page DACOM

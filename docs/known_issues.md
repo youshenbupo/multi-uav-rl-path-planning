@@ -1150,3 +1150,31 @@
   repository full text. Do not infer absent communication, uncertainty,
   dynamic-obstacle or safety details from those short/metadata sources, and do
   not make “first” or exhaustive novelty claims.
+- The historical label "raw GraphMAPPO" is semantically misleading after the
+  actor-isolation audit. Its eligible runs use `graph_mode=mappo`, which creates
+  self loops but no neighbour edges. The core protocol manifest and loader now
+  lock that identity; do not substitute `distance_graph`, relabel it as a raw
+  neighbour graph, or mix old roots generated under another mode.
+- Critic information differs by family. The MLP runner trains its critic on the
+  complete centralized environment state, while the current GraphMAPPO runner
+  gives its graph critic the same communication-limited graph tensors used by
+  the actor. The centralized-geometry CBF is a third, execution-only boundary.
+  Manuscript language must state these separately rather than claiming a
+  uniform centralized critic implementation.
+- The completed 5/8-UAV no-uncertainty comparison disables both graph
+  uncertainty risk and the CBF uncertainty margin. It is a joint pathway
+  ablation and cannot assign a difference to either component separately.
+  Independently trained graph-only and CBF-only arms are still required for a
+  component-level causal claim.
+- The current full pytest audit has 160 passes and one unrelated legacy failure
+  with 190 OSQP dependency warnings. The failing test expects 81 MATLAB files
+  under the external sibling path
+  `D:\yolo\multiuav\legacy_hgalo\HGALO_恢复源码`; that path is absent on the
+  current host, so zero are observed. An earlier host snapshot recorded 83.
+  This external dependency drift must be audited separately; do not create or
+  edit the legacy source as part of the RL paper work.
+- The manuscript package is an internal scaffold only. No inferential analysis
+  has been prespecified, no paper-facing table/figure has a completed
+  raw-root/hash sidecar ledger, literature coverage remains non-exhaustive, and
+  the mixed five-seed descriptive values do not support superiority, safety,
+  robust generalization, or external submission.
