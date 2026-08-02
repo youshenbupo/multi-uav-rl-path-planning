@@ -54,6 +54,8 @@ only a graph-uncertainty comparison.
   `docs/post_actor_isolation_descriptive_validation.md`
 - Statistical decision for the current five-seed evidence:
   `docs/aamas2027_statistical_decision.md`
+- Portable descriptive PDF and validation ledger:
+  `docs/aamas2027_pdf_report_validation.md`
 - Primary-source literature ledger: `docs/related_work_matrix.md`
 - Manuscript assembly package: `docs/aamas2027_manuscript_package.md`
 - Current status and handoff: `docs/progress.md` and

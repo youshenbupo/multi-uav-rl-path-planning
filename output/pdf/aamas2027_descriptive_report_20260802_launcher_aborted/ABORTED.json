@@ -1,0 +1,10 @@
+{
+  "status": "aborted",
+  "stage": "pdf_cli_import",
+  "reason": "Direct script execution failed before argument parsing because scripts.build_aamas_descriptive_report was not importable when sys.path contained only the scripts directory.",
+  "error": "ModuleNotFoundError: No module named 'scripts'",
+  "pdf_created": false,
+  "provenance_created": false,
+  "preserve_and_exclude": true,
+  "next_attempt_must_use_new_output_root": true
+}

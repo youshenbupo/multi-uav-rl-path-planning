@@ -177,6 +177,8 @@ Completed:
 - independently validated descriptive aggregation;
 - an explicit decision to keep the already viewed five-seed package
   descriptive and add no retrospective hypothesis tests;
+- a source-hashed six-page portable PDF whose complete pages, tables and charts
+  passed structural, text and visual validation;
 - full primary-source review of DACOM and DHCG and a source-tiered comparison
   with graph-CBF and decentralized-UAV prior work.
 
@@ -191,7 +193,5 @@ Open before external submission readiness:
    keeping all six scenarios and unfavorable cells visible.
 4. Resolve or explicitly waive the unrelated legacy MATLAB inventory drift
    after a separate ownership audit.
-5. Resolve the portable-report runtime layout blocker or use another fully
-   validated delivery surface; never distribute the failed HTML attempts.
-6. Perform a final manuscript-to-artifact audit. External submission requires
+5. Perform a final manuscript-to-artifact audit. External submission requires
    explicit user authorization and is outside the current task.

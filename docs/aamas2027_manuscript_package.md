@@ -155,7 +155,8 @@ clearly labels five trained seeds and descriptive uncertainty.
    keep claims explicitly at the integrated-pathway level.
 3. Expand primary-source literature coverage and obtain the closed IEEE full
    text before stronger comparisons.
-4. Resolve the portable-report runtime blocker or use another fully validated
-   surface, then audit every table/figure value and sidecar.
+4. Use the validated PDF surface recorded in
+   `docs/aamas2027_pdf_report_validation.md` as the portable descriptive view;
+   still audit every manuscript-specific table/figure value and sidecar.
 5. Complete a final consistency, reproducibility, and limitations review.
 6. Obtain explicit user authorization before any external submission action.

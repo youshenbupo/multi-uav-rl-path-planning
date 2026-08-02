@@ -6,6 +6,37 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-08-02, supersedes stale status below)
 
+- **Validated portable PDF replaces the blocked HTML delivery surface,
+  2026-08-02 (parent revision `a310097`; code/docs pending commit):**
+  `scripts/build_aamas_descriptive_pdf.py` consumes the same three frozen
+  descriptive summaries and generates a six-page landscape-A4 PDF plus a
+  source/builder-hashed provenance sidecar. The eligible root is
+  `output/pdf/aamas2027_descriptive_report_20260802_retry2/`; PDF SHA-256 is
+  `C37B1C931C9031D89FAAC568428800BB1AC264ECC96C821D742F1F92C25A6F09`
+  and provenance SHA-256 is
+  `96149F4BA7815A43B64FAB9511F1221E0855559A06E06A2D37B0E7BACF163AFA`.
+  Generation-time builder SHA-256 is
+  `E86B4459C3CB90A8639334E46425815174E249579269028C62E0904B85C8CDD3`.
+
+  Structural checks reopen the PDF with `pypdf` and `pdfplumber`; `pdfinfo`
+  confirms six A4 pages, no encryption, JavaScript or form. Table extraction
+  finds 25 rows including the 3-UAV header and 13 including the 5/8-UAV header.
+  Poppler rendered all pages at 144 DPI, and every page was inspected at
+  original detail with no clipping, overlap, black box, missing glyph or
+  illegible label. The exact contract is in
+  `docs/aamas2027_pdf_report_validation.md`.
+
+  Two excluded attempts are preserved: a zero-artifact direct-script import
+  failure and `retry1`, whose all-zero full-only scale plot was visually
+  uninformative. Both have `ABORTED.json`; the import defect and two-series
+  scale chart were fixed test-first. The nine invalid HTML roots remain
+  excluded. The portable-surface gate is closed, but manuscript-specific
+  figure/table traceability, broader full-text literature, optional component
+  ablations and final manuscript-to-artifact integrity audit remain open.
+  Final checks pass Ruff, mypy over 105 source files and six focused
+  PDF/report/protocol tests. Full pytest is 165 passed plus the same one
+  external-MATLAB-path failure and 190 OSQP dependency warnings.
+
 - **Canonical descriptive-report generator complete but portable HTML blocked;
   current cohort fixed as descriptive, 2026-08-02 (parent revision `2e29747`;
   code/docs pending commit):** `scripts/build_aamas_descriptive_report.py` and

@@ -4529,3 +4529,58 @@ Next: commit/push the generator, tests and synchronized documentation without
 `.gitignore`. The remaining paper gates are the portable surface blocker,
 component-only ablations if causal component claims are retained, broader
 full-text literature coverage, and a final manuscript-to-artifact audit.
+
+## AAMAS 2027 - validated portable PDF evidence surface retained (2026-08-02)
+
+At parent revision `a310097`, the blocked portable HTML was replaced by an
+independent static-PDF surface rather than patched. A test-first
+`scripts/build_aamas_descriptive_pdf.py` now validates the three frozen summary
+schemas, refuses overwrite, creates a six-page landscape-A4 PDF with source and
+generator provenance, reopens the result, and enforces required text before
+writing the sidecar. `environment.yml` pins ReportLab, pdfplumber and pypdf.
+`.gitattributes` marks PDFs as binary; staged and raw blob IDs match, so Git
+line-ending conversion cannot invalidate their recorded hashes.
+
+The first direct-script launch failed before argument parsing because its
+package import was not available in script execution mode. It produced no PDF;
+an explicit launcher `ABORTED.json` is retained. A failing CLI regression test
+was added before the dual execution-mode import repair. The next unique root,
+`retry1`, produced a structurally clean six-page report, but its full-method-
+only scale chart was empty because all 12 full-method success means were zero.
+That root and provenance remain with `ABORTED.json`. A failing provenance
+contract test was added before changing the chart to show both independently
+trained arm means.
+
+The eligible unique root is
+`output/pdf/aamas2027_descriptive_report_20260802_retry2/`. Its PDF SHA-256 is
+`C37B1C931C9031D89FAAC568428800BB1AC264ECC96C821D742F1F92C25A6F09`;
+provenance SHA-256 is
+`96149F4BA7815A43B64FAB9511F1221E0855559A06E06A2D37B0E7BACF163AFA`;
+the generation-time builder SHA-256 is
+`E86B4459C3CB90A8639334E46425815174E249579269028C62E0904B85C8CDD3`.
+Its provenance repeats the three already validated input hashes and records
+six scenarios, five seeds, 20 episodes per seed-scenario cell, 24 visible
+3-UAV success rows, 12 visible paired scale rows, all 11 task metrics, all five
+CBF metrics, full-minus-no-uncertainty direction, descriptive-only claims and
+no external-submission authorization.
+
+Independent checks reopened the PDF with pypdf and pdfplumber, matched the PDF
+and builder hashes, found one 25-row table on page 3 and one 13-row table on
+page 5, and confirmed one 841.89 by 595.276 point page size. `pdfinfo` reports
+six pages, PDF 1.4, no encryption, no JavaScript and no form. Poppler rendered
+all six pages at 144 DPI. Complete visual inspection found no clipping,
+overlap, black boxes, missing glyphs or unreadable labels. Its `Symbol` and
+`ArialUnicode` missing-display-font diagnostics had no visible effect and are
+retained as non-blocking renderer provenance.
+
+This closes the portable evidence-surface gate only. It does not make any
+failed HTML eligible and does not close manuscript-specific figure/table
+traceability, component-only causal ablations, primary-literature breadth or
+the final manuscript-to-artifact integrity audit. No experiment, CBF value or
+claim boundary changed.
+
+Final verification passes Ruff, mypy over 105 source files and six focused
+PDF/report/protocol tests. Full pytest is 165 passed with one unchanged legacy
+MATLAB inventory failure and 190 OSQP dependency warnings. The external sibling
+source path is still absent, so the test observes zero `.m` files while
+asserting 81; no RL or PDF test failed.

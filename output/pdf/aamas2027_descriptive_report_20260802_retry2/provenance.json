@@ -1,0 +1,79 @@
+{
+  "generated_at": "2026-08-02T04:33:14Z",
+  "git_revision": "a3100971129ba6c347e1407a24b5cc2f0780b000",
+  "builder": {
+    "path": "D:/yolo/multiuav/reinforcement_learning/scripts/build_aamas_descriptive_pdf.py",
+    "sha256": "E86B4459C3CB90A8639334E46425815174E249579269028C62E0904B85C8CDD3"
+  },
+  "pdf_path": "output/pdf/aamas2027_descriptive_report_20260802_retry2/aamas2027_descriptive_report.pdf",
+  "pdf_sha256": "C37B1C931C9031D89FAAC568428800BB1AC264ECC96C821D742F1F92C25A6F09",
+  "page_count": 6,
+  "inputs": {
+    "three_uav": {
+      "path": "outputs/paired_summaries/post_actor_isolation_3uav_four_arm_descriptive_20260801.json",
+      "sha256": "B3CB5F017A241DAF29C366DA9592624076A2FE44519F51809D5AE50251CF2F3E"
+    },
+    "five_uav": {
+      "path": "outputs/paired_summaries/post_actor_isolation_5uav_full_vs_no_uncertainty_descriptive_20260801.json",
+      "sha256": "6661DBDDF678039581ED7FEC0D84595A641C25B87C6877DCEA95C3ADD5359120"
+    },
+    "eight_uav": {
+      "path": "outputs/paired_summaries/post_actor_isolation_8uav_full_vs_no_uncertainty_descriptive_20260801.json",
+      "sha256": "E487CD7C16EAA285025917848AD51268BDC11228174ED17EFB395DC740144C61"
+    }
+  },
+  "independent_unit": "trained_seed",
+  "trained_seed_count": 5,
+  "episodes_per_seed_scenario": 20,
+  "scenarios": [
+    "nominal",
+    "delay_only",
+    "loss_only",
+    "dynamic_only",
+    "combined",
+    "ood_communication_obstacle"
+  ],
+  "visible_success_rows": {
+    "three_uav": 24,
+    "scale_paired": 12
+  },
+  "charts": {
+    "three_uav_success": {
+      "series": [
+        "mlp_mappo",
+        "raw_graph_mappo",
+        "predictive_graph_no_uncertainty",
+        "uncertainty_predictive_graph"
+      ]
+    },
+    "scale_success": {
+      "series": [
+        "no_uncertainty_seed_mean",
+        "full_seed_mean"
+      ]
+    }
+  },
+  "retained_task_metrics": [
+    "success",
+    "collision",
+    "terrain_violation",
+    "threat_violation",
+    "episode_return",
+    "path_length",
+    "mission_time",
+    "minimum_separation",
+    "temporal_conflict_count",
+    "energy_proxy",
+    "decision_latency"
+  ],
+  "retained_cbf_diagnostic_metrics": [
+    "cbf_emergency_count",
+    "cbf_emergency_fallback_rate",
+    "cbf_intervention_rate",
+    "cbf_mean_correction",
+    "cbf_mean_solve_time_seconds"
+  ],
+  "paired_delta_direction": "full_minus_independently_trained_no_uncertainty",
+  "claim_boundary": "descriptive_only",
+  "external_submission_authorized": false
+}

@@ -111,6 +111,29 @@ cohort requires a separately specified and reviewed plan before its output is
 generated. `docs/aamas2027_statistical_decision.md` prohibits retrospective
 inference on the current already viewed five-seed cohort.
 
+## Portable PDF reproduction
+
+`environment.yml` pins `reportlab`, `pdfplumber`, and `pypdf` for the PDF
+surface. Generate only into a new directory:
+
+```powershell
+$revision = git rev-parse HEAD
+$generated = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+& 'D:\anaconda3\envs\multiuav_rl\python.exe' scripts\build_aamas_descriptive_pdf.py `
+  --three-uav-summary outputs\paired_summaries\post_actor_isolation_3uav_four_arm_descriptive_20260801.json `
+  --five-uav-summary outputs\paired_summaries\post_actor_isolation_5uav_full_vs_no_uncertainty_descriptive_20260801.json `
+  --eight-uav-summary outputs\paired_summaries\post_actor_isolation_8uav_full_vs_no_uncertainty_descriptive_20260801.json `
+  --output-dir output\pdf\<new-unique-root> `
+  --generated-at $generated `
+  --git-revision $revision
+```
+
+The command refuses an existing output directory. Reopen the PDF with `pypdf`
+and `pdfplumber`, run `pdfinfo`, render every page with `pdftoppm`, and inspect
+the complete rendered page set before eligibility. The current eligible file,
+hashes, extracted-table checks, visual audit, and preserved failed attempts are
+recorded in `docs/aamas2027_pdf_report_validation.md`.
+
 ## Traceability checklist
 
 Before using a number in a manuscript:

@@ -1166,7 +1166,7 @@
   ablation and cannot assign a difference to either component separately.
   Independently trained graph-only and CBF-only arms are still required for a
   component-level causal claim.
-- The current full pytest audit has 162 passes and one unrelated legacy failure
+- The current full pytest audit has 165 passes and one unrelated legacy failure
   with 190 OSQP dependency warnings. The failing test expects 81 MATLAB files
   under the external sibling path
   `D:\yolo\multiuav\legacy_hgalo\HGALO_恢复源码`; that path is absent on the
@@ -1187,6 +1187,15 @@
   scrolling `100vw` sticky header. Do not patch generated HTML, delete failed
   screenshots, or distribute the diagnostic HTML. Wait for an upstream runtime
   fix or use another surface only after it passes equivalent validation.
+- A validated alternative now exists at
+  `output/pdf/aamas2027_descriptive_report_20260802_retry2/`. Its six-page PDF
+  passed `pypdf`, `pdfplumber`, `pdfinfo`, complete 144-DPI rendering and
+  page-by-page visual inspection. The direct-script launcher failure and the
+  first visually uninformative PDF remain preserved with `ABORTED.json` and are
+  excluded. Poppler emitted missing-display-font diagnostics for `Symbol` and
+  `ArialUnicode`, but no missing glyph, black box, clipping or overlap was
+  visible on any page. The PDF resolves the portable-surface gate without
+  making any failed HTML eligible.
 - The current statistical decision is deliberately non-inferential. Values
   were already inspected before any endpoint/hypothesis/multiplicity plan, and
   five trained seeds give only 32 paired sign assignments. Do not add post-hoc

@@ -1,0 +1,10 @@
+{
+  "status": "aborted",
+  "stage": "pdf_visual_review",
+  "reason": "The PDF rendered cleanly, but the scale chart displayed only the full-method series. All full-method success means were zero, leaving an empty plotting area and hiding the nonzero no-uncertainty comparison cells visible in the adjacent table.",
+  "pdf_created": true,
+  "provenance_created": true,
+  "pages_rendered": 6,
+  "preserve_and_exclude": true,
+  "next_attempt_must_use_new_output_root": true
+}
