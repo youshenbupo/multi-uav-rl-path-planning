@@ -65,6 +65,51 @@ CBF diagnostic fields are not a safety guarantee or a substitute for retained
 all-source CBF replay JSONL. Any future safety/fallback analysis must identify
 the exact raw event sources and solver protocol separately.
 
+## Frozen post-isolation descriptive aggregation (specified before output generation)
+
+This section was fixed on 2026-08-01 at parent revision `67b40e0`, before the
+three output paths below existed or their values were inspected. It is a
+prospective descriptive aggregation plan, not a preregistration or an
+inferential test plan.
+
+For every arm and scenario, compute the arithmetic mean of each supported
+numeric metric across the 20 indexed episodes in a seed--scenario cell. Treat
+the resulting five cell means, one per independently trained seed
+`20260719`--`20260723`, as the only repetition units. Report the across-seed
+mean and sample standard deviation. For the 5-UAV and 8-UAV ablations, also
+report the same-seed paired difference as full uncertainty-aware method minus
+independently trained predictive-without-uncertainty method, with its mean and
+sample standard deviation. The shared seed is a blocking identity, not extra
+replication.
+
+Use exactly the metric list already frozen in
+`scripts/summarize_paired_checkpoint_evaluations.py`: task metrics `success`,
+`collision`, `terrain_violation`, `threat_violation`, `episode_return`,
+`path_length`, `mission_time`, `minimum_separation`,
+`temporal_conflict_count`, `energy_proxy`, and `decision_latency`; CBF
+diagnostic metrics `cbf_emergency_count`, `cbf_emergency_fallback_rate`,
+`cbf_intervention_rate`, `cbf_mean_correction`, and
+`cbf_mean_solve_time_seconds`. Preserve task and CBF sections separately.
+
+Generate exactly these new artifacts from only the eligible roots in the table
+below:
+
+- `outputs/paired_summaries/post_actor_isolation_3uav_four_arm_descriptive_20260801.json`
+  with arm order MLP MAPPO, raw graph MAPPO, predictive graph without
+  uncertainty, then uncertainty-aware predictive graph.
+- `outputs/paired_summaries/post_actor_isolation_5uav_full_vs_no_uncertainty_descriptive_20260801.json`
+  with reference = predictive without uncertainty and treatment = full
+  uncertainty-aware method, so every paired delta is full minus no uncertainty.
+- `outputs/paired_summaries/post_actor_isolation_8uav_full_vs_no_uncertainty_descriptive_20260801.json`
+  with the same reference/treatment direction.
+
+Do not compute episode-level tests, p-values, confidence intervals, multiple
+comparison decisions, rankings, or superiority labels. Do not select scenarios
+or metrics after viewing values. All six scenarios and every supported metric
+remain in the artifacts even when constant, unfavorable, or non-significant in
+appearance. CBF diagnostic summaries remain execution telemetry only and must
+not replace the separately retained source/replay audit.
+
 ## Eligible checkpoint-evaluation inputs
 
 | Scale / comparison | Eligible raw inputs | Descriptive artifact | Explicit exclusions |

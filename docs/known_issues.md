@@ -1123,3 +1123,11 @@
   safety, fallback-rate, performance or generalization claim. A fresh
   prespecified paired/descriptive analysis remains absent, and every historical
   paired summary remains excluded.
+- The post-isolation descriptive aggregation was frozen before output
+  generation at revision `67b40e0`, but it has only five independent trained
+  seeds per arm. The planned artifacts therefore report seed-level means,
+  sample standard deviations and, for 5/8 UAV, same-seed paired deltas only.
+  They deliberately provide no p-values, confidence intervals, rankings or
+  significance decisions and cannot support superiority, causality, safety or
+  robust-generalization claims. All six scenarios and all supported metrics
+  must be retained without post-hoc selection.

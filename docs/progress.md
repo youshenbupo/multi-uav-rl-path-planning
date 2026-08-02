@@ -4337,3 +4337,27 @@ generalization result. Next: commit/push these four documents without
 `.gitignore`, then specify and independently verify the fresh post-isolation
 paired/descriptive analysis using seed as the inferential unit while retaining
 all historical summaries as exclusions.
+
+## AAMAS 2027 - post-isolation descriptive aggregation frozen before results (2026-08-01)
+
+At parent revision `67b40e0`, read-only preflight verified that all eight
+eligible post-isolation evaluation roots used by the planned 3-UAV four-arm and
+5/8-UAV full-vs-no-uncertainty summaries each contain 30 cell directories, 30
+raw JSONL files and 600 records. The three new descriptive output targets did
+not exist; HEAD matched the remote and `.gitignore` remained the only dirty
+user file.
+
+Before inspecting any new aggregate values, `docs/aamas2027_analysis_plan.md`
+now freezes the independent unit, input roots, arm/delta direction, complete
+metric list, output names and claim boundary. Every seed--scenario cell is
+first averaged over its 20 episodes; only the five independently trained seeds
+are descriptive units. Outputs contain seed means/sample standard deviations
+and, for 5/8 UAV, paired full-minus-no-uncertainty deltas. They contain no
+p-values, confidence intervals, multiple-comparison decisions, rankings or
+superiority labels. All six scenarios and every supported metric must remain,
+and CBF fields stay separate diagnostic telemetry.
+
+Next: commit/push this prospective plan and the three synchronized documents
+without `.gitignore`. Only after that commit may the three new descriptive
+artifacts be generated with the existing validated summary tools, independently
+audited against eligible roots, documented and pushed as provenance records.

@@ -6,6 +6,23 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-07-30, supersedes stale status below)
 
+- **Post-isolation descriptive aggregation frozen before output generation,
+  2026-08-01 (parent revision `67b40e0`; documentation pending commit):** all
+  eight eligible evaluation roots were rechecked at 30 cells / 30 JSONL / 600
+  records, while the three planned output targets were absent. The analysis
+  plan now fixes seed--scenario cell averaging, five trained seeds as the only
+  repetition units, all supported metrics, and 5/8-UAV paired direction as full
+  uncertainty-aware minus independently trained no-uncertainty.
+
+  Planned outputs are the new `post_actor_isolation_*_descriptive_20260801.json`
+  files for 3-UAV four-arm, 5-UAV paired and 8-UAV paired summaries. They must
+  retain all six scenarios and all task/CBF diagnostic metrics, report only
+  seed means/sample standard deviations and paired deltas, and include no
+  p-values, confidence intervals, rankings or superiority claims. Next:
+  commit/push the four documents without `.gitignore`; only then run the three
+  existing summary tools against the exact eligible roots, audit outputs, and
+  document results without inferential language.
+
 - **Post-isolation 8-UAV independent no-uncertainty evidence gate complete,
   2026-08-01 (matrix launch revision `c47aaf7`; documentation pending
   commit):** retained launcher
