@@ -1,4 +1,4 @@
-# AAMAS 2027 research brief: uncertainty-calibrated coordination
+# AAMAS 2027 research brief: uncertainty-aware coordination
 
 ## Locked question
 
@@ -50,7 +50,7 @@ the graph and CBF components.
 
 1. A delivery-aware interaction representation that predicts neighbour state from packet age
    and exposes a deterministic uncertainty bound without actor truth leakage.
-2. An uncertainty-calibrated predictive graph that makes communication degradation alter
+2. An uncertainty-aware predictive graph that makes communication degradation alter
    both edge risk and graph connectivity.
 3. A risk-adaptive execution-side CBF margin and a reproducible evaluation protocol for
    delayed/lossy communication plus dynamic obstacles.

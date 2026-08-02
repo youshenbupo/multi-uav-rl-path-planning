@@ -6,6 +6,25 @@ processes before relying on any status below.
 
 ## Latest continuation update (2026-08-02, supersedes stale status below)
 
+- **Academic-paper Phase-0 configuration prepared, awaiting mandatory user
+  confirmation, 2026-08-02 (parent revision `fdb4a4d`; docs pending commit):**
+  `docs/aamas2027_paper_configuration.md` converts the repository evidence and
+  claim limits into a proposed English AAMAS 2027 empirical-paper record. It
+  recommends a 5,500--6,500-word Markdown source, descriptive integrated-
+  pathway claims only, no graph-only/CBF-only training unless component
+  causality is explicitly chosen, and no external submission.
+
+  The record refuses to fabricate author names/order, affiliations, CRediT,
+  funding, conflicts, public data/code availability or final AI-disclosure
+  language. The exact 2027 template/page limit/citation style also remains
+  pending an official venue source. `docs/aamas2027_research_brief.md` was
+  corrected from “uncertainty-calibrated” to “uncertainty-aware” because the
+  age bound is deterministic and uncalibrated. This is a documentation-only
+  Phase-0 gate; no experiment, model, CBF parameter or result changed.
+
+  Next action requires explicit user confirmation or edits to the proposed
+  record. Only then may the full internal manuscript drafting phase begin.
+
 - **Validated portable PDF replaces the blocked HTML delivery surface,
   2026-08-02 (parent revision `a310097`; code/docs pending commit):**
   `scripts/build_aamas_descriptive_pdf.py` consumes the same three frozen

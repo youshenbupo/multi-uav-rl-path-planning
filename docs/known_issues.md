@@ -1202,3 +1202,11 @@
   p-values, confidence intervals, one-sided tests, mid-p conventions, rankings
   or superiority labels to the existing cohort. A later confirmatory cohort
   must be frozen separately before its seed results are viewed.
+- The academic-paper Phase-0 configuration is explicit but not yet user
+  confirmed. The recommended paper is an English, descriptive,
+  integrated-pathway AAMAS 2027 manuscript; it does not run graph-only or
+  CBF-only ablations and leaves authorship, CRediT, funding, conflicts, public
+  data availability and AI-disclosure wording unresolved. These fields must
+  not be guessed or silently filled. Full drafting cannot cross the Phase-0
+  gate until the user confirms or edits
+  `docs/aamas2027_paper_configuration.md`.

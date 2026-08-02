@@ -58,6 +58,8 @@ only a graph-uncertainty comparison.
   `docs/aamas2027_pdf_report_validation.md`
 - Primary-source literature ledger: `docs/related_work_matrix.md`
 - Manuscript assembly package: `docs/aamas2027_manuscript_package.md`
+- Paper configuration awaiting author confirmation:
+  `docs/aamas2027_paper_configuration.md`
 - Current status and handoff: `docs/progress.md` and
   `docs/next_conversation_handoff.md`
 

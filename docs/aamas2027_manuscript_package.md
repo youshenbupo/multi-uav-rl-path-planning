@@ -3,6 +3,9 @@
 **Purpose:** evidence-bounded drafting scaffold. This is not a finished paper,
 an acceptance claim, or authorization to submit.
 
+Phase-0 drafting choices and unresolved author declarations are recorded in
+`docs/aamas2027_paper_configuration.md` and require explicit user confirmation.
+
 ## Candidate title
 
 **Communication-Uncertainty-Aware Predictive Graph Coordination with an

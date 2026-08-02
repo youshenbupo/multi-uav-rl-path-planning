@@ -4584,3 +4584,30 @@ PDF/report/protocol tests. Full pytest is 165 passed with one unchanged legacy
 MATLAB inventory failure and 190 OSQP dependency warnings. The external sibling
 source path is still absent, so the test observes zero `.m` files while
 asserting 81; no RL or PDF test failed.
+
+## AAMAS 2027 - academic-paper Phase-0 configuration prepared (2026-08-02)
+
+At parent revision `fdb4a4d`, the manuscript scaffold, method/readiness record,
+statistical decision, related-work ledger and validated PDF were reconciled
+into `docs/aamas2027_paper_configuration.md`. The recommended configuration is
+an English empirical AAMAS 2027 paper drafted canonically in Markdown at a
+working 5,500--6,500 words. It retains only descriptive integrated-pathway
+claims and recommends no graph-only/CBF-only training unless the user chooses a
+component-level causal claim.
+
+The record freezes the question, claim contract, section/word budget, accepted
+evidence inputs and no-external-submission boundary. It explicitly leaves
+author identity/order, affiliations, CRediT roles, funding, conflicts, public
+data/code availability, final AI disclosure and any stricter length preference
+for user confirmation. It also leaves the exact AAMAS 2027 template, page limit
+and citation format pending an official venue source rather than guessing.
+
+The research brief title and contribution wording were corrected from
+“uncertainty-calibrated” to “uncertainty-aware”. The deterministic age bound
+has never been physically or probabilistically calibrated, so the old wording
+contradicted the current method audit. No code, experiment, CBF parameter,
+artifact or result changed.
+
+This completes academic-paper Phase 0 preparation but not its mandatory user
+confirmation gate. Full drafting must not begin until the user approves or
+edits the record.
